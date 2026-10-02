@@ -49,7 +49,7 @@ For every successfully resolved company, generate:
 - legal company name,
 - NIP,
 - KRS / REGON where available,
-- registered city / location,
+- registered address or city / location, without guessing a city from address text,
 - official website where identifiable.
 
 #### Business
@@ -132,6 +132,7 @@ Use only where justified:
 - Python
 - `uv`
 - Pydantic v2
+- openpyxl for XLSX NIP input (not financial-document parsing)
 - PydanticAI
 - Tavily for web search / discovery
 - Scrapling for reading selected web pages
@@ -328,7 +329,7 @@ Do not cut:
 
 ## Foundation contracts — OG-148 / OG-149 / OG-150 / OG-160
 
-The foundation is frozen; the application is **not implemented**. No ingest, checksum/registry resolver, research agent, evidence gate, Markdown renderer, batch runner or CI has been added. Do not proceed to OG-151 without explicit instruction.
+The foundation checkpoint is `6cfcfe4`. OG-151 now implements deterministic CSV/XLSX ingest and MF-registry identity resolution only. The research agent, generic evidence extractor/gate, financial extraction, Markdown/BI rendering, full BI batch runner and CI remain unimplemented. Do not proceed to OG-152 without explicit instruction.
 
 - [Architecture decisions](docs/ARCHITECTURE_DECISIONS.md): minimum pipeline, dependency responsibilities, trust boundaries and rejected technologies.
 - [One-page product contract](docs/PRODUCT_CONTRACT.md): exact input, output, evidence states, limits and refusals.
@@ -336,9 +337,9 @@ The foundation is frozen; the application is **not implemented**. No ingest, che
 - [Financial decision](docs/FINANCIAL_DATA_DECISION.md): two-company live spike; official issuer HTML/text with linked CSV where available, then UNKNOWN. No PDF/XML/archive financial parser.
 - [`examples/profiles/`](examples/profiles/): complete, partial and conflicting-source **synthetic** JSON fixtures, not real retrieved company reports.
 
-Only Pydantic is currently a runtime dependency. Research libraries remain documented decisions for their assigned implementation stages. Python 3.12 is selected in `.python-version`; `uv.lock` fixes package versions.
+Current runtime dependencies are Pydantic and openpyxl. CSV, checksum calculation, HTTP and the CLI use the standard library; development typing stubs cover openpyxl. Research libraries remain documented decisions for their assigned implementation stages. Python 3.12 is selected in `.python-version`; `uv.lock` fixes package versions.
 
-### Offline schema checks
+### Offline checks
 
 ```sh
 uv sync --frozen
@@ -348,7 +349,7 @@ uv run --frozen ruff format --check src tests
 uv run --frozen mypy src
 ```
 
-Verification recorded on 2026-10-02: **43 invariant tests passed**, Ruff lint/format checks passed, and mypy passed for the two source files. A throwaway consumer loaded all three examples, serialized/revalidated them, displayed every profile section with states/citations without an LLM, and retained nulls, employee ranges, decimal values, units and financial scope. A separate smoke exercised the inclusive 12-month news boundary. The live LPP financial candidate retained `2.4` billion PLN, group scope and its non-calendar fiscal interval, explicitly marked uncertain/not gate-verified.
+Foundation verification at `6cfcfe4` on 2026-10-02: **43 invariant tests passed**, Ruff lint/format checks passed, and mypy passed for the then-two source files. A throwaway consumer loaded all three examples, serialized/revalidated them, displayed every profile section with states/citations without an LLM, and retained nulls, employee ranges, decimal values, units and financial scope. A separate smoke exercised the inclusive 12-month news boundary. The live LPP financial candidate retained `2.4` billion PLN, group scope and its non-calendar fiscal interval, explicitly marked uncertain/not gate-verified.
 
 The financial spike exercised public KRS JSON, issuer HTML/CSV/text and RDF document discovery for Asseco Poland and LPP. It closed after 10.2 minutes within its 120-minute ceiling; source URLs, observed values and limitations are documented in the decision. No extraction-quality or universal coverage claim is made.
 
@@ -361,4 +362,50 @@ The financial spike exercised public KRS JSON, issuer HTML/CSV/text and RDF docu
 | OG-150 | Satisfied locally | All ten required models, state/quantity/provenance invariants and three examples exist; the smoke consumed the schema without a second LLM pass. |
 | OG-160 | Satisfied locally | Real-source investigation and a frozen primary route, UNKNOWN fallback, mandatory context and unsupported-format boundary permit later implementation without another financial research phase. |
 
-These results complete the four **foundation** issues, not the functional MVP or portfolio gate. Actual retrieval/excerpt/semantic verification and deterministic NIP resolution remain later work; schema acceptance alone is not proof of either. Linear status was not changed through the read-only connection.
+These results completed the four **foundation** issues, not the functional MVP or portfolio gate. Current OG-151 behavior is below; research evidence/excerpt/semantic verification and BI reports remain later work. Linear status was not changed through the read-only connection.
+
+## OG-151 — executable deterministic identity slice
+
+```sh
+uv sync --frozen
+uv run --frozen company-bi resolve examples/nips.csv
+# For a supplied workbook:
+uv run --frozen company-bi resolve input.xlsx --output outputs/identities-xlsx.json
+```
+
+The default output is `outputs/identities.json`: a JSON array of canonical `BatchResult` records, **not** final BI profiles. Each input row records original input, normalized/validated NIP where valid, outcome, identity if resolved, source metadata, optional failure code/reason and completion timestamp. BI report paths remain null. Output directories are created automatically; an existing output is replaced after successful input processing, but the input file cannot be overwritten.
+
+### Input and validation
+
+- UTF-8 CSV (optional BOM), comma separator, or the first worksheet of XLSX. Exactly one `nip` header, matched case-insensitively with surrounding whitespace removed. Other columns are ignored, never used to infer a company. No legacy XLS or import-plugin framework.
+- Every data record is represented, including blank/missing NIP cells. Row numbering starts at 2, counting the header; CSV numbering follows logical records.
+- Text may contain a leading `PL` (case-insensitive), whitespace and ASCII hyphens. Only these decorations are removed. The result must contain ten ASCII digits and satisfy the Polish checksum weights `(6, 5, 7, 2, 3, 4, 5, 6, 7)` modulo 11; remainder 10 is invalid.
+- Exact integer XLSX cells are converted to their existing decimal digits without padding. Floats, booleans, dates and formulas are rejected, not rounded/evaluated. Lost leading zeros are never reconstructed, and checksums are never repaired.
+- Malformed NIPs do not reach the registry. File/header/encoding/read errors exit with code 2 before lookup; a completely processed file exits 0 even when individual rows fail. Inspect JSON row statuses for row-level failures.
+
+### One deterministic source
+
+Use the [MF VAT-register API](https://wl-api.mf.gov.pl/) directly by NIP for the current Polish date, with a 10-second network timeout and no automatic retry. Duplicate normalized NIPs share one successful, absent or failed lookup snapshot within a file. No API key is required.
+
+The returned NIP must match the validated input. Legal name, NIP, REGON and KRS come from that response, with identifier strings preserved exactly. The [official API schema](https://www.gov.pl/attachment/9a515a2c-17d5-405a-a7fd-2df4cba2c15c) defines `workingAddress` as the registration address; preserve it and leave the separate city unknown rather than parsing it. The API supplies no website, so website remains unknown with an explicit reason.
+
+| Row outcome | Meaning |
+| --- | --- |
+| `resolved` | Exact NIP matched a supported legal identity; optional missing fields may still be unknown. No BI completeness claim. |
+| `invalid_input` / `INVALID_NIP` | Presence/type/format/length/checksum failure; normalized NIP, identity and sources are empty. |
+| `unresolved` / `COMPANY_NOT_FOUND` | Valid NIP, successful MF response with `subject: null`; no guessed company. Not proof that no entity exists outside this source. |
+| `failed` | Operational/source problem: `REGISTRY_NETWORK_ERROR`, `REGISTRY_HTTP_ERROR`, `REGISTRY_INVALID_RESPONSE` or `REGISTRY_IDENTITY_MISMATCH`. No guessed identity; other rows continue. |
+
+Source URLs retain the query date, and retrieval/resolution/completion timestamps are aware. Registry-field provenance uses source IDs and the retrieved JSON field values; no unstructured research/evidence gate is implemented. Determinism means explicit validation and exact authoritative identity mapping, not permanently identical external data or timestamps.
+
+### OG-151 verification and exit
+
+- **78 offline tests passed**: known-valid/checksum-invalid/malformed NIPs; normalization; resolved/absent/mismatched registry data; missing identifiers; mixed and duplicate rows; CSV/XLSX, blank/formula cells and headers; operational failures; canonical provenance/path constraints. Tests block live registry calls and use controlled raw responses.
+- Ruff lint/format checks passed; mypy passed for all six source files.
+- Actual `company-bi resolve examples/nips.csv` wrote one resolved, one invalid and one unresolved row. A temporary XLSX with equivalent integer/string cells produced the same outcomes; its temporary workbook was removed.
+- Inspected live records: `"ASSECO POLAND" SPÓŁKA AKCYJNA`, NIP `5220003782`, REGON `010334578`, KRS `0000033391`, registration address `OLCHOWA 14, 35-322 RZESZÓW`. Identifier leading zeros survived, city/website stayed unknown, and both malformed `123` and valid unresolved `1234563218` produced structured outcomes.
+- All three synthetic profile fixtures were explicitly migrated to the address/city contract and round-tripped successfully. No source/confidence semantics or financial decision was replaced.
+
+Limitations: this one register is not universal Polish-entity coverage; the [Ministry's shared search limits](https://www.gov.pl/web/kas/api-wykazu-podatnikow-vat) can cause operational failures. Website discovery is deliberately absent rather than guessed. CSV is comma-separated and XLSX uses the first worksheet; no general importer is promised. Full research, BI profiles/reports, evidence gate and financial extraction are still out of scope.
+
+**Definition of Done satisfied locally:** one command converts a small CSV/XLSX NIP file into persisted deterministic identity records with independent row outcomes. Stop here; OG-152 has not started.

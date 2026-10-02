@@ -1,6 +1,6 @@
 # Company BI v0.1 — product contract
 
-[OG-149](https://linear.app/tpg96/issue/OG-149) · **CSV/XLSX of Polish NIPs → evidence-backed JSON and Markdown BI files.** This page freezes future behavior; the current repository contains schemas/examples, not the application.
+[OG-149](https://linear.app/tpg96/issue/OG-149) · **CSV/XLSX of Polish NIPs → evidence-backed JSON and Markdown BI files.** This page freezes the complete product behavior; OG-151 currently executes only deterministic ingest/identity, not research or BI reports.
 
 ## Input and identity
 
@@ -12,7 +12,7 @@
 
 | Section | Contract |
 | --- | --- |
-| Identity | Resolved legal name and NIP; KRS/REGON, registered city and official website where obtained, with evidence/state. |
+| Identity | Resolved legal name and NIP; KRS/REGON, registered address or city and official website where obtained, with evidence/state. Never infer a city from free-form address text. |
 | Business | Concise activity description; products/services, industries and markets supported by retrieved sources. |
 | Employees | Exact count or source-provided range, evidence and source date; unknown observation date stays null. A range never becomes a midpoint estimate. |
 | Financials | Revenue and net result, best-effort, for up to three most recent available reporting periods found. Every asserted amount retains metric, period, currency, reported unit and legal-entity/group scope; unavailable amounts stay null. No promise of financial coverage. |
@@ -21,7 +21,7 @@
 
 For each resolved NIP: `outputs/<nip>.json` is canonical, and `outputs/<nip>.md` is rendered deterministically from the same validated profile. `outputs/batch_summary.csv` has `row_number,input_nip,nip,status,json_path,markdown_path,reason,completed_at`. States: `complete`, `partial`, `invalid_input`, `unresolved`, `failed`. Failed/unresolved rows have no report paths. A company failure must not abort other rows; save progress after each company.
 
-A complete profile has supported observations in every requested section, both financial metrics for at least one available period, and no unexplained gaps. Partial profiles retain uncertain/unknown observations and limit/fetch reasons. Optional identifiers not obtained are explicitly unknown and make coverage partial; missing is never evidence of nonexistence. “Complete” describes coverage of this contract, not exhaustive knowledge of the company.
+A complete profile has supported observations in every requested section, both financial metrics for at least one available period, and no unexplained gaps. Location requires a supported registered address or city; an unknown alternative is not an extra required section. Partial profiles retain uncertain observations, unknown required observations and limit/fetch reasons. Optional identifiers not obtained make coverage partial; missing is never evidence of nonexistence. “Complete” describes coverage, not exhaustive knowledge.
 
 ## Evidence and limits
 

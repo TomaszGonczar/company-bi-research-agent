@@ -48,6 +48,12 @@
       ],
       "reason": null
     },
+    "registered_address": {
+      "state": "unknown",
+      "value": null,
+      "evidence": [],
+      "reason": "This synthetic fixture supplies a city, not a full registration address."
+    },
     "website": {
       "state": "supported",
       "value": "https://company.example/",

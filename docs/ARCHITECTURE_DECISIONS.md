@@ -1,6 +1,6 @@
 # Architecture decisions — Company BI v0.1
 
-Contract for [OG-148](https://linear.app/tpg96/issue/OG-148). The purpose is a small NIP-to-BI-file product, not stack imitation. Only schemas and offline examples exist at this foundation stage.
+Contract for [OG-148](https://linear.app/tpg96/issue/OG-148). The purpose is a small NIP-to-BI-file product, not stack imitation. The foundation choices remain frozen; OG-151 implements the deterministic ingest/identity leg only, not the research or BI-report pipeline.
 
 ## Minimum architecture
 
@@ -28,10 +28,12 @@ Use ordinary Python functions and one `company_bi` package. `models.py` owns the
 | Python 3.12 | Use | A conservative interpreter baseline for the selected Python libraries. |
 | uv | Use now | Reproducible environment and dependency lock; commit `uv.lock`. |
 | Pydantic v2 | Use now | Canonical typed JSON and local structural/cross-reference invariants. |
+| openpyxl | Use from OG-151 | Read the first XLSX worksheet's NIP column; not financial-document ingestion. |
+| types-openpyxl | Use from OG-151, development only | Type-check the concrete XLSX reader against library stubs. |
 | Hatchling | Use now, build-time only | Install the small `src/company_bi` package. |
-| pytest | Use now, development only | Offline tests for consumer-visible schema invariants. |
+| pytest | Use now, development only | Offline tests for consumer-visible schema and identity-row behavior. |
 | Ruff | Use now, development only | Lint and format Python code. |
-| mypy | Use now, development only | Type-check the canonical model module. |
+| mypy | Use now, development only | Type-check the package, including the concrete CSV/XLSX and registry code. |
 | PydanticAI | Use later | One structured research/extraction agent; no orchestration framework. |
 | Tavily | Use later | Discover candidate public URLs; search snippets alone do not become final evidence. |
 | Scrapling | Use later | Retrieve full text from selected URLs; static fetch first, browser fetch only when necessary. No broad crawling. |
@@ -42,7 +44,7 @@ Use ordinary Python functions and one `company_bi` package. `models.py` owns the
 | Logfire | Optional, disabled in baseline | Development/demo traces only; not required to run or evaluate the product. |
 | AgentCanvas | Optional, not installed | A final reviewer trace artifact only if Logfire is actually used; not a runtime dependency. |
 
-Only Pydantic is a runtime dependency in this foundation. Research and extraction libraries are decisions, not unused installations. Each later dependency must still have its named responsibility when introduced.
+The foundation installed only Pydantic; OG-151 adds openpyxl for actual XLSX input and its development typing stubs. CSV, HTTP, checksum calculation and the CLI use the standard library. Research and extraction libraries remain decisions, not unused installations. Each later dependency must still have its named responsibility when introduced.
 
 ## Bounds and trust
 
@@ -71,3 +73,13 @@ Outputs are `outputs/<nip>.json`, `outputs/<nip>.md`, and `outputs/batch_summary
 | Name-only / global entity resolution | Conflicts with the deterministic Polish NIP anchor. |
 
 No optional technology blocks the functional MVP. Reopening a decision requires evidence from the assigned issue, not a hypothetical future requirement.
+
+## OG-151 registry choice
+
+Use one fixed public source: the [MF VAT-register REST API](https://wl-api.mf.gov.pl/), `GET /api/search/nip/{nip}?date=YYYY-MM-DD`. It is accessed anonymously with standard-library HTTPS, a 10-second network timeout, no automatic retries, and one lookup per unique normalized NIP within a file. The query date is the current Polish date; source URLs and aware retrieval/resolution timestamps retain the snapshot context.
+
+The actual NIP must match the returned `subject.nip` before any legal name/identifier is accepted. Preserve NIP, KRS and REGON strings exactly. `workingAddress` is documented as the registration address; preserve it rather than parsing a city. No website is provided by this source, so website is unknown. Other response fields (people, PESEL, bank accounts) are ignored.
+
+`result.subject: null` means unresolved in this register, not that no legal entity exists. HTTP, network, mismatched-identity and response-schema failures become explicit failed rows. The [Ministry documents 100 search requests/day](https://www.gov.pl/web/kas/api-wykazu-podatnikow-vat); shared-IP limits and incomplete register coverage are accepted constraints, not reasons to add another provider or retry framework.
+
+The only executable slice is `company-bi resolve`: CSV/XLSX → checksummed NIP → MF identity → JSON row outcomes. There are no research tools, broad website lookup, generic evidence extraction, final evidence gate, financial extraction, BI reports, provider interfaces or worker infrastructure.

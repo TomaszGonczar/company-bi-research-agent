@@ -82,6 +82,7 @@ class CompanyIdentity(Model):
     krs: Fact[KRS]
     regon: Fact[REGON]
     registered_city: Fact[Text]
+    registered_address: Fact[Text]
     website: Fact[HttpUrl]
     resolved_at: AwareDatetime
 
@@ -191,7 +192,6 @@ class CompanyProfile(Model):
             self.identity.legal_name,
             self.identity.krs,
             self.identity.regon,
-            self.identity.registered_city,
             self.identity.website,
             self.business_description,
             self.products_services,
@@ -201,7 +201,8 @@ class CompanyProfile(Model):
             *self.financials,
             *self.recent_developments,
         )
-        for fact in facts:
+        location_facts = (self.identity.registered_city, self.identity.registered_address)
+        for fact in (*facts, *location_facts):
             if any(ref.source_id not in source_ids for ref in fact.evidence):
                 raise ValueError("evidence must reference a source in the retrieved-source ledger")
 
@@ -238,6 +239,8 @@ class CompanyProfile(Model):
             bool(self.limitations)
             or not self.recent_developments
             or any(fact.state != "supported" for fact in facts)
+            or not any(fact.state == "supported" for fact in location_facts)
+            or any(fact.state == "uncertain" for fact in location_facts)
         )
         if self.status == "complete" and has_gaps:
             raise ValueError("complete requires supported coverage in every requested section")
@@ -249,12 +252,15 @@ class CompanyProfile(Model):
 
 
 class BatchResult(Model):
-    """One CSV summary entry per input row, not an implemented batch runner."""
+    """One input row's identity-stage or final-report outcome."""
 
     row_number: PositiveInt
     input_nip: Annotated[str, StringConstraints(strict=True)]
     nip: NIP | None = None
-    status: Literal["complete", "partial", "invalid_input", "unresolved", "failed"]
+    status: Literal["resolved", "complete", "partial", "invalid_input", "unresolved", "failed"]
+    identity: CompanyIdentity | None = None
+    sources: list[Source] = Field(default_factory=list)
+    error_code: Text | None = None
     json_path: Text | None = None
     markdown_path: Text | None = None
     reason: Text | None = None
@@ -263,15 +269,42 @@ class BatchResult(Model):
     @model_validator(mode="after")
     def check_outcome(self) -> Self:
         if self.status == "invalid_input":
-            if self.nip is not None:
-                raise ValueError("invalid input cannot carry a validated NIP")
+            if self.nip is not None or self.identity is not None or self.sources:
+                raise ValueError("invalid input cannot carry a validated NIP or registry result")
         elif self.nip is None:
             raise ValueError("a post-validation outcome requires a normalized NIP")
+        if self.status == "resolved":
+            if self.identity is None or not self.sources:
+                raise ValueError("resolved requires an identity and its retrieved sources")
+            if self.identity.nip != self.nip:
+                raise ValueError("resolved identity must match the validated input NIP")
+            if self.error_code is not None:
+                raise ValueError("a resolved identity cannot carry a failure code")
+        elif self.identity is not None:
+            raise ValueError("only an identity-stage resolved row contains an identity")
         if self.status in {"complete", "partial"}:
             if self.json_path is None or self.markdown_path is None:
-                raise ValueError("a resolved result requires both report paths")
+                raise ValueError("a published result requires both report paths")
         elif self.json_path is not None or self.markdown_path is not None:
-            raise ValueError("an unsuccessful row cannot claim report paths")
-        if self.status != "complete" and self.reason is None:
-            raise ValueError("a non-complete row requires a reason")
+            raise ValueError("an identity-only or unsuccessful row cannot claim BI report paths")
+        if self.status not in {"complete", "resolved"} and self.reason is None:
+            raise ValueError("a non-complete/non-resolved row requires a reason")
+        source_ids = {source.source_id for source in self.sources}
+        if len(source_ids) != len(self.sources):
+            raise ValueError("source IDs must be unique within a row result")
+        if any(source.retrieved_at > self.completed_at for source in self.sources):
+            raise ValueError("a source cannot be retrieved after row completion")
+        if self.identity is not None:
+            if self.identity.resolved_at > self.completed_at:
+                raise ValueError("identity cannot be resolved after row completion")
+            for fact in (
+                self.identity.legal_name,
+                self.identity.krs,
+                self.identity.regon,
+                self.identity.registered_city,
+                self.identity.registered_address,
+                self.identity.website,
+            ):
+                if any(ref.source_id not in source_ids for ref in fact.evidence):
+                    raise ValueError("identity evidence must reference the row source ledger")
         return self
