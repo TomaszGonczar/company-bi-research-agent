@@ -1,0 +1,163 @@
+{
+  "schema_version": "0.1",
+  "status": "partial",
+  "generated_at": "2026-10-02T12:10:00Z",
+  "identity": {
+    "nip": "1234563218",
+    "legal_name": {
+      "state": "supported",
+      "value": "Przykładowa Produkcja sp. z o.o.",
+      "evidence": [
+        {
+          "source_id": "registry",
+          "excerpt": "Przykładowa Produkcja sp. z o.o.; NIP 1234563218; KRS 0000123456; REGON 123456789; siedziba: Gdańsk."
+        }
+      ],
+      "reason": null
+    },
+    "krs": {
+      "state": "supported",
+      "value": "0000123456",
+      "evidence": [
+        {
+          "source_id": "registry",
+          "excerpt": "Przykładowa Produkcja sp. z o.o.; NIP 1234563218; KRS 0000123456; REGON 123456789; siedziba: Gdańsk."
+        }
+      ],
+      "reason": null
+    },
+    "regon": {
+      "state": "supported",
+      "value": "123456789",
+      "evidence": [
+        {
+          "source_id": "registry",
+          "excerpt": "Przykładowa Produkcja sp. z o.o.; NIP 1234563218; KRS 0000123456; REGON 123456789; siedziba: Gdańsk."
+        }
+      ],
+      "reason": null
+    },
+    "registered_city": {
+      "state": "supported",
+      "value": "Gdańsk",
+      "evidence": [
+        {
+          "source_id": "registry",
+          "excerpt": "Przykładowa Produkcja sp. z o.o.; NIP 1234563218; KRS 0000123456; REGON 123456789; siedziba: Gdańsk."
+        }
+      ],
+      "reason": null
+    },
+    "website": {
+      "state": "unknown",
+      "value": null,
+      "evidence": [],
+      "reason": "Nie uzyskano potwierdzonej oficjalnej strony."
+    },
+    "resolved_at": "2026-10-02T12:01:00Z"
+  },
+  "business_description": {
+    "state": "supported",
+    "value": "Producent pomp przemysłowych.",
+    "evidence": [
+      {
+        "source_id": "company",
+        "excerpt": "Producent pomp przemysłowych. Produkty: pompy przemysłowe. Branża: produkcja przemysłowa. Rynki: Polska i Niemcy."
+      }
+    ],
+    "reason": null
+  },
+  "products_services": {
+    "state": "supported",
+    "value": [
+      "Pompy przemysłowe"
+    ],
+    "evidence": [
+      {
+        "source_id": "company",
+        "excerpt": "Producent pomp przemysłowych. Produkty: pompy przemysłowe. Branża: produkcja przemysłowa. Rynki: Polska i Niemcy."
+      }
+    ],
+    "reason": null
+  },
+  "industries": {
+    "state": "supported",
+    "value": [
+      "Produkcja przemysłowa"
+    ],
+    "evidence": [
+      {
+        "source_id": "company",
+        "excerpt": "Producent pomp przemysłowych. Produkty: pompy przemysłowe. Branża: produkcja przemysłowa. Rynki: Polska i Niemcy."
+      }
+    ],
+    "reason": null
+  },
+  "markets": {
+    "state": "supported",
+    "value": [
+      "Polska",
+      "Niemcy"
+    ],
+    "evidence": [
+      {
+        "source_id": "company",
+        "excerpt": "Producent pomp przemysłowych. Produkty: pompy przemysłowe. Branża: produkcja przemysłowa. Rynki: Polska i Niemcy."
+      }
+    ],
+    "reason": null
+  },
+  "employees": {
+    "state": "unknown",
+    "value": null,
+    "evidence": [],
+    "reason": "Nie uzyskano informacji o zatrudnieniu.",
+    "as_of": null
+  },
+  "financials": [
+    {
+      "state": "unknown",
+      "value": null,
+      "evidence": [],
+      "reason": "Dostępny dokument wymaga nieobsługiwanego parsowania PDF.",
+      "metric": "revenue",
+      "period": null,
+      "currency": null,
+      "unit": null,
+      "scope": null,
+      "group_name": null
+    },
+    {
+      "state": "unknown",
+      "value": null,
+      "evidence": [],
+      "reason": "Dostępny dokument wymaga nieobsługiwanego parsowania PDF.",
+      "metric": "net_result",
+      "period": null,
+      "currency": null,
+      "unit": null,
+      "scope": null,
+      "group_name": null
+    }
+  ],
+  "recent_developments": [],
+  "sources": [
+    {
+      "source_id": "registry",
+      "url": "https://registry.example/1234563218",
+      "title": "Synthetic registry entry",
+      "retrieved_at": "2026-10-02T12:00:00Z",
+      "published_on": null
+    },
+    {
+      "source_id": "company",
+      "url": "https://company.example/",
+      "title": "Synthetic company page",
+      "retrieved_at": "2026-10-02T12:02:00Z",
+      "published_on": "2026-06-30"
+    }
+  ],
+  "limitations": [
+    "Nie uzyskano wiadomości z ostatnich 12 miesięcy."
+  ]
+}

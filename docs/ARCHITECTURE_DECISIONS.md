@@ -1,0 +1,73 @@
+# Architecture decisions — Company BI v0.1
+
+Contract for [OG-148](https://linear.app/tpg96/issue/OG-148). The purpose is a small NIP-to-BI-file product, not stack imitation. Only schemas and offline examples exist at this foundation stage.
+
+## Minimum architecture
+
+```text
+CSV/XLSX with NIP
+  → deterministic normalization, checksum validation and legal identity
+  → one bounded PydanticAI research agent
+      Tavily discovers URLs → Scrapling reads selected pages
+      → candidate facts referencing retriever-owned evidence
+  → deterministic evidence gate
+  → canonical CompanyProfile → deterministic JSON and Markdown
+  → filesystem outputs and one batch-summary row per input row
+```
+
+**NIP is the identity anchor.** The registry resolver owns legal name and identifiers. Research cannot substitute a similarly named company or change the resolved NIP. An unresolved identity never enters research and never produces a guessed company profile.
+
+The LLM chooses queries, selects sources, interprets text and proposes observations. Code validates identity, assigns source IDs, retains retrieved text, checks evidence and financial context, sets publication states, and renders reports. There is no second report-writing LLM pass.
+
+Use ordinary Python functions and one `company_bi` package. `models.py` owns the publication contract. Do not add service layers, provider interfaces, a workflow framework, or persistence adapters. Later stages add only the concrete ingest, registry, research, gate and rendering functions they require.
+
+## Use / don't use / why
+
+| Component | Decision | One concrete responsibility |
+| --- | --- | --- |
+| Python 3.12 | Use | A conservative interpreter baseline for the selected Python libraries. |
+| uv | Use now | Reproducible environment and dependency lock; commit `uv.lock`. |
+| Pydantic v2 | Use now | Canonical typed JSON and local structural/cross-reference invariants. |
+| Hatchling | Use now, build-time only | Install the small `src/company_bi` package. |
+| pytest | Use now, development only | Offline tests for consumer-visible schema invariants. |
+| Ruff | Use now, development only | Lint and format Python code. |
+| mypy | Use now, development only | Type-check the canonical model module. |
+| PydanticAI | Use later | One structured research/extraction agent; no orchestration framework. |
+| Tavily | Use later | Discover candidate public URLs; search snippets alone do not become final evidence. |
+| Scrapling | Use later | Retrieve full text from selected URLs; static fetch first, browser fetch only when necessary. No broad crawling. |
+| PydanticAI `UsageLimits` | Use later | Bound model requests, tool calls and token usage. Separate deterministic counters and a deadline enforce search/read/browser/time limits. |
+| Pydantic AI Harness guardrails | Don't add to baseline | No additional wrapper without a concrete threat and a demonstrated benefit over bounded typed tools and deterministic URL checks. No invented dependency/import is frozen. |
+| Pydantic Evals | Use in OG-154, not installed now | A small reproducible local evaluation dataset measuring identity, supported-claim precision, coverage, failures and resource usage. |
+| GitHub Actions | Use in OG-155, not created now | Run deterministic checks from a clean environment; live API access is not required for CI. |
+| Logfire | Optional, disabled in baseline | Development/demo traces only; not required to run or evaluate the product. |
+| AgentCanvas | Optional, not installed | A final reviewer trace artifact only if Logfire is actually used; not a runtime dependency. |
+
+Only Pydantic is a runtime dependency in this foundation. Research and extraction libraries are decisions, not unused installations. Each later dependency must still have its named responsibility when introduced.
+
+## Bounds and trust
+
+Initial per-company limits: **6 searches, 10 page reads, 2 browser reads, 1 structured-output repair, 180 seconds**. Repair consumes the same budget. Limit exhaustion produces a partial profile with an explanation, not an unbounded retry. Model request/token ceilings will be selected with the actual model in the research issue; they are not fabricated here.
+
+Tools have no arbitrary shell, filesystem or code-execution access. URLs and redirects must pass deterministic web-safety checks before retrieval; retrieved pages are untrusted data, not instructions. Source IDs and retrieval timestamps are assigned by the application, never invented by the model. Browser fallback is bounded and may fail explicitly.
+
+The retriever stores selected page text in per-run filesystem artifacts. Canonical JSON contains source metadata and evidence excerpts, not entire pages. The gate must use the trusted retrieval ledger and stored text; a schema-valid profile alone is **not** verified evidence. A quote match proves the excerpt exists, not that an interpretation is necessarily correct. Conflicts, ambiguous identity/scope and insufficient evidence remain uncertain/unknown.
+
+Outputs are `outputs/<nip>.json`, `outputs/<nip>.md`, and `outputs/batch_summary.csv`. Persist after each company; a failed company does not abort the batch. No database, queue, web service or worker is needed for the sample batch. Financial scope is frozen in [FINANCIAL_DATA_DECISION.md](FINANCIAL_DATA_DECISION.md).
+
+## Explicit rejections
+
+| Technology/capability | Why not v0.1 |
+| --- | --- |
+| DeepAgents, subagents, multi-agent swarms | One bounded research task; extra agents expand budgets and obscure identity/evidence ownership. |
+| Skills discovery / plugin system | The required tools are known; discovery adds an unnecessary capability and trust surface. |
+| RAG / vector database | A small, per-company set of retrieved pages needs direct evidence lookup, not a persistent retrieval subsystem. |
+| PostgreSQL / other database infrastructure | Sequential per-company progress and outputs fit the filesystem. |
+| Redis / Celery / scheduler | No distributed workload, asynchronous worker fleet or scheduled product requirement. |
+| Next.js / frontend / full SaaS shell / authentication | Files and a CLI demonstrate the required workflow without a web product. |
+| Generic provider abstractions / custom agent framework | There is one selected search path and one agent implementation, not two real implementations requiring an interface. |
+| Product MCP server | No product-facing remote tool integration is required. Developer access to Linear is separate tooling, not application infrastructure. |
+| Universal PDF/XML financial parser | Unbounded document variation would become a second product; unavailable financials are valid. |
+| CRM / lead scoring / contacts / outreach | Different business workflows, not this product. |
+| Name-only / global entity resolution | Conflicts with the deterministic Polish NIP anchor. |
+
+No optional technology blocks the functional MVP. Reopening a decision requires evidence from the assigned issue, not a hypothetical future requirement.

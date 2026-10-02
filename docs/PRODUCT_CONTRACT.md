@@ -1,0 +1,38 @@
+# Company BI v0.1 — product contract
+
+[OG-149](https://linear.app/tpg96/issue/OG-149) · **CSV/XLSX of Polish NIPs → evidence-backed JSON and Markdown BI files.** This page freezes future behavior; the current repository contains schemas/examples, not the application.
+
+## Input and identity
+
+- One mandatory `nip` column, one company NIP per row. Read NIPs as text. Deterministic ingest may remove `PL`, spaces and hyphens; never pad, repair a checksum, or infer a NIP from a company name.
+- Validate the Polish NIP and resolve its legal entity before research. The LLM researches that company; it does **not** decide which legal company the NIP represents. Invalid or unresolved rows receive a failure/status entry, not a guessed profile.
+- Duplicate normalized NIPs share one company run/report; every input row still has a batch-summary entry. Name-only lookup is refused.
+
+## Profile and output
+
+| Section | Contract |
+| --- | --- |
+| Identity | Resolved legal name and NIP; KRS/REGON, registered city and official website where obtained, with evidence/state. |
+| Business | Concise activity description; products/services, industries and markets supported by retrieved sources. |
+| Employees | Exact count or source-provided range, evidence and source date; unknown observation date stays null. A range never becomes a midpoint estimate. |
+| Financials | Revenue and net result, best-effort, for up to three most recent available reporting periods found. Every asserted amount retains metric, period, currency, reported unit and legal-entity/group scope; unavailable amounts stay null. No promise of financial coverage. |
+| Recent developments | Up to three meaningful items published in the 12 calendar months preceding report generation; title/summary, publication date, event date if known, and evidence. No items found does not mean no events occurred. |
+| Provenance / gaps | Retriever-owned source IDs, URLs, retrieval timestamps, publication dates where known, evidence excerpts, generation timestamp and explicit conflicts/missing-data/limit reasons. |
+
+For each resolved NIP: `outputs/<nip>.json` is canonical, and `outputs/<nip>.md` is rendered deterministically from the same validated profile. `outputs/batch_summary.csv` has `row_number,input_nip,nip,status,json_path,markdown_path,reason,completed_at`. States: `complete`, `partial`, `invalid_input`, `unresolved`, `failed`. Failed/unresolved rows have no report paths. A company failure must not abort other rows; save progress after each company.
+
+A complete profile has supported observations in every requested section, both financial metrics for at least one available period, and no unexplained gaps. Partial profiles retain uncertain/unknown observations and limit/fetch reasons. Optional identifiers not obtained are explicitly unknown and make coverage partial; missing is never evidence of nonexistence. “Complete” describes coverage of this contract, not exhaustive knowledge of the company.
+
+## Evidence and limits
+
+- **supported:** retrieved evidence directly supports this observation for the resolved company and stated scope. Supported by a citation does not mean independently proven universal truth.
+- **uncertain:** candidate evidence exists, but conflict, identity, scope, interpretation or freshness prevents supported publication; explain why. An unresolved conflict may have no selected value.
+- **unknown:** no defensible value; `value: null` and a reason, never invented `0`, `false`, or a guess. No confidence percentages.
+- The deterministic gate checks trusted retrieval, excerpt presence, identity conflicts and financial context. JSON/Markdown preserve states; no second LLM rewrites or promotes observations.
+- Initial per-company ceilings: 6 searches, 10 page reads, 2 browser reads, 1 output repair, 180 seconds. Exhaustion returns a partial result with a reason.
+
+## Refusals
+
+No name-only/global entity resolution, CRM/lead scoring, people/contact enrichment, outreach, universal financial-statement parser, autonomous crawling, multiple agents, DeepAgents, skills discovery, RAG/vector DB, database/queue infrastructure, frontend/SaaS/authentication, product MCP server, generic provider interfaces or custom orchestration framework. Financial documents requiring general PDF/XML parsing are unavailable in v0.1, not an invitation to expand scope. No static HTML index is included in this baseline.
+
+Details: [architecture](ARCHITECTURE_DECISIONS.md), [evidence/model contract](EVIDENCE_MODEL.md), [financial decision](FINANCIAL_DATA_DECISION.md).
