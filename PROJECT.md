@@ -329,7 +329,7 @@ Do not cut:
 
 ## Foundation contracts — OG-148 / OG-149 / OG-150 / OG-160
 
-The foundation checkpoint is `6cfcfe4`; OG-151 is committed at `8701453`, OG-152 at `c8aa7a2` and OG-153 at `59e76de`. Deterministic CSV/XLSX identity, bounded research, deterministic publication, BI rendering and sequential batch are implemented. OG-154 adds reproducible offline evaluation with separately measured precision and coverage; its low-yield baseline is documented below. CI, fuller web hardening and later retrieval experiments remain future issues.
+The foundation checkpoint is `6cfcfe4`; OG-151 is committed at `8701453`, OG-152 at `c8aa7a2` and OG-153 at `59e76de`. Deterministic CSV/XLSX identity, bounded research, deterministic publication, BI rendering and sequential batch are implemented. OG-154 adds reproducible offline evaluation; OG-154A records one measured coverage iteration. OG-155 adds credential-free CI, sanitized reliability diagnostics and explicit web/tool safety. Later retrieval experiments remain outside this checkpoint.
 
 - [Architecture decisions](docs/ARCHITECTURE_DECISIONS.md): minimum pipeline, dependency responsibilities, trust boundaries and rejected technologies.
 - [One-page product contract](docs/PRODUCT_CONTRACT.md): exact input, output, evidence states, limits and refusals.
@@ -347,6 +347,8 @@ uv run --frozen pytest -q
 uv run --frozen ruff check .
 uv run --frozen ruff format --check src tests
 uv run --frozen mypy src
+uv run --frozen company-bi eval \
+  --dataset examples/evals/dataset.json --output-dir outputs/evals
 ```
 
 Foundation verification at `6cfcfe4` on 2026-10-02: **43 invariant tests passed**, Ruff lint/format checks passed, and mypy passed for the then-two source files. A throwaway consumer loaded all three examples, serialized/revalidated them, displayed every profile section with states/citations without an LLM, and retained nulls, employee ranges, decimal values, units and financial scope. A separate smoke exercised the inclusive 12-month news boundary. The live LPP financial candidate retained `2.4` billion PLN, group scope and its non-calendar fiscal interval, explicitly marked uncertain/not gate-verified.
@@ -562,4 +564,61 @@ Frozen-set before → after: researched precision **2/2 → 5/5**, recall **2/19
 An optional fresh LPP sanity run failed at the unchanged single output-repair ceiling, with no valid progress retained. Six full pages were retained, but new researched output remained unknown. This is an explicit limit, not a successful live before/after benchmark. No extra retry, token optimization or continued tuning followed.
 
 **231 tests**, Ruff lint/format and mypy passed; actual offline CLI, canonical JSON and Markdown were exercised with zero network/research calls. All original gold/baseline/replay files remain byte-identical. No OG-155, CI/security, AgentCanvas, new provider, parser, crawler or architecture work was started.
+
+## OG-155 — offline CI, reliability and web/tool safety
+
+### Deterministic versus live execution
+
+The offline commands above require Python 3.12 and the frozen lockfile, not `.env`, paid keys, a Codex login, prior runs or Chromium installation. Dependency installation may download packages; test/evaluation execution must not call real services. Autouse test guards disable registry HTTP, model requests, Tavily, Scrapling, DNS and socket connections. Controlled fixtures explicitly replace their required transports.
+
+[`ci.yml`](.github/workflows/ci.yml) runs those commands on pushes and pull requests in one Ubuntu/Python 3.12 job with uv 0.12.3 and a 15-minute job ceiling. Checkout credentials are not persisted; permissions are read-only. Paid-key/Logfire variables are empty and `CODEX_HOME` is isolated under runner temporary storage. No live research, browser installation, provider fallback or credential-backed job is included.
+
+The OG-152/OG-153 commands remain separate **live** verification, requiring environment-configured Tavily credentials and ordinary SDK-managed native Codex login. Native `openai-codex:gpt-6-luna` does not require `OPENAI_API_KEY`; no application OAuth-cache parsing/copying was introduced. Missing Tavily credentials fail research/batch early with `CONFIG_ERROR`. Do not put keys, headers, OAuth caches or generated run artifacts in version control.
+
+### Small failure taxonomy
+
+Input/identity outcomes and evidence states remain distinct from operational failures:
+
+| Code or state | Meaning |
+| --- | --- |
+| `INVALID_NIP` / `invalid_input` | Deterministic input rejection; no registry lookup. |
+| `COMPANY_NOT_FOUND` / `unresolved` | Successful lookup without an identity; no guessed company. |
+| Existing `REGISTRY_*` codes | Registry network/HTTP/schema/identity failure; network reasons never copy provider exception payloads. |
+| `SEARCH_FAILURE` | Bounded Tavily timeout, provider or malformed-response failure. |
+| `FETCH_FAILURE` | Static/dynamic retrieval or URL/source-ID rejection. Separate attempts are retained even when fallback succeeds. |
+| `MODEL_FAILURE` | Provider/model interruption or a safely recorded cleanup failure. |
+| `MODEL_OUTPUT_INVALID` | Structured-output rejection, including a safe terminal stop after the existing single repair. |
+| `RESOURCE_LIMIT` | Deadline, search/read/browser or model usage ceiling reached. |
+| `EVIDENCE_VALIDATION_FAILURE` | Candidate/progress or publication-gate validation failed; separate from artifact I/O. |
+| `CONFIG_ERROR` | Missing live configuration or research setup failure. |
+| `PUBLICATION_ERROR` / `PROFILE_REFRESH_ERROR` | Persistence/publication or cached-profile refresh failed. |
+| `uncertain` / `unknown` | Ordinary unsupported, ambiguous or unavailable facts, not necessarily an operational error. Missing numbers remain null. |
+
+`ResearchDiagnostics` adds defaulted `failure_code`, `failures` and `validated_progress_retained`; old retained runs still load. Each failure records a fixed short reason, stage, exception class, optional safe schema path/error kind, attempt and progress availability. Unknown field names/IDs, raw model output, exception messages, provider request/response bodies, headers and credentials are not diagnostic payloads. Retrieved source text and evidence excerpts remain intentional research artifacts, not debug dumps.
+
+Native PydanticAI validation hooks capture schema failures; the existing output validator records source/excerpt/context failures before `ModelRetry`. Attempt 1 is the initial rejection; attempt 2 is the allowed repair rejection. A repaired failure stays observable without changing `completed` into `failed`. On interruption, validated saved progress yields `partial`; without it, the run returns `failed` with explicit unknowns. The retained-progress flag means the returned partial draft actually uses that progress. Client cleanup has a separate two-second bound per client; cleanup exceptions cannot discard a valid result. Batch failures retain their diagnostic code and do not prevent later companies from publishing.
+
+`failure_code` identifies the terminal interruption when present; otherwise it identifies the first retained failure event. Consult `status` and the per-attempt records rather than treating a repaired schema failure or recovered static fetch as an unsuccessful run.
+
+An offline actual research-CLI smoke persisted both financial-period schema rejections at `financials.0.period.start`, with `ValidationError`, attempts 1/2, two model requests and one repair; the invalid raw value was absent. This makes equivalent future failures diagnosable. The earlier optional LPP run cannot retrospectively be assigned an exact validation cause from its old aggregate diagnostics.
+
+### Bounds and web trust
+
+Research bounds remain 180 seconds, 6 searches, 10 page reads, 2 browser attempts, 12 model requests, 24 tool calls and one output repair. Model request timeout is 30 seconds; SDK retries are zero. MF uses its existing 10-second timeout/no retry; DNS has a three-second ceiling. Static fetches allow at most five separately validated redirects, with HTTP retries disabled. Browser fallback makes one total attempt; each routed fetch has a 15-second timeout and follows no redirects.
+
+Reads accept only discovered host source IDs, not arbitrary model URLs or registry IDs. Rejected IDs consume no read/fetch attempt and do not persist the supplied value. Page URLs must be HTTP(S), without userinfo, and all resolved addresses must be global. Dotless/internal names and localhost/local/localdomain/internal/LAN/home.arpa suffixes are rejected independently of DNS. Private, loopback, link-local, unspecified and mixed public/private DNS answers are blocked. Static redirect targets are validated before following; browser redirects and unsafe subrequests are blocked.
+
+Retrieved page instructions cannot replace the host identity, invent sources or grant shell/file/code/network privileges. The malicious-page regression exercises an attempted arbitrary read and fabricated citation, checking that only the discovered URL was fetched and unsupported numeric output remains null. No injection classifier, crawler or additional agent was added.
+
+Residual limits remain explicit: validate-before-connect DNS checks are **not IP pinning**, so DNS rebinding/TOCTOU is not eliminated. Browser redirect blocking can reduce coverage; sites may block retrieval. Financial PDF/XML/archive/office parsing remains unsupported. Frozen evaluation still measures **47/47** overall precision, **5/5** researched precision, **5/19** eligible researched recall and **0** false supports; retained real yield stays **0/7**. Registry/identity/uncertainty/strict-unknown metrics remain **42/42**, **10/10**, **28/28**, **40/41**. This issue does not improve recall or claim acceptable real coverage. Upstream `strip_cdata` warnings remain visible.
+
+### Exercised verification and issue exit
+
+- **265 tests passed** with paid-key variables unset; Ruff lint/format passed and mypy checked all 14 source files. The 17 upstream `strip_cdata` warnings were retained.
+- The offline CLI-to-batch integration uses controlled MF parsing, actual research/tools/source storage, the unchanged gate and actual JSON/Markdown publication. A supported revenue survives; a mismatched net-result candidate becomes non-supported/null.
+- A separate actual batch-CLI smoke returned `partial` with saved progress, `failed` with `MODEL_FAILURE`, then a published `partial` after successful model completion. Both surviving report pairs were inspected; the injected provider-secret text was absent from research/checkpoint artifacts.
+- An isolated staged-tree snapshot installed the frozen dependencies into a new managed Python 3.12 environment with separate HOME, Codex state and package cache, excluding credential files and prior runs/outputs. The complete CI command path passed there, including the exact unchanged evaluation metrics and immutable input hashes. Python 3.12 was selected explicitly with `UV_PYTHON=3.12`, matching CI's interpreter selection.
+- Workflow YAML and its offline command/security configuration were validated locally; **no GitHub-hosted Actions execution is claimed**. No live provider run was required or performed. Linear status/comments remain unchanged through the read-only integration.
+
+OG-155 is complete locally. The prompt, native provider/model, required Fact/financial fields, evidence gate, single repair, lockfile and original gold/baselines/replays remain unchanged. Stop before OG-156, retrieval experiments, AgentCanvas, reviewer packaging or further recall tuning.
 

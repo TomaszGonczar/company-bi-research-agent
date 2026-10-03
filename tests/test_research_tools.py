@@ -8,7 +8,7 @@ import pytest
 from pydantic import HttpUrl
 from scrapling.engines.toolbelt.custom import Response
 
-from company_bi.fetch import read_page
+from company_bi.fetch import _validate_public_url, read_page
 from company_bi.models import CompanyIdentity, EvidenceRef, Fact, RetrievedSource, Source
 from company_bi.search import search_web
 from company_bi.sources import ResearchBudget, SourceStore
@@ -181,6 +181,10 @@ async def test_search_web_errors_and_budget_are_structured() -> None:
     budget = ResearchBudget(max_searches=1)
     failed_client = ControlledTavily(error=RuntimeError("token=secret"))
     error = await search_web("bad", client=failed_client, store=store, budget=budget)
+    assert error.failure is not None
+    assert error.failure.code == "SEARCH_FAILURE"
+    assert error.failure.stage == "search"
+    assert budget.failures == [error.failure]
     assert error.error
     assert "secret" not in error.error
     assert budget.searches == 1
@@ -195,6 +199,151 @@ async def test_search_web_errors_and_budget_are_structured() -> None:
     )
     assert expired.error
     assert expired_client.calls == []
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "host",
+    ["localhost", "localhost.", "printer", "service.internal", "host.localdomain"],
+)
+async def test_url_validation_rejects_local_names_even_when_dns_is_public(
+    monkeypatch: pytest.MonkeyPatch, host: str
+) -> None:
+    monkeypatch.setattr(
+        socket,
+        "getaddrinfo",
+        lambda *args, **kwargs: [(None, None, None, None, ("93.184.216.34", 0))],
+    )
+    with pytest.raises(ValueError):
+        await _validate_public_url(f"https://{host}/")
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "address",
+    [
+        "127.0.0.1",
+        "10.0.0.1",
+        "169.254.1.1",
+        "0.0.0.0",
+        "::1",
+        "fc00::1",
+        "fe80::1",
+        "::",
+    ],
+)
+async def test_url_validation_rejects_non_global_ip_literals(address: str) -> None:
+    url = f"https://[{address}]/" if ":" in address else f"https://{address}/"
+    with pytest.raises(ValueError):
+        await _validate_public_url(url)
+
+
+@pytest.mark.asyncio
+async def test_url_validation_rejects_mixed_public_and_private_dns_answers(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(
+        socket,
+        "getaddrinfo",
+        lambda *args, **kwargs: [
+            (None, None, None, None, ("93.184.216.34", 0)),
+            (None, None, None, None, ("192.168.1.2", 0)),
+        ],
+    )
+    with pytest.raises(ValueError):
+        await _validate_public_url("https://mixed.example/")
+
+
+@pytest.mark.asyncio
+async def test_search_failures_are_structured_and_safe() -> None:
+    store = SourceStore(identity(), [])
+    budget = ResearchBudget()
+    error = await search_web(
+        "bad",
+        client=ControlledTavily(error=TimeoutError("Authorization: bearer private")),
+        store=store,
+        budget=budget,
+    )
+    assert error.failure is not None
+    assert error.failure.code == "SEARCH_FAILURE"
+    assert error.failure.stage == "search"
+    assert error.failure.error_type == "TimeoutError"
+    assert budget.searches == 1
+    assert budget.failures == [error.failure]
+    assert "private" not in str(error.failure.model_dump())
+    assert "private" not in (error.error or "")
+    assert len(budget.failures) == 1
+
+
+@pytest.mark.asyncio
+async def test_static_and_dynamic_failures_are_separately_recorded_without_payload(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    store = SourceStore(identity(), [])
+    hit = store.add_search(
+        title="Story",
+        url=HttpUrl("https://example.com/page"),
+        content="snippet",
+        score=None,
+        retrieved_at=datetime.now(UTC),
+    )
+    monkeypatch.setattr(
+        socket,
+        "getaddrinfo",
+        lambda *args, **kwargs: [(None, None, None, None, ("93.184.216.34", 0))],
+    )
+
+    async def failed(*args: Any, **kwargs: Any) -> Response:
+        raise OSError("Authorization: bearer private")
+
+    monkeypatch.setattr("company_bi.fetch.AsyncFetcher.get", failed)
+    monkeypatch.setattr("company_bi.fetch.DynamicFetcher.async_fetch", failed)
+    budget = ResearchBudget()
+    result = await read_page(hit.source_id, store=store, budget=budget)
+    assert result.material is None and result.failure is not None
+    assert [(failure.code, failure.stage, failure.source_id) for failure in budget.failures] == [
+        ("FETCH_FAILURE", "static_fetch", hit.source_id),
+        ("FETCH_FAILURE", "dynamic_fetch", hit.source_id),
+    ]
+    assert budget.page_reads == 1 and budget.dynamic_reads == 1
+    assert all("private" not in str(failure.model_dump()) for failure in budget.failures)
+    assert store.get(hit.source_id).kind == "search_snippet"
+
+
+@pytest.mark.asyncio
+async def test_static_failure_is_recorded_when_dynamic_fallback_succeeds(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    store = SourceStore(identity(), [])
+    hit = store.add_search(
+        title="Story",
+        url=HttpUrl("https://example.com/page"),
+        content="snippet",
+        score=None,
+        retrieved_at=datetime.now(UTC),
+    )
+    monkeypatch.setattr(
+        socket,
+        "getaddrinfo",
+        lambda *args, **kwargs: [(None, None, None, None, ("93.184.216.34", 0))],
+    )
+
+    async def failed(*args: Any, **kwargs: Any) -> Response:
+        raise OSError("provider body must not persist")
+
+    async def dynamic(url: str, **kwargs: Any) -> Response:
+        return response("<main>Useful rendered content</main>", url)
+
+    monkeypatch.setattr("company_bi.fetch.AsyncFetcher.get", failed)
+    monkeypatch.setattr("company_bi.fetch.DynamicFetcher.async_fetch", dynamic)
+    budget = ResearchBudget()
+    result = await read_page(hit.source_id, store=store, budget=budget)
+    assert result.material is not None and result.material.kind == "full_page"
+    assert budget.dynamic_reads == 1
+    assert [(failure.code, failure.stage) for failure in budget.failures] == [
+        ("FETCH_FAILURE", "static_fetch")
+    ]
+    assert "provider body" not in str(budget.failures)
 
 
 @pytest.mark.asyncio
@@ -461,6 +610,8 @@ async def test_read_page_dynamic_fallback_is_bounded_and_stored(
         routes = [
             FakeRoute("file:///etc/passwd"),
             FakeRoute("http://127.0.0.1/private"),
+            FakeRoute("http://169.254.1.1/latest"),
+            FakeRoute("http://metadata.internal/private"),
         ]
         for route in routes:
             await page.handler(route)
@@ -477,8 +628,46 @@ async def test_read_page_dynamic_fallback_is_bounded_and_stored(
 
 
 @pytest.mark.asyncio
-async def test_read_page_rejects_unknown_and_private_redirects(
+async def test_read_page_rejected_source_ids_are_structured_and_do_not_leak_values(
     monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    store = SourceStore(identity(), [registry_source()])
+    budget = ResearchBudget()
+    monkeypatch.setattr(
+        "company_bi.fetch.AsyncFetcher.get",
+        lambda *args, **kwargs: pytest.fail("source ID rejection must not fetch"),
+    )
+    monkeypatch.setattr(
+        "company_bi.fetch.DynamicFetcher.async_fetch",
+        lambda *args, **kwargs: pytest.fail("source ID rejection must not fetch"),
+    )
+    rejected = await read_page(
+        "https://unknown.example/private?token=secret", store=store, budget=budget
+    )
+    registry = await read_page("mf-source", store=store, budget=budget)
+    assert rejected.failure is not None and registry.failure is not None
+    for result in (rejected, registry):
+        assert result.failure.code == "FETCH_FAILURE"
+        assert result.failure.stage == "source_reference_validation"
+        assert result.failure.field_path == "source_id"
+        assert result.failure.source_id is None
+    assert "unknown.example" not in str(budget.failures)
+    assert "secret" not in str(budget.failures)
+    assert "mf-source" not in str(budget.failures)
+    assert budget.page_reads == 0
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "redirect_url",
+    [
+        "http://localhost/private",
+        "http://10.0.0.1/private",
+        "http://169.254.1.1/latest",
+    ],
+)
+async def test_read_page_rejects_unknown_and_unsafe_redirects(
+    monkeypatch: pytest.MonkeyPatch, redirect_url: str
 ) -> None:
     store = SourceStore(identity(), [registry_source()])
     budget = ResearchBudget()
@@ -504,7 +693,7 @@ async def test_read_page_rejects_unknown_and_private_redirects(
         requested_urls.append(url)
         result = response("", url)
         result.status = 302
-        result.headers = {"location": "http://127.0.0.1/private"}
+        result.headers = {"location": redirect_url}
         return result
 
     monkeypatch.setattr("company_bi.fetch.AsyncFetcher.get", redirect)
@@ -546,6 +735,10 @@ async def test_read_page_budget_exhaustion_and_failed_fetch_are_reported(
     result = await read_page(hit.source_id, store=store, budget=limited_dynamic)
     assert result.material is None and result.error
     assert limited_dynamic.page_reads == 1 and limited_dynamic.dynamic_reads == 0
+    assert [(failure.code, failure.stage) for failure in limited_dynamic.failures] == [
+        ("FETCH_FAILURE", "static_fetch"),
+        ("RESOURCE_LIMIT", "resource_limit"),
+    ]
 
 
 @pytest.mark.asyncio

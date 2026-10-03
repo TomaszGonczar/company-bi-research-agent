@@ -10,7 +10,13 @@ from urllib.parse import urlsplit, urlunsplit
 
 from pydantic import HttpUrl
 
-from company_bi.models import CompanyIdentity, RetrievedSource, SearchHit, Source
+from company_bi.models import (
+    CompanyIdentity,
+    OperationalFailure,
+    RetrievedSource,
+    SearchHit,
+    Source,
+)
 
 
 @dataclass
@@ -24,6 +30,7 @@ class ResearchBudget:
     dynamic_reads: int = 0
     notes: list[str] = field(default_factory=list)
     started_at: float = field(default_factory=time.monotonic)
+    failures: list[OperationalFailure] = field(default_factory=list)
 
     def remaining(self) -> float:
         return max(0.0, self.max_seconds - (time.monotonic() - self.started_at))
@@ -33,20 +40,35 @@ class ResearchBudget:
             self.notes.append(message)
 
     def consume(self, kind: Literal["search", "page", "dynamic"]) -> bool:
-        limits = {
+        if self.remaining() <= 0:
+            self.record_failure(
+                OperationalFailure(
+                    code="RESOURCE_LIMIT",
+                    stage="resource_limit",
+                    reason="Research deadline reached",
+                )
+            )
+            return False
+        attr, maximum = {
             "search": ("searches", self.max_searches),
             "page": ("page_reads", self.max_page_reads),
             "dynamic": ("dynamic_reads", self.max_dynamic_reads),
-        }
-        attr, limit = limits[kind]
-        if self.remaining() <= 0:
-            self.note("Research deadline reached")
-            return False
-        if getattr(self, attr) >= limit:
-            self.note(f"Research {kind} budget exhausted")
+        }[kind]
+        if getattr(self, attr) >= maximum:
+            self.record_failure(
+                OperationalFailure(
+                    code="RESOURCE_LIMIT",
+                    stage="resource_limit",
+                    reason=f"Research {kind} budget exhausted",
+                )
+            )
             return False
         setattr(self, attr, getattr(self, attr) + 1)
         return True
+
+    def record_failure(self, failure: OperationalFailure) -> None:
+        self.failures.append(failure)
+        self.note(failure.reason)
 
 
 def _normalized_url(url: HttpUrl | str) -> str:

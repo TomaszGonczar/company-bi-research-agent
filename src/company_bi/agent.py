@@ -5,12 +5,22 @@ import os
 import time
 from calendar import monthrange
 from dataclasses import dataclass
+from dataclasses import field as dataclass_field
 from datetime import UTC, date, datetime
-from typing import Any
+from typing import Any, Literal
 
 from openai import AsyncOpenAI
-from pydantic_ai import Agent, AgentRetries, ModelRequestNode, ModelRetry, RunContext, UsageLimits
-from pydantic_ai.exceptions import UsageLimitExceeded
+from pydantic import ValidationError
+from pydantic_ai import (
+    Agent,
+    AgentRetries,
+    ModelRequestNode,
+    ModelRetry,
+    RunContext,
+    UsageLimits,
+)
+from pydantic_ai.capabilities import Hooks
+from pydantic_ai.exceptions import UnexpectedModelBehavior, UsageLimitExceeded
 from pydantic_ai.messages import RetryPromptPart
 from pydantic_ai.models import Model
 from pydantic_ai.models.openai import OpenAIChatModel, OpenAIChatModelSettings
@@ -27,6 +37,8 @@ from company_bi.models import (
     CompanyResearchDraft,
     CompanyResearchRun,
     Fact,
+    FailureCode,
+    OperationalFailure,
     PageReadResult,
     ResearchDiagnostics,
     Source,
@@ -43,7 +55,22 @@ class ResearchDeps:
     tavily: AsyncTavilyClient
     progress: CompanyResearchDraft | None = None
     output_retries: int = 0
+    output_validation_attempts: int = 0
+    failures: list[OperationalFailure] = dataclass_field(default_factory=list)
     usage: RunUsage | None = None
+
+
+class _DraftValidationFailure(ValueError):
+    def __init__(
+        self,
+        stage: Literal["source_reference_validation", "evidence_validation"],
+        field_path: str,
+        reason: str,
+    ) -> None:
+        super().__init__(reason)
+        self.stage = stage
+        self.field_path = field_path
+        self.reason = reason
 
 
 _AGENT_INSTRUCTIONS = (
@@ -71,47 +98,82 @@ _AGENT_INSTRUCTIONS = (
 
 def _validate_draft(draft: CompanyResearchDraft, sources: SourceStore) -> None:
     known = sources.known_ids()
-    refs = [ref for fact in _facts(draft) for ref in fact.evidence]
-    refs.extend(ref for event in draft.recent_developments for ref in event.evidence)
-    invalid = sorted({ref.source_id for ref in refs if ref.source_id not in known})
-    if invalid:
-        raise ValueError(f"Unknown host source IDs: {', '.join(invalid)}")
-    extractable = [*(_facts(draft)), *draft.recent_developments]
-    for fact in extractable:
+    fact_paths = [
+        "business_description",
+        "products_services",
+        "industries",
+        "markets",
+        "employees",
+        *(f"financials.{index}" for index in range(len(draft.financials))),
+    ]
+    fact_pairs = list(zip(fact_paths, _facts(draft), strict=True))
+    refs = [
+        (f"{path}.evidence.{ref_index}.source_id", ref)
+        for path, fact in fact_pairs
+        for ref_index, ref in enumerate(fact.evidence)
+    ]
+    refs.extend(
+        (f"recent_developments.{event_index}.evidence.{ref_index}.source_id", ref)
+        for event_index, event in enumerate(draft.recent_developments)
+        for ref_index, ref in enumerate(event.evidence)
+    )
+    for field_path, ref in refs:
+        if ref.source_id not in known:
+            raise _DraftValidationFailure(
+                "source_reference_validation",
+                field_path,
+                "Evidence references an unavailable host source",
+            )
+
+    for path, fact in [
+        *fact_pairs,
+        *[
+            (f"recent_developments.{index}", event)
+            for index, event in enumerate(draft.recent_developments)
+        ],
+    ]:
         if fact.state != "supported":
             continue
-        for ref in fact.evidence:
+        for ref_index, ref in enumerate(fact.evidence):
             material = sources.get(ref.source_id)
             if (
                 material is None
                 or material.kind != "full_page"
                 or not _exact_excerpt(material, ref.excerpt)
             ):
-                raise ValueError(
-                    "Supported claims require exact excerpts from retrieved full-page content; "
-                    "otherwise keep the candidate uncertain or unknown"
+                raise _DraftValidationFailure(
+                    "evidence_validation",
+                    f"{path}.evidence.{ref_index}.excerpt",
+                    "Supported claims require exact excerpts from retrieved full-page content",
                 )
 
-    for financial in draft.financials:
+    for financial_index, financial in enumerate(draft.financials):
         if financial.value is None:
             continue
         if not financial.evidence:
-            raise ValueError("Financial amounts require eligible retrieved page/text evidence")
-        for ref in financial.evidence:
+            raise _DraftValidationFailure(
+                "evidence_validation",
+                f"financials.{financial_index}.evidence",
+                "Financial amounts require eligible retrieved page/text evidence",
+            )
+        for ref_index, ref in enumerate(financial.evidence):
             material = sources.get(ref.source_id)
             if material is None or material.kind != "full_page":
-                raise ValueError(
-                    "Financial amounts require eligible retrieved page/text content, not "
-                    "discovery snippets or unreadable documents; otherwise return unknown"
+                raise _DraftValidationFailure(
+                    "evidence_validation",
+                    f"financials.{financial_index}.evidence.{ref_index}.source_id",
+                    "Financial amounts require retrieved page/text content",
                 )
 
     today = date.today()
     start_day = min(today.day, monthrange(today.year - 1, today.month)[1])
     earliest = today.replace(year=today.year - 1, day=start_day)
-    for event in draft.recent_developments:
+    for event_index, event in enumerate(draft.recent_developments):
         if event.value is not None and not (earliest <= event.value.published_on <= today):
-            raise ValueError(
-                "Recent development publication dates must be within the previous 12 months"
+            raise _DraftValidationFailure(
+                "evidence_validation",
+                f"recent_developments.{event_index}.value.published_on",
+                "Recent development publication dates must be within the previous 12 months",
             )
 
 
@@ -142,12 +204,127 @@ def _unknown_draft(reason: str) -> CompanyResearchDraft:
     )
 
 
+_SAFE_SCHEMA_FIELDS = frozenset(
+    {
+        "business_description",
+        "products_services",
+        "industries",
+        "markets",
+        "employees",
+        "financials",
+        "recent_developments",
+        "limitations",
+        "state",
+        "kind",
+        "count",
+        "minimum",
+        "maximum",
+        "as_of",
+        "value",
+        "reason",
+        "evidence",
+        "metric",
+        "period",
+        "currency",
+        "unit",
+        "scope",
+        "group_name",
+        "source_id",
+        "excerpt",
+        "start",
+        "end",
+        "published_on",
+        "occurred_on",
+        "title",
+        "description",
+    }
+)
+
+
+def _safe_schema_error(error: ValidationError) -> tuple[str | None, str]:
+    errors = error.errors(include_input=False, include_context=False, include_url=False)
+    if not errors:
+        return None, "schema_validation_error"
+    first = errors[0]
+    raw_loc = first.get("loc", ())
+    safe_parts = [
+        str(part) if isinstance(part, int) else part if part in _SAFE_SCHEMA_FIELDS else "unknown"
+        for part in raw_loc[:8]
+        if isinstance(part, (int, str))
+    ]
+    path = ".".join(safe_parts) or None
+    error_kind = first.get("type")
+    if not isinstance(error_kind, str) or not error_kind.replace("_", "").isalnum():
+        error_kind = "schema_validation_error"
+    return path, error_kind
+
+
+def _record_failure(
+    deps: ResearchDeps,
+    *,
+    code: FailureCode,
+    stage: Literal[
+        "source_reference_validation",
+        "evidence_validation",
+        "structured_output_validation",
+        "resource_limit",
+        "model",
+        "cleanup",
+    ],
+    reason: str,
+    error_type: str | None = None,
+    field_path: str | None = None,
+    attempt: int | None = None,
+) -> None:
+    deps.failures.append(
+        OperationalFailure(
+            code=code,
+            stage=stage,
+            reason=reason,
+            error_type=error_type,
+            field_path=field_path,
+            attempt=attempt,
+            validated_progress_available=deps.progress is not None,
+        )
+    )
+
+
+def _output_validation_error(
+    ctx: RunContext[ResearchDeps], *, output_context: Any, output: Any, error: Any
+) -> None:
+    del output_context, output
+    deps = ctx.deps
+    deps.output_validation_attempts += 1
+    if isinstance(error, ValidationError):
+        field_path, error_kind = _safe_schema_error(error)
+        _record_failure(
+            deps,
+            code="MODEL_OUTPUT_INVALID",
+            stage="structured_output_validation",
+            reason=f"Structured output schema validation failed ({error_kind})",
+            error_type=type(error).__name__,
+            field_path=field_path,
+            attempt=deps.output_validation_attempts,
+        )
+    else:
+        _record_failure(
+            deps,
+            code="MODEL_OUTPUT_INVALID",
+            stage="structured_output_validation",
+            reason="Output validation rejected the draft",
+            error_type=type(error).__name__,
+            attempt=deps.output_validation_attempts,
+        )
+    raise error
+
+
 def create_agent() -> Agent[ResearchDeps, CompanyResearchDraft]:
     agent: Agent[ResearchDeps, CompanyResearchDraft] = Agent(
         output_type=CompanyResearchDraft,
         deps_type=ResearchDeps,
         instructions=_AGENT_INSTRUCTIONS,
         retries=AgentRetries(tools=0, output=1),
+        capabilities=[Hooks(output_validate_error=_output_validation_error)],
     )
 
     @agent.tool(name="search_web", sequential=True)
@@ -181,8 +358,25 @@ def create_agent() -> Agent[ResearchDeps, CompanyResearchDraft]:
         try:
             ctx.deps.usage = ctx.usage
             _validate_draft(draft, ctx.deps.sources)
-        except ValueError as exc:
-            return f"Progress not saved: {exc}"
+        except _DraftValidationFailure as exc:
+            _record_failure(
+                ctx.deps,
+                code="EVIDENCE_VALIDATION_FAILURE",
+                stage=exc.stage,
+                reason=exc.reason,
+                error_type=type(exc).__name__,
+                field_path=exc.field_path,
+            )
+            return f"Progress not saved: {exc.reason}"
+        except ValueError:
+            _record_failure(
+                ctx.deps,
+                code="EVIDENCE_VALIDATION_FAILURE",
+                stage="evidence_validation",
+                reason="Progress draft validation failed",
+                error_type="ValueError",
+            )
+            return "Progress not saved: draft validation failed"
         ctx.deps.progress = draft
         return "Progress saved."
 
@@ -193,8 +387,29 @@ def create_agent() -> Agent[ResearchDeps, CompanyResearchDraft]:
         ctx.deps.usage = ctx.usage
         try:
             _validate_draft(draft, ctx.deps.sources)
+        except _DraftValidationFailure as exc:
+            ctx.deps.output_validation_attempts += 1
+            _record_failure(
+                ctx.deps,
+                code="EVIDENCE_VALIDATION_FAILURE",
+                stage=exc.stage,
+                reason=exc.reason,
+                error_type=type(exc).__name__,
+                field_path=exc.field_path,
+                attempt=ctx.deps.output_validation_attempts,
+            )
+            raise ModelRetry(exc.reason) from exc
         except ValueError as exc:
-            raise ModelRetry(str(exc)) from exc
+            ctx.deps.output_validation_attempts += 1
+            _record_failure(
+                ctx.deps,
+                code="MODEL_OUTPUT_INVALID",
+                stage="structured_output_validation",
+                reason="Draft validation failed",
+                error_type="ValueError",
+                attempt=ctx.deps.output_validation_attempts,
+            )
+            raise ModelRetry("Draft validation failed") from exc
         return draft
 
     return agent
@@ -220,18 +435,16 @@ def _usage_counts(exc: BaseException | None, result: Any, usage: RunUsage) -> tu
     )
 
 
-def _stop_reason(exc: BaseException, secrets: tuple[str, ...]) -> str:
+def _failure_category(
+    exc: BaseException,
+) -> tuple[FailureCode, Literal["resource_limit", "model"], str]:
     if isinstance(exc, TimeoutError):
-        return "Research deadline exceeded"
+        return "RESOURCE_LIMIT", "resource_limit", "Research deadline exceeded"
     if isinstance(exc, UsageLimitExceeded):
-        prefix = "Model usage limit reached"
-    else:
-        prefix = f"Research interrupted ({type(exc).__name__})"
-    detail = str(exc).strip()
-    for secret in secrets:
-        if secret:
-            detail = detail.replace(secret, "[redacted]")
-    return f"{prefix}: {detail[:500]}" if detail else prefix
+        return "RESOURCE_LIMIT", "resource_limit", "Model usage limit reached"
+    if isinstance(exc, (ValueError, TypeError)):
+        return "CONFIG_ERROR", "model", "Research configuration failed"
+    return "MODEL_FAILURE", "model", "Research interrupted by a provider or model failure"
 
 
 async def research_company(
@@ -319,37 +532,62 @@ async def research_company(
     except Exception as exc:
         failure = exc
     finally:
-        await client.close()
-        if openai_client is not None:
-            await openai_client.close()
+        for resource_name, close in (
+            ("search client", client.close),
+            ("model client", openai_client.close if openai_client is not None else None),
+        ):
+            if close is None:
+                continue
+            try:
+                async with asyncio.timeout(2):
+                    await close()
+            except Exception as exc:
+                _record_failure(
+                    deps,
+                    code="MODEL_FAILURE",
+                    stage="cleanup",
+                    reason=f"{resource_name} cleanup failed",
+                    error_type=type(exc).__name__,
+                )
 
     requests, input_tokens, output_tokens = _usage_counts(failure, result, run_usage)
     requests = max(requests, request_count)
     output_retries = deps.output_retries
-    if result is not None and failure is None:
-        draft = result.output
-        status: str = "completed"
-        stop_reason = "; ".join(budget.notes) or None
-    else:
-        stop_reason = (
-            _stop_reason(
-                failure,
-                (
-                    tavily_api_key or os.getenv("TAVILY_API_KEY") or "",
-                    os.getenv("OPENAI_API_KEY", ""),
-                ),
+    final_failure_code: FailureCode | None = None
+    stop_reason: str | None
+    if failure is not None:
+        if isinstance(failure, UnexpectedModelBehavior) and deps.output_validation_attempts:
+            code: FailureCode = "MODEL_OUTPUT_INVALID"
+            stop_reason = "Output remained invalid after the allowed repair"
+        else:
+            code, stage, stop_reason = _failure_category(failure)
+            _record_failure(
+                deps,
+                code=code,
+                stage=stage,
+                reason=stop_reason,
+                error_type=type(failure).__name__,
             )
-            if failure
-            else "Research interrupted"
-        )
+        final_failure_code = code
         draft = deps.progress or _unknown_draft(stop_reason)
-        status = "partial" if deps.progress is not None else "failed"
+        status: str = "partial" if deps.progress is not None else "failed"
         if stop_reason not in draft.limitations:
             draft = draft.model_copy(update={"limitations": [*draft.limitations, stop_reason]})
+    elif result is not None:
+        draft = result.output
+        status = "completed"
+        stop_reason = "; ".join(budget.notes) or None
+    else:
+        stop_reason = "Research interrupted"
+        draft = deps.progress or _unknown_draft(stop_reason)
+        status = "partial" if deps.progress is not None else "failed"
     if budget.notes:
         draft = draft.model_copy(
             update={"limitations": list(dict.fromkeys([*draft.limitations, *budget.notes]))}
         )
+    failures = [*deps.failures, *budget.failures]
+    if final_failure_code is None and failures:
+        final_failure_code = failures[0].code
 
     return CompanyResearchRun(
         identity=identity,
@@ -366,6 +604,9 @@ async def research_company(
             output_retries=output_retries,
             input_tokens=input_tokens,
             output_tokens=output_tokens,
+            failure_code=final_failure_code,
+            failures=failures,
+            validated_progress_retained=status == "partial" and deps.progress is not None,
             duration_seconds=max(0.0, time.monotonic() - started),
             cost_usd=None,
         ),

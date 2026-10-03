@@ -478,3 +478,69 @@ def test_subset_checkpoint_preserves_omitted_failures_and_diagnostics(
     resumed = asyncio.run(batch.run_batch(full_input, output_dir=out, runs_dir=runs))
     assert [result.status for result in resumed] == ["complete", "failed", "partial"]
     assert calls == {"lookup": 3, "research": 2}
+
+
+def test_gate_failure_is_sanitized_and_distinct_from_artifact_io(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _setup(monkeypatch)
+    path = _input(tmp_path / "input.csv", [NIPS[0]])
+    out, runs = tmp_path / "out", tmp_path / "runs"
+    secret = "provider payload authorization=top-secret"
+
+    monkeypatch.setattr(
+        batch, "build_profile", lambda run: (_ for _ in ()).throw(ValueError(secret))
+    )
+    result = asyncio.run(batch.run_batch(path, output_dir=out, runs_dir=runs))[0]
+    assert result.status == "failed"
+    assert result.error_code == "EVIDENCE_VALIDATION_FAILURE"
+    assert result.reason is not None and secret not in result.reason
+    assert result.diagnostics is not None
+
+
+def test_artifact_io_failure_is_not_reported_as_evidence_validation(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _setup(monkeypatch)
+    path = _input(tmp_path / "input.csv", [NIPS[0]])
+    out, runs = tmp_path / "out", tmp_path / "runs"
+    original_write_text = Path.write_text
+
+    def fail_research_artifact(self: Path, data: str, *args: Any, **kwargs: Any) -> int:
+        if self.name == "research.json":
+            raise OSError("secret filesystem details")
+        return original_write_text(self, data, *args, **kwargs)
+
+    monkeypatch.setattr(Path, "write_text", fail_research_artifact)
+    result = asyncio.run(batch.run_batch(path, output_dir=out, runs_dir=runs))[0]
+    assert result.status == "failed"
+    assert result.error_code != "EVIDENCE_VALIDATION_FAILURE"
+    assert "secret filesystem details" not in (result.reason or "")
+
+
+def test_failed_research_company_keeps_diagnostics_and_later_publication(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _setup(monkeypatch)
+
+    async def research(identity: Any, sources: list[Any], *, model: str) -> Any:
+        run = _run(_profile(nip=identity.nip), "failed" if identity.nip == NIPS[1] else "completed")
+        if identity.nip == NIPS[1]:
+            diagnostics = run.diagnostics.model_copy(update={"failure_code": "MODEL_FAILURE"})
+            return run.model_copy(update={"diagnostics": diagnostics})
+        return run
+
+    monkeypatch.setattr(batch, "research_company", research)
+    path = _input(tmp_path / "input.csv", NIPS)
+    out, runs = tmp_path / "out", tmp_path / "runs"
+    results = asyncio.run(batch.run_batch(path, output_dir=out, runs_dir=runs))
+
+    assert [result.status for result in results] == ["complete", "failed", "complete"]
+    assert results[1].error_code == "MODEL_FAILURE"
+    assert results[1].diagnostics is not None
+    assert results[1].diagnostics.failure_code == "MODEL_FAILURE"
+    assert results[2].json_path is not None and Path(results[2].json_path).exists()
+    persisted = json.loads((out / "_batch_state.json").read_text(encoding="utf-8"))
+    by_nip = {item["nip"]: item for item in persisted}
+    assert by_nip[NIPS[1]]["status"] == "failed"
+    assert by_nip[NIPS[1]]["diagnostics"]["failure_code"] == "MODEL_FAILURE"

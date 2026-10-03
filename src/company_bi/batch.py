@@ -19,6 +19,8 @@ from company_bi.models import (
     CompanyResearchRun,
     Fact,
     InputRow,
+    OperationalFailure,
+    ResearchDiagnostics,
 )
 from company_bi.nip import InvalidNIP, validate_nip
 from company_bi.registry import RegistryLookupError, lookup_company
@@ -218,6 +220,25 @@ def _replace_pair(
             path.unlink(missing_ok=True)
 
 
+def _evidence_failure_diagnostics(
+    diagnostics: ResearchDiagnostics, error: ValueError
+) -> ResearchDiagnostics:
+    failure = OperationalFailure(
+        code="EVIDENCE_VALIDATION_FAILURE",
+        stage="evidence_validation",
+        reason="Research output failed evidence validation",
+        error_type=type(error).__name__,
+    )
+    return diagnostics.model_copy(
+        update={
+            "status": "failed",
+            "stop_reason": failure.reason,
+            "failure_code": failure.code,
+            "failures": [*diagnostics.failures, failure],
+        }
+    )
+
+
 async def run_batch(
     input_path: Path,
     *,
@@ -336,13 +357,22 @@ async def run_batch(
                                 }
                             )
                         except Exception as error:
+                            invalid_output = isinstance(error, ValidationError)
                             result = BatchResult(
                                 row_number=row_number,
                                 input_nip=input_nip,
                                 nip=nip,
                                 status="failed",
-                                error_code="PROFILE_REFRESH_ERROR",
-                                reason=f"{type(error).__name__}: {error}"[:500],
+                                error_code=(
+                                    "MODEL_OUTPUT_INVALID"
+                                    if invalid_output
+                                    else "PROFILE_REFRESH_ERROR"
+                                ),
+                                reason=(
+                                    "Cached research output failed schema validation"
+                                    if invalid_output
+                                    else "Cached research profile refresh failed"
+                                ),
                                 completed_at=_now(),
                                 diagnostics=run.diagnostics,
                                 research_path=cached.research_path,
@@ -440,41 +470,60 @@ async def run_batch(
                         input_nip=input_nip,
                         nip=nip,
                         status="failed",
-                        error_code="RESEARCH_FAILED",
+                        error_code=run.diagnostics.failure_code or "RESEARCH_FAILED",
                         reason=run.diagnostics.stop_reason or "Research failed",
                         completed_at=_now(),
                         diagnostics=run.diagnostics,
                         research_path=str(artifact),
                     )
                 else:
-                    profile = build_profile(run)
-                    if profile.identity.nip != nip:
-                        raise ValueError("Published profile NIP does not match the input NIP")
-                    json_path, markdown_path = output_dir / f"{nip}.json", output_dir / f"{nip}.md"
-                    _replace_pair(
-                        json_path, render_json(profile), markdown_path, render_markdown(profile)
-                    )
-                    reason = (
-                        "Research completed with limitations"
-                        if run.diagnostics.status == "partial" and profile.status == "complete"
-                        else (
-                            "Profile has incomplete or uncertain core coverage"
-                            if profile.status == "partial"
-                            else None
+                    try:
+                        profile = build_profile(run)
+                        if profile.identity.nip != nip:
+                            raise ValueError("Published profile NIP does not match the input NIP")
+                    except ValueError as error:
+                        diagnostics = _evidence_failure_diagnostics(run.diagnostics, error)
+                        result = BatchResult(
+                            row_number=row_number,
+                            input_nip=input_nip,
+                            nip=nip,
+                            status="failed",
+                            error_code="EVIDENCE_VALIDATION_FAILURE",
+                            reason=diagnostics.stop_reason,
+                            completed_at=_now(),
+                            diagnostics=diagnostics,
+                            research_path=str(artifact),
                         )
-                    )
-                    result = BatchResult(
-                        row_number=row_number,
-                        input_nip=input_nip,
-                        nip=nip,
-                        status=profile.status,
-                        json_path=str(json_path),
-                        markdown_path=str(markdown_path),
-                        reason=reason,
-                        completed_at=_now(),
-                        diagnostics=run.diagnostics,
-                        research_path=str(artifact),
-                    )
+                    else:
+                        json_path = output_dir / f"{nip}.json"
+                        markdown_path = output_dir / f"{nip}.md"
+                        _replace_pair(
+                            json_path,
+                            render_json(profile),
+                            markdown_path,
+                            render_markdown(profile),
+                        )
+                        reason = (
+                            "Research completed with limitations"
+                            if run.diagnostics.status == "partial" and profile.status == "complete"
+                            else (
+                                "Profile has incomplete or uncertain core coverage"
+                                if profile.status == "partial"
+                                else None
+                            )
+                        )
+                        result = BatchResult(
+                            row_number=row_number,
+                            input_nip=input_nip,
+                            nip=nip,
+                            status=profile.status,
+                            json_path=str(json_path),
+                            markdown_path=str(markdown_path),
+                            reason=reason,
+                            completed_at=_now(),
+                            diagnostics=run.diagnostics,
+                            research_path=str(artifact),
+                        )
         except RegistryLookupError as error:
             result = BatchResult(
                 row_number=row_number,
@@ -482,17 +531,22 @@ async def run_batch(
                 nip=nip,
                 status="failed",
                 error_code=error.code,
-                reason=str(error),
+                reason="MF registry lookup failed",
                 completed_at=_now(),
             )
         except Exception as error:
+            invalid_output = isinstance(error, ValidationError)
             result = BatchResult(
                 row_number=row_number,
                 input_nip=input_nip,
                 nip=nip,
                 status="failed",
-                error_code=getattr(error, "code", "PUBLICATION_ERROR"),
-                reason=f"{type(error).__name__}: {error}"[:500],
+                error_code="MODEL_OUTPUT_INVALID" if invalid_output else "PUBLICATION_ERROR",
+                reason=(
+                    "Research output failed schema validation"
+                    if invalid_output
+                    else "Company processing failed during persistence or publication"
+                ),
                 completed_at=_now(),
                 diagnostics=run.diagnostics if run else None,
                 research_path=str(artifact) if artifact_persisted and artifact else None,

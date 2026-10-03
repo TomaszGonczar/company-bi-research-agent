@@ -59,7 +59,7 @@ def lookup_company(nip: str, as_of: date) -> tuple[CompanyIdentity | None, Sourc
         ) from error
     except (URLError, TimeoutError, OSError) as error:
         raise RegistryLookupError(
-            "REGISTRY_NETWORK_ERROR", f"MF registry request failed: {error}"
+            "REGISTRY_NETWORK_ERROR", "MF registry request failed due to a network or timeout error"
         ) from error
     retrieved_at = datetime.now(UTC)
     try:

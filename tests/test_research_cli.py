@@ -45,6 +45,58 @@ def test_research_does_not_create_a_draft_without_trusted_identity(
     assert capsys.readouterr().err.startswith(f"{code}:")
 
 
+def test_registry_network_error_does_not_echo_provider_exception(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    mock_registry: Callable[[dict[str, dict[str, Any] | bytes | Exception]], None],
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    from urllib.error import URLError
+
+    monkeypatch.setenv("OPENAI_API_KEY", "offline-fixture")
+    monkeypatch.setenv("TAVILY_API_KEY", "offline-fixture")
+    secret = "authorization=top-secret-provider-body"
+    mock_registry({"5220003782": URLError(secret)})
+    output = tmp_path / "research.json"
+
+    assert main(["research", "5220003782", "--output", str(output)]) == 2
+    error = capsys.readouterr().err
+    assert "REGISTRY_NETWORK_ERROR" in error
+    assert "MF registry request failed" in error
+    assert secret not in error
+    assert not output.exists()
+
+
+@pytest.mark.parametrize(
+    ("model", "tavily", "openai", "missing"),
+    [
+        ("openai-codex:gpt-6-luna", None, None, "TAVILY_API_KEY"),
+        ("openai:gpt-4.1", "offline-fixture", None, "OPENAI_API_KEY"),
+    ],
+)
+def test_batch_missing_live_credentials_fails_before_reading_input(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+    model: str,
+    tavily: str | None,
+    openai: str | None,
+    missing: str,
+) -> None:
+    if tavily is None:
+        monkeypatch.delenv("TAVILY_API_KEY", raising=False)
+    else:
+        monkeypatch.setenv("TAVILY_API_KEY", tavily)
+    if openai is None:
+        monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    else:
+        monkeypatch.setenv("OPENAI_API_KEY", openai)
+    missing_input = tmp_path / "does-not-exist.csv"
+
+    assert main(["batch", str(missing_input), "--model", model]) == 2
+    assert f"CONFIG_ERROR: {missing}" in capsys.readouterr().err
+
+
 def test_missing_research_credentials_fail_before_registry_lookup(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:

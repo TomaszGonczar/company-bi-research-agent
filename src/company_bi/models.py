@@ -25,6 +25,15 @@ Money = Annotated[Decimal, Field(allow_inf_nan=False)]
 TextList = Annotated[list[Text], Field(min_length=1)]
 EvidenceState = Literal["supported", "uncertain", "unknown"]
 EntityScope = Literal["legal_entity", "group"]
+FailureCode = Literal[
+    "SEARCH_FAILURE",
+    "FETCH_FAILURE",
+    "MODEL_FAILURE",
+    "MODEL_OUTPUT_INVALID",
+    "RESOURCE_LIMIT",
+    "EVIDENCE_VALIDATION_FAILURE",
+    "CONFIG_ERROR",
+]
 
 
 class Model(BaseModel):
@@ -305,10 +314,37 @@ class CompanyProfile(Model):
         return self
 
 
+class OperationalFailure(Model):
+    code: FailureCode
+    stage: Literal[
+        "search",
+        "static_fetch",
+        "dynamic_fetch",
+        "url_validation",
+        "model",
+        "structured_output_validation",
+        "source_reference_validation",
+        "evidence_validation",
+        "progress_validation",
+        "resource_limit",
+        "cleanup",
+        "publication",
+    ]
+    reason: Text = Field(max_length=500)
+    error_type: Text | None = None
+    field_path: Text | None = None
+    attempt: PositiveInt | None = None
+    source_id: Text | None = None
+    validated_progress_available: bool = False
+
+
 class ResearchDiagnostics(Model):
     model: Text
     status: Literal["completed", "partial", "failed"]
     stop_reason: Text | None = None
+    failure_code: FailureCode | None = None
+    failures: list[OperationalFailure] = Field(default_factory=list)
+    validated_progress_retained: bool = False
     model_requests: NonNegativeInt
     searches: NonNegativeInt
     page_reads: NonNegativeInt
@@ -411,6 +447,7 @@ class SearchResults(Model):
     query: Text
     results: list[SearchHit] = Field(default_factory=list)
     error: Text | None = None
+    failure: OperationalFailure | None = None
 
 
 class RetrievedSource(Model):
@@ -425,6 +462,7 @@ class RetrievedSource(Model):
 class PageReadResult(Model):
     material: RetrievedSource | None = None
     error: Text | None = None
+    failure: OperationalFailure | None = None
 
 
 class CompanyResearchRun(Model):

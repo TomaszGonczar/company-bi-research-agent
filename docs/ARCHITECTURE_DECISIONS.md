@@ -104,3 +104,11 @@ Final `ProfileSource` adds required material-kind provenance without changing OG
 
 Persist canonical JSON/Markdown pairs at the frozen paths, original research under per-run artifacts, ordered summaries at `outputs/batch_summary.csv` and a concrete checkpoint at `outputs/_batch_state.json`. Reuse requires valid same-NIP retained research under `runs/<nip>/`, re-applies the current gate, and republishes deterministic pairs while retaining original diagnostics. Profile/status/path checks prevent mismatched recovery; a schema-valid stale profile alone is insufficient. Per-company failures stay independent; explicit retry/force controls expensive work. Interrupted publication can recover from valid retained research; no scheduler, queue, database, generic storage/provider interface or fallback-output fiction is added.
 
+## OG-155 reliability and deterministic CI
+
+Use one Python 3.12 GitHub Actions job with locked uv installation, pytest, Ruff lint/format, mypy and offline evaluation. Default tests block live network/provider entry points; live research commands remain separate. CI isolates Codex state and supplies no paid credentials. No dependency/provider or architecture expansion is needed.
+
+Operational failures are additive typed records in research/tool diagnostics, not a retry framework or telemetry platform. Native PydanticAI hooks observe schema errors; the existing output validator records domain rejections before its unchanged `ModelRetry`. Safe class/path/kind/attempt/progress information replaces raw exception/payload dumps. Valid progress, resource counters and per-company isolation remain intact; finite client cleanup cannot replace a valid result.
+
+Public-target validation explicitly rejects local/internal hostnames, non-global/mixed DNS addresses, unsafe schemes and userinfo. Source-ID-only reads and pre-follow redirect checks remain the concrete boundary. DNS validation is still not connection IP pinning; this is not a complete network sandbox. Frozen prompts, evidence gating, financial schemas, model/provider, gold and resource/repair limits are unchanged. [PROJECT.md](../PROJECT.md#og-155--offline-ci-reliability-and-webtool-safety) documents commands, failure taxonomy, diagnostics and remaining limitations.
+

@@ -10,12 +10,11 @@ from typing import Any
 from pydantic import HttpUrl
 from tavily import AsyncTavilyClient  # type: ignore[import-untyped]
 
-from company_bi.models import SearchResults
+from company_bi.models import OperationalFailure, SearchResults
 from company_bi.sources import ResearchBudget, SourceStore
 
 
 def _provider_error(error: BaseException) -> str:
-    # Exception strings may contain request headers or credentials; retain only the class.
     return f"Tavily search failed ({type(error).__name__})"
 
 
@@ -23,10 +22,21 @@ async def search_web(
     query: str, *, client: AsyncTavilyClient, store: SourceStore, budget: ResearchBudget
 ) -> SearchResults:
     if not budget.consume("search"):
-        return SearchResults(query=query, results=[], error="Search budget or deadline exhausted")
+        return SearchResults(
+            query=query,
+            results=[],
+            error="Search budget or deadline exhausted",
+            failure=budget.failures[-1],
+        )
     timeout = budget.remaining()
     if timeout <= 0:
-        return SearchResults(query=query, results=[], error="Research deadline reached")
+        budget.record_failure(
+            OperationalFailure(
+                code="RESOURCE_LIMIT", stage="resource_limit", reason="Research deadline reached"
+            )
+        )
+        failure = budget.failures[-1]
+        return SearchResults(query=query, results=[], error=failure.reason, failure=failure)
     try:
         async with asyncio.timeout(timeout):
             response: Any = await client.search(
@@ -68,9 +78,18 @@ async def search_web(
             for title, url, content, score in parsed
         ]
         return SearchResults(query=query, results=hits)
-    except TimeoutError:
+    except TimeoutError as error:
         message = "Tavily search timed out"
+        error_type = type(error).__name__
     except Exception as error:
         message = _provider_error(error)
-    budget.note(message)
-    return SearchResults(query=query, results=[], error=message)
+        error_type = type(error).__name__
+    failure = OperationalFailure(
+        code="SEARCH_FAILURE",
+        stage="search",
+        reason=message,
+        error_type=error_type,
+        attempt=1,
+    )
+    budget.record_failure(failure)
+    return SearchResults(query=query, results=[], error=message, failure=failure)

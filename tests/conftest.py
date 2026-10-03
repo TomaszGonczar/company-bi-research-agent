@@ -1,4 +1,5 @@
 import json
+import socket
 from collections.abc import Callable
 from io import BytesIO
 from typing import Any
@@ -16,6 +17,19 @@ def block_live_registry(monkeypatch: pytest.MonkeyPatch) -> None:
         )
 
     monkeypatch.setattr("company_bi.registry.urlopen", blocked)
+
+
+@pytest.fixture(autouse=True)
+def block_live_sockets(monkeypatch: pytest.MonkeyPatch) -> None:
+    def blocked(*args: object, **kwargs: object) -> None:
+        raise AssertionError(
+            "Tests must use controlled network transports; live sockets are disabled"
+        )
+
+    monkeypatch.setattr(socket, "create_connection", blocked)
+    monkeypatch.setattr(socket.socket, "connect", blocked)
+    monkeypatch.setattr(socket.socket, "connect_ex", blocked)
+    monkeypatch.setattr(socket, "getaddrinfo", blocked)
 
 
 @pytest.fixture(autouse=True)

@@ -7,13 +7,13 @@ import ipaddress
 import socket
 from dataclasses import dataclass
 from datetime import UTC, date, datetime
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal
 from urllib.parse import urljoin, urlsplit
 
 from pydantic import HttpUrl
 from scrapling.fetchers import AsyncFetcher, DynamicFetcher
 
-from company_bi.models import PageReadResult, RetrievedSource
+from company_bi.models import OperationalFailure, PageReadResult, RetrievedSource
 from company_bi.sources import ResearchBudget, SourceStore
 
 if TYPE_CHECKING:
@@ -49,17 +49,26 @@ async def _validate_public_url(value: str, timeout: float = _DNS_TIMEOUT) -> str
         port = parts.port
         if port is not None and not 1 <= port <= 65535:
             raise _UnsafeTarget("Invalid URL port")
+        hostname = parts.hostname.rstrip(".").lower()
         try:
-            literal = ipaddress.ip_address(parts.hostname)
+            literal = ipaddress.ip_address(hostname)
         except ValueError:
             literal = None
         if literal is not None:
             addresses = [literal]
         else:
+            if (
+                "." not in hostname
+                or hostname == "localhost"
+                or hostname.endswith((".localhost", ".local", ".localdomain", ".internal", ".lan"))
+                or hostname == "home.arpa"
+                or hostname.endswith(".home.arpa")
+            ):
+                raise _UnsafeTarget("Local or internal URL hosts are not allowed")
             resolved = await asyncio.wait_for(
                 asyncio.to_thread(
                     socket.getaddrinfo,
-                    parts.hostname,
+                    hostname,
                     port or (443 if parts.scheme.lower() == "https" else 80),
                     type=socket.SOCK_STREAM,
                 ),
@@ -253,6 +262,31 @@ def _full_page(
     return material
 
 
+def _record_fetch_failure(
+    budget: ResearchBudget,
+    *,
+    source_id: str | None,
+    stage: Literal[
+        "static_fetch", "dynamic_fetch", "url_validation", "source_reference_validation"
+    ],
+    reason: str,
+    error: BaseException | None = None,
+    attempt: int | None = None,
+    field_path: str | None = None,
+) -> OperationalFailure:
+    failure = OperationalFailure(
+        code="FETCH_FAILURE",
+        stage=stage,
+        reason=reason,
+        error_type=type(error).__name__ if error is not None else None,
+        source_id=source_id,
+        attempt=attempt,
+        field_path=field_path,
+    )
+    budget.record_failure(failure)
+    return failure
+
+
 async def _static_read(url: str, timeout: float) -> _PageArtifact:
     current = url
     for redirect_count in range(_MAX_REDIRECTS + 1):
@@ -305,22 +339,43 @@ async def read_page(
     source_id: str, *, store: SourceStore, budget: ResearchBudget
 ) -> PageReadResult:
     if source_id not in store.known_ids():
-        return PageReadResult(error="Unknown source ID; only Tavily search results can be read")
+        failure = _record_fetch_failure(
+            budget,
+            source_id=None,
+            stage="source_reference_validation",
+            reason="Page read source reference is not known to this run",
+            field_path="source_id",
+        )
+        return PageReadResult(error=failure.reason, failure=failure)
     existing = store.get(source_id)
     if existing is not None and existing.kind == "full_page":
         return PageReadResult(material=existing)
     if existing is None or existing.fetch_mode != "tavily":
-        return PageReadResult(error="Only discovered Tavily sources can be read")
+        failure = _record_fetch_failure(
+            budget,
+            source_id=None,
+            stage="source_reference_validation",
+            reason="Only discovered Tavily sources can be read",
+            field_path="source_id",
+        )
+        return PageReadResult(error=failure.reason, failure=failure)
     if not budget.consume("page"):
-        return PageReadResult(error="Page-read budget or deadline exhausted")
+        return PageReadResult(
+            error="Page-read budget or deadline exhausted", failure=budget.failures[-1]
+        )
     try:
         target = await _validate_public_url(str(existing.source.url), budget.remaining())
     except _UnsafeTarget as error:
-        message = str(error)
-        budget.note(message)
-        return PageReadResult(error=message)
+        failure = _record_fetch_failure(
+            budget,
+            source_id=source_id,
+            stage="url_validation",
+            reason="Page URL failed public-target validation",
+            error=error,
+            attempt=1,
+        )
+        return PageReadResult(error=failure.reason, failure=failure)
 
-    static_error: str | None = None
     try:
         timeout = budget.remaining()
         if timeout <= 0:
@@ -330,27 +385,58 @@ async def read_page(
         if _meaningful(artifact.text):
             return PageReadResult(material=_full_page(store, source_id, artifact, "static"))
         target = artifact.url
-        static_error = "Static fetch returned no meaningful page text"
+        _record_fetch_failure(
+            budget,
+            source_id=source_id,
+            stage="static_fetch",
+            reason="Static fetch returned no meaningful page text",
+            attempt=1,
+        )
     except _UnsafeTarget as error:
-        message = str(error)
-        budget.note(message)
-        return PageReadResult(error=message)
+        failure = _record_fetch_failure(
+            budget,
+            source_id=source_id,
+            stage="url_validation",
+            reason="Static redirect failed public-target validation",
+            error=error,
+            attempt=1,
+        )
+        return PageReadResult(error=failure.reason, failure=failure)
     except _UnsupportedContent as error:
-        message = str(error)
-        budget.note(message)
-        return PageReadResult(error=message)
+        failure = _record_fetch_failure(
+            budget,
+            source_id=source_id,
+            stage="static_fetch",
+            reason="Static fetch returned unsupported page content",
+            error=error,
+            attempt=1,
+        )
+        return PageReadResult(error=failure.reason, failure=failure)
     except Exception as error:
-        static_error = f"Static page read failed ({type(error).__name__})"
+        _record_fetch_failure(
+            budget,
+            source_id=source_id,
+            stage="static_fetch",
+            reason="Static page fetch failed",
+            error=error,
+            attempt=1,
+        )
 
     if not budget.consume("dynamic"):
-        message = static_error or "Dynamic-read budget exhausted"
-        budget.note(message)
-        return PageReadResult(error=message)
+        failure = budget.failures[-1]
+        return PageReadResult(error=failure.reason, failure=failure)
     timeout = budget.remaining()
     if timeout <= 0:
-        message = "Research deadline reached"
-        budget.note(message)
-        return PageReadResult(error=message)
+        budget.record_failure(
+            OperationalFailure(
+                code="RESOURCE_LIMIT",
+                stage="resource_limit",
+                reason="Research deadline reached",
+                source_id=source_id,
+            )
+        )
+        failure = budget.failures[-1]
+        return PageReadResult(error=failure.reason, failure=failure)
     try:
         await _validate_public_url(target, timeout)
         async with asyncio.timeout(timeout):
@@ -375,14 +461,32 @@ async def read_page(
             raise ValueError("Dynamic fetch returned no meaningful page text")
         return PageReadResult(material=_full_page(store, source_id, artifact, "dynamic"))
     except _UnsafeTarget as error:
-        message = str(error)
-        budget.note(message)
-        return PageReadResult(error=message)
+        failure = _record_fetch_failure(
+            budget,
+            source_id=source_id,
+            stage="url_validation",
+            reason="Dynamic page target failed public-target validation",
+            error=error,
+            attempt=2,
+        )
+        return PageReadResult(error=failure.reason, failure=failure)
     except _UnsupportedContent as error:
-        message = str(error)
-        budget.note(message)
-        return PageReadResult(error=message)
+        failure = _record_fetch_failure(
+            budget,
+            source_id=source_id,
+            stage="dynamic_fetch",
+            reason="Dynamic fetch returned unsupported page content",
+            error=error,
+            attempt=2,
+        )
+        return PageReadResult(error=failure.reason, failure=failure)
     except Exception as error:
-        message = f"Page read failed ({type(error).__name__})"
-        budget.note(message)
-        return PageReadResult(error=message)
+        failure = _record_fetch_failure(
+            budget,
+            source_id=source_id,
+            stage="dynamic_fetch",
+            reason="Dynamic page fetch failed",
+            error=error,
+            attempt=2,
+        )
+        return PageReadResult(error=failure.reason, failure=failure)
