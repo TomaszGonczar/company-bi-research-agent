@@ -48,6 +48,12 @@ class Source(Model):
     published_on: date | None = None
 
 
+class ProfileSource(Source):
+    """Published provenance with the strongest retained material kind."""
+
+    kind: Literal["registry", "search_snippet", "full_page"]
+
+
 class EvidenceRef(Model):
     source_id: Text
     excerpt: Text
@@ -163,6 +169,52 @@ class CompanyEvent(Fact[EventDetails]):
     """A dated development with its own publication state and evidence."""
 
 
+def profile_has_gaps(
+    *,
+    limitations: list[str],
+    recent_developments: list[CompanyEvent],
+    facts: tuple[Fact[Any], ...],
+    identity: CompanyIdentity,
+    financials: list[FinancialFact],
+) -> bool:
+    """Canonical coverage calculation shared by the evidence gate and schema."""
+    if identity.legal_name.state != "supported":
+        return True
+    optional_identifiers = (identity.krs, identity.regon, identity.website)
+    required_facts = tuple(
+        fact for fact in facts if all(fact is not optional for optional in optional_identifiers)
+    )
+    if (
+        limitations
+        or not recent_developments
+        or any(fact.state != "supported" for fact in required_facts)
+    ):
+        return True
+    if any(fact.state == "uncertain" for fact in optional_identifiers):
+        return True
+    if (
+        identity.registered_city.state != "supported"
+        and identity.registered_address.state != "supported"
+    ):
+        return True
+    if any(
+        fact.state == "uncertain"
+        for fact in (identity.registered_city, identity.registered_address)
+    ):
+        return True
+    revenue_periods = {
+        (fact.period.start, fact.period.end)
+        for fact in financials
+        if fact.state == "supported" and fact.metric == "revenue" and fact.period is not None
+    }
+    net_result_periods = {
+        (fact.period.start, fact.period.end)
+        for fact in financials
+        if fact.state == "supported" and fact.metric == "net_result" and fact.period is not None
+    }
+    return not bool(revenue_periods & net_result_periods)
+
+
 def _check_financial_coverage(financials: list[FinancialFact]) -> None:
     if {fact.metric for fact in financials} != {"revenue", "net_result"}:
         raise ValueError("both financial metrics must be represented, even when unknown")
@@ -195,7 +247,7 @@ class CompanyProfile(Model):
     employees: EmployeeFact
     financials: list[FinancialFact] = Field(min_length=2, max_length=6)
     recent_developments: list[CompanyEvent] = Field(max_length=3)
-    sources: list[Source] = Field(min_length=1)
+    sources: list[ProfileSource] = Field(min_length=1)
     limitations: list[Text] = Field(default_factory=list)
 
     @model_validator(mode="after")
@@ -237,12 +289,12 @@ class CompanyProfile(Model):
             if event.value is not None and not recent_start <= event.value.published_on <= today:
                 raise ValueError("recent developments must be published within the last 12 months")
 
-        has_gaps = (
-            bool(self.limitations)
-            or not self.recent_developments
-            or any(fact.state != "supported" for fact in facts)
-            or not any(fact.state == "supported" for fact in location_facts)
-            or any(fact.state == "uncertain" for fact in location_facts)
+        has_gaps = profile_has_gaps(
+            limitations=self.limitations,
+            recent_developments=self.recent_developments,
+            facts=facts,
+            identity=self.identity,
+            financials=self.financials,
         )
         if self.status == "complete" and has_gaps:
             raise ValueError("complete requires supported coverage in every requested section")
@@ -251,6 +303,21 @@ class CompanyProfile(Model):
         if not self.recent_developments and not self.limitations:
             raise ValueError("no retrieved recent developments requires an explicit limitation")
         return self
+
+
+class ResearchDiagnostics(Model):
+    model: Text
+    status: Literal["completed", "partial", "failed"]
+    stop_reason: Text | None = None
+    model_requests: NonNegativeInt
+    searches: NonNegativeInt
+    page_reads: NonNegativeInt
+    dynamic_reads: NonNegativeInt
+    output_retries: NonNegativeInt
+    input_tokens: NonNegativeInt
+    output_tokens: NonNegativeInt
+    duration_seconds: Annotated[float, Field(ge=0)]
+    cost_usd: Money | None = None
 
 
 class BatchResult(Model):
@@ -267,6 +334,8 @@ class BatchResult(Model):
     markdown_path: Text | None = None
     reason: Text | None = None
     completed_at: AwareDatetime
+    diagnostics: ResearchDiagnostics | None = None
+    research_path: Text | None = None
 
     @model_validator(mode="after")
     def check_outcome(self) -> Self:
@@ -356,21 +425,6 @@ class RetrievedSource(Model):
 class PageReadResult(Model):
     material: RetrievedSource | None = None
     error: Text | None = None
-
-
-class ResearchDiagnostics(Model):
-    model: Text
-    status: Literal["completed", "partial", "failed"]
-    stop_reason: Text | None = None
-    model_requests: NonNegativeInt
-    searches: NonNegativeInt
-    page_reads: NonNegativeInt
-    dynamic_reads: NonNegativeInt
-    output_retries: NonNegativeInt
-    input_tokens: NonNegativeInt
-    output_tokens: NonNegativeInt
-    duration_seconds: Annotated[float, Field(ge=0)]
-    cost_usd: Money | None = None
 
 
 class CompanyResearchRun(Model):

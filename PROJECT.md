@@ -329,7 +329,7 @@ Do not cut:
 
 ## Foundation contracts — OG-148 / OG-149 / OG-150 / OG-160
 
-The foundation checkpoint is `6cfcfe4`; OG-151 is committed at `8701453`. Deterministic CSV/XLSX ingest/identity and the OG-152 bounded one-company draft path are implemented and verified, including a full native Codex OAuth/Tavily/Scrapling run. The generic evidence/excerpt/semantic publication gate, deterministic JSON/Markdown BI renderer, full BI research batch runner, eval suite and CI remain later work.
+The foundation checkpoint is `6cfcfe4`; OG-151 is committed at `8701453` and OG-152 at `c8aa7a2`. Deterministic CSV/XLSX ingest/identity and bounded one-company research are implemented and verified. OG-153 connects candidate research to a deterministic publication gate, JSON/Markdown BI rendering and a sequential filesystem-backed batch. Evals, CI, fuller web hardening and later retrieval experiments remain future issues.
 
 - [Architecture decisions](docs/ARCHITECTURE_DECISIONS.md): minimum pipeline, dependency responsibilities, trust boundaries and rejected technologies.
 - [One-page product contract](docs/PRODUCT_CONTRACT.md): exact input, output, evidence states, limits and refusals.
@@ -362,7 +362,7 @@ The financial spike exercised public KRS JSON, issuer HTML/CSV/text and RDF docu
 | OG-150 | Satisfied locally | All ten required models, state/quantity/provenance invariants and three examples exist; the smoke consumed the schema without a second LLM pass. |
 | OG-160 | Satisfied locally | Real-source investigation and a frozen primary route, UNKNOWN fallback, mandatory context and unsupported-format boundary permit later implementation without another financial research phase. |
 
-These results completed the four **foundation** issues, not the functional MVP or portfolio gate. OG-151 and OG-152 execution boundaries are below; excerpt/semantic publication checks and final BI reports remain OG-153 work. Linear status was not changed through the read-only connection.
+These results completed the four **foundation** issues, not the functional MVP or portfolio gate. OG-151, OG-152 and OG-153 execution boundaries are documented below. Linear status was not changed through the read-only connection.
 
 ## OG-151 — executable deterministic identity slice
 
@@ -452,3 +452,84 @@ Default output: `runs/<nip>/<UTC-run-timestamp>/research.json`, or `--output`. T
 - The live draft proposes Polish software/services activity, sector offerings and **2,465 employees as of 2025-12-31**. Business source `S016` and employee source `S004` remain discovery snippets after failed/refused reads, so these are unverified candidate observations, not published facts. Retrieved official news pages `S006` and `S007` contain explicit publication dates **2026-08-27** and **2026-05-27** and Asseco Poland **segment**, not legal-entity, activity. Draft summaries preserve that scope.
 - Manual excerpt inspection found model-added ellipses/non-exact excerpts even for some retrieved pages. No excerpt/semantic publication approval is claimed. PDF refusal, an ESG-site certificate/browser failure and all gaps remain explicit. The earlier live artifact with snippet-only revenue is now rejected by the persisted-run model; the corrected artifact reloads successfully.
 - **OG-152 Definition of Done is satisfied:** bounded one-company typed research, actual retained sources, truthful diagnostics, offline checks and full live/manual verification. Native credentials stay in the standard SDK/CLI path. No final evidence gate, BI renderer, research batch, eval/CI expansion, provider framework or runtime subagents were introduced. Stop before OG-153.
+
+## OG-153 — evidence-backed publication and batch
+
+```sh
+uv run --frozen --env-file .env company-bi batch examples/research_batch.csv \
+  --model openai-codex:gpt-6-luna
+# Reuse saved outcomes by default; retry deliberately:
+uv run --frozen --env-file .env company-bi batch examples/research_batch.csv --retry-partial
+uv run --frozen --env-file .env company-bi batch examples/research_batch.csv --retry-failed
+# Explicitly repeat all normalized NIPs:
+uv run --frozen --env-file .env company-bi batch examples/research_batch.csv --force
+```
+
+`--output-dir` defaults to `outputs`; `--runs-dir` defaults to `runs`. The sample deliberately spans software (Asseco Poland), apparel retail (LPP) and energy (ORLEN). Asseco/LPP NIPs were established in the prior live slices and financial decision; ORLEN NIP `7740001454` is stated in its [official regulatory notice](https://www.orlen.pl/en/investor-relations/reports-and-publications/regulatory-announcements/2026/02/Regulatory-announcement-no-17-2026). Missing/unreadable financial evidence is a normal partial outcome, not permission to infer totals.
+
+The batch reuses OG-151 input/identity and OG-152 research unchanged. Only `evidence.py` decides final states; `renderer.py` consumes the validated `CompanyProfile` without another model call. `batch.py` processes unique normalized NIPs sequentially, writes independent `<nip>.json`/`<nip>.md` pairs, and retains ordered input rows (including duplicates) in `batch_summary.csv`.
+
+Each completed company checkpoints `outputs/_batch_state.json`; raw research remains at `runs/<nip>/<UTC timestamp>/research.json`. Resume requires valid same-NIP retained research and re-applies the current gate before republishing deterministic JSON/Markdown. This prevents an older profile from preserving observations rejected by a corrected gate. Typed profile, status, pair content and expected paths are checked; missing/corrupt/mismatched research cannot authorize reuse. Valid retained research can also recover an interruption immediately before checkpointing. Partial/failed/unresolved records are reused by default; retry flags opt into new research and `--force` includes complete records. A failed retry must not erase the earlier usable report.
+
+Final source records retain `registry`, `full_page` or `search_snippet` provenance. Registry supplies legal identity only; researched supported claims require retained full-page evidence. Excerpts use case-sensitive NFC plus whitespace collapse and contiguous exact matching. Ellipses/paraphrases are not silently repaired. Fact-specific claim/context checks can downgrade an exact quote when it does not establish the candidate observation. Unverified candidates, nulls and reasons remain visible; no confidence score or another LLM approves publication.
+
+Date verification applies to uncertain candidates too. An employee observation date needs an explicitly dated employee statement, not a page's publication date. A month-only occurrence cannot become the first day of that month; an event publication date cannot become its occurrence date. Unsupported optional dates become null. If an event's required publication date or cited content is unverifiable, its structured details are cleared, retaining references and rejection reasons in the final profile and the original candidate in the raw research artifact.
+
+Unknown optional KRS/REGON/website fields no longer alone force partial. Required core gaps, conflicts, missing paired financial coverage and limitations still do. JSON and Markdown retain quantities, decimal precision, units, explicit reporting intervals and company/group scope; event publication and occurrence dates remain separate. Research usage is actual SDK/counter data, with empty/null values for unavailable diagnostics or cost.
+
+### Observed verification and OG-153 exit
+
+- **193 offline tests passed**. Ruff lint and format checks passed for 22 Python files; mypy passed for 13 source files. The 14 upstream Scrapling/lxml `strip_cdata` warnings remain visible, not suppressed.
+- Throwaway consumers exercised the actual gate and renderer: altered/model-ellipsis excerpts cannot support claims; employee bounds do not become exact counts; operating profit, revenue and a month number do not become total net-result amounts. An explicitly evidenced zero survives. A controlled full-page fixture reached `complete` with unknown optional identifiers, paired financial coverage and no limitations.
+- A separate **controlled, synthetic** runtime batch produced `complete`, `failed`, `partial`, then a duplicate `complete` input row. Both successful report pairs and all ordered summary rows were written. The injected failure did not stop the following company; resume added no lookup/research calls. Its temporary artifacts were removed. This is branch/failure-isolation proof, not real-company coverage.
+- The actual `examples/research_batch.csv` CLI used unchanged MF identity, native `openai-codex:gpt-6-luna`, Tavily and Scrapling. It wrote all three independent report pairs and the summary without manual profile editing: **0 complete, 3 partial, 0 failed/unresolved**. All final financial values are null. All researched candidates remained uncertain or unknown; each company has four supported registry identity facts. The sample did **not** attain the hoped-for real complete profile, and no real complete excerpt is available.
+
+| Company / NIP | Supported / uncertain / unknown facts | Model requests | Searches / page reads | Browser attempts / output repairs | Input / output tokens | Research seconds |
+| --- | --- | ---: | --- | --- | --- | ---: |
+| Asseco Poland / `5220003782` | 4 / 6 / 5 | 5 | 4 / 3 | 0 / 0 | 57,142 / 2,103 | 73.281 |
+| LPP / `5831014898` | 4 / 8 / 4 | 6 | 6 / 8 | 0 / 0 | 105,926 / 2,427 | 81.944 |
+| ORLEN / `7740001454` | 4 / 8 / 4 | 4 | 4 / 7 | 2 / 1 | 36,096 / 2,540 | 68.010 |
+
+Costs are null because the provider supplied no actual cost. Unsupported documents limited Asseco/LPP; failed reads, certificate errors and the exhausted browser budget limited ORLEN. Model completion is not BI completeness.
+
+Manual inspection found an unsupported LPP `2026-07-01` occurrence date derived from “In July this year”, plus employee dates copied from publication metadata. General date-role sanitation now clears these values, including already-uncertain candidates. Unverified required event publication/content clears the structured event details while preserving candidate references/reasons. The corrected persisted JSON and Markdown were reloaded and compared with the current gate/renderer; identity stayed unchanged, employee dates are null, financial values are null and unverified event details are null.
+
+The real CLI resume refreshed all six report files in 1.53 seconds. Retained research paths, hashes, timestamps and diagnostics were unchanged. A subsequent instrumented CLI resume observed **0 registry lookups and 0 research calls**. Changed rules therefore do not require repeated model work or trust stale rendered profiles.
+
+After correction and re-inspection: **none found in the inspected sample** of surviving hallucinated published facts. Uncertain qualitative candidates and candidate excerpts remain explicitly unverified; this is not an extraction-accuracy or universal truth claim.
+
+A temporary XLSX also exercised the actual CLI with retained real research: prefixed/hyphenated text, an exact integer cell and a duplicate NIP produced four ordered partial summary rows and three independent report pairs, with **0 lookup/research calls**. The workbook and its separate output directory were removed.
+
+Representative **real LPP** fields after re-gating (abridged, not a complete profile):
+
+```json
+{
+  "employees": {"state": "uncertain", "value": null, "as_of": null},
+  "financials": [
+    {"metric": "revenue", "state": "unknown", "value": null},
+    {"metric": "net_result", "state": "unknown", "value": null}
+  ]
+}
+```
+
+Its cited “nearly 63,000 people” is approximate Group evidence, not an exact standalone-company headcount. The report does not select 63,000 or inherit the article's publication date. The controlled complete fixture, not a real report, retained `120` exact employees as of `2026-09-01`, revenue `"12.5"` million PLN and total net result `"0"` million PLN for the explicit `2025-01-01`–`2025-12-31` legal-entity interval.
+
+### Definition-of-Done assessment
+
+| Criterion | Exercised evidence |
+| --- | --- |
+| 1. Deterministic candidate gate | Actual research artifacts passed through `build_profile` before publication. |
+| 2. Supported / uncertain / unknown | Canonical models, controlled complete output and all three inspected real reports preserve states and nulls. |
+| 3. Unsupported source IDs rejected | Offline orphan-reference rejection and retained-source model invariants. |
+| 4. Altered excerpts rejected | Exact NFC/whitespace normalization regressions, including model-added ellipses; no fuzzy repair. |
+| 5. Financial context required | Metric/amount/period/currency/unit/scope regressions, conflict handling, legitimate zero and controlled fully supported financials. |
+| 6. Deterministic JSON/Markdown | Canonical reload, repeated rendering and persisted pair equality without another model. |
+| 7. Multiple NIPs | Three-company real CLI and ordered duplicate-row controlled batch. |
+| 8. Failure isolation | Actual controlled batch writes complete/partial neighbors around an injected failure. |
+| 9. Complete / partial / failed | Controlled runtime demonstrates all three; real sample honestly reports only partial. |
+| 10. Practical progress/resume | Per-company checkpoint, interruption recovery, explicit retry regressions and zero-call real resume. |
+| 11. Deterministic checks | 193 tests, Ruff lint/format and mypy passed. |
+| 12. Real sample inspection | All three corrected Markdown reports and canonical JSON pairs were inspected. |
+
+OG-153's twelve gate/render/batch criteria are satisfied; the live complete-profile aspiration remains unmet. The gate deliberately favors false negatives over unsupported publication: paraphrases, insufficient entity/context attachment and missing date roles may downgrade genuine information. Evidence links remain usable citations/discovery leads, not a promise that blocked or unsupported documents can be fetched. The CLI still requires configured Tavily credentials even for a cached batch. No evals, CI expansion, general PDF/XML financial parser, runtime subagents, databases/queues, provider framework, prompt/token optimization or unrelated web-safety changes were introduced. Stop before OG-154.
+

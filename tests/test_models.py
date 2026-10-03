@@ -253,3 +253,21 @@ def test_batch_summary_cannot_claim_an_inconsistent_outcome(updates: dict[str, A
     }
     with pytest.raises(ValidationError):
         BatchResult.model_validate(payload)
+
+
+def test_unknown_optional_identifiers_do_not_force_partial(complete_data: dict[str, Any]) -> None:
+    complete_data["identity"]["krs"] = {"state": "unknown", "reason": "Not supplied"}
+    complete_data["identity"]["regon"] = {"state": "unknown", "reason": "Not supplied"}
+    complete_data["identity"]["website"] = {"state": "unknown", "reason": "Not supplied"}
+    assert profile(complete_data).status == "complete"
+
+
+def test_complete_financial_coverage_requires_a_shared_reporting_interval(
+    complete_data: dict[str, Any],
+) -> None:
+    complete_data["financials"][1]["period"] = {
+        "start": "2024-01-01",
+        "end": "2024-12-31",
+    }
+    with pytest.raises(ValidationError):
+        profile(complete_data)

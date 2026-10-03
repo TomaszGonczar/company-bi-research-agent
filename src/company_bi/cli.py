@@ -1,4 +1,4 @@
-"""Deterministic identity and one-company research commands; no BI rendering."""
+"""Deterministic identity, research, and publication batch commands."""
 
 import argparse
 import asyncio
@@ -12,6 +12,7 @@ from zoneinfo import ZoneInfo
 from pydantic import TypeAdapter
 
 from company_bi.agent import research_company
+from company_bi.batch import run_batch
 from company_bi.ingest import InputFileError, resolve_file
 from company_bi.models import BatchResult
 from company_bi.nip import InvalidNIP, validate_nip
@@ -65,9 +66,46 @@ def main(argv: list[str] | None = None) -> int:
     research.add_argument(
         "--model", default=os.environ.get("COMPANY_BI_MODEL", "openai-codex:gpt-6-luna")
     )
+    batch = commands.add_parser("batch", help="Research and publish a CSV/XLSX NIP batch")
+    batch.add_argument("input", type=Path)
+    batch.add_argument("--output-dir", type=Path, default=Path("outputs"))
+    batch.add_argument("--runs-dir", type=Path, default=Path("runs"))
+    batch.add_argument(
+        "--model", default=os.environ.get("COMPANY_BI_MODEL", "openai-codex:gpt-6-luna")
+    )
+    batch.add_argument("--retry-partial", action="store_true")
+    batch.add_argument("--retry-failed", action="store_true")
+    batch.add_argument("--force", action="store_true")
     args = parser.parse_args(argv)
     if args.command == "research":
         return _research(args.nip, args.output, args.model)
+    if args.command == "batch":
+        if not os.environ.get("TAVILY_API_KEY"):
+            print("CONFIG_ERROR: TAVILY_API_KEY is required", file=sys.stderr)
+            return 2
+        if args.model.startswith("openai:") and not os.environ.get("OPENAI_API_KEY"):
+            print(
+                "CONFIG_ERROR: OPENAI_API_KEY is required for the selected model", file=sys.stderr
+            )
+            return 2
+        try:
+            results = asyncio.run(
+                run_batch(
+                    args.input,
+                    output_dir=args.output_dir,
+                    runs_dir=args.runs_dir,
+                    model=args.model,
+                    retry_partial=args.retry_partial,
+                    retry_failed=args.retry_failed,
+                    force=args.force,
+                )
+            )
+        except (InputFileError, OSError, ValueError) as error:
+            print(f"BATCH_ERROR: {error}", file=sys.stderr)
+            return 2
+        counts = dict(Counter(result.status for result in results))
+        print(f"Processed {len(results)} input rows: {counts}")
+        return 1 if any(result.status == "failed" for result in results) else 0
     input_path = Path(args.input)
     output_path = Path(args.output)
     try:

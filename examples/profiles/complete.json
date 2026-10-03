@@ -200,28 +200,32 @@
       "url": "https://registry.example/1234563218",
       "title": "Synthetic registry entry",
       "retrieved_at": "2026-10-02T12:00:00Z",
-      "published_on": null
+      "published_on": null,
+      "kind": "registry"
     },
     {
       "source_id": "company",
       "url": "https://company.example/",
       "title": "Synthetic company page",
       "retrieved_at": "2026-10-02T12:02:00Z",
-      "published_on": "2026-06-30"
+      "published_on": "2026-06-30",
+      "kind": "full_page"
     },
     {
       "source_id": "financial",
       "url": "https://company.example/results/2025",
       "title": "Synthetic standalone annual results",
       "retrieved_at": "2026-10-02T12:03:00Z",
-      "published_on": "2026-03-31"
+      "published_on": "2026-03-31",
+      "kind": "full_page"
     },
     {
       "source_id": "news",
       "url": "https://company.example/news/factory",
       "title": "Synthetic factory news",
       "retrieved_at": "2026-10-02T12:04:00Z",
-      "published_on": "2026-07-15"
+      "published_on": "2026-07-15",
+      "kind": "full_page"
     }
   ],
   "limitations": []
