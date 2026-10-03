@@ -118,6 +118,160 @@ def _company_name_tokens(run: CompanyResearchRun) -> list[str]:
     ]
 
 
+_SOURCE_SENTENCE_BREAK = re.compile(r"(?<=[!?])\s+|(?<=\.)\s+(?=[A-ZĄĆĘŁŃÓŚŹŻ0-9])|;")
+
+
+def _bounded_source_contexts(content: str, excerpt: str) -> list[str]:
+    """Return retained contiguous spans: two sentences before each exact quote occurrence."""
+    normalized = _norm(content)
+    quote = _norm(excerpt)
+    if not quote:
+        return []
+    sentence_starts = [0]
+    sentence_starts.extend(match.end() for match in _SOURCE_SENTENCE_BREAK.finditer(normalized))
+    contexts: list[str] = []
+    offset = 0
+    while (offset := normalized.find(quote, offset)) >= 0:
+        sentence_index = max(
+            index for index, start in enumerate(sentence_starts) if start <= offset
+        )
+        start = sentence_starts[max(0, sentence_index - 2)]
+        contexts.append(normalized[start : offset + len(quote)])
+        offset += 1
+    return contexts
+
+
+_LEGAL_FORM_SUFFIXES = (
+    ("spółka", "z", "ograniczoną", "odpowiedzialnością"),
+    ("spółka", "komandytowo", "akcyjna"),
+    ("spółka", "komandytowa"),
+    ("spółka", "partnerska"),
+    ("spółka", "akcyjna"),
+    ("spółka", "jawna"),
+    ("sp", "z", "o", "o"),
+    ("sp", "k", "a"),
+    ("sp", "k"),
+    ("sp", "j"),
+    ("sp", "p"),
+    ("s", "a"),
+    ("sa",),
+)
+_EMPLOYEE_SCOPE_BLOCKERS = {"group", "groups", "grupa", "segment", "segments", "consolidated"}
+_EMPLOYEE_RELATION_BLOCKERS = {
+    "customer",
+    "customers",
+    "client",
+    "clients",
+    "supplier",
+    "suppliers",
+    "vendor",
+    "vendors",
+}
+_SENTENCE_INITIAL_NON_NAMES = {
+    "a",
+    "an",
+    "as",
+    "at",
+    "for",
+    "from",
+    "in",
+    "on",
+    "the",
+    "this",
+}
+
+
+def _legal_name_core_tokens(run: CompanyResearchRun) -> list[str]:
+    tokens = _company_name_tokens(run)
+    for suffix in _LEGAL_FORM_SUFFIXES:
+        if len(tokens) > len(suffix) and tokens[-len(suffix) :] == list(suffix):
+            return tokens[: -len(suffix)]
+    return tokens
+
+
+def _has_company_antecedent(context: str, run: CompanyResearchRun) -> bool:
+    sentences = _sentences(context)
+    name = _company_name_tokens(run)
+    if not name or len(sentences) < 2:
+        return False
+    for index in range(len(sentences) - 2, -1, -1):
+        words = _WORD.findall(sentences[index])
+        tokens = [word.casefold() for word in words]
+        subject = tokens[1:] if tokens[:1] == ["the"] else tokens
+        if subject[: len(name)] != name:
+            continue
+        if any(word[:1].isupper() and word.casefold() not in set(name) for word in words):
+            return False
+        for sentence in sentences[index + 1 :]:
+            following = [word.casefold() for word in _WORD.findall(sentence)]
+            if following[:1] not in (["it"], ["its"]) and following[:2] not in (
+                ["the", "company"],
+                ["this", "company"],
+            ):
+                return False
+        return True
+    return False
+
+
+def _issuer_nip_matches(text: str, identity_nip: str) -> bool:
+    for sentence in _sentences(text):
+        match = re.match(
+            r"(?:the\s+)?issuer\s+NIP\s*[:#]?\s*"
+            r"(\d{10}|\d{3}[- ]\d{3}[- ]\d{2}[- ]\d{2})\b",
+            sentence,
+            re.I,
+        )
+        if match is not None and re.sub(r"\D", "", match.group(1)) == identity_nip:
+            return True
+    return False
+
+
+def _employee_entity_attached(context: str, run: CompanyResearchRun) -> bool:
+    sentences = _sentences(context)
+    if not sentences:
+        return False
+    claim = sentences[-1]
+    claim_tokens = [token.casefold() for token in _WORD.findall(claim)]
+    if (
+        _tokens(claim) & (_EMPLOYEE_SCOPE_BLOCKERS | _EMPLOYEE_RELATION_BLOCKERS)
+        or _conflicting_nip(context, run.identity.nip)
+        or _nearby_negation(claim, _EMPLOYEE_WORDS)
+    ):
+        return False
+    if _entity_attached(claim, _EMPLOYEE_WORDS, run):
+        return True
+    first = claim_tokens[0] if claim_tokens else ""
+    if (
+        first in {"the", "company", "it", "its", "this", "these"}
+        and _has_company_antecedent(context, run)
+        and _entity_attached(context, _EMPLOYEE_WORDS, run)
+    ):
+        return True
+
+    core = _legal_name_core_tokens(run)
+    full_core_match = _contains_sequence(claim_tokens, core)
+    suffix_match = len(core) >= 2 and any(
+        _contains_sequence(claim_tokens, core[-size:]) for size in range(2, len(core))
+    )
+    if not core or not (full_core_match or suffix_match):
+        return False
+    local_sentences = sentences[-3:]
+    local_context = " ".join(local_sentences)
+    if not _issuer_nip_matches(local_context, run.identity.nip):
+        return False
+    foreign_names = {
+        word.casefold()
+        for local_sentence in local_sentences
+        for index, word in enumerate(_WORD.findall(local_sentence))
+        if word[:1].isupper()
+        and word.casefold() not in core
+        and word.casefold() != "nip"
+        and not (index == 0 and word.casefold() in _SENTENCE_INITIAL_NON_NAMES)
+        and word.casefold() != "issuer"
+    }
+    return not foreign_names
+
+
 def _conflicting_nip(text: str, identity_nip: str) -> bool:
     values = re.findall(
         r"\bNIP\s*[:#]?\s*(\d{10}|\d{3}[- ]\d{3}[- ]\d{2}[- ]\d{2})\b",
@@ -200,6 +354,17 @@ def _entity_attached(text: str, anchors: set[str], run: CompanyResearchRun) -> b
     return False
 
 
+def _source_entity_attached(text: str, anchors: set[str], run: CompanyResearchRun) -> bool:
+    if _tokens(text) & {"group"}:
+        return False
+    sentences = _sentences(text)
+    if not sentences:
+        return False
+    if _entity_attached(sentences[-1], anchors, run):
+        return True
+    return _has_company_antecedent(text, run) and _entity_attached(text, anchors, run)
+
+
 def _nearby_negation(text: str, anchors: set[str]) -> bool:
     tokens = [token.casefold() for token in _WORD.findall(_norm(text))]
     negatives = {"not", "never", "no", "without", "neither", "nie", "nigdy", "żaden"}
@@ -250,7 +415,12 @@ def _phrase_outside_company_name(phrase: list[str], text: str, run: CompanyResea
     )
 
 
-def _ordered_phrase_supported(phrase: str, excerpt: str, run: CompanyResearchRun) -> bool:
+def _ordered_phrase_supported(
+    phrase: str,
+    excerpt: str,
+    run: CompanyResearchRun,
+    source_content: str | None = None,
+) -> bool:
     phrase_tokens = [token.casefold() for token in _WORD.findall(_norm(phrase))]
     if not phrase_tokens:
         return False
@@ -266,19 +436,27 @@ def _ordered_phrase_supported(phrase: str, excerpt: str, run: CompanyResearchRun
             if claim_tokens
             else _phrase_outside_company_name(phrase_tokens, sentence, run)
         )
+        contexts = (
+            _bounded_source_contexts(source_content, sentence)
+            if source_content is not None
+            else [sentence]
+        )
+        attachment = _source_entity_attached if source_content is not None else _entity_attached
         if (
             exact_claim
-            and _entity_attached(sentence, anchors, run)
+            and any(attachment(context, anchors, run) for context in contexts)
             and (phrase_is_negative or not _nearby_negation(sentence, anchors))
         ):
             return True
     return False
 
 
-def _lexical_support(fact: Fact[Any], excerpt: str, run: CompanyResearchRun) -> bool:
+def _lexical_support(
+    fact: Fact[Any], excerpt: str, run: CompanyResearchRun, material: RetrievedSource
+) -> bool:
     phrases = _candidate_terms(fact.value)
     return bool(phrases) and all(
-        _ordered_phrase_supported(phrase, excerpt, run) for phrase in phrases
+        _ordered_phrase_supported(phrase, excerpt, run, material.content) for phrase in phrases
     )
 
 
@@ -450,25 +628,31 @@ def _financial_observation(
     return None
 
 
-def _employee_supported(fact: EmployeeFact, excerpt: str, run: CompanyResearchRun) -> bool:
+def _employee_supported(
+    fact: EmployeeFact, excerpt: str, run: CompanyResearchRun, material: RetrievedSource
+) -> bool:
     value = fact.value
     if isinstance(value, ExactEmployees):
         expected = (value.count,)
-        return any(
-            _employee_observation(window) == expected
-            and not _employee_qualifier(window)
-            and _tokens(window) & _EMPLOYEE_WORDS
-            and _entity_attached(window, _EMPLOYEE_WORDS, run)
-            for window in _context_windows(excerpt)
-        )
+        for sentence in _sentences(excerpt):
+            contexts = _bounded_source_contexts(material.content, sentence)
+            if (
+                _employee_observation(sentence) == expected
+                and not _employee_qualifier(sentence)
+                and _tokens(sentence) & _EMPLOYEE_WORDS
+                and any(_employee_entity_attached(context, run) for context in contexts)
+            ):
+                return True
     if isinstance(value, EmployeeRange):
         expected_bounds = (value.minimum, value.maximum)
-        return any(
-            _employee_range_observation(window) == expected_bounds
-            and _tokens(window) & _EMPLOYEE_WORDS
-            and _entity_attached(window, _EMPLOYEE_WORDS, run)
-            for window in _context_windows(excerpt)
-        )
+        for sentence in _sentences(excerpt):
+            contexts = _bounded_source_contexts(material.content, sentence)
+            if (
+                _employee_range_observation(sentence) == expected_bounds
+                and _tokens(sentence) & _EMPLOYEE_WORDS
+                and any(_employee_entity_attached(context, run) for context in contexts)
+            ):
+                return True
     return False
 
 
@@ -484,10 +668,11 @@ def _employee_as_of_supported(
             if material.kind != "full_page" or not _exact_excerpt(material, ref.excerpt):
                 continue
             for sentence in _sentences(ref.excerpt):
+                contexts = _bounded_source_contexts(material.content, sentence)
                 if (
                     _employee_range_observation(sentence) is not None
                     and _tokens(sentence) & _EMPLOYEE_WORDS
-                    and _entity_attached(sentence, _EMPLOYEE_WORDS, run)
+                    and any(_employee_entity_attached(context, run) for context in contexts)
                     and _date_present(sentence, fact.as_of)
                     and not _publication_date_present(sentence, fact.as_of)
                 ):
@@ -795,13 +980,13 @@ def build_profile(run: CompanyResearchRun) -> CompanyProfile:
             valid_pairs = [
                 (ref, material)
                 for ref, material in eligible
-                if _employee_supported(fact, ref.excerpt, run)
+                if _employee_supported(fact, ref.excerpt, run, material)
             ]
         else:
             valid_pairs = [
                 (ref, material)
                 for ref, material in eligible
-                if _lexical_support(fact, ref.excerpt, run)
+                if _lexical_support(fact, ref.excerpt, run, material)
             ]
         if kind == "employees" and isinstance(fact, EmployeeFact) and valid_pairs:
             expected: tuple[int | None, int | None]
@@ -820,17 +1005,18 @@ def build_profile(run: CompanyResearchRun) -> CompanyProfile:
             for material in run.sources:
                 if material.kind != "full_page":
                     continue
-                for window in _context_windows(material.content):
-                    observed = _employee_range_observation(window)
+                for sentence in _sentences(material.content):
+                    observed = _employee_range_observation(sentence)
+                    contexts = _bounded_source_contexts(material.content, sentence)
                     if (
                         observed is not None
-                        and _tokens(window) & _EMPLOYEE_WORDS
-                        and _entity_attached(window, _EMPLOYEE_WORDS, run)
+                        and _tokens(sentence) & _EMPLOYEE_WORDS
+                        and any(_employee_entity_attached(context, run) for context in contexts)
                     ):
                         observations.add(observed)
                         if observed != expected:
                             alternative_refs.append(
-                                EvidenceRef(source_id=material.source.source_id, excerpt=window)
+                                EvidenceRef(source_id=material.source.source_id, excerpt=sentence)
                             )
             if any(observed != expected for observed in observations):
                 unique_refs = {

@@ -550,3 +550,16 @@ The CLI was exercised without credentials with socket/research-call guards: **12
 
 All twelve OG-154 evaluation criteria are satisfied. Linear status/comments remain unchanged because only read tools are mounted and authenticated browser relay is unavailable. No OG-155 work was started.
 
+
+## OG-154A — one measured researched-coverage iteration
+
+OG-154 is approved and frozen at `46bdd26`. [RECALL_RECOVERY.md](docs/RECALL_RECOVERY.md) records all 17 original eligible misses before fixes, reproduced baseline, regression-first changes and remaining limits; [machine-readable comparison](examples/evals/og154a-comparison.json) preserves raw before/after metrics and immutable input hashes.
+
+Proposed supported research citations now require exact retained full-page spans before progress/final-output acceptance. Uncertain discovery remains visible; the same one-repair allowance remains. The final gate uses at most two preceding retained sentences for exact qualitative/pronoun attachment and a narrowly guarded nearby issuer-NIP / literal registered-name-suffix association for employee counts/dates. Foreign antecedents, customer/Group ambiguity, date borrowing and conflicting employee observations do not authorize support. Financial context, exact excerpts, source IDs, provider/model and budgets remain unchanged; no retrieval expansion was justified.
+
+Frozen-set before → after: researched precision **2/2 → 5/5**, recall **2/19 → 5/19**, over-downgrade **17/19 → 14/19**, false supports **0 → 0**. Overall precision is **47/47**, registry **42/42**; identity **10/10**, uncertainty **28/28**, strict unknown **40/41** unchanged. Three controlled claims recovered; **retained Asseco/LPP/ORLEN yield remains 0/7**. Extraction dominates remaining eligible misses; retrieval leads the broader real-field losses. No complete real profile was manufactured.
+
+An optional fresh LPP sanity run failed at the unchanged single output-repair ceiling, with no valid progress retained. Six full pages were retained, but new researched output remained unknown. This is an explicit limit, not a successful live before/after benchmark. No extra retry, token optimization or continued tuning followed.
+
+**231 tests**, Ruff lint/format and mypy passed; actual offline CLI, canonical JSON and Markdown were exercised with zero network/research calls. All original gold/baseline/replay files remain byte-identical. No OG-155, CI/security, AgentCanvas, new provider, parser, crawler or architecture work was started.
+

@@ -1,0 +1,806 @@
+{
+  "baseline_commit": "46bdd26",
+  "baseline_reproduction": {
+    "metrics_match": true,
+    "counts_match": true,
+    "inputs_and_source_hashes_match": true
+  },
+  "frozen_file_sha256": {
+    "examples/evals/dataset.json": "15d38e1e635dec24ee075d10fa1be2b58611d1d2ae5178c2d60d144382f21e82",
+    "examples/evals/baseline.json": "42bcbac5bf2adf66137447fd644a2c136e0d424138e38794ab9590cea0f69c09",
+    "examples/evals/initial-dataset.json": "82165a718e37c6f42dc0cfce8374fc741b1ae08c4c9144148e23fe70c8cefb61",
+    "examples/evals/initial-baseline.json": "437d49b50af96a4a731e3a136398497127a5cd484f61e6ebd27ee18b6ff0c6e2",
+    "examples/evals/gold-corrections.json": "6d398fe0eb3c11dfea533b4beec63cffa6494c623857b96eb9d586fa7843cc95",
+    "examples/evals/controlled/fully_supported.json": "60c4049f63182331df1f0af53776b49cab037e44f7500702cd516f958bf3293a",
+    "examples/evals/controlled/employee_exact_official.json": "8785a44258549140c7fcd8e14e5e13e40333015b119534269ba00407d8807c04",
+    "examples/evals/controlled/employee_conflict.json": "49f26d49371bcab3226b622264b0c4cf6dec8b6be83e4b2b49baeda208bded2f",
+    "examples/evals/controlled/employee_range_stale.json": "a1dabbb5414897938e638d108f4f19c6e4662ca5291c5a1244350233d2c030d1",
+    "examples/evals/controlled/ellipsis_snippet.json": "7c7f5cb5a4df0d0d9fdfcbe859b23249f5da168de5f6c53227b6c6b361ce5dd3",
+    "examples/evals/controlled/financial_context_metric.json": "7a419ec77685247953bb4dfd0bdc2a5ab854dfb1ae00b28052e00c86c1cf4552",
+    "examples/evals/controlled/invalid_source_id.json": "95189d46498e85be44cfa4d8ed2edf528e111b0eeb319c21daaed9f1640a1c86",
+    "examples/evals/controlled/unresolved-mf-response.json": "b9747290a8cfc9569f446541cbdf8d2c64632c4104c4ad61a3d4bdad00793559",
+    "examples/evals/retained/asseco-poland.json": "41b9bf80321988d51fe4230adb5ec28b85d6954c7b1399c1a68da116afb86325",
+    "examples/evals/retained/lpp.json": "0aaf6fb2d7ab5a7c30d45489782c38f085fcaa6a53258d8eec8f74bd51821754",
+    "examples/evals/retained/orlen.json": "26c969534a1dcf6ec60ed750c03fddea8fc05caf7425da64090abe34e0adcad4"
+  },
+  "before_metrics": {
+    "identity_correctness": {
+      "numerator": 10,
+      "denominator": 10,
+      "rate": 1.0
+    },
+    "identity_field_correctness": {
+      "numerator": 60,
+      "denominator": 60,
+      "rate": 1.0
+    },
+    "supported_precision": {
+      "numerator": 44,
+      "denominator": 44,
+      "rate": 1.0
+    },
+    "registry_precision": {
+      "numerator": 42,
+      "denominator": 42,
+      "rate": 1.0
+    },
+    "researched_precision": {
+      "numerator": 2,
+      "denominator": 2,
+      "rate": 1.0
+    },
+    "unsupported_as_supported": 0,
+    "researched_recall": {
+      "numerator": 2,
+      "denominator": 19,
+      "rate": 0.10526315789473684
+    },
+    "over_downgrade_rate": {
+      "numerator": 17,
+      "denominator": 19,
+      "rate": 0.8947368421052632
+    },
+    "eligible_outcomes": {
+      "eligible_supported": 2,
+      "eligible_supported_wrong": 0,
+      "eligible_uncertain": 17,
+      "eligible_unknown": 0,
+      "eligible_missing": 0
+    },
+    "correct_uncertain_handling": {
+      "numerator": 28,
+      "denominator": 28,
+      "rate": 1.0
+    },
+    "correct_unknown_handling": {
+      "numerator": 40,
+      "denominator": 41,
+      "rate": 0.975609756097561
+    },
+    "safety": {
+      "unknown": {
+        "correct": 40,
+        "total": 41,
+        "rate": {
+          "numerator": 40,
+          "denominator": 41,
+          "rate": 0.975609756097561
+        }
+      },
+      "uncertain": {
+        "correct": 28,
+        "total": 28,
+        "rate": {
+          "numerator": 28,
+          "denominator": 28,
+          "rate": 1.0
+        }
+      }
+    }
+  },
+  "extraction_only_metrics": {
+    "identity_correctness": {
+      "numerator": 10,
+      "denominator": 10,
+      "rate": 1.0
+    },
+    "identity_field_correctness": {
+      "numerator": 60,
+      "denominator": 60,
+      "rate": 1.0
+    },
+    "supported_precision": {
+      "numerator": 44,
+      "denominator": 44,
+      "rate": 1.0
+    },
+    "registry_precision": {
+      "numerator": 42,
+      "denominator": 42,
+      "rate": 1.0
+    },
+    "researched_precision": {
+      "numerator": 2,
+      "denominator": 2,
+      "rate": 1.0
+    },
+    "unsupported_as_supported": 0,
+    "researched_recall": {
+      "numerator": 2,
+      "denominator": 19,
+      "rate": 0.10526315789473684
+    },
+    "over_downgrade_rate": {
+      "numerator": 17,
+      "denominator": 19,
+      "rate": 0.8947368421052632
+    },
+    "eligible_outcomes": {
+      "eligible_supported": 2,
+      "eligible_supported_wrong": 0,
+      "eligible_uncertain": 17,
+      "eligible_unknown": 0,
+      "eligible_missing": 0
+    },
+    "correct_uncertain_handling": {
+      "numerator": 28,
+      "denominator": 28,
+      "rate": 1.0
+    },
+    "correct_unknown_handling": {
+      "numerator": 40,
+      "denominator": 41,
+      "rate": 0.975609756097561
+    },
+    "safety": {
+      "unknown": {
+        "correct": 40,
+        "total": 41,
+        "rate": {
+          "numerator": 40,
+          "denominator": 41,
+          "rate": 0.975609756097561
+        }
+      },
+      "uncertain": {
+        "correct": 28,
+        "total": 28,
+        "rate": {
+          "numerator": 28,
+          "denominator": 28,
+          "rate": 1.0
+        }
+      }
+    }
+  },
+  "after_metrics": {
+    "identity_correctness": {
+      "numerator": 10,
+      "denominator": 10,
+      "rate": 1.0
+    },
+    "identity_field_correctness": {
+      "numerator": 60,
+      "denominator": 60,
+      "rate": 1.0
+    },
+    "supported_precision": {
+      "numerator": 47,
+      "denominator": 47,
+      "rate": 1.0
+    },
+    "registry_precision": {
+      "numerator": 42,
+      "denominator": 42,
+      "rate": 1.0
+    },
+    "researched_precision": {
+      "numerator": 5,
+      "denominator": 5,
+      "rate": 1.0
+    },
+    "unsupported_as_supported": 0,
+    "researched_recall": {
+      "numerator": 5,
+      "denominator": 19,
+      "rate": 0.2631578947368421
+    },
+    "over_downgrade_rate": {
+      "numerator": 14,
+      "denominator": 19,
+      "rate": 0.7368421052631579
+    },
+    "eligible_outcomes": {
+      "eligible_supported": 5,
+      "eligible_supported_wrong": 0,
+      "eligible_uncertain": 14,
+      "eligible_unknown": 0,
+      "eligible_missing": 0
+    },
+    "correct_uncertain_handling": {
+      "numerator": 28,
+      "denominator": 28,
+      "rate": 1.0
+    },
+    "correct_unknown_handling": {
+      "numerator": 40,
+      "denominator": 41,
+      "rate": 0.975609756097561
+    },
+    "safety": {
+      "unknown": {
+        "correct": 40,
+        "total": 41,
+        "rate": {
+          "numerator": 40,
+          "denominator": 41,
+          "rate": 0.975609756097561
+        }
+      },
+      "uncertain": {
+        "correct": 28,
+        "total": 28,
+        "rate": {
+          "numerator": 28,
+          "denominator": 28,
+          "rate": 1.0
+        }
+      }
+    }
+  },
+  "after_runtime_source_hashes": {
+    "src/company_bi/evidence.py": "b7e1db12e646f39fa7f0c64a0342e1632e555e1ee4f88fa313417928fdb65113",
+    "src/company_bi/models.py": "f831165ff4de46a3c5a31dca5717739f4eab49b1bb5dc84de131f78addb12e38",
+    "src/company_bi/nip.py": "e5cc0c4750a3858213fc72385f8ff9b053baa9165193d7d93fad2cd799c85394",
+    "src/company_bi/registry.py": "366afe77ccbf7f74fcda6e455cb3183f1ab1a05ef63f89f853e18860568371b1",
+    "src/company_bi/agent.py": "b712eac430abc9bc6d87f473ea539c9fb20dc90c67dbde11460b536b7ddf1c72",
+    "src/company_bi/renderer.py": "db019af78c8773ab2f35c8be32b81d1d563821603f9a7c69b73f8bd730e03c6d"
+  },
+  "before_after_input_hashes_identical": true,
+  "original_17_missed_eligible_claims": [
+    {
+      "case_id": "fully_supported",
+      "field": "financials.0",
+      "expected_state": "supported",
+      "before_state": "uncertain",
+      "after_state": "uncertain",
+      "recovered": false,
+      "before_loss_stage": "gate",
+      "after_loss_stage": "gate",
+      "before_reason": "Exact full-page evidence does not verify metric, amount, precision, currency, unit, entity scope and explicit reporting interval",
+      "after_reason": "Exact full-page evidence does not verify metric, amount, precision, currency, unit, entity scope and explicit reporting interval",
+      "source_type": "full_page",
+      "eligible_exact_evidence": true,
+      "source_ids": [
+        "annual-report"
+      ]
+    },
+    {
+      "case_id": "fully_supported",
+      "field": "financials.1",
+      "expected_state": "supported",
+      "before_state": "uncertain",
+      "after_state": "uncertain",
+      "recovered": false,
+      "before_loss_stage": "extraction",
+      "after_loss_stage": "extraction",
+      "before_reason": "Exact full-page evidence does not verify metric, amount, precision, currency, unit, entity scope and explicit reporting interval",
+      "after_reason": "Exact full-page evidence does not verify metric, amount, precision, currency, unit, entity scope and explicit reporting interval",
+      "source_type": "full_page",
+      "eligible_exact_evidence": true,
+      "source_ids": [
+        "annual-report"
+      ]
+    },
+    {
+      "case_id": "fully_supported",
+      "field": "industries",
+      "expected_state": "supported",
+      "before_state": "uncertain",
+      "after_state": "supported",
+      "recovered": true,
+      "before_loss_stage": "gate",
+      "after_loss_stage": null,
+      "before_reason": "No exact full-page citation verifies the candidate value, entity, and required context",
+      "after_reason": null,
+      "source_type": "full_page",
+      "eligible_exact_evidence": true,
+      "source_ids": [
+        "annual-report"
+      ]
+    },
+    {
+      "case_id": "fully_supported",
+      "field": "markets",
+      "expected_state": "supported",
+      "before_state": "uncertain",
+      "after_state": "uncertain",
+      "recovered": false,
+      "before_loss_stage": "gate",
+      "after_loss_stage": "gate",
+      "before_reason": "No exact full-page citation verifies the candidate value, entity, and required context",
+      "after_reason": "No exact full-page citation verifies the candidate value, entity, and required context",
+      "source_type": "full_page",
+      "eligible_exact_evidence": true,
+      "source_ids": [
+        "annual-report"
+      ]
+    },
+    {
+      "case_id": "fully_supported",
+      "field": "products_services",
+      "expected_state": "supported",
+      "before_state": "uncertain",
+      "after_state": "supported",
+      "recovered": true,
+      "before_loss_stage": "gate",
+      "after_loss_stage": null,
+      "before_reason": "No exact full-page citation verifies the candidate value, entity, and required context",
+      "after_reason": null,
+      "source_type": "full_page",
+      "eligible_exact_evidence": true,
+      "source_ids": [
+        "annual-report"
+      ]
+    },
+    {
+      "case_id": "fully_supported",
+      "field": "recent_developments.0",
+      "expected_state": "supported",
+      "before_state": "uncertain",
+      "after_state": "uncertain",
+      "recovered": false,
+      "before_loss_stage": "gate",
+      "after_loss_stage": "gate",
+      "before_reason": "Unverified event occurrence date removed; Event publication date or content could not be verified; details cleared",
+      "after_reason": "Unverified event occurrence date removed; Event publication date or content could not be verified; details cleared",
+      "source_type": "full_page",
+      "eligible_exact_evidence": true,
+      "source_ids": [
+        "news-august"
+      ]
+    },
+    {
+      "case_id": "fully_supported",
+      "field": "recent_developments.1",
+      "expected_state": "supported",
+      "before_state": "uncertain",
+      "after_state": "uncertain",
+      "recovered": false,
+      "before_loss_stage": "extraction",
+      "after_loss_stage": "extraction",
+      "before_reason": "Unverified event occurrence date removed; Event publication date or content could not be verified; details cleared",
+      "after_reason": "Unverified event occurrence date removed; Event publication date or content could not be verified; details cleared",
+      "source_type": "full_page",
+      "eligible_exact_evidence": true,
+      "source_ids": [
+        "news-july"
+      ]
+    },
+    {
+      "case_id": "employee_exact_official",
+      "field": "employees",
+      "expected_state": "supported",
+      "before_state": "uncertain",
+      "after_state": "supported",
+      "recovered": true,
+      "before_loss_stage": "gate",
+      "after_loss_stage": null,
+      "before_reason": "No exact full-page citation verifies the candidate value, entity, and required context; Unverified employee as-of date removed",
+      "after_reason": null,
+      "source_type": "full_page",
+      "eligible_exact_evidence": true,
+      "source_ids": [
+        "issuer-page"
+      ]
+    },
+    {
+      "case_id": "employee_range_stale",
+      "field": "employees",
+      "expected_state": "supported",
+      "before_state": "uncertain",
+      "after_state": "uncertain",
+      "recovered": false,
+      "before_loss_stage": "extraction",
+      "after_loss_stage": "extraction",
+      "before_reason": "No exact full-page citation verifies the candidate value, entity, and required context; Unverified employee as-of date removed",
+      "after_reason": "No exact full-page citation verifies the candidate value, entity, and required context; Unverified employee as-of date removed",
+      "source_type": "full_page",
+      "eligible_exact_evidence": true,
+      "source_ids": [
+        "historical-page"
+      ]
+    },
+    {
+      "case_id": "ellipsis_snippet",
+      "field": "employees",
+      "expected_state": "supported",
+      "before_state": "uncertain",
+      "after_state": "uncertain",
+      "recovered": false,
+      "before_loss_stage": "extraction",
+      "after_loss_stage": "extraction",
+      "before_reason": "Model-added ellipsis changed the retrieved text and cannot verify exact observation.",
+      "after_reason": "Model-added ellipsis changed the retrieved text and cannot verify exact observation.",
+      "source_type": "full_page",
+      "eligible_exact_evidence": true,
+      "source_ids": [
+        "employee-page"
+      ]
+    },
+    {
+      "case_id": "retained_asseco_poland",
+      "field": "recent_developments.0",
+      "expected_state": "supported",
+      "before_state": "uncertain",
+      "after_state": "uncertain",
+      "recovered": false,
+      "before_loss_stage": "extraction",
+      "after_loss_stage": "extraction",
+      "before_reason": "Event publication date or content could not be verified; details cleared",
+      "after_reason": "Event publication date or content could not be verified; details cleared",
+      "source_type": "full_page",
+      "eligible_exact_evidence": true,
+      "source_ids": [
+        "S006"
+      ]
+    },
+    {
+      "case_id": "retained_lpp",
+      "field": "business_description",
+      "expected_state": "supported",
+      "before_state": "uncertain",
+      "after_state": "uncertain",
+      "recovered": false,
+      "before_loss_stage": "extraction",
+      "after_loss_stage": "extraction",
+      "before_reason": "No exact full-page citation verifies the candidate value, entity, and required context",
+      "after_reason": "No exact full-page citation verifies the candidate value, entity, and required context",
+      "source_type": "full_page",
+      "eligible_exact_evidence": true,
+      "source_ids": [
+        "S007"
+      ]
+    },
+    {
+      "case_id": "retained_lpp",
+      "field": "industries",
+      "expected_state": "supported",
+      "before_state": "uncertain",
+      "after_state": "uncertain",
+      "recovered": false,
+      "before_loss_stage": "gate",
+      "after_loss_stage": "gate",
+      "before_reason": "No exact full-page citation verifies the candidate value, entity, and required context",
+      "after_reason": "No exact full-page citation verifies the candidate value, entity, and required context",
+      "source_type": "full_page",
+      "eligible_exact_evidence": true,
+      "source_ids": [
+        "S007",
+        "S016"
+      ]
+    },
+    {
+      "case_id": "retained_lpp",
+      "field": "products_services",
+      "expected_state": "supported",
+      "before_state": "uncertain",
+      "after_state": "uncertain",
+      "recovered": false,
+      "before_loss_stage": "extraction",
+      "after_loss_stage": "extraction",
+      "before_reason": "No exact full-page citation verifies the candidate value, entity, and required context",
+      "after_reason": "No exact full-page citation verifies the candidate value, entity, and required context",
+      "source_type": "full_page",
+      "eligible_exact_evidence": true,
+      "source_ids": [
+        "S007"
+      ]
+    },
+    {
+      "case_id": "retained_lpp",
+      "field": "recent_developments.0",
+      "expected_state": "supported",
+      "before_state": "uncertain",
+      "after_state": "uncertain",
+      "recovered": false,
+      "before_loss_stage": "gate",
+      "after_loss_stage": "gate",
+      "before_reason": "Event publication date or content could not be verified; details cleared",
+      "after_reason": "Event publication date or content could not be verified; details cleared",
+      "source_type": "full_page",
+      "eligible_exact_evidence": true,
+      "source_ids": [
+        "S007"
+      ]
+    },
+    {
+      "case_id": "retained_lpp",
+      "field": "recent_developments.1",
+      "expected_state": "supported",
+      "before_state": "uncertain",
+      "after_state": "uncertain",
+      "recovered": false,
+      "before_loss_stage": "extraction",
+      "after_loss_stage": "extraction",
+      "before_reason": "Unverified event occurrence date removed; Event publication date or content could not be verified; details cleared",
+      "after_reason": "Unverified event occurrence date removed; Event publication date or content could not be verified; details cleared",
+      "source_type": "full_page",
+      "eligible_exact_evidence": true,
+      "source_ids": [
+        "S016"
+      ]
+    },
+    {
+      "case_id": "retained_lpp",
+      "field": "recent_developments.2",
+      "expected_state": "supported",
+      "before_state": "uncertain",
+      "after_state": "uncertain",
+      "recovered": false,
+      "before_loss_stage": "gate",
+      "after_loss_stage": "gate",
+      "before_reason": "Event publication date or content could not be verified; details cleared",
+      "after_reason": "Event publication date or content could not be verified; details cleared",
+      "source_type": "full_page",
+      "eligible_exact_evidence": true,
+      "source_ids": [
+        "S001"
+      ]
+    }
+  ],
+  "original_17_loss_stage_counts": [
+    {
+      "stage": "retrieval",
+      "before_lost": 0,
+      "after_lost": 0,
+      "recovered": 0
+    },
+    {
+      "stage": "extraction",
+      "before_lost": 8,
+      "after_lost": 8,
+      "recovered": 0
+    },
+    {
+      "stage": "gate",
+      "before_lost": 9,
+      "after_lost": 6,
+      "recovered": 3
+    },
+    {
+      "stage": "unavailable",
+      "before_lost": 0,
+      "after_lost": 0,
+      "recovered": 0
+    }
+  ],
+  "real_replay": {
+    "eligible_researched": 7,
+    "before_supported": 0,
+    "after_supported": 0,
+    "before_uncertain": 7,
+    "after_uncertain": 7,
+    "before_unknown": 0,
+    "after_unknown": 0,
+    "researched_precision_before": {
+      "numerator": 0,
+      "denominator": 0,
+      "rate": null
+    },
+    "researched_precision_after": {
+      "numerator": 0,
+      "denominator": 0,
+      "rate": null
+    },
+    "cases": [
+      {
+        "case_id": "retained_asseco_poland",
+        "eligible_researched": 1,
+        "before_researched_states": {
+          "uncertain": 6,
+          "unknown": 3
+        },
+        "after_researched_states": {
+          "uncertain": 6,
+          "unknown": 3
+        },
+        "before_eligible_states": {
+          "uncertain": 1
+        },
+        "after_eligible_states": {
+          "uncertain": 1
+        },
+        "recovered_claims": []
+      },
+      {
+        "case_id": "retained_lpp",
+        "eligible_researched": 6,
+        "before_researched_states": {
+          "uncertain": 8,
+          "unknown": 2
+        },
+        "after_researched_states": {
+          "uncertain": 8,
+          "unknown": 2
+        },
+        "before_eligible_states": {
+          "uncertain": 6
+        },
+        "after_eligible_states": {
+          "uncertain": 6
+        },
+        "recovered_claims": []
+      },
+      {
+        "case_id": "retained_orlen",
+        "eligible_researched": 0,
+        "before_researched_states": {
+          "uncertain": 8,
+          "unknown": 2
+        },
+        "after_researched_states": {
+          "uncertain": 8,
+          "unknown": 2
+        },
+        "before_eligible_states": {},
+        "after_eligible_states": {},
+        "recovered_claims": []
+      }
+    ]
+  },
+  "real_29_field_loss_stages": {
+    "population": "29 retained-real researched fields; distinct from the 17 originally missed eligible claims",
+    "before": {
+      "retrieval": 11,
+      "extraction": 10,
+      "gate": 3,
+      "unavailable": 5
+    },
+    "after": {
+      "retrieval": 11,
+      "extraction": 10,
+      "gate": 3,
+      "unavailable": 5
+    },
+    "recovered": {
+      "retrieval": 0,
+      "extraction": 0,
+      "gate": 0,
+      "unavailable": 0
+    }
+  },
+  "rejected_intermediate": {
+    "metrics": {
+      "identity_correctness": {
+        "numerator": 10,
+        "denominator": 10,
+        "rate": 1.0
+      },
+      "identity_field_correctness": {
+        "numerator": 60,
+        "denominator": 60,
+        "rate": 1.0
+      },
+      "supported_precision": {
+        "numerator": 46,
+        "denominator": 46,
+        "rate": 1.0
+      },
+      "registry_precision": {
+        "numerator": 42,
+        "denominator": 42,
+        "rate": 1.0
+      },
+      "researched_precision": {
+        "numerator": 4,
+        "denominator": 4,
+        "rate": 1.0
+      },
+      "unsupported_as_supported": 0,
+      "researched_recall": {
+        "numerator": 4,
+        "denominator": 19,
+        "rate": 0.21052631578947367
+      },
+      "over_downgrade_rate": {
+        "numerator": 15,
+        "denominator": 19,
+        "rate": 0.7894736842105263
+      },
+      "eligible_outcomes": {
+        "eligible_supported": 4,
+        "eligible_supported_wrong": 0,
+        "eligible_uncertain": 15,
+        "eligible_unknown": 0,
+        "eligible_missing": 0
+      },
+      "correct_uncertain_handling": {
+        "numerator": 28,
+        "denominator": 28,
+        "rate": 1.0
+      },
+      "correct_unknown_handling": {
+        "numerator": 40,
+        "denominator": 41,
+        "rate": 0.975609756097561
+      },
+      "safety": {
+        "unknown": {
+          "correct": 40,
+          "total": 41,
+          "rate": {
+            "numerator": 40,
+            "denominator": 41,
+            "rate": 0.975609756097561
+          }
+        },
+        "uncertain": {
+          "correct": 28,
+          "total": 28,
+          "rate": {
+            "numerator": 28,
+            "denominator": 28,
+            "rate": 1.0
+          }
+        }
+      }
+    },
+    "problems": [
+      "Original legitimate zero became uncertain",
+      "A foreign employee date could be borrowed by an issuer employee fact",
+      "An intervening foreign entity could authorize employee/product pronouns",
+      "Different named issuer could authorize a shortened company name"
+    ],
+    "accepted": false,
+    "corrected_with_regression_first": true
+  },
+  "verification": {
+    "pytest_passed": 231,
+    "upstream_warnings": 14,
+    "mypy_source_files": 14,
+    "ruff_lint": "passed",
+    "format_python_files": 24,
+    "offline_cli_smoke": {
+      "cases": 12,
+      "exit": 0,
+      "network_calls": 0,
+      "research_calls": 0
+    },
+    "gold_annotation_changes": 0,
+    "retrieval_changes": 0,
+    "provider_changes": 0
+  },
+  "live_sanity": {
+    "company": "LPP",
+    "nip": "5831014898",
+    "cli_exit": 1,
+    "primary_before_after_benchmark": false,
+    "diagnostics": {
+      "model": "openai-codex:gpt-6-luna",
+      "status": "failed",
+      "stop_reason": "Research interrupted (UnexpectedModelBehavior): Exceeded maximum output retries (1)",
+      "model_requests": 4,
+      "searches": 6,
+      "page_reads": 7,
+      "dynamic_reads": 0,
+      "output_retries": 1,
+      "input_tokens": 72964,
+      "output_tokens": 4501,
+      "duration_seconds": 163.18512987485155,
+      "cost_usd": null
+    },
+    "retained_source_kinds": {
+      "registry": 1,
+      "search_snippet": 30,
+      "full_page": 6
+    },
+    "profile_status": "partial",
+    "researched_states": {
+      "unknown": 7
+    },
+    "financial_values": [null, null],
+    "validated_progress_retained": false,
+    "limitation": "Single output-repair ceiling exhausted; retained diagnostics do not identify the exact validation failure. No validated progress remained, no extra retry or tuning. Live drift makes this observational only, not the frozen before/after benchmark."
+  }
+}

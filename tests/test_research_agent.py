@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import json
 from datetime import UTC, datetime
+from decimal import Decimal
+from types import SimpleNamespace
 from typing import Any
 
 import pytest
@@ -68,14 +70,344 @@ def unknown_output() -> dict[str, Any]:
     }
 
 
-def saved_candidate_output() -> dict[str, Any]:
-    result = unknown_output()
-    result["business_description"] = {
+PAGE_EXCERPT = (
+    "The Example Group reported approximately PLN 1.2 billion in consolidated revenue "
+    "for the fiscal year from 1 January 2025 to 31 December 2025."
+)
+
+
+async def install_full_page(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    async def controlled_search(*args: Any, **kwargs: Any) -> dict[str, Any]:
+        return {
+            "results": [
+                {
+                    "title": "Example Group annual report",
+                    "url": "https://issuer.example/annual-report",
+                    "content": "Discovery snippet, not the annual report",
+                }
+            ]
+        }
+
+    async def controlled_page(url: str, timeout: float) -> Any:
+        return SimpleNamespace(
+            text=PAGE_EXCERPT,
+            url=url,
+            published_on=None,
+            title="Example Group annual report",
+        )
+
+    async def controlled_url(url: str, timeout: float = 3.0) -> str:
+        return url
+
+    monkeypatch.setattr("company_bi.fetch._validate_public_url", controlled_url)
+    monkeypatch.setattr("tavily.AsyncTavilyClient.search", controlled_search)
+    monkeypatch.setattr("company_bi.fetch._static_read", controlled_page)
+
+
+def supported_revenue(excerpt: str) -> dict[str, Any]:
+    output = unknown_output()
+    output["financials"][0] = {
         "state": "supported",
-        "value": "A saved candidate finding",
-        "evidence": [{"source_id": "identity-record", "excerpt": "Verified registry evidence"}],
+        "metric": "revenue",
+        "value": "1.2",
+        "period": {"start": "2025-01-01", "end": "2025-12-31"},
+        "currency": "PLN",
+        "unit": "billions",
+        "scope": "group",
+        "group_name": "Example Group",
+        "evidence": [{"source_id": "S001", "excerpt": excerpt}],
     }
-    return result
+    return output
+
+
+def discovery_then_page(messages: Any, info: Any) -> ModelResponse:
+    if not any(
+        isinstance(part, ToolCallPart) and part.tool_name == "search_web"
+        for message in messages
+        for part in getattr(message, "parts", [])
+    ):
+        return ModelResponse(
+            parts=[ToolCallPart("search_web", {"query": "Example Group annual report"}, "search")]
+        )
+    if not any(
+        isinstance(part, ToolCallPart) and part.tool_name == "read_page"
+        for message in messages
+        for part in getattr(message, "parts", [])
+    ):
+        return ModelResponse(parts=[ToolCallPart("read_page", {"source_id": "S001"}, "read")])
+    raise AssertionError("Output response must be supplied by the test")
+
+
+@pytest.mark.asyncio
+async def test_exact_literal_span_survives_single_output_repair(
+    identity: CompanyIdentity, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    await install_full_page(monkeypatch)
+    outputs = iter(
+        [
+            supported_revenue("The Example Group reported approximately PLN 1.2 billion ..."),
+            supported_revenue(PAGE_EXCERPT),
+        ]
+    )
+    stage = 0
+
+    def respond(messages: Any, info: Any) -> ModelResponse:
+        nonlocal stage
+        if stage < 2:
+            stage += 1
+            return discovery_then_page(messages, info)
+        return ModelResponse(
+            parts=[ToolCallPart(info.output_tools[0].name, next(outputs), "output")]
+        )
+
+    run = await research_company(
+        identity, [registry_source()], model=FunctionModel(respond), max_seconds=10
+    )
+    revenue = run.draft.financials[0]
+    assert run.diagnostics.status == "completed", run.diagnostics.stop_reason
+    assert run.diagnostics.output_retries == 1
+    assert run.diagnostics.model_requests == 4
+    assert revenue.state == "supported"
+    assert revenue.evidence[0].excerpt == PAGE_EXCERPT
+
+
+@pytest.mark.asyncio
+async def test_supported_discovery_only_excerpt_cannot_be_extraction_ready(
+    identity: CompanyIdentity, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    excerpt = "The Example Group operates in the logistics sector."
+
+    async def controlled_search(*args: Any, **kwargs: Any) -> dict[str, Any]:
+        return {
+            "results": [
+                {
+                    "title": "Example Group profile",
+                    "url": "https://issuer.example/profile",
+                    "content": excerpt,
+                }
+            ]
+        }
+
+    monkeypatch.setattr("tavily.AsyncTavilyClient.search", controlled_search)
+    stage = 0
+    candidate = unknown_output()
+    candidate["business_description"] = {
+        "state": "supported",
+        "value": "The Example Group operates in logistics.",
+        "evidence": [{"source_id": "S001", "excerpt": excerpt}],
+    }
+
+    def respond(messages: Any, info: Any) -> ModelResponse:
+        nonlocal stage
+        if stage == 0:
+            stage += 1
+            return ModelResponse(
+                parts=[ToolCallPart("search_web", {"query": "Example Group"}, "search")]
+            )
+        return ModelResponse(parts=[ToolCallPart(info.output_tools[0].name, candidate, "output")])
+
+    run = await research_company(
+        identity, [registry_source()], model=FunctionModel(respond), max_seconds=10
+    )
+    assert run.diagnostics.status == "failed"
+    assert run.diagnostics.output_retries == 1
+    assert run.draft.business_description.state == "unknown"
+    assert next(source for source in run.sources if source.source.source_id == "S001").kind == (
+        "search_snippet"
+    )
+
+
+@pytest.mark.asyncio
+async def test_supported_excerpt_must_match_its_attached_source_id(
+    identity: CompanyIdentity, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    other_page = "The Example Group manufactures industrial components."
+
+    async def controlled_search(*args: Any, **kwargs: Any) -> dict[str, Any]:
+        return {
+            "results": [
+                {
+                    "title": "Annual report",
+                    "url": "https://issuer.example/annual-report",
+                    "content": "Annual report discovery result",
+                },
+                {
+                    "title": "Company profile",
+                    "url": "https://issuer.example/profile",
+                    "content": "Company profile discovery result",
+                },
+            ]
+        }
+
+    async def controlled_page(url: str, timeout: float) -> Any:
+        return SimpleNamespace(
+            text=PAGE_EXCERPT if url.endswith("annual-report") else other_page,
+            url=url,
+            published_on=None,
+            title="Controlled source",
+        )
+
+    async def controlled_url(url: str, timeout: float = 3.0) -> str:
+        return url
+
+    monkeypatch.setattr("tavily.AsyncTavilyClient.search", controlled_search)
+    monkeypatch.setattr("company_bi.fetch._static_read", controlled_page)
+    monkeypatch.setattr("company_bi.fetch._validate_public_url", controlled_url)
+    candidate = unknown_output()
+    candidate["business_description"] = {
+        "state": "supported",
+        "value": "The Example Group reported revenue.",
+        "evidence": [{"source_id": "S002", "excerpt": PAGE_EXCERPT}],
+    }
+    stage = 0
+
+    def respond(messages: Any, info: Any) -> ModelResponse:
+        nonlocal stage
+        if stage == 0:
+            stage += 1
+            return ModelResponse(
+                parts=[ToolCallPart("search_web", {"query": "Example Group"}, "search")]
+            )
+        if stage in (1, 2):
+            read_number = stage
+            stage += 1
+            return ModelResponse(
+                parts=[
+                    ToolCallPart(
+                        "read_page",
+                        {"source_id": f"S00{read_number}"},
+                        f"read-{read_number}",
+                    )
+                ]
+            )
+        return ModelResponse(parts=[ToolCallPart(info.output_tools[0].name, candidate, "output")])
+
+    run = await research_company(
+        identity, [registry_source()], model=FunctionModel(respond), max_seconds=10
+    )
+    assert run.diagnostics.status == "failed"
+    assert run.diagnostics.output_retries == 1
+    assert run.draft.business_description.state == "unknown"
+
+
+@pytest.mark.asyncio
+async def test_uncertain_discovery_candidate_remains_visible(
+    identity: CompanyIdentity, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    excerpt = "The Example Group may operate in the logistics sector."
+
+    async def controlled_search(*args: Any, **kwargs: Any) -> dict[str, Any]:
+        return {
+            "results": [
+                {
+                    "title": "Example Group profile",
+                    "url": "https://issuer.example/profile",
+                    "content": excerpt,
+                }
+            ]
+        }
+
+    monkeypatch.setattr("tavily.AsyncTavilyClient.search", controlled_search)
+    candidate = unknown_output()
+    candidate["business_description"] = {
+        "state": "uncertain",
+        "value": "The Example Group may operate in the logistics sector.",
+        "reason": "The discovery snippet needs full-page verification.",
+        "evidence": [{"source_id": "S001", "excerpt": excerpt}],
+    }
+    stage = 0
+
+    def respond(messages: Any, info: Any) -> ModelResponse:
+        nonlocal stage
+        if stage == 0:
+            stage += 1
+            return ModelResponse(
+                parts=[ToolCallPart("search_web", {"query": "Example Group"}, "search")]
+            )
+        return ModelResponse(parts=[ToolCallPart(info.output_tools[0].name, candidate, "output")])
+
+    run = await research_company(
+        identity, [registry_source()], model=FunctionModel(respond), max_seconds=10
+    )
+    assert run.diagnostics.status == "completed"
+    assert run.draft.business_description.state == "uncertain"
+    assert run.draft.business_description.evidence[0].source_id == "S001"
+
+
+@pytest.mark.asyncio
+async def test_persistent_altered_excerpt_is_rejected_after_one_repair(
+    identity: CompanyIdentity, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    await install_full_page(monkeypatch)
+    stage = 0
+
+    def respond(messages: Any, info: Any) -> ModelResponse:
+        nonlocal stage
+        if stage < 2:
+            stage += 1
+            return discovery_then_page(messages, info)
+        malformed = supported_revenue(
+            "The Example Group reported approx. PLN 1.2 billion in consolidated revenue ..."
+        )
+        return ModelResponse(parts=[ToolCallPart(info.output_tools[0].name, malformed, "output")])
+
+    run = await research_company(
+        identity, [registry_source()], model=FunctionModel(respond), max_seconds=10
+    )
+    assert run.diagnostics.status == "failed"
+    assert run.diagnostics.output_retries == 1
+    assert run.diagnostics.model_requests == 4
+    assert run.draft.financials[0].state == "unknown"
+    assert run.draft.financials[0].value is None
+
+
+@pytest.mark.asyncio
+async def test_malformed_progress_save_does_not_replace_safe_progress(
+    identity: CompanyIdentity, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    await install_full_page(monkeypatch)
+    calls = 0
+
+    def save_twice_then_fail(messages: Any, info: Any) -> ModelResponse:
+        nonlocal calls
+        calls += 1
+        if calls <= 2:
+            return discovery_then_page(messages, info)
+        if calls == 3:
+            return ModelResponse(
+                parts=[
+                    ToolCallPart(
+                        "save_progress",
+                        {"draft": supported_revenue(PAGE_EXCERPT)},
+                        tool_call_id="save-valid",
+                    )
+                ]
+            )
+        if calls == 4:
+            return ModelResponse(
+                parts=[
+                    ToolCallPart(
+                        "save_progress",
+                        {
+                            "draft": supported_revenue(
+                                PAGE_EXCERPT.replace("approximately", "nearly")
+                            )
+                        },
+                        tool_call_id="save-malformed",
+                    )
+                ]
+            )
+        raise RuntimeError("provider unavailable")
+
+    run = await research_company(
+        identity, [registry_source()], model=FunctionModel(save_twice_then_fail), max_seconds=10
+    )
+    assert run.diagnostics.status == "partial", run.diagnostics.stop_reason
+    assert run.draft.financials[0].state == "supported"
+    assert run.draft.financials[0].evidence[0].excerpt == PAGE_EXCERPT
+    assert run.diagnostics.model_requests == 5
 
 
 async def run_research(identity: CompanyIdentity, output: Any) -> CompanyResearchRun:
@@ -203,19 +535,22 @@ async def test_search_budget_exhaustion_is_visible_without_a_provider_call(
 
 @pytest.mark.asyncio
 async def test_saved_partial_progress_survives_later_provider_failure(
-    identity: CompanyIdentity,
+    identity: CompanyIdentity, monkeypatch: pytest.MonkeyPatch
 ) -> None:
+    await install_full_page(monkeypatch)
     calls = 0
 
-    def save_then_fail(_messages: Any, _info: Any) -> ModelResponse:
+    def save_then_fail(messages: Any, info: Any) -> ModelResponse:
         nonlocal calls
         calls += 1
-        if calls == 1:
+        if calls <= 2:
+            return discovery_then_page(messages, info)
+        if calls == 3:
             return ModelResponse(
                 parts=[
                     ToolCallPart(
                         "save_progress",
-                        {"draft": saved_candidate_output()},
+                        {"draft": supported_revenue(PAGE_EXCERPT)},
                         tool_call_id="save-progress-1",
                     )
                 ]
@@ -229,12 +564,12 @@ async def test_saved_partial_progress_survives_later_provider_failure(
         max_seconds=10,
     )
 
-    assert run.diagnostics.status == "partial"
+    assert run.diagnostics.status == "partial", run.diagnostics.stop_reason
     assert run.diagnostics.stop_reason is not None
-    assert run.draft.business_description.state == "supported"
-    assert run.draft.business_description.value == "A saved candidate finding"
-    assert run.draft.business_description.evidence[0].source_id == "identity-record"
-    assert run.diagnostics.model_requests == 2
+    assert run.draft.financials[0].state == "supported"
+    assert run.draft.financials[0].value == Decimal("1.2")
+    assert run.draft.financials[0].evidence[0].source_id == "S001"
+    assert run.diagnostics.model_requests == 4
     assert run.diagnostics.input_tokens > 0
     assert run.diagnostics.output_tokens > 0
 
@@ -274,7 +609,24 @@ async def test_deadline_failure_reports_interruption(identity: CompanyIdentity) 
 async def test_run_orphan_references_fail_but_retained_material_versions_are_valid(
     identity: CompanyIdentity,
 ) -> None:
-    run = await run_research(identity, saved_candidate_output())
+    run = await run_research(identity, unknown_output())
+    source = Source(
+        source_id="S001",
+        url="https://issuer.example/annual-report",
+        title="Example Group annual report",
+        retrieved_at=run.generated_at,
+    )
+    payload = run.model_dump(mode="json")
+    payload["draft"]["financials"][0] = supported_revenue(PAGE_EXCERPT)["financials"][0]
+    payload["sources"].append(
+        RetrievedSource(
+            source=source,
+            kind="full_page",
+            content=PAGE_EXCERPT,
+            fetch_mode="static",
+        ).model_dump(mode="json")
+    )
+    run = CompanyResearchRun.model_validate(payload)
 
     orphan_identity = run.model_dump(mode="json")
     orphan_identity["identity"]["legal_name"]["evidence"][0]["source_id"] = "missing-identity"
@@ -282,22 +634,22 @@ async def test_run_orphan_references_fail_but_retained_material_versions_are_val
         CompanyResearchRun.model_validate(orphan_identity)
 
     orphan_draft = run.model_dump(mode="json")
-    orphan_draft["draft"]["business_description"]["evidence"][0]["source_id"] = "missing-finding"
+    orphan_draft["draft"]["financials"][0]["evidence"][0]["source_id"] = "missing-finding"
     with pytest.raises(ValidationError):
         CompanyResearchRun.model_validate(orphan_draft)
 
     retained = run.model_dump(mode="json")
-    source = run.sources[0].source
+    registry_source_material = run.sources[0].source
     retained["sources"].extend(
         [
             RetrievedSource(
-                source=source,
+                source=registry_source_material,
                 kind="search_snippet",
                 content="Discovery snippet",
                 fetch_mode="tavily",
             ).model_dump(mode="json"),
             RetrievedSource(
-                source=source,
+                source=registry_source_material,
                 kind="full_page",
                 content="Retrieved full page",
                 fetch_mode="static",
@@ -306,9 +658,10 @@ async def test_run_orphan_references_fail_but_retained_material_versions_are_val
     )
     accepted = CompanyResearchRun.model_validate(retained)
     assert {(material.source.source_id, material.kind) for material in accepted.sources} == {
-        (source.source_id, "registry"),
-        (source.source_id, "search_snippet"),
-        (source.source_id, "full_page"),
+        ("identity-record", "registry"),
+        ("identity-record", "search_snippet"),
+        ("identity-record", "full_page"),
+        ("S001", "full_page"),
     }
 
 

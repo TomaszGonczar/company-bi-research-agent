@@ -1,5 +1,6 @@
 from datetime import UTC, date, datetime
 from decimal import Decimal
+from pathlib import Path
 
 import pytest
 
@@ -909,3 +910,350 @@ def test_financial_heading_and_amount_can_be_separate_exact_companion_citations(
     )
     result = build_profile(run.model_copy(update={"draft": draft})).financials[0]
     assert result.state == "supported" and result.value == Decimal("12")
+
+
+def test_frozen_employee_exact_official_count_and_date_attach_with_matching_nip() -> None:
+    fixture = Path(__file__).parents[1] / "examples/evals/controlled/employee_exact_official.json"
+    run = CompanyResearchRun.model_validate_json(fixture.read_bytes())
+    result = build_profile(run).employees
+    assert result.state == "supported" and result.value.count == 84
+    assert result.as_of == date(2026, 9, 30)
+
+
+def test_frozen_fully_supported_zero_employee_count_and_date_remain_supported() -> None:
+    fixture = Path(__file__).parents[1] / "examples/evals/controlled/fully_supported.json"
+    run = CompanyResearchRun.model_validate_json(fixture.read_bytes())
+    result = build_profile(run).employees
+    assert result.state == "supported" and result.value.count == 0
+    assert result.as_of == date(2026, 9, 1)
+
+
+def test_employee_date_cannot_attach_to_foreign_company_sentence() -> None:
+    fixture = Path(__file__).parents[1] / "examples/evals/controlled/employee_exact_official.json"
+    original = CompanyResearchRun.model_validate_json(fixture.read_bytes())
+    quote = (
+        "Issuer NIP 8420000005. Northstar Holdings employs 84 employees. "
+        "Acme employs 84 employees as of 2026-10-02."
+    )
+    page = next(source for source in original.sources if source.source.source_id == "issuer-page")
+    employees = original.draft.employees.model_copy(
+        update={
+            "evidence": [EvidenceRef(source_id="issuer-page", excerpt=quote)],
+            "as_of": date(2026, 10, 2),
+        }
+    )
+    draft = original.draft.model_copy(update={"employees": employees})
+    run = original.model_copy(
+        update={
+            "draft": draft,
+            "sources": [
+                source.model_copy(update={"content": quote}) if source is page else source
+                for source in original.sources
+            ],
+        }
+    )
+    result = build_profile(run).employees
+    assert result.state == "supported" and result.value.count == 84
+    assert result.as_of is None
+
+
+def test_exact_group_news_event_remains_supported() -> None:
+    quote = "Example sp. z o.o. group opened a new factory on 2026-09-10."
+    run = _run(quote)
+    page = run.sources[1].model_copy(
+        update={
+            "source": run.sources[1].source.model_copy(update={"published_on": date(2026, 9, 20)})
+        }
+    )
+    event = {
+        "state": "supported",
+        "value": {
+            "title": "Example Group opened a new factory",
+            "summary": "Example Group opened a new factory",
+            "published_on": "2026-09-20",
+            "occurred_on": "2026-09-10",
+        },
+        "evidence": [{"source_id": "page", "excerpt": quote}],
+    }
+    draft = _draft_with(run, recent_developments=[event])
+    result = build_profile(
+        run.model_copy(update={"draft": draft, "sources": [run.sources[0], page]})
+    )
+    assert result.recent_developments[0].state == "supported"
+
+
+@pytest.mark.parametrize(
+    "content",
+    [
+        "Issuer NIP 9999999999. As of 2026-09-30, Northstar Holdings employs 84 employees.",
+        "Issuer NIP 8420000005. As of 2026-09-30, Northstar Holdings Group employs 84 employees.",
+        (
+            "Acme sells apparel. Issuer NIP 8420000005. "
+            "As of 2026-09-30, Northstar Holdings employs 84 employees."
+        ),
+        (
+            "Issuer NIP 8420000005. As of 2026-09-30, Northstar Holdings, "
+            "a customer of Acme, employs 84 employees."
+        ),
+        (
+            "Issuer NIP 8420000005. As of 2026-09-30, Northstar Holdings "
+            "does not employ 84 employees."
+        ),
+        "As of 2026-09-30, Northstar Holdings employs 84 employees. Issuer NIP 8420000005.",
+        (
+            "Issuer NIP 8420000005. This is an official page. "
+            "Unrelated information follows. As of 2026-09-30, "
+            "Northstar Holdings employs 84 employees."
+        ),
+        (
+            "Acme is the issuer, NIP 8420000005. "
+            "As of 2026-09-30, Northstar Holdings employs 84 employees."
+        ),
+    ],
+    ids=[
+        "wrong-nip",
+        "group-widening",
+        "foreign-entity",
+        "customer-relation",
+        "negation",
+        "footer-nip",
+        "distant-nip",
+        "different-issuer",
+    ],
+)
+def test_frozen_northstar_suffix_bridge_rejects_unsafe_contexts(content: str) -> None:
+    fixture = Path(__file__).parents[1] / "examples/evals/controlled/employee_exact_official.json"
+    original = CompanyResearchRun.model_validate_json(fixture.read_bytes())
+    page = next(source for source in original.sources if source.source.source_id == "issuer-page")
+    evidence = EvidenceRef(source_id="issuer-page", excerpt=content)
+    employees = original.draft.employees.model_copy(
+        update={"evidence": [evidence], "as_of": date(2026, 9, 30)}
+    )
+    draft = original.draft.model_copy(update={"employees": employees})
+    run = original.model_copy(
+        update={
+            "draft": draft,
+            "sources": [
+                source.model_copy(update={"content": content}) if source is page else source
+                for source in original.sources
+            ],
+        }
+    )
+    assert build_profile(run).employees.state == "uncertain"
+
+
+def test_frozen_northstar_suffix_bridge_retains_conflicting_full_page_count() -> None:
+    fixture = Path(__file__).parents[1] / "examples/evals/controlled/employee_exact_official.json"
+    run = CompanyResearchRun.model_validate_json(fixture.read_bytes())
+    other_page = RetrievedSource(
+        source=_source("other-issuer-page", "Issuer employee page"),
+        kind="full_page",
+        content=(
+            "Issuer NIP 8420000005. As of 2026-09-30, Northstar Holdings employs 85 employees."
+        ),
+        fetch_mode="static",
+    )
+    result = build_profile(run.model_copy(update={"sources": [*run.sources, other_page]}))
+    assert result.employees.state == "uncertain" and result.employees.value is None
+
+
+def test_issuer_nip_bridge_does_not_accept_a_legal_form_as_the_company_name() -> None:
+    quote = "Issuer NIP 1234567890. Spółka akcyjna employs 120 employees."
+    run = _run(
+        quote,
+        employee={
+            "state": "supported",
+            "value": {"kind": "exact", "count": 120},
+            "evidence": [{"source_id": "page", "excerpt": quote}],
+        },
+    )
+    registry = run.sources[0].model_copy(
+        update={"content": "Registry identity: LPP SPÓŁKA AKCYJNA"}
+    )
+    legal_name = run.identity.legal_name.model_copy(
+        update={
+            "value": "LPP SPÓŁKA AKCYJNA",
+            "evidence": [EvidenceRef(source_id="registry", excerpt="LPP SPÓŁKA AKCYJNA")],
+        }
+    )
+    identity = run.identity.model_copy(update={"legal_name": legal_name})
+    result = build_profile(
+        run.model_copy(update={"identity": identity, "sources": [registry, run.sources[1]]})
+    )
+    assert result.employees.state == "uncertain"
+
+
+def test_abbreviated_legal_name_bridge_rejects_wrong_nip_and_group_headcount() -> None:
+    wrong_nip = "Issuer NIP 9999999999. As of 2026-09-30, Example employs 120 employees."
+    run = _run(
+        wrong_nip,
+        employee={
+            "state": "supported",
+            "value": {"kind": "exact", "count": 120},
+            "as_of": "2026-09-30",
+            "evidence": [{"source_id": "page", "excerpt": wrong_nip}],
+        },
+    )
+    assert build_profile(run).employees.state == "uncertain"
+
+    group = "Issuer NIP 1234567890. Example Group reports 120 employees."
+    group_run = _run(
+        group,
+        employee={
+            "state": "supported",
+            "value": {"kind": "exact", "count": 120},
+            "evidence": [{"source_id": "page", "excerpt": group}],
+        },
+    )
+    assert build_profile(group_run).employees.state == "uncertain"
+
+    foreign = (
+        "Other Company employs 120 employees. Issuer NIP 1234567890. Example employs 120 employees."
+    )
+    foreign_run = _run(
+        foreign,
+        employee={
+            "state": "supported",
+            "value": {"kind": "exact", "count": 120},
+            "evidence": [{"source_id": "page", "excerpt": foreign}],
+        },
+    )
+    assert build_profile(foreign_run).employees.state == "uncertain"
+
+    footer_nip = "Example employs 120 employees. Issuer NIP 1234567890."
+    footer_run = _run(
+        footer_nip,
+        employee={
+            "state": "supported",
+            "value": {"kind": "exact", "count": 120},
+            "evidence": [{"source_id": "page", "excerpt": footer_nip}],
+        },
+    )
+    assert build_profile(footer_run).employees.state == "uncertain"
+
+    distant_nip = (
+        "Issuer NIP 1234567890. This is an official page. "
+        "Additional unrelated page content. Example employs 120 employees."
+    )
+    distant_run = _run(
+        distant_nip,
+        employee={
+            "state": "supported",
+            "value": {"kind": "exact", "count": 120},
+            "evidence": [{"source_id": "page", "excerpt": "Example employs 120 employees."}],
+        },
+    )
+    assert build_profile(distant_run).employees.state == "uncertain"
+
+
+@pytest.mark.parametrize(
+    ("field", "claim"),
+    [
+        ("products_services", ["apparel and fashion"]),
+        ("industries", ["apparel and fashion"]),
+    ],
+)
+def test_exact_pronoun_claim_uses_nearby_preceding_company_anchor(
+    field: str, claim: list[str]
+) -> None:
+    body = "Example sp. z o.o. is a fashion retailer. Its business is apparel and fashion."
+    excerpt = "Its business is apparel and fashion."
+    run = _run(body)
+    draft = _draft_with(
+        run,
+        **{
+            field: {
+                "state": "supported",
+                "value": claim,
+                "evidence": [{"source_id": "page", "excerpt": excerpt}],
+            }
+        },
+    )
+    assert (
+        getattr(build_profile(run.model_copy(update={"draft": draft})), field).state == "supported"
+    )
+
+
+def test_pronoun_attachment_rejects_footer_cross_source_foreign_and_altered_quotes() -> None:
+    excerpt = "Its products include pumps."
+    body = (
+        "Other Company sells valves. Its products include pumps. "
+        "Example sp. z o.o. is listed in the footer."
+    )
+    run = _run(
+        body,
+    )
+    draft = _draft_with(
+        run,
+        products_services={
+            "state": "supported",
+            "value": ["pumps"],
+            "evidence": [{"source_id": "page", "excerpt": excerpt}],
+        },
+    )
+    assert (
+        build_profile(run.model_copy(update={"draft": draft})).products_services.state
+        == "uncertain"
+    )
+
+    claim_body = "Its products include pumps."
+    cross_source = RetrievedSource(
+        source=_source("other-page", "Resolved company"),
+        kind="full_page",
+        content="Example sp. z o.o. is a fashion retailer.",
+        fetch_mode="static",
+    )
+    cross_run = _run(claim_body)
+    cross_draft = _draft_with(
+        cross_run,
+        products_services={
+            "state": "supported",
+            "value": ["pumps"],
+            "evidence": [{"source_id": "page", "excerpt": claim_body}],
+        },
+    )
+    assert (
+        build_profile(
+            cross_run.model_copy(
+                update={"draft": cross_draft, "sources": [*cross_run.sources, cross_source]}
+            )
+        ).products_services.state
+        == "uncertain"
+    )
+
+    altered = _draft_with(
+        run,
+        products_services={
+            "state": "supported",
+            "value": ["pumps"],
+            "evidence": [{"source_id": "page", "excerpt": "Its pumps are products."}],
+        },
+    )
+    assert (
+        build_profile(run.model_copy(update={"draft": altered})).products_services.state
+        == "uncertain"
+    )
+
+
+@pytest.mark.parametrize("field", ["employees", "products_services"])
+def test_intervening_foreign_entity_does_not_authorize_researched_pronoun(field: str) -> None:
+    excerpt = (
+        "Its 120 employees work remotely."
+        if field == "employees"
+        else "Its products include pumps."
+    )
+    body = f"Example sp. z o.o. is a retailer. Acme is the supplier. {excerpt}"
+    run = _run(body)
+    draft = _draft_with(
+        run,
+        **{
+            field: {
+                "state": "supported",
+                "value": {"kind": "exact", "count": 120} if field == "employees" else ["pumps"],
+                "evidence": [{"source_id": "page", "excerpt": excerpt}],
+            }
+        },
+    )
+    assert (
+        getattr(build_profile(run.model_copy(update={"draft": draft})), field).state == "uncertain"
+    )

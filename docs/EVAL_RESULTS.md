@@ -144,3 +144,16 @@ Actual provider cost is null. `dynamic_reads` is the recorded browser-attempt co
 The set is small and deliberately adversarial. Gold depends on manual source interpretation, finite approved wording and fixed snapshots. It does not estimate population precision/recall, live retrieval reliability, semantic completeness or universal factual accuracy. Live content may change and needs new human-reviewed gold. Registry-preservation metrics do not claim fresh live MF coverage. Production remains safe-but-low-yield in these cases; the evaluation does not hide that result behind registry precision.
 
 OG-154's twelve repository/evaluation criteria are satisfied. Linear updates remain blocked: only read routes are mounted and the authenticated browser relay is unavailable. No completed status/comment update is claimed. Stop before OG-155.
+
+## OG-154A — targeted recovery, separate from the frozen baseline
+
+The approved OG-154 baseline is frozen at `46bdd26`; every original dataset/gold/replay byte and `baseline.json` remains unchanged. It was reproduced before production edits: researched precision **2/2**, recall **2/19**, false supports **0**.
+
+Regression-first exact extraction admission and bounded claim-local entity attachment recover three controlled observations: products, industry and a dated same-NIP employee count. The same set now measures overall precision **47/47**, registry **42/42**, researched **5/5**, recall **5/19**, over-downgrade **14/19**, false supports **0**. Identity **10/10**, uncertainty **28/28** and strict unknown **40/41** are unchanged. No historical candidate, quote or gold was repaired to improve metrics.
+
+**Retained real yield remains 0/7.** The three LPP semantic gate opportunities and four real extraction losses remain visible. A fresh optional LPP sanity run failed at the existing single output-repair ceiling despite six retained full pages; it is not a successful live demonstration or part of the frozen before/after benchmark. No retry or further tuning followed.
+
+[RECALL_RECOVERY.md](RECALL_RECOVERY.md) contains the pre-fix 17-claim inventory, accepted/rejected intermediate decisions, exact recoveries, safety regressions, separate stage populations and live/resource limitations. [`og154a-comparison.json`](../examples/evals/og154a-comparison.json) contains machine-readable before/after metrics, frozen hashes and per-claim recovery.
+
+Verification: **231 tests**, Ruff lint/format, mypy (14 source files) and actual no-credentials/no-network CLI/JSON/Markdown smoke passed. No financial/retrieval/provider/budget weakening, new architecture or OG-155 work.
+
