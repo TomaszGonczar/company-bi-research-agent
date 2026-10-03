@@ -18,6 +18,17 @@ def block_live_registry(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("company_bi.registry.urlopen", blocked)
 
 
+@pytest.fixture(autouse=True)
+def block_live_research(monkeypatch: pytest.MonkeyPatch) -> None:
+    async def blocked(*args: object, **kwargs: object) -> None:
+        raise AssertionError("Tests must provide controlled research responses; live HTTP disabled")
+
+    monkeypatch.setattr("pydantic_ai.models.ALLOW_MODEL_REQUESTS", False)
+    monkeypatch.setattr("tavily.AsyncTavilyClient.search", blocked)
+    monkeypatch.setattr("scrapling.fetchers.AsyncFetcher.get", blocked)
+    monkeypatch.setattr("scrapling.fetchers.DynamicFetcher.async_fetch", blocked)
+
+
 @pytest.fixture
 def registry_subject() -> dict[str, Any]:
     return {

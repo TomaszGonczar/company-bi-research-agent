@@ -1,6 +1,6 @@
 # Company BI v0.1 — product contract
 
-[OG-149](https://linear.app/tpg96/issue/OG-149) · **CSV/XLSX of Polish NIPs → evidence-backed JSON and Markdown BI files.** This page freezes the complete product behavior; OG-151 currently executes only deterministic ingest/identity, not research or BI reports.
+[OG-149](https://linear.app/tpg96/issue/OG-149) · **CSV/XLSX of Polish NIPs → evidence-backed JSON and Markdown BI files.** This page freezes complete product behavior. OG-151 executes deterministic ingest/identity; OG-152 adds a bounded one-company candidate draft and source artifacts, not final BI reports.
 
 ## Input and identity
 
@@ -30,6 +30,7 @@ A complete profile has supported observations in every requested section, both f
 - **unknown:** no defensible value; `value: null` and a reason, never invented `0`, `false`, or a guess. No confidence percentages.
 - The deterministic gate checks trusted retrieval, excerpt presence, identity conflicts and financial context. JSON/Markdown preserve states; no second LLM rewrites or promotes observations.
 - Initial per-company ceilings: 6 searches, 10 page reads, 2 browser reads, 1 output repair, 180 seconds. Exhaustion returns a partial result with a reason.
+- OG-152 drafts reuse evidence states as candidate proposals. Host identity/source IDs and structural/date constraints are checked; numerical financial candidates additionally require eligible retained page/text material, never discovery-only snippets. `supported` is not publication-approved until the OG-153 gate. Draft run artifacts live under `runs/`, separate from the final product paths above.
 
 ## Refusals
 

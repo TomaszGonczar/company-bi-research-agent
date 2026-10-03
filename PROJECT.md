@@ -329,7 +329,7 @@ Do not cut:
 
 ## Foundation contracts — OG-148 / OG-149 / OG-150 / OG-160
 
-The foundation checkpoint is `6cfcfe4`. OG-151 now implements deterministic CSV/XLSX ingest and MF-registry identity resolution only. The research agent, generic evidence extractor/gate, financial extraction, Markdown/BI rendering, full BI batch runner and CI remain unimplemented. Do not proceed to OG-152 without explicit instruction.
+The foundation checkpoint is `6cfcfe4`; OG-151 is committed at `8701453`. Deterministic CSV/XLSX ingest/identity and the OG-152 bounded one-company draft path are implemented and verified, including a full native Codex OAuth/Tavily/Scrapling run. The generic evidence/excerpt/semantic publication gate, deterministic JSON/Markdown BI renderer, full BI research batch runner, eval suite and CI remain later work.
 
 - [Architecture decisions](docs/ARCHITECTURE_DECISIONS.md): minimum pipeline, dependency responsibilities, trust boundaries and rejected technologies.
 - [One-page product contract](docs/PRODUCT_CONTRACT.md): exact input, output, evidence states, limits and refusals.
@@ -337,14 +337,14 @@ The foundation checkpoint is `6cfcfe4`. OG-151 now implements deterministic CSV/
 - [Financial decision](docs/FINANCIAL_DATA_DECISION.md): two-company live spike; official issuer HTML/text with linked CSV where available, then UNKNOWN. No PDF/XML/archive financial parser.
 - [`examples/profiles/`](examples/profiles/): complete, partial and conflicting-source **synthetic** JSON fixtures, not real retrieved company reports.
 
-Current runtime dependencies are Pydantic and openpyxl. CSV, checksum calculation, HTTP and the CLI use the standard library; development typing stubs cover openpyxl. Research libraries remain documented decisions for their assigned implementation stages. Python 3.12 is selected in `.python-version`; `uv.lock` fixes package versions.
+Runtime dependencies are Pydantic, openpyxl, `pydantic-ai-slim[openai]`, `tavily-python` and `scrapling[fetchers]`. The slim PydanticAI distribution installs only the selected OpenAI SDK integration, not every model provider. Scrapling's fetchers extra supplies its static HTTP and Playwright browser support. `pytest-asyncio` is a development-only pytest extension for deterministic async tool/agent tests. CSV, checksum calculation and registry HTTP still use the standard library; development typing stubs cover openpyxl. Python 3.12 and `uv.lock` fix the environment.
 
 ### Offline checks
 
 ```sh
 uv sync --frozen
 uv run --frozen pytest -q
-uv run --frozen ruff check src tests
+uv run --frozen ruff check .
 uv run --frozen ruff format --check src tests
 uv run --frozen mypy src
 ```
@@ -362,7 +362,7 @@ The financial spike exercised public KRS JSON, issuer HTML/CSV/text and RDF docu
 | OG-150 | Satisfied locally | All ten required models, state/quantity/provenance invariants and three examples exist; the smoke consumed the schema without a second LLM pass. |
 | OG-160 | Satisfied locally | Real-source investigation and a frozen primary route, UNKNOWN fallback, mandatory context and unsupported-format boundary permit later implementation without another financial research phase. |
 
-These results completed the four **foundation** issues, not the functional MVP or portfolio gate. Current OG-151 behavior is below; research evidence/excerpt/semantic verification and BI reports remain later work. Linear status was not changed through the read-only connection.
+These results completed the four **foundation** issues, not the functional MVP or portfolio gate. OG-151 and OG-152 execution boundaries are below; excerpt/semantic publication checks and final BI reports remain OG-153 work. Linear status was not changed through the read-only connection.
 
 ## OG-151 — executable deterministic identity slice
 
@@ -406,6 +406,49 @@ Source URLs retain the query date, and retrieval/resolution/completion timestamp
 - Inspected live records: `"ASSECO POLAND" SPÓŁKA AKCYJNA`, NIP `5220003782`, REGON `010334578`, KRS `0000033391`, registration address `OLCHOWA 14, 35-322 RZESZÓW`. Identifier leading zeros survived, city/website stayed unknown, and both malformed `123` and valid unresolved `1234563218` produced structured outcomes.
 - All three synthetic profile fixtures were explicitly migrated to the address/city contract and round-tripped successfully. No source/confidence semantics or financial decision was replaced.
 
-Limitations: this one register is not universal Polish-entity coverage; the [Ministry's shared search limits](https://www.gov.pl/web/kas/api-wykazu-podatnikow-vat) can cause operational failures. Website discovery is deliberately absent rather than guessed. CSV is comma-separated and XLSX uses the first worksheet; no general importer is promised. Full research, BI profiles/reports, evidence gate and financial extraction are still out of scope.
+Limitations of the identity slice: this one register is not universal Polish-entity coverage; the [Ministry's shared search limits](https://www.gov.pl/web/kas/api-wykazu-podatnikow-vat) can cause operational failures. Website discovery is deliberately absent rather than guessed. CSV is comma-separated and XLSX uses the first worksheet; no general importer is promised.
 
-**Definition of Done satisfied locally:** one command converts a small CSV/XLSX NIP file into persisted deterministic identity records with independent row outcomes. Stop here; OG-152 has not started.
+**OG-151 Definition of Done satisfied locally:** one command converts a small CSV/XLSX NIP file into persisted deterministic identity records with independent row outcomes.
+
+## OG-152 — bounded one-company research draft
+
+```sh
+uv sync --frozen
+uv run --frozen playwright install chromium
+# Supply TAVILY_API_KEY in the environment or ignored .env.
+# Log in once with the standard Codex CLI if needed:
+codex login
+uv run --frozen --env-file .env company-bi research 5220003782 \
+  --model openai-codex:gpt-6-luna --output runs/asseco/research.json
+```
+
+The default model is `openai-codex:gpt-6-luna`; `--model` or `COMPANY_BI_MODEL` selects the model. PydanticAI 2.54+ supplies its native Codex OAuth provider and reads the standard `~/.codex/auth.json` (or `$CODEX_HOME/auth.json`) itself; the application does not parse, export, copy or persist OAuth/session tokens. `OPENAI_API_KEY` is not required for Codex. The native provider's refreshed tokens remain in memory; CLI login remains the standard credential-management path.
+
+The ordinary existing `openai:<model>` SDK path can still use `OPENAI_API_KEY`/`OPENAI_BASE_URL`. Already-exported shell variables take precedence over uv dotenv files. Local credential files, outputs, browser caches and run artifacts must never be committed. No custom OAuth adapter, gateway, authentication service or credential store is part of the product.
+
+`research` validates one NIP and calls the unchanged MF lookup before creating one `Agent[ResearchDeps, CompanyResearchDraft]`. The host's identity, including name/NIP/KRS/REGON/location, is copied unchanged into the run. The agent output schema cannot replace identity or create sources. It has only Tavily search, source-ID-only Scrapling reads and an in-memory progress checkpoint; no shell, filesystem-write or arbitrary-code tools.
+
+Default output: `runs/<nip>/<UTC-run-timestamp>/research.json`, or `--output`. This typed `CompanyResearchRun` retains the unchanged identity, candidate draft, every registry/snippet/full-page material snapshot and diagnostics. A stable host ID can have multiple snippet versions and a page snapshot; reading a page does not discard its snippets or full stored text. Tool-facing page text is capped at 16,000 characters, independently of the retained content. These are **not** canonical final BI profiles or Markdown reports.
+
+### Bounds, failures and provenance
+
+- At most 6 Tavily searches (5 results/query), 10 page-read attempts, 2 dynamic attempts and 180 seconds of research. PydanticAI also limits model requests to 12, tool calls to 24, input tokens to 120,000, output tokens to 16,000 and total tokens to 136,000. Each model request has a 30-second timeout. Native Codex does not support a per-response `max_tokens` cap; only the ordinary API-key path has the 6,000-token response setting. Codex uses low reasoning effort plus the supported usage ceilings/deadline, without claiming a nonexistent output cap.
+- One output-repair request maximum; zero model SDK or tool automatic retries. Scrapling browser `retries=1` means one **total** attempt, unlike static mode's `retries=0`.
+- `completed` means a model returned a structurally valid **candidate** draft, not complete BI coverage or verified publication. `partial` retains validated saved findings after interruption; `failed` has no saved model findings and explicit unknowns. Limit/tool failure reasons are retained in the draft and diagnostics. Exit code 0 covers completed/partial drafts, 1 a failed research run, and 2 configuration/input/identity/file errors.
+- Only public HTTP(S) page targets are allowed. DNS/IP checks reject local/private/link-local/nonpublic destinations. Static redirects are checked before following; browser HTTP redirects are blocked before following because Playwright routes only their first hop. Browser rendering has service workers/downloads disabled. DNS checks are not IP pinning: DNS rebinding/TOCTOU protection is incomplete and is not claimed as an OG-155 safety guarantee.
+- Static HTML/text/CSV first; dynamic fallback only for failed or contentless/recognizable-JS-shell pages. PDF/XML/ZIP/office/image payloads are refused, not parsed as financial evidence. Publication dates require explicit article/date-published metadata, never a guessed year.
+- Source-ID membership and schema/date/context constraints are deterministic. Financial amounts, including uncertain values and zero, require the frozen OG-160 metadata and retained full-page/text evidence in both agent/progress validation and persisted-run validation; discovery-only snippets and unreadable PDFs cannot supply amounts. Excerpt occurrence, entity semantics and final promotion of `supported` candidates remain **OG-153** work. Employee ranges, uncertainty/conflicts and unknowns are retained.
+
+### Observed verification and OG-152 exit
+
+- **118 offline tests passed**; Ruff lint/format checks (16 Python files) and mypy for 10 source files passed. Tests disable real model/provider calls and use controlled SDK responses and PydanticAI test/function models. Financial regressions proved failing-before/passing-after rejection of snippet-only amounts, including uncertain zero and serialized-run reloads; the same source ID becomes eligible only when full-page material is retained.
+- Real MF identity plus a real static Scrapling read of Asseco's investor financial-highlights page succeeded. A separate controlled-discovery/static-shell smoke exercised actual redirect-guarded Chromium extraction successfully. These are retrieval smokes, **not** a full Tavily/model research demonstration.
+- The actual research CLI resolved the real MF identity, ran a controlled PydanticAI test model, persisted/reloaded the typed research artifact and retained unknown financial nulls. Its temporary output was removed. This proves CLI persistence, not a live model/Tavily research run.
+- Asseco's investor site returned HTTP 403 to the browser routing transport in one smoke; that failure stayed explicit. Site blocking and missing eligible financial context can legitimately leave facts unknown. Upstream Scrapling/lxml emits a `strip_cdata` deprecation warning in the offline HTML fixtures; it is not suppressed.
+- An earlier live agent attempt reached an OpenAI-compatible API-key endpoint (`openai:gpt-5.4-mini`), which returned “insufficient credits” on its first request. It retained a truthful failed/unknown artifact rather than claiming research success. The operator subsequently chose native Codex OAuth; that API-key funding failure is not a prerequisite for the native path.
+- A separate **real Tavily → Scrapling** component run succeeded: 1 search, 1 static read, 0 dynamic reads. Host source `S002` is `https://pl.asseco.com/en`; full retained text describes “a global software producer for business and administration” and lists its sector offerings. The provider ranking score is discovery metadata, not fact confidence. This is not substituted for an agent-generated draft.
+- The **full native live CLI run** resolved NIP `5220003782` through unchanged MF identity, then used `openai-codex:gpt-6-luna`, real Tavily and real Scrapling. Its ignored artifact is `runs/5220003782/og152-codex-verified.json`; typed reload succeeded. Actual diagnostics: `completed`, **6 model requests, 5 searches, 6 page reads, 1 dynamic attempt, 1 output repair, 77,794 input tokens, 2,351 output tokens, 81.125 seconds**. Cost is `null` because no actual provider cost was available; no estimate is invented.
+- Manually inspected identity: `"ASSECO POLAND" SPÓŁKA AKCYJNA`, NIP `5220003782`, KRS `0000033391`, REGON `010334578`, address `OLCHOWA 14, 35-322 RZESZÓW`. Registry city/website remain unknown. Both financial metrics are **unknown**, with null value/currency/unit/period/scope: the located official PDFs were not eligible retrieved text.
+- The live draft proposes Polish software/services activity, sector offerings and **2,465 employees as of 2025-12-31**. Business source `S016` and employee source `S004` remain discovery snippets after failed/refused reads, so these are unverified candidate observations, not published facts. Retrieved official news pages `S006` and `S007` contain explicit publication dates **2026-08-27** and **2026-05-27** and Asseco Poland **segment**, not legal-entity, activity. Draft summaries preserve that scope.
+- Manual excerpt inspection found model-added ellipses/non-exact excerpts even for some retrieved pages. No excerpt/semantic publication approval is claimed. PDF refusal, an ESG-site certificate/browser failure and all gaps remain explicit. The earlier live artifact with snippet-only revenue is now rejected by the persisted-run model; the corrected artifact reloads successfully.
+- **OG-152 Definition of Done is satisfied:** bounded one-company typed research, actual retained sources, truthful diagnostics, offline checks and full live/manual verification. Native credentials stay in the standard SDK/CLI path. No final evidence gate, BI renderer, research batch, eval/CI expansion, provider framework or runtime subagents were introduced. Stop before OG-153.

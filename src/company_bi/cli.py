@@ -1,14 +1,56 @@
-"""Identity-stage CLI only; no research or BI report generation."""
+"""Deterministic identity and one-company research commands; no BI rendering."""
 
 import argparse
+import asyncio
+import os
 import sys
 from collections import Counter
+from datetime import UTC, datetime
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 from pydantic import TypeAdapter
 
+from company_bi.agent import research_company
 from company_bi.ingest import InputFileError, resolve_file
 from company_bi.models import BatchResult
+from company_bi.nip import InvalidNIP, validate_nip
+from company_bi.registry import RegistryLookupError, lookup_company
+
+
+def _research(nip_value: str, output: Path | None, model: str) -> int:
+    try:
+        nip = validate_nip(nip_value)
+    except InvalidNIP as error:
+        print(f"INVALID_NIP: {error}", file=sys.stderr)
+        return 2
+    if not os.environ.get("TAVILY_API_KEY"):
+        print("CONFIG_ERROR: TAVILY_API_KEY is required", file=sys.stderr)
+        return 2
+    if model.startswith("openai:") and not os.environ.get("OPENAI_API_KEY"):
+        print("CONFIG_ERROR: OPENAI_API_KEY is required for the selected model", file=sys.stderr)
+        return 2
+    try:
+        identity, source = lookup_company(nip, datetime.now(ZoneInfo("Europe/Warsaw")).date())
+    except RegistryLookupError as error:
+        print(f"{error.code}: {error}", file=sys.stderr)
+        return 2
+    if identity is None:
+        print("COMPANY_NOT_FOUND: no identity resolved in the MF register", file=sys.stderr)
+        return 2
+    run = asyncio.run(research_company(identity, [source], model=model))
+    path = output or (
+        Path("runs") / nip / datetime.now(UTC).strftime("%Y%m%dT%H%M%S%fZ") / "research.json"
+    )
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(run.model_dump_json(indent=2) + "\n", encoding="utf-8")
+    except OSError as error:
+        print(f"FILE_ERROR: {error}", file=sys.stderr)
+        return 2
+    print(f"Wrote one research draft and retained sources to {path}")
+    print(run.diagnostics.model_dump_json())
+    return 1 if run.diagnostics.status == "failed" else 0
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -17,7 +59,15 @@ def main(argv: list[str] | None = None) -> int:
     resolve = commands.add_parser("resolve", help="Resolve CSV/XLSX NIPs into identity records")
     resolve.add_argument("input", type=Path)
     resolve.add_argument("--output", type=Path, default=Path("outputs/identities.json"))
+    research = commands.add_parser("research", help="Research one deterministically resolved NIP")
+    research.add_argument("nip")
+    research.add_argument("--output", type=Path)
+    research.add_argument(
+        "--model", default=os.environ.get("COMPANY_BI_MODEL", "openai-codex:gpt-6-luna")
+    )
     args = parser.parse_args(argv)
+    if args.command == "research":
+        return _research(args.nip, args.output, args.model)
     input_path = Path(args.input)
     output_path = Path(args.output)
     try:

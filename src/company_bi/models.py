@@ -163,6 +163,26 @@ class CompanyEvent(Fact[EventDetails]):
     """A dated development with its own publication state and evidence."""
 
 
+def _check_financial_coverage(financials: list[FinancialFact]) -> None:
+    if {fact.metric for fact in financials} != {"revenue", "net_result"}:
+        raise ValueError("both financial metrics must be represented, even when unknown")
+    periods = {
+        (fact.period.start, fact.period.end) for fact in financials if fact.period is not None
+    }
+    if len(periods) > 3:
+        raise ValueError("financials may cover at most three reporting periods")
+    keys = [
+        (
+            fact.metric,
+            fact.period.start if fact.period else None,
+            fact.period.end if fact.period else None,
+        )
+        for fact in financials
+    ]
+    if len(set(keys)) != len(keys):
+        raise ValueError("conflicting metric/period observations belong in one uncertain fact")
+
+
 class CompanyProfile(Model):
     schema_version: Literal["0.1"] = "0.1"
     status: Literal["complete", "partial"]
@@ -206,25 +226,7 @@ class CompanyProfile(Model):
             if any(ref.source_id not in source_ids for ref in fact.evidence):
                 raise ValueError("evidence must reference a source in the retrieved-source ledger")
 
-        if {fact.metric for fact in self.financials} != {"revenue", "net_result"}:
-            raise ValueError("both financial metrics must be represented, even when unknown")
-        periods = {
-            (fact.period.start, fact.period.end)
-            for fact in self.financials
-            if fact.period is not None
-        }
-        if len(periods) > 3:
-            raise ValueError("financials may cover at most three reporting periods")
-        financial_keys = [
-            (
-                fact.metric,
-                fact.period.start if fact.period else None,
-                fact.period.end if fact.period else None,
-            )
-            for fact in self.financials
-        ]
-        if len(set(financial_keys)) != len(financial_keys):
-            raise ValueError("conflicting metric/period observations belong in one uncertain fact")
+        _check_financial_coverage(self.financials)
 
         today = self.generated_at.date()
         try:
@@ -307,4 +309,111 @@ class BatchResult(Model):
             ):
                 if any(ref.source_id not in source_ids for ref in fact.evidence):
                     raise ValueError("identity evidence must reference the row source ledger")
+        return self
+
+
+class CompanyResearchDraft(Model):
+    """Candidate findings, not a published profile or model-owned legal identity."""
+
+    business_description: Fact[Text]
+    products_services: Fact[TextList]
+    industries: Fact[TextList]
+    markets: Fact[TextList]
+    employees: EmployeeFact
+    financials: list[FinancialFact] = Field(min_length=2, max_length=6)
+    recent_developments: list[CompanyEvent] = Field(max_length=3)
+    limitations: list[Text] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def check_financial_attempts(self) -> Self:
+        _check_financial_coverage(self.financials)
+        return self
+
+
+class SearchHit(Model):
+    source_id: Text
+    title: Text
+    url: HttpUrl
+    content: str
+    score: Annotated[float, Field(ge=0, le=1)] | None = None
+
+
+class SearchResults(Model):
+    query: Text
+    results: list[SearchHit] = Field(default_factory=list)
+    error: Text | None = None
+
+
+class RetrievedSource(Model):
+    """Host-owned material; search discovery is not a full-page retrieval."""
+
+    source: Source
+    kind: Literal["registry", "search_snippet", "full_page"]
+    content: str
+    fetch_mode: Literal["registry", "tavily", "static", "dynamic"]
+
+
+class PageReadResult(Model):
+    material: RetrievedSource | None = None
+    error: Text | None = None
+
+
+class ResearchDiagnostics(Model):
+    model: Text
+    status: Literal["completed", "partial", "failed"]
+    stop_reason: Text | None = None
+    model_requests: NonNegativeInt
+    searches: NonNegativeInt
+    page_reads: NonNegativeInt
+    dynamic_reads: NonNegativeInt
+    output_retries: NonNegativeInt
+    input_tokens: NonNegativeInt
+    output_tokens: NonNegativeInt
+    duration_seconds: Annotated[float, Field(ge=0)]
+    cost_usd: Money | None = None
+
+
+class CompanyResearchRun(Model):
+    """One draft and its trusted retrieval artifacts; never a final BI report."""
+
+    identity: CompanyIdentity
+    draft: CompanyResearchDraft
+    sources: list[RetrievedSource]
+    diagnostics: ResearchDiagnostics
+    generated_at: AwareDatetime
+
+    @model_validator(mode="after")
+    def check_retrieval_references(self) -> Self:
+        # One source ID may have multiple retained snippets and a full-page snapshot.
+        source_ids = {material.source.source_id for material in self.sources}
+        if any(material.source.retrieved_at > self.generated_at for material in self.sources):
+            raise ValueError("a source cannot be retrieved after draft generation")
+        if self.identity.resolved_at > self.generated_at:
+            raise ValueError("identity cannot be resolved after draft generation")
+        facts: tuple[Fact[Any], ...] = (
+            self.identity.legal_name,
+            self.identity.krs,
+            self.identity.regon,
+            self.identity.registered_city,
+            self.identity.registered_address,
+            self.identity.website,
+            self.draft.business_description,
+            self.draft.products_services,
+            self.draft.industries,
+            self.draft.markets,
+            self.draft.employees,
+            *self.draft.financials,
+            *self.draft.recent_developments,
+        )
+        if any(ref.source_id not in source_ids for fact in facts for ref in fact.evidence):
+            raise ValueError("research evidence must reference retained host source material")
+        full_page_ids = {
+            material.source.source_id for material in self.sources if material.kind == "full_page"
+        }
+        for financial in self.draft.financials:
+            if financial.value is not None and (
+                not financial.evidence
+                or any(ref.source_id not in full_page_ids for ref in financial.evidence)
+            ):
+                raise ValueError("financial amounts require retained full-page evidence")
         return self
