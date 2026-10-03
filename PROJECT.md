@@ -329,7 +329,7 @@ Do not cut:
 
 ## Foundation contracts — OG-148 / OG-149 / OG-150 / OG-160
 
-The foundation checkpoint is `6cfcfe4`; OG-151 is committed at `8701453` and OG-152 at `c8aa7a2`. Deterministic CSV/XLSX ingest/identity and bounded one-company research are implemented and verified. OG-153 connects candidate research to a deterministic publication gate, JSON/Markdown BI rendering and a sequential filesystem-backed batch. Evals, CI, fuller web hardening and later retrieval experiments remain future issues.
+The foundation checkpoint is `6cfcfe4`; OG-151 is committed at `8701453`, OG-152 at `c8aa7a2` and OG-153 at `59e76de`. Deterministic CSV/XLSX identity, bounded research, deterministic publication, BI rendering and sequential batch are implemented. OG-154 adds reproducible offline evaluation with separately measured precision and coverage; its low-yield baseline is documented below. CI, fuller web hardening and later retrieval experiments remain future issues.
 
 - [Architecture decisions](docs/ARCHITECTURE_DECISIONS.md): minimum pipeline, dependency responsibilities, trust boundaries and rejected technologies.
 - [One-page product contract](docs/PRODUCT_CONTRACT.md): exact input, output, evidence states, limits and refusals.
@@ -532,4 +532,21 @@ Its cited “nearly 63,000 people” is approximate Group evidence, not an exact
 | 12. Real sample inspection | All three corrected Markdown reports and canonical JSON pairs were inspected. |
 
 OG-153's twelve gate/render/batch criteria are satisfied; the live complete-profile aspiration remains unmet. The gate deliberately favors false negatives over unsupported publication: paraphrases, insufficient entity/context attachment and missing date roles may downgrade genuine information. Evidence links remain usable citations/discovery leads, not a promise that blocked or unsupported documents can be fetched. The CLI still requires configured Tavily credentials even for a cached batch. No evals, CI expansion, general PDF/XML financial parser, runtime subagents, databases/queues, provider framework, prompt/token optimization or unrelated web-safety changes were introduced. Stop before OG-154.
+
+## OG-154 — measured reproducible evaluation
+
+```sh
+uv run --frozen company-bi eval \
+  --dataset examples/evals/dataset.json --output-dir outputs/evals
+```
+
+The deterministic Pydantic Evals 2.54.0 suite has **12 cases: nine controlled and three frozen real-run replays**, with no LLM judge or live dependencies. [EVAL_SPEC.md](docs/EVAL_SPEC.md) defines eligibility/denominators; [EVAL_RESULTS.md](docs/EVAL_RESULTS.md) records gold revisions, source proofs, resource counters, baseline and limitations.
+
+Measured unchanged production `59e76de`: identity **10/10**, supported precision **44/44** (registry **42/42**, researched **2/2**), unsupported-as-supported **0**, researched recall **2/19**, over-downgrade **17/19**, uncertainty obligations **28/28**, strict unknown obligations **40/41**. The unknown miss is a deliberately rejected run with no website Fact, not an invented value. Seven eligible real researched claims all remain uncertain: four extraction/citation/qualifier losses and three genuine gate-loss opportunities. Across 29 real researched fields, primary losses are retrieval **11**, extraction **10**, gate **3**, unavailable eligible context **5**.
+
+This demonstrates safety on a small selected set, **not acceptable useful coverage** or established population precision. Registry successes cannot hide zero real researched support. Initial gold/constraint mistakes and corrected results are both preserved; no input, eligible truth, precision/recall count or production behavior was tuned to improve metrics. No production fix was made.
+
+The CLI was exercised without credentials with socket/research-call guards: **12 cases, exit 0, no network or research calls**. **205 tests**, Ruff, mypy (14 source files) and formatting (24 Python files) passed; upstream warnings remain visible. Original research diagnostics and native replay timings are separate. Public snapshots and machine-readable baselines are deliberate evaluation fixtures; ignored credentials/runs/outputs are not staged.
+
+All twelve OG-154 evaluation criteria are satisfied. Linear status/comments remain unchanged because only read tools are mounted and authenticated browser relay is unavailable. No OG-155 work was started.
 

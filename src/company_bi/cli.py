@@ -76,7 +76,20 @@ def main(argv: list[str] | None = None) -> int:
     batch.add_argument("--retry-partial", action="store_true")
     batch.add_argument("--retry-failed", action="store_true")
     batch.add_argument("--force", action="store_true")
+    evaluate = commands.add_parser("eval", help="Run offline deterministic evaluation")
+    evaluate.add_argument("--dataset", type=Path, default=Path("examples/evals/dataset.json"))
+    evaluate.add_argument("--output-dir", type=Path, default=Path("outputs/evals"))
     args = parser.parse_args(argv)
+    if args.command == "eval":
+        from company_bi.evaluation import write_reports
+
+        try:
+            failed = write_reports(args.dataset, args.output_dir)
+        except (OSError, ValueError) as error:
+            print(f"EVAL_ERROR: {error}", file=sys.stderr)
+            return 2
+        print(f"Wrote evaluation results to {args.output_dir}")
+        return 1 if failed else 0
     if args.command == "research":
         return _research(args.nip, args.output, args.model)
     if args.command == "batch":

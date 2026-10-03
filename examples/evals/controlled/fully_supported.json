@@ -1,0 +1,255 @@
+{
+  "identity": {
+    "nip": "7310000009",
+    "legal_name": {
+      "state": "supported",
+      "value": "Fictional Aurora Systems sp. z o.o.",
+      "evidence": [
+        {
+          "source_id": "registry-fully_supported",
+          "excerpt": "\"Fictional Aurora Systems sp. z o.o.\""
+        }
+      ]
+    },
+    "krs": {
+      "state": "supported",
+      "value": "0000123456",
+      "evidence": [
+        {
+          "source_id": "registry-fully_supported",
+          "excerpt": "KRS 0000123456"
+        }
+      ]
+    },
+    "regon": {
+      "state": "supported",
+      "value": "123456789",
+      "evidence": [
+        {
+          "source_id": "registry-fully_supported",
+          "excerpt": "REGON 123456789"
+        }
+      ]
+    },
+    "registered_city": {
+      "state": "supported",
+      "value": "Fictionalowo",
+      "evidence": [
+        {
+          "source_id": "registry-fully_supported",
+          "excerpt": "registered address Example Avenue 10, Fictionalowo"
+        }
+      ]
+    },
+    "registered_address": {
+      "state": "supported",
+      "value": "Example Avenue 10, Fictionalowo",
+      "evidence": [
+        {
+          "source_id": "registry-fully_supported",
+          "excerpt": "registered address Example Avenue 10, Fictionalowo"
+        }
+      ]
+    },
+    "website": {
+      "state": "unknown",
+      "reason": "Official registry snapshot does not provide a website."
+    },
+    "resolved_at": "2026-10-02T11:00:00Z"
+  },
+  "draft": {
+    "business_description": {
+      "state": "supported",
+      "value": "Designs modular water pumps for municipal utilities.",
+      "evidence": [
+        {
+          "source_id": "annual-report",
+          "excerpt": "Fictional Aurora Systems sp. z o.o. designs modular water pumps for municipal utilities."
+        }
+      ]
+    },
+    "products_services": {
+      "state": "supported",
+      "value": [
+        "Industrial water pumps",
+        "Control units"
+      ],
+      "evidence": [
+        {
+          "source_id": "annual-report",
+          "excerpt": "Its products are industrial water pumps and control units."
+        }
+      ]
+    },
+    "industries": {
+      "state": "supported",
+      "value": [
+        "Water infrastructure"
+      ],
+      "evidence": [
+        {
+          "source_id": "annual-report",
+          "excerpt": "The company operates in water infrastructure"
+        }
+      ]
+    },
+    "markets": {
+      "state": "supported",
+      "value": [
+        "Poland"
+      ],
+      "evidence": [
+        {
+          "source_id": "annual-report",
+          "excerpt": "serves customers in Poland"
+        }
+      ]
+    },
+    "employees": {
+      "state": "supported",
+      "value": {
+        "kind": "exact",
+        "count": 0
+      },
+      "evidence": [
+        {
+          "source_id": "annual-report",
+          "excerpt": "As of 2026-09-01, Fictional Aurora Systems sp. z o.o. employs 0 employees."
+        }
+      ],
+      "as_of": "2026-09-01"
+    },
+    "financials": [
+      {
+        "state": "supported",
+        "value": "0",
+        "evidence": [
+          {
+            "source_id": "annual-report",
+            "excerpt": "For 2025-01-01 to 2025-12-31, standalone revenue was PLN 0"
+          }
+        ],
+        "metric": "revenue",
+        "period": {
+          "start": "2025-01-01",
+          "end": "2025-12-31"
+        },
+        "currency": "PLN",
+        "unit": "units",
+        "scope": "legal_entity"
+      },
+      {
+        "state": "supported",
+        "value": "0",
+        "evidence": [
+          {
+            "source_id": "annual-report",
+            "excerpt": "For 2025-01-01 to 2025-12-31, standalone net result was PLN 0"
+          }
+        ],
+        "metric": "net_result",
+        "period": {
+          "start": "2025-01-01",
+          "end": "2025-12-31"
+        },
+        "currency": "PLN",
+        "unit": "units",
+        "scope": "legal_entity"
+      }
+    ],
+    "recent_developments": [
+      {
+        "state": "supported",
+        "value": {
+          "title": "Opened a test laboratory",
+          "summary": "Opened a test laboratory in Fictionalowo.",
+          "published_on": "2026-08-15",
+          "occurred_on": "2026-08-14"
+        },
+        "evidence": [
+          {
+            "source_id": "news-august",
+            "excerpt": "On 2026-08-14 it opened a test laboratory in Fictionalowo."
+          }
+        ]
+      },
+      {
+        "state": "supported",
+        "value": {
+          "title": "Launched a distribution centre",
+          "summary": "Launched a distribution centre.",
+          "published_on": "2026-08-01",
+          "occurred_on": "2026-07-01"
+        },
+        "evidence": [
+          {
+            "source_id": "news-july",
+            "excerpt": "In July this year it launched a distribution centre."
+          }
+        ]
+      }
+    ],
+    "limitations": []
+  },
+  "sources": [
+    {
+      "source": {
+        "source_id": "registry-fully_supported",
+        "url": "https://registry-fully_supported.example/",
+        "title": "Fictional national register",
+        "retrieved_at": "2026-10-02T12:00:00Z"
+      },
+      "kind": "registry",
+      "content": "Registry identity: \"Fictional Aurora Systems sp. z o.o.\"; NIP 7310000009; KRS 0000123456; REGON 123456789; registered address Example Avenue 10, Fictionalowo.",
+      "fetch_mode": "registry"
+    },
+    {
+      "source": {
+        "source_id": "annual-report",
+        "url": "https://annual-report.example/",
+        "title": "Fictional Aurora annual report",
+        "retrieved_at": "2026-10-02T12:00:00Z"
+      },
+      "kind": "full_page",
+      "content": "Fictional Aurora Systems sp. z o.o. designs modular water pumps for municipal utilities. Its products are industrial water pumps and control units. The company operates in water infrastructure and serves customers in Poland. As of 2026-09-01, Fictional Aurora Systems sp. z o.o. employs 0 employees. For 2025-01-01 to 2025-12-31, standalone revenue was PLN 0 and standalone net result was PLN 0. On 2026-08-14 it opened a test laboratory in Fictionalowo. In July this year it launched a distribution centre.",
+      "fetch_mode": "static"
+    },
+    {
+      "source": {
+        "source_id": "news-august",
+        "url": "https://news-august.example/",
+        "title": "Fictional Aurora laboratory announcement",
+        "retrieved_at": "2026-10-02T12:00:00Z",
+        "published_on": "2026-08-15"
+      },
+      "kind": "full_page",
+      "content": "On 2026-08-14 it opened a test laboratory in Fictionalowo.",
+      "fetch_mode": "static"
+    },
+    {
+      "source": {
+        "source_id": "news-july",
+        "url": "https://news-july.example/",
+        "title": "Fictional Aurora July announcement",
+        "retrieved_at": "2026-10-02T12:00:00Z",
+        "published_on": "2026-08-01"
+      },
+      "kind": "full_page",
+      "content": "In July this year it launched a distribution centre.",
+      "fetch_mode": "static"
+    }
+  ],
+  "diagnostics": {
+    "model": "offline-retained-run",
+    "status": "completed",
+    "model_requests": 0,
+    "searches": 0,
+    "page_reads": 0,
+    "dynamic_reads": 0,
+    "output_retries": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "duration_seconds": 0
+  },
+  "generated_at": "2026-10-03T12:00:00Z"
+}

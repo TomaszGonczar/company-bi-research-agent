@@ -1,0 +1,115 @@
+{
+  "initial_dataset_sha256": "82165a718e37c6f42dc0cfce8374fc741b1ae08c4c9144148e23fe70c8cefb61",
+  "initial_results": "initial-baseline.json",
+  "corrections": [
+    {
+      "case": "employee_exact_official",
+      "path": "recent_developments.0",
+      "correction": "No event object exists in the input; expected missing, not a fabricated unknown event."
+    },
+    {
+      "case": "employee_conflict",
+      "path": "recent_developments.0",
+      "correction": "No event object exists in the input; expected missing, not a fabricated unknown event."
+    },
+    {
+      "case": "employee_range_stale",
+      "path": "employees",
+      "correction": "Correct range/historical date remain eligible gold, but safety rejects invented midpoint/current date with nulls; gate need not replace candidate with gold."
+    },
+    {
+      "case": "employee_range_stale",
+      "path": "recent_developments.0",
+      "correction": "No event object exists in the input; expected missing, not a fabricated unknown event."
+    },
+    {
+      "case": "ellipsis_snippet",
+      "path": "financials.0",
+      "correction": "Financial row 0 requests revenue, not net_result; keep null amount and actual requested metric."
+    },
+    {
+      "case": "ellipsis_snippet",
+      "path": "recent_developments.0",
+      "correction": "No event object exists in the input; expected missing, not a fabricated unknown event."
+    },
+    {
+      "case": "financial_context_metric",
+      "path": "financials.1",
+      "correction": "Unknown selected amount does not require erasing nullable/uncertain context under the frozen contract; enforce null amount and revenue metric."
+    },
+    {
+      "case": "financial_context_metric",
+      "path": "recent_developments.0",
+      "correction": "No event object exists in the input; expected missing, not a fabricated unknown event."
+    }
+  ],
+  "unchanged": "All input snapshots, eligible claims and supported_fields are unchanged; no production code is changed. Partial nested null constraints require an evaluator correction recorded separately.",
+  "classification_clarifications": [
+    {
+      "case": "retained_asseco_poland",
+      "path": "recent_developments.1",
+      "correction": "Index/snippet retained without the filing instrument body; retrieval selection limitation, not proof that appointment data does not exist."
+    },
+    {
+      "case": "retained_lpp",
+      "path": "financials.0",
+      "correction": "No eligible financial amount with explicit interval is retained; agent correctly returned unknown rather than extracting unsupported entity values."
+    },
+    {
+      "case": "retained_lpp",
+      "path": "financials.1",
+      "correction": "No eligible financial amount with explicit interval is retained; agent correctly returned unknown rather than extracting unsupported entity values."
+    },
+    {
+      "case": "retained_orlen",
+      "path": "business_description",
+      "correction": "No full-page material exists in this retained corpus; primary retrieval-availability limitation, with Group/candidate deficiencies secondary. Not proof of world-wide data absence."
+    },
+    {
+      "case": "retained_orlen",
+      "path": "products_services",
+      "correction": "No full-page material exists in this retained corpus; primary retrieval-availability limitation, with Group/candidate deficiencies secondary. Not proof of world-wide data absence."
+    },
+    {
+      "case": "retained_orlen",
+      "path": "industries",
+      "correction": "No full-page material exists in this retained corpus; primary retrieval-availability limitation, with Group/candidate deficiencies secondary. Not proof of world-wide data absence."
+    },
+    {
+      "case": "retained_orlen",
+      "path": "markets",
+      "correction": "No full-page material exists in this retained corpus; primary retrieval-availability limitation, with Group/candidate deficiencies secondary. Not proof of world-wide data absence."
+    },
+    {
+      "case": "retained_orlen",
+      "path": "employees",
+      "correction": "No full-page material exists in this retained corpus; primary retrieval-availability limitation, with Group/candidate deficiencies secondary. Not proof of world-wide data absence."
+    },
+    {
+      "case": "retained_orlen",
+      "path": "financials.0",
+      "correction": "No full-page material exists in this retained corpus; primary retrieval-availability limitation, with Group/candidate deficiencies secondary. Not proof of world-wide data absence."
+    },
+    {
+      "case": "retained_orlen",
+      "path": "financials.1",
+      "correction": "No full-page material exists in this retained corpus; primary retrieval-availability limitation, with Group/candidate deficiencies secondary. Not proof of world-wide data absence."
+    },
+    {
+      "case": "retained_orlen",
+      "path": "recent_developments.0",
+      "correction": "No full-page material exists in this retained corpus; primary retrieval-availability limitation, with Group/candidate deficiencies secondary. Not proof of world-wide data absence."
+    },
+    {
+      "case": "retained_orlen",
+      "path": "recent_developments.1",
+      "correction": "No full-page material exists in this retained corpus; primary retrieval-availability limitation, with Group/candidate deficiencies secondary. Not proof of world-wide data absence."
+    },
+    {
+      "case": "retained_orlen",
+      "path": "recent_developments.2",
+      "correction": "No full-page material exists in this retained corpus; primary retrieval-availability limitation, with Group/candidate deficiencies secondary. Not proof of world-wide data absence."
+    }
+  ],
+  "reviewed_dataset_sha256": "15d38e1e635dec24ee075d10fa1be2b58611d1d2ae5178c2d60d144382f21e82"
+}

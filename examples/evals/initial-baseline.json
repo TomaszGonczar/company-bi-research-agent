@@ -1,0 +1,4500 @@
+{
+  "cases": [
+    {
+      "name": "fully_supported",
+      "outcome": "published",
+      "prediction_outcome": "published",
+      "error": null,
+      "counts": {
+        "output_outcome_published": 1,
+        "expected_outcome_published": 1,
+        "identity_fields_total": 5,
+        "identity_fields_correct": 5,
+        "identity_cases_total": 1,
+        "identity_cases_correct": 1,
+        "supported_researched": 2,
+        "correct_supported_researched": 2,
+        "eligible_researched": 9,
+        "eligible_supported": 2,
+        "eligible_uncertain": 7,
+        "over_downgraded": 7,
+        "supported_registry": 5,
+        "correct_supported_registry": 5
+      },
+      "safety": {
+        "unknown": {
+          "correct": 1,
+          "total": 1
+        }
+      },
+      "fields": [
+        {
+          "path": "business_description",
+          "state": "supported",
+          "value": "Designs modular water pumps for municipal utilities.",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "annual-report",
+              "excerpt": "Fictional Aurora Systems sp. z o.o. designs modular water pumps for municipal utilities."
+            }
+          ],
+          "note": "Full-page source literally states the business activity."
+        },
+        {
+          "path": "employees",
+          "state": "supported",
+          "value": {
+            "kind": "exact",
+            "count": 0
+          },
+          "context": {
+            "as_of": "2026-09-01"
+          },
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "annual-report",
+              "excerpt": "As of 2026-09-01, Fictional Aurora Systems sp. z o.o. employs 0 employees."
+            }
+          ],
+          "note": "Explicit dated zero is legitimate exact employee count."
+        },
+        {
+          "path": "financials.0",
+          "state": "uncertain",
+          "value": null,
+          "context": {
+            "metric": "revenue",
+            "period": {
+              "start": "2025-01-01",
+              "end": "2025-12-31"
+            },
+            "currency": "PLN",
+            "unit": "units",
+            "scope": "legal_entity",
+            "group_name": null
+          },
+          "reason": "Exact full-page evidence does not verify metric, amount, precision, currency, unit, entity scope and explicit reporting interval",
+          "supported_approved": false,
+          "eligible": true,
+          "state_allowed": false,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "annual-report",
+              "excerpt": "For 2025-01-01 to 2025-12-31, standalone revenue was PLN 0"
+            }
+          ],
+          "note": "Full-page explicitly identifies standalone revenue, period, currency and zero amount."
+        },
+        {
+          "path": "financials.1",
+          "state": "uncertain",
+          "value": null,
+          "context": {
+            "metric": "net_result",
+            "period": {
+              "start": "2025-01-01",
+              "end": "2025-12-31"
+            },
+            "currency": "PLN",
+            "unit": "units",
+            "scope": "legal_entity",
+            "group_name": null
+          },
+          "reason": "Exact full-page evidence does not verify metric, amount, precision, currency, unit, entity scope and explicit reporting interval",
+          "supported_approved": false,
+          "eligible": true,
+          "state_allowed": false,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": "extraction",
+            "failure_category": "noncontiguous_rewritten_metric_citation"
+          },
+          "evidence": [
+            {
+              "source_id": "annual-report",
+              "excerpt": "For 2025-01-01 to 2025-12-31, standalone revenue was PLN 0 and standalone net result was PLN 0."
+            }
+          ],
+          "note": "Source explicitly gives zero net result and the interval. The candidate rewrites a revenue-and-net sentence into a nonexistent contiguous net-only quote; zero truth remains eligible, but citation extraction is defective."
+        },
+        {
+          "path": "identity.krs",
+          "state": "supported",
+          "value": "0000123456",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-fully_supported",
+              "excerpt": "KRS 0000123456"
+            }
+          ],
+          "note": "Registry excerpt establishes exact identity field."
+        },
+        {
+          "path": "identity.legal_name",
+          "state": "supported",
+          "value": "Fictional Aurora Systems sp. z o.o.",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-fully_supported",
+              "excerpt": "\"Fictional Aurora Systems sp. z o.o.\""
+            }
+          ],
+          "note": "Registry excerpt establishes exact identity field."
+        },
+        {
+          "path": "identity.registered_address",
+          "state": "supported",
+          "value": "Example Avenue 10, Fictionalowo",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-fully_supported",
+              "excerpt": "registered address Example Avenue 10, Fictionalowo"
+            }
+          ],
+          "note": "Registry excerpt establishes exact identity field."
+        },
+        {
+          "path": "identity.registered_city",
+          "state": "supported",
+          "value": "Fictionalowo",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-fully_supported",
+              "excerpt": "registered address Example Avenue 10, Fictionalowo"
+            }
+          ],
+          "note": "Registry excerpt establishes exact identity field."
+        },
+        {
+          "path": "identity.regon",
+          "state": "supported",
+          "value": "123456789",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-fully_supported",
+              "excerpt": "REGON 123456789"
+            }
+          ],
+          "note": "Registry excerpt establishes exact identity field."
+        },
+        {
+          "path": "identity.website",
+          "state": "unknown",
+          "value": null,
+          "context": {},
+          "reason": "Official registry snapshot does not provide a website.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-fully_supported",
+              "excerpt": "Registry identity: \"Fictional Aurora Systems sp. z o.o.\"; NIP 7310000009; KRS 0000123456; REGON 123456789; registered address Example Avenue 10, Fictionalowo."
+            }
+          ],
+          "note": "Retained registry snapshot does not provide this optional identity field."
+        },
+        {
+          "path": "industries",
+          "state": "uncertain",
+          "value": [
+            "Water infrastructure"
+          ],
+          "context": {},
+          "reason": "No exact full-page citation verifies the candidate value, entity, and required context",
+          "supported_approved": false,
+          "eligible": true,
+          "state_allowed": false,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "annual-report",
+              "excerpt": "The company operates in water infrastructure"
+            }
+          ],
+          "note": "Explicit operating sector."
+        },
+        {
+          "path": "markets",
+          "state": "uncertain",
+          "value": [
+            "Poland"
+          ],
+          "context": {},
+          "reason": "No exact full-page citation verifies the candidate value, entity, and required context",
+          "supported_approved": false,
+          "eligible": true,
+          "state_allowed": false,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "annual-report",
+              "excerpt": "serves customers in Poland"
+            }
+          ],
+          "note": "Explicit market statement."
+        },
+        {
+          "path": "products_services",
+          "state": "uncertain",
+          "value": [
+            "Industrial water pumps",
+            "Control units"
+          ],
+          "context": {},
+          "reason": "No exact full-page citation verifies the candidate value, entity, and required context",
+          "supported_approved": false,
+          "eligible": true,
+          "state_allowed": false,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "annual-report",
+              "excerpt": "Its products are industrial water pumps and control units."
+            }
+          ],
+          "note": "Explicit product list."
+        },
+        {
+          "path": "recent_developments.0",
+          "state": "uncertain",
+          "value": null,
+          "context": {},
+          "reason": "Unverified event occurrence date removed; Event publication date or content could not be verified; details cleared",
+          "supported_approved": false,
+          "eligible": true,
+          "state_allowed": false,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "news-august",
+              "excerpt": "On 2026-08-14 it opened a test laboratory in Fictionalowo."
+            }
+          ],
+          "note": "Occurrence date and separately retained publication metadata support event."
+        },
+        {
+          "path": "recent_developments.1",
+          "state": "uncertain",
+          "value": null,
+          "context": {},
+          "reason": "Unverified event occurrence date removed; Event publication date or content could not be verified; details cleared",
+          "supported_approved": false,
+          "eligible": true,
+          "state_allowed": false,
+          "required_fields_satisfied": false,
+          "safety_failure": true,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "news-july",
+              "excerpt": "In July this year it launched a distribution centre."
+            }
+          ],
+          "note": "July-only phrase does not support specific occurrence day; publication metadata is independently dated."
+        }
+      ],
+      "diagnostics": {
+        "model": "offline-retained-run",
+        "status": "completed",
+        "stop_reason": null,
+        "model_requests": 0,
+        "searches": 0,
+        "page_reads": 0,
+        "dynamic_reads": 0,
+        "output_retries": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "duration_seconds": 0.0,
+        "cost_usd": null
+      },
+      "evaluator_failures": []
+    },
+    {
+      "name": "employee_exact_official",
+      "outcome": "published",
+      "prediction_outcome": "published",
+      "error": null,
+      "counts": {
+        "output_outcome_published": 1,
+        "expected_outcome_published": 1,
+        "identity_fields_total": 5,
+        "identity_fields_correct": 5,
+        "identity_cases_total": 1,
+        "identity_cases_correct": 1,
+        "eligible_researched": 1,
+        "eligible_uncertain": 1,
+        "over_downgraded": 1,
+        "supported_registry": 5,
+        "correct_supported_registry": 5
+      },
+      "safety": {
+        "unknown": {
+          "correct": 7,
+          "total": 8
+        }
+      },
+      "fields": [
+        {
+          "path": "business_description",
+          "state": "unknown",
+          "value": null,
+          "context": {},
+          "reason": "No supported business description retained.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "No eligible retained evidence establishes business description."
+        },
+        {
+          "path": "employees",
+          "state": "uncertain",
+          "value": null,
+          "context": {
+            "as_of": null
+          },
+          "reason": "No exact full-page citation verifies the candidate value, entity, and required context; Unverified employee as-of date removed",
+          "supported_approved": false,
+          "eligible": true,
+          "state_allowed": false,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "issuer-page",
+              "excerpt": "Issuer NIP 8420000005."
+            },
+            {
+              "source_id": "issuer-page",
+              "excerpt": "As of 2026-09-30, Northstar Holdings employs 84 employees."
+            }
+          ],
+          "note": "Same explicit NIP ties abbreviated issuer name to resolved legal entity; dated exact count is in full-page source."
+        },
+        {
+          "path": "financials.0",
+          "state": "unknown",
+          "value": null,
+          "context": {
+            "metric": "revenue",
+            "period": null,
+            "currency": null,
+            "unit": null,
+            "scope": null,
+            "group_name": null
+          },
+          "reason": "No supported revenue retained.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "No eligible revenue observation retained."
+        },
+        {
+          "path": "financials.1",
+          "state": "unknown",
+          "value": null,
+          "context": {
+            "metric": "net_result",
+            "period": null,
+            "currency": null,
+            "unit": null,
+            "scope": null,
+            "group_name": null
+          },
+          "reason": "No supported net result retained.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "No eligible net result observation retained."
+        },
+        {
+          "path": "identity.krs",
+          "state": "supported",
+          "value": "0000123456",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-employee_exact_official",
+              "excerpt": "KRS 0000123456"
+            }
+          ],
+          "note": "Registry excerpt establishes exact identity field."
+        },
+        {
+          "path": "identity.legal_name",
+          "state": "supported",
+          "value": "Fictional Northstar Holdings sp. z o.o.",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-employee_exact_official",
+              "excerpt": "\"Fictional Northstar Holdings sp. z o.o.\""
+            }
+          ],
+          "note": "Registry excerpt establishes exact identity field."
+        },
+        {
+          "path": "identity.registered_address",
+          "state": "supported",
+          "value": "Example Avenue 10, Fictionalowo",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-employee_exact_official",
+              "excerpt": "registered address Example Avenue 10, Fictionalowo"
+            }
+          ],
+          "note": "Registry excerpt establishes exact identity field."
+        },
+        {
+          "path": "identity.registered_city",
+          "state": "supported",
+          "value": "Fictionalowo",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-employee_exact_official",
+              "excerpt": "registered address Example Avenue 10, Fictionalowo"
+            }
+          ],
+          "note": "Registry excerpt establishes exact identity field."
+        },
+        {
+          "path": "identity.regon",
+          "state": "supported",
+          "value": "123456789",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-employee_exact_official",
+              "excerpt": "REGON 123456789"
+            }
+          ],
+          "note": "Registry excerpt establishes exact identity field."
+        },
+        {
+          "path": "identity.website",
+          "state": "unknown",
+          "value": null,
+          "context": {},
+          "reason": "Official registry snapshot does not provide a website.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-employee_exact_official",
+              "excerpt": "Registry identity: \"Fictional Northstar Holdings sp. z o.o.\"; NIP 8420000005; KRS 0000123456; REGON 123456789; registered address Example Avenue 10, Fictionalowo."
+            }
+          ],
+          "note": "Retained registry snapshot does not provide this optional identity field."
+        },
+        {
+          "path": "industries",
+          "state": "unknown",
+          "value": null,
+          "context": {},
+          "reason": "No supported industry retained.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "No eligible retained evidence establishes this requested profile fact."
+        },
+        {
+          "path": "markets",
+          "state": "unknown",
+          "value": null,
+          "context": {},
+          "reason": "No supported market retained.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "No eligible retained evidence establishes this requested profile fact."
+        },
+        {
+          "path": "products_services",
+          "state": "unknown",
+          "value": null,
+          "context": {},
+          "reason": "No supported products or services retained.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "No eligible retained evidence establishes this requested profile fact."
+        },
+        {
+          "path": "recent_developments.0",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": null,
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": false,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "No eligible news item retained."
+        }
+      ],
+      "diagnostics": {
+        "model": "offline-retained-run",
+        "status": "completed",
+        "stop_reason": null,
+        "model_requests": 0,
+        "searches": 0,
+        "page_reads": 0,
+        "dynamic_reads": 0,
+        "output_retries": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "duration_seconds": 0.0,
+        "cost_usd": null
+      },
+      "evaluator_failures": []
+    },
+    {
+      "name": "employee_conflict",
+      "outcome": "published",
+      "prediction_outcome": "published",
+      "error": null,
+      "counts": {
+        "output_outcome_published": 1,
+        "expected_outcome_published": 1,
+        "identity_fields_total": 5,
+        "identity_fields_correct": 5,
+        "identity_cases_total": 1,
+        "identity_cases_correct": 1,
+        "supported_registry": 5,
+        "correct_supported_registry": 5
+      },
+      "safety": {
+        "unknown": {
+          "correct": 7,
+          "total": 8
+        },
+        "uncertain": {
+          "correct": 1,
+          "total": 1
+        }
+      },
+      "fields": [
+        {
+          "path": "business_description",
+          "state": "unknown",
+          "value": null,
+          "context": {},
+          "reason": "No supported business description retained.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "No eligible retained evidence establishes business description."
+        },
+        {
+          "path": "employees",
+          "state": "uncertain",
+          "value": null,
+          "context": {
+            "as_of": null
+          },
+          "reason": "Two credible same-date full-page sources report conflicting counts.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "source-a",
+              "excerpt": "Cedar Devices employs 84 employees as of 2026-09-30."
+            },
+            {
+              "source_id": "source-b",
+              "excerpt": "Cedar Devices employs 91 employees as of 2026-09-30."
+            }
+          ],
+          "note": "Credible full-page observations conflict on same date; no selection, average, or date is acceptable."
+        },
+        {
+          "path": "financials.0",
+          "state": "unknown",
+          "value": null,
+          "context": {
+            "metric": "revenue",
+            "period": null,
+            "currency": null,
+            "unit": null,
+            "scope": null,
+            "group_name": null
+          },
+          "reason": "No supported revenue retained.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "No eligible revenue observation retained."
+        },
+        {
+          "path": "financials.1",
+          "state": "unknown",
+          "value": null,
+          "context": {
+            "metric": "net_result",
+            "period": null,
+            "currency": null,
+            "unit": null,
+            "scope": null,
+            "group_name": null
+          },
+          "reason": "No supported net result retained.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "No eligible net result observation retained."
+        },
+        {
+          "path": "identity.krs",
+          "state": "supported",
+          "value": "0000123456",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-employee_conflict",
+              "excerpt": "KRS 0000123456"
+            }
+          ],
+          "note": "Registry excerpt establishes exact identity field."
+        },
+        {
+          "path": "identity.legal_name",
+          "state": "supported",
+          "value": "Fictional Cedar Devices sp. z o.o.",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-employee_conflict",
+              "excerpt": "\"Fictional Cedar Devices sp. z o.o.\""
+            }
+          ],
+          "note": "Registry excerpt establishes exact identity field."
+        },
+        {
+          "path": "identity.registered_address",
+          "state": "supported",
+          "value": "Example Avenue 10, Fictionalowo",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-employee_conflict",
+              "excerpt": "registered address Example Avenue 10, Fictionalowo"
+            }
+          ],
+          "note": "Registry excerpt establishes exact identity field."
+        },
+        {
+          "path": "identity.registered_city",
+          "state": "supported",
+          "value": "Fictionalowo",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-employee_conflict",
+              "excerpt": "registered address Example Avenue 10, Fictionalowo"
+            }
+          ],
+          "note": "Registry excerpt establishes exact identity field."
+        },
+        {
+          "path": "identity.regon",
+          "state": "supported",
+          "value": "123456789",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-employee_conflict",
+              "excerpt": "REGON 123456789"
+            }
+          ],
+          "note": "Registry excerpt establishes exact identity field."
+        },
+        {
+          "path": "identity.website",
+          "state": "unknown",
+          "value": null,
+          "context": {},
+          "reason": "Official registry snapshot does not provide a website.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-employee_conflict",
+              "excerpt": "Registry identity: \"Fictional Cedar Devices sp. z o.o.\"; NIP 5930000008; KRS 0000123456; REGON 123456789; registered address Example Avenue 10, Fictionalowo."
+            }
+          ],
+          "note": "Retained registry snapshot does not provide this optional identity field."
+        },
+        {
+          "path": "industries",
+          "state": "unknown",
+          "value": null,
+          "context": {},
+          "reason": "No supported industry retained.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "No eligible retained evidence establishes this requested profile fact."
+        },
+        {
+          "path": "markets",
+          "state": "unknown",
+          "value": null,
+          "context": {},
+          "reason": "No supported market retained.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "No eligible retained evidence establishes this requested profile fact."
+        },
+        {
+          "path": "products_services",
+          "state": "unknown",
+          "value": null,
+          "context": {},
+          "reason": "No supported products or services retained.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "No eligible retained evidence establishes this requested profile fact."
+        },
+        {
+          "path": "recent_developments.0",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": null,
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": false,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "No eligible news item retained."
+        }
+      ],
+      "diagnostics": {
+        "model": "offline-retained-run",
+        "status": "completed",
+        "stop_reason": null,
+        "model_requests": 0,
+        "searches": 0,
+        "page_reads": 0,
+        "dynamic_reads": 0,
+        "output_retries": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "duration_seconds": 0.0,
+        "cost_usd": null
+      },
+      "evaluator_failures": []
+    },
+    {
+      "name": "employee_range_stale",
+      "outcome": "published",
+      "prediction_outcome": "published",
+      "error": null,
+      "counts": {
+        "output_outcome_published": 1,
+        "expected_outcome_published": 1,
+        "identity_fields_total": 5,
+        "identity_fields_correct": 5,
+        "identity_cases_total": 1,
+        "identity_cases_correct": 1,
+        "eligible_researched": 1,
+        "eligible_uncertain": 1,
+        "over_downgraded": 1,
+        "supported_registry": 5,
+        "correct_supported_registry": 5
+      },
+      "safety": {
+        "unknown": {
+          "correct": 7,
+          "total": 8
+        },
+        "uncertain": {
+          "correct": 0,
+          "total": 1
+        }
+      },
+      "fields": [
+        {
+          "path": "business_description",
+          "state": "unknown",
+          "value": null,
+          "context": {},
+          "reason": "No supported business description retained.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "No eligible retained evidence establishes business description."
+        },
+        {
+          "path": "employees",
+          "state": "uncertain",
+          "value": null,
+          "context": {
+            "as_of": null
+          },
+          "reason": "No exact full-page citation verifies the candidate value, entity, and required context; Unverified employee as-of date removed",
+          "supported_approved": false,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": false,
+          "safety_failure": true,
+          "gold_loss": {
+            "failure_layer": "extraction",
+            "failure_category": "invented_precision_or_date"
+          },
+          "evidence": [
+            {
+              "source_id": "historical-page",
+              "excerpt": "Harbor Tools had between 51 and 200 employees as of 2021-06-30."
+            }
+          ],
+          "note": "Source supports range and historical date; exact midpoint/current date are not gold."
+        },
+        {
+          "path": "financials.0",
+          "state": "unknown",
+          "value": null,
+          "context": {
+            "metric": "revenue",
+            "period": null,
+            "currency": null,
+            "unit": null,
+            "scope": null,
+            "group_name": null
+          },
+          "reason": "No supported revenue retained.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "No eligible revenue observation retained."
+        },
+        {
+          "path": "financials.1",
+          "state": "unknown",
+          "value": null,
+          "context": {
+            "metric": "net_result",
+            "period": null,
+            "currency": null,
+            "unit": null,
+            "scope": null,
+            "group_name": null
+          },
+          "reason": "No supported net result retained.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "No eligible net result observation retained."
+        },
+        {
+          "path": "identity.krs",
+          "state": "supported",
+          "value": "0000123456",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-employee_range_stale",
+              "excerpt": "KRS 0000123456"
+            }
+          ],
+          "note": "Registry excerpt establishes exact identity field."
+        },
+        {
+          "path": "identity.legal_name",
+          "state": "supported",
+          "value": "Fictional Harbor Tools sp. z o.o.",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-employee_range_stale",
+              "excerpt": "\"Fictional Harbor Tools sp. z o.o.\""
+            }
+          ],
+          "note": "Registry excerpt establishes exact identity field."
+        },
+        {
+          "path": "identity.registered_address",
+          "state": "supported",
+          "value": "Example Avenue 10, Fictionalowo",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-employee_range_stale",
+              "excerpt": "registered address Example Avenue 10, Fictionalowo"
+            }
+          ],
+          "note": "Registry excerpt establishes exact identity field."
+        },
+        {
+          "path": "identity.registered_city",
+          "state": "supported",
+          "value": "Fictionalowo",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-employee_range_stale",
+              "excerpt": "registered address Example Avenue 10, Fictionalowo"
+            }
+          ],
+          "note": "Registry excerpt establishes exact identity field."
+        },
+        {
+          "path": "identity.regon",
+          "state": "supported",
+          "value": "123456789",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-employee_range_stale",
+              "excerpt": "REGON 123456789"
+            }
+          ],
+          "note": "Registry excerpt establishes exact identity field."
+        },
+        {
+          "path": "identity.website",
+          "state": "unknown",
+          "value": null,
+          "context": {},
+          "reason": "Official registry snapshot does not provide a website.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-employee_range_stale",
+              "excerpt": "Registry identity: \"Fictional Harbor Tools sp. z o.o.\"; NIP 6140000003; KRS 0000123456; REGON 123456789; registered address Example Avenue 10, Fictionalowo."
+            }
+          ],
+          "note": "Retained registry snapshot does not provide this optional identity field."
+        },
+        {
+          "path": "industries",
+          "state": "unknown",
+          "value": null,
+          "context": {},
+          "reason": "No supported industry retained.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "No eligible retained evidence establishes this requested profile fact."
+        },
+        {
+          "path": "markets",
+          "state": "unknown",
+          "value": null,
+          "context": {},
+          "reason": "No supported market retained.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "No eligible retained evidence establishes this requested profile fact."
+        },
+        {
+          "path": "products_services",
+          "state": "unknown",
+          "value": null,
+          "context": {},
+          "reason": "No supported products or services retained.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "No eligible retained evidence establishes this requested profile fact."
+        },
+        {
+          "path": "recent_developments.0",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": null,
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": false,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "No eligible news item retained."
+        }
+      ],
+      "diagnostics": {
+        "model": "offline-retained-run",
+        "status": "completed",
+        "stop_reason": null,
+        "model_requests": 0,
+        "searches": 0,
+        "page_reads": 0,
+        "dynamic_reads": 0,
+        "output_retries": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "duration_seconds": 0.0,
+        "cost_usd": null
+      },
+      "evaluator_failures": []
+    },
+    {
+      "name": "ellipsis_snippet",
+      "outcome": "published",
+      "prediction_outcome": "published",
+      "error": null,
+      "counts": {
+        "output_outcome_published": 1,
+        "expected_outcome_published": 1,
+        "identity_fields_total": 5,
+        "identity_fields_correct": 5,
+        "identity_cases_total": 1,
+        "identity_cases_correct": 1,
+        "eligible_researched": 1,
+        "eligible_uncertain": 1,
+        "over_downgraded": 1,
+        "supported_registry": 5,
+        "correct_supported_registry": 5
+      },
+      "safety": {
+        "uncertain": {
+          "correct": 2,
+          "total": 2
+        },
+        "unknown": {
+          "correct": 5,
+          "total": 7
+        }
+      },
+      "fields": [
+        {
+          "path": "business_description",
+          "state": "uncertain",
+          "value": "Makes inventory software for independent bookstores.",
+          "context": {},
+          "reason": "Evidence is absent, snippet-only, or not an exact NFC/whitespace-normalized excerpt from a retained full page",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "search-snippet",
+              "excerpt": "Maple Analytics makes inventory software for independent bookstores."
+            }
+          ],
+          "note": "Discovery-only assertion has no retained full-page support."
+        },
+        {
+          "path": "employees",
+          "state": "uncertain",
+          "value": null,
+          "context": {
+            "as_of": null
+          },
+          "reason": "Model-added ellipsis changed the retrieved text and cannot verify exact observation.",
+          "supported_approved": false,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": "extraction",
+            "failure_category": "altered_quote"
+          },
+          "evidence": [
+            {
+              "source_id": "employee-page",
+              "excerpt": "Maple Analytics employs 84 employees as of 2026-09-30."
+            }
+          ],
+          "note": "Underlying snippet contains complete sentence but submitted candidate altered it with ellipsis; eligible exact truth is independent of candidate; loss is extraction."
+        },
+        {
+          "path": "financials.0",
+          "state": "unknown",
+          "value": null,
+          "context": {
+            "metric": "revenue",
+            "period": null,
+            "currency": null,
+            "unit": null,
+            "scope": null,
+            "group_name": null
+          },
+          "reason": "No supported revenue retained.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": false,
+          "safety_failure": true,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "No eligible financial observation retained for this company."
+        },
+        {
+          "path": "financials.1",
+          "state": "unknown",
+          "value": null,
+          "context": {
+            "metric": "net_result",
+            "period": null,
+            "currency": null,
+            "unit": null,
+            "scope": null,
+            "group_name": null
+          },
+          "reason": "No supported net result retained.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "No eligible financial observation retained for this company."
+        },
+        {
+          "path": "identity.krs",
+          "state": "supported",
+          "value": "0000123456",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-ellipsis_snippet",
+              "excerpt": "KRS 0000123456"
+            }
+          ],
+          "note": "Registry excerpt establishes exact identity field."
+        },
+        {
+          "path": "identity.legal_name",
+          "state": "supported",
+          "value": "Fictional Maple Analytics sp. z o.o.",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-ellipsis_snippet",
+              "excerpt": "\"Fictional Maple Analytics sp. z o.o.\""
+            }
+          ],
+          "note": "Registry excerpt establishes exact identity field."
+        },
+        {
+          "path": "identity.registered_address",
+          "state": "supported",
+          "value": "Example Avenue 10, Fictionalowo",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-ellipsis_snippet",
+              "excerpt": "registered address Example Avenue 10, Fictionalowo"
+            }
+          ],
+          "note": "Registry excerpt establishes exact identity field."
+        },
+        {
+          "path": "identity.registered_city",
+          "state": "supported",
+          "value": "Fictionalowo",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-ellipsis_snippet",
+              "excerpt": "registered address Example Avenue 10, Fictionalowo"
+            }
+          ],
+          "note": "Registry excerpt establishes exact identity field."
+        },
+        {
+          "path": "identity.regon",
+          "state": "supported",
+          "value": "123456789",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-ellipsis_snippet",
+              "excerpt": "REGON 123456789"
+            }
+          ],
+          "note": "Registry excerpt establishes exact identity field."
+        },
+        {
+          "path": "identity.website",
+          "state": "unknown",
+          "value": null,
+          "context": {},
+          "reason": "Official registry snapshot does not provide a website.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-ellipsis_snippet",
+              "excerpt": "Registry identity: \"Fictional Maple Analytics sp. z o.o.\"; NIP 7250000016; KRS 0000123456; REGON 123456789; registered address Example Avenue 10, Fictionalowo."
+            }
+          ],
+          "note": "Retained registry snapshot does not provide this optional identity field."
+        },
+        {
+          "path": "industries",
+          "state": "unknown",
+          "value": null,
+          "context": {},
+          "reason": "No supported industry retained.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "No eligible retained evidence establishes this requested profile fact."
+        },
+        {
+          "path": "markets",
+          "state": "unknown",
+          "value": null,
+          "context": {},
+          "reason": "No supported market retained.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "No eligible retained evidence establishes this requested profile fact."
+        },
+        {
+          "path": "products_services",
+          "state": "unknown",
+          "value": null,
+          "context": {},
+          "reason": "No supported products or services retained.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "No eligible retained evidence establishes this requested profile fact."
+        },
+        {
+          "path": "recent_developments.0",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": null,
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": false,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "No eligible news item retained."
+        }
+      ],
+      "diagnostics": {
+        "model": "offline-retained-run",
+        "status": "completed",
+        "stop_reason": null,
+        "model_requests": 0,
+        "searches": 0,
+        "page_reads": 0,
+        "dynamic_reads": 0,
+        "output_retries": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "duration_seconds": 0.0,
+        "cost_usd": null
+      },
+      "evaluator_failures": []
+    },
+    {
+      "name": "financial_context_metric",
+      "outcome": "published",
+      "prediction_outcome": "published",
+      "error": null,
+      "counts": {
+        "output_outcome_published": 1,
+        "expected_outcome_published": 1,
+        "identity_fields_total": 5,
+        "identity_fields_correct": 5,
+        "identity_cases_total": 1,
+        "identity_cases_correct": 1,
+        "supported_registry": 5,
+        "correct_supported_registry": 5
+      },
+      "safety": {
+        "unknown": {
+          "correct": 6,
+          "total": 7
+        },
+        "uncertain": {
+          "correct": 1,
+          "total": 2
+        }
+      },
+      "fields": [
+        {
+          "path": "business_description",
+          "state": "unknown",
+          "value": null,
+          "context": {},
+          "reason": "No supported business description retained.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "No eligible retained evidence establishes business description."
+        },
+        {
+          "path": "employees",
+          "state": "unknown",
+          "value": null,
+          "context": {
+            "as_of": null
+          },
+          "reason": "No supported employee observation retained.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "No eligible employee observation retained."
+        },
+        {
+          "path": "financials.0",
+          "state": "uncertain",
+          "value": null,
+          "context": {
+            "metric": "net_result",
+            "period": {
+              "start": "2025-01-01",
+              "end": "2025-12-31"
+            },
+            "currency": "PLN",
+            "unit": "thousands",
+            "scope": "legal_entity",
+            "group_name": null
+          },
+          "reason": "Operating profit is not net result.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "finance-page",
+              "excerpt": "For 2025, fictional Quartz Works reported operating profit of PLN 24 thousand."
+            }
+          ],
+          "note": "Operating profit cannot substantiate net result; do not invent a net amount."
+        },
+        {
+          "path": "financials.1",
+          "state": "uncertain",
+          "value": null,
+          "context": {
+            "metric": "revenue",
+            "period": {
+              "start": "2025-01-01",
+              "end": "2025-12-31"
+            },
+            "currency": "PLN",
+            "unit": "millions",
+            "scope": "legal_entity",
+            "group_name": null
+          },
+          "reason": "Exact full-page evidence does not verify metric, amount, precision, currency, unit, entity scope and explicit reporting interval",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": false,
+          "safety_failure": true,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "finance-page",
+              "excerpt": "Revenue was 2025: 81."
+            }
+          ],
+          "note": "Retained text does not establish amount currency or reporting context."
+        },
+        {
+          "path": "identity.krs",
+          "state": "supported",
+          "value": "0000123456",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-financial_context_metric",
+              "excerpt": "KRS 0000123456"
+            }
+          ],
+          "note": "Registry excerpt establishes exact identity field."
+        },
+        {
+          "path": "identity.legal_name",
+          "state": "supported",
+          "value": "Fictional Quartz Works sp. z o.o.",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-financial_context_metric",
+              "excerpt": "\"Fictional Quartz Works sp. z o.o.\""
+            }
+          ],
+          "note": "Registry excerpt establishes exact identity field."
+        },
+        {
+          "path": "identity.registered_address",
+          "state": "supported",
+          "value": "Example Avenue 10, Fictionalowo",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-financial_context_metric",
+              "excerpt": "registered address Example Avenue 10, Fictionalowo"
+            }
+          ],
+          "note": "Registry excerpt establishes exact identity field."
+        },
+        {
+          "path": "identity.registered_city",
+          "state": "supported",
+          "value": "Fictionalowo",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-financial_context_metric",
+              "excerpt": "registered address Example Avenue 10, Fictionalowo"
+            }
+          ],
+          "note": "Registry excerpt establishes exact identity field."
+        },
+        {
+          "path": "identity.regon",
+          "state": "supported",
+          "value": "123456789",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-financial_context_metric",
+              "excerpt": "REGON 123456789"
+            }
+          ],
+          "note": "Registry excerpt establishes exact identity field."
+        },
+        {
+          "path": "identity.website",
+          "state": "unknown",
+          "value": null,
+          "context": {},
+          "reason": "Official registry snapshot does not provide a website.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-financial_context_metric",
+              "excerpt": "Registry identity: \"Fictional Quartz Works sp. z o.o.\"; NIP 9360000001; KRS 0000123456; REGON 123456789; registered address Example Avenue 10, Fictionalowo."
+            }
+          ],
+          "note": "Retained registry snapshot does not provide this optional identity field."
+        },
+        {
+          "path": "industries",
+          "state": "unknown",
+          "value": null,
+          "context": {},
+          "reason": "No supported industry retained.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "No eligible retained evidence establishes this requested profile fact."
+        },
+        {
+          "path": "markets",
+          "state": "unknown",
+          "value": null,
+          "context": {},
+          "reason": "No supported market retained.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "No eligible retained evidence establishes this requested profile fact."
+        },
+        {
+          "path": "products_services",
+          "state": "unknown",
+          "value": null,
+          "context": {},
+          "reason": "No supported products or services retained.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "No eligible retained evidence establishes this requested profile fact."
+        },
+        {
+          "path": "recent_developments.0",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": null,
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": false,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "No eligible news item retained."
+        }
+      ],
+      "diagnostics": {
+        "model": "offline-retained-run",
+        "status": "completed",
+        "stop_reason": null,
+        "model_requests": 0,
+        "searches": 0,
+        "page_reads": 0,
+        "dynamic_reads": 0,
+        "output_retries": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "duration_seconds": 0.0,
+        "cost_usd": null
+      },
+      "evaluator_failures": []
+    },
+    {
+      "name": "invalid_source_id",
+      "outcome": "rejected",
+      "prediction_outcome": "rejected",
+      "error": "RUN_REJECTED: 1 validation error for CompanyResearchRun\n  Value error, research evidence must reference retained host source material [type=value_error, input_value={'identity': {'nip': '417... '2026-10-03T12:00:00Z'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error",
+      "counts": {
+        "output_outcome_rejected": 1,
+        "expected_outcome_rejected": 1,
+        "identity_fields_total": 5,
+        "identity_fields_correct": 5,
+        "identity_cases_total": 1,
+        "identity_cases_correct": 1
+      },
+      "safety": {
+        "unknown": {
+          "correct": 0,
+          "total": 1
+        }
+      },
+      "fields": [
+        {
+          "path": "business_description",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": "RUN_REJECTED: 1 validation error for CompanyResearchRun\n  Value error, research evidence must reference retained host source material [type=value_error, input_value={'identity': {'nip': '417... '2026-10-03T12:00:00Z'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Run is rejected during typed loading/gating due to orphan evidence reference; no profile state is available."
+        },
+        {
+          "path": "employees",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": "RUN_REJECTED: 1 validation error for CompanyResearchRun\n  Value error, research evidence must reference retained host source material [type=value_error, input_value={'identity': {'nip': '417... '2026-10-03T12:00:00Z'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Run is rejected during typed loading/gating due to orphan evidence reference; no profile state is available."
+        },
+        {
+          "path": "financials.0",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": "RUN_REJECTED: 1 validation error for CompanyResearchRun\n  Value error, research evidence must reference retained host source material [type=value_error, input_value={'identity': {'nip': '417... '2026-10-03T12:00:00Z'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Run is rejected during typed loading/gating due to orphan evidence reference; no profile state is available."
+        },
+        {
+          "path": "financials.1",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": "RUN_REJECTED: 1 validation error for CompanyResearchRun\n  Value error, research evidence must reference retained host source material [type=value_error, input_value={'identity': {'nip': '417... '2026-10-03T12:00:00Z'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Run is rejected during typed loading/gating due to orphan evidence reference; no profile state is available."
+        },
+        {
+          "path": "identity.krs",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": "RUN_REJECTED: 1 validation error for CompanyResearchRun\n  Value error, research evidence must reference retained host source material [type=value_error, input_value={'identity': {'nip': '417... '2026-10-03T12:00:00Z'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error",
+          "supported_approved": false,
+          "eligible": true,
+          "state_allowed": false,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-invalid_source_id",
+              "excerpt": "KRS 0000123456"
+            }
+          ],
+          "note": "Registry excerpt establishes exact identity field."
+        },
+        {
+          "path": "identity.legal_name",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": "RUN_REJECTED: 1 validation error for CompanyResearchRun\n  Value error, research evidence must reference retained host source material [type=value_error, input_value={'identity': {'nip': '417... '2026-10-03T12:00:00Z'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error",
+          "supported_approved": false,
+          "eligible": true,
+          "state_allowed": false,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-invalid_source_id",
+              "excerpt": "\"Fictional Orchid Components sp. z o.o.\""
+            }
+          ],
+          "note": "Registry excerpt establishes exact identity field."
+        },
+        {
+          "path": "identity.registered_address",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": "RUN_REJECTED: 1 validation error for CompanyResearchRun\n  Value error, research evidence must reference retained host source material [type=value_error, input_value={'identity': {'nip': '417... '2026-10-03T12:00:00Z'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error",
+          "supported_approved": false,
+          "eligible": true,
+          "state_allowed": false,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-invalid_source_id",
+              "excerpt": "registered address Example Avenue 10, Fictionalowo"
+            }
+          ],
+          "note": "Registry excerpt establishes exact identity field."
+        },
+        {
+          "path": "identity.registered_city",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": "RUN_REJECTED: 1 validation error for CompanyResearchRun\n  Value error, research evidence must reference retained host source material [type=value_error, input_value={'identity': {'nip': '417... '2026-10-03T12:00:00Z'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error",
+          "supported_approved": false,
+          "eligible": true,
+          "state_allowed": false,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-invalid_source_id",
+              "excerpt": "registered address Example Avenue 10, Fictionalowo"
+            }
+          ],
+          "note": "Registry excerpt establishes exact identity field."
+        },
+        {
+          "path": "identity.regon",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": "RUN_REJECTED: 1 validation error for CompanyResearchRun\n  Value error, research evidence must reference retained host source material [type=value_error, input_value={'identity': {'nip': '417... '2026-10-03T12:00:00Z'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error",
+          "supported_approved": false,
+          "eligible": true,
+          "state_allowed": false,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-invalid_source_id",
+              "excerpt": "REGON 123456789"
+            }
+          ],
+          "note": "Registry excerpt establishes exact identity field."
+        },
+        {
+          "path": "identity.website",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": "RUN_REJECTED: 1 validation error for CompanyResearchRun\n  Value error, research evidence must reference retained host source material [type=value_error, input_value={'identity': {'nip': '417... '2026-10-03T12:00:00Z'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": false,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "registry-invalid_source_id",
+              "excerpt": "Registry identity: \"Fictional Orchid Components sp. z o.o.\"; NIP 4170000001; KRS 0000123456; REGON 123456789; registered address Example Avenue 10, Fictionalowo."
+            }
+          ],
+          "note": "Retained registry snapshot does not provide this optional identity field."
+        },
+        {
+          "path": "industries",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": "RUN_REJECTED: 1 validation error for CompanyResearchRun\n  Value error, research evidence must reference retained host source material [type=value_error, input_value={'identity': {'nip': '417... '2026-10-03T12:00:00Z'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Run is rejected during typed loading/gating due to orphan evidence reference; no profile state is available."
+        },
+        {
+          "path": "markets",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": "RUN_REJECTED: 1 validation error for CompanyResearchRun\n  Value error, research evidence must reference retained host source material [type=value_error, input_value={'identity': {'nip': '417... '2026-10-03T12:00:00Z'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Run is rejected during typed loading/gating due to orphan evidence reference; no profile state is available."
+        },
+        {
+          "path": "products_services",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": "RUN_REJECTED: 1 validation error for CompanyResearchRun\n  Value error, research evidence must reference retained host source material [type=value_error, input_value={'identity': {'nip': '417... '2026-10-03T12:00:00Z'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Run is rejected during typed loading/gating due to orphan evidence reference; no profile state is available."
+        },
+        {
+          "path": "recent_developments.0",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": "RUN_REJECTED: 1 validation error for CompanyResearchRun\n  Value error, research evidence must reference retained host source material [type=value_error, input_value={'identity': {'nip': '417... '2026-10-03T12:00:00Z'}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Run is rejected during typed loading/gating due to orphan evidence reference; no profile state is available."
+        }
+      ],
+      "diagnostics": {
+        "model": "offline-retained-run",
+        "status": "completed",
+        "model_requests": 0,
+        "searches": 0,
+        "page_reads": 0,
+        "dynamic_reads": 0,
+        "output_retries": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "duration_seconds": 0
+      },
+      "evaluator_failures": []
+    },
+    {
+      "name": "invalid_nip",
+      "outcome": "invalid_input",
+      "prediction_outcome": "invalid_input",
+      "error": "INVALID_NIP: Invalid Polish NIP checksum",
+      "counts": {
+        "output_outcome_invalid_input": 1,
+        "expected_outcome_invalid_input": 1,
+        "identity_fields_total": 5,
+        "identity_fields_correct": 5
+      },
+      "safety": {},
+      "fields": [
+        {
+          "path": "business_description",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": "INVALID_NIP: Invalid Polish NIP checksum",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Checksum validation rejects before registry lookup; no profile state exists."
+        },
+        {
+          "path": "employees",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": "INVALID_NIP: Invalid Polish NIP checksum",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Checksum validation rejects before registry lookup; no profile state exists."
+        },
+        {
+          "path": "financials.0",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": "INVALID_NIP: Invalid Polish NIP checksum",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Checksum validation rejects before registry lookup; no profile state exists."
+        },
+        {
+          "path": "financials.1",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": "INVALID_NIP: Invalid Polish NIP checksum",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Checksum validation rejects before registry lookup; no profile state exists."
+        },
+        {
+          "path": "identity.krs",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": "INVALID_NIP: Invalid Polish NIP checksum",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Checksum validation rejects before registry lookup; no profile state exists."
+        },
+        {
+          "path": "identity.legal_name",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": "INVALID_NIP: Invalid Polish NIP checksum",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Checksum validation rejects before registry lookup; no profile state exists."
+        },
+        {
+          "path": "identity.registered_address",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": "INVALID_NIP: Invalid Polish NIP checksum",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Checksum validation rejects before registry lookup; no profile state exists."
+        },
+        {
+          "path": "identity.registered_city",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": "INVALID_NIP: Invalid Polish NIP checksum",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Checksum validation rejects before registry lookup; no profile state exists."
+        },
+        {
+          "path": "identity.regon",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": "INVALID_NIP: Invalid Polish NIP checksum",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Checksum validation rejects before registry lookup; no profile state exists."
+        },
+        {
+          "path": "identity.website",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": "INVALID_NIP: Invalid Polish NIP checksum",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Checksum validation rejects before registry lookup; no profile state exists."
+        },
+        {
+          "path": "industries",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": "INVALID_NIP: Invalid Polish NIP checksum",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Checksum validation rejects before registry lookup; no profile state exists."
+        },
+        {
+          "path": "markets",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": "INVALID_NIP: Invalid Polish NIP checksum",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Checksum validation rejects before registry lookup; no profile state exists."
+        },
+        {
+          "path": "products_services",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": "INVALID_NIP: Invalid Polish NIP checksum",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Checksum validation rejects before registry lookup; no profile state exists."
+        },
+        {
+          "path": "recent_developments.0",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": "INVALID_NIP: Invalid Polish NIP checksum",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Checksum validation rejects before registry lookup; no profile state exists."
+        }
+      ],
+      "diagnostics": null,
+      "evaluator_failures": []
+    },
+    {
+      "name": "unresolved_nip",
+      "outcome": "unresolved",
+      "prediction_outcome": "unresolved",
+      "error": null,
+      "counts": {
+        "output_outcome_unresolved": 1,
+        "expected_outcome_unresolved": 1,
+        "identity_fields_total": 5,
+        "identity_fields_correct": 5
+      },
+      "safety": {},
+      "fields": [
+        {
+          "path": "business_description",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": null,
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Retained MF response parses successfully with subject null; identity and profile remain unavailable."
+        },
+        {
+          "path": "employees",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": null,
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Retained MF response parses successfully with subject null; identity and profile remain unavailable."
+        },
+        {
+          "path": "financials.0",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": null,
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Retained MF response parses successfully with subject null; identity and profile remain unavailable."
+        },
+        {
+          "path": "financials.1",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": null,
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Retained MF response parses successfully with subject null; identity and profile remain unavailable."
+        },
+        {
+          "path": "identity.krs",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": null,
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Retained MF response parses successfully with subject null; identity and profile remain unavailable."
+        },
+        {
+          "path": "identity.legal_name",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": null,
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Retained MF response parses successfully with subject null; identity and profile remain unavailable."
+        },
+        {
+          "path": "identity.registered_address",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": null,
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Retained MF response parses successfully with subject null; identity and profile remain unavailable."
+        },
+        {
+          "path": "identity.registered_city",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": null,
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Retained MF response parses successfully with subject null; identity and profile remain unavailable."
+        },
+        {
+          "path": "identity.regon",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": null,
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Retained MF response parses successfully with subject null; identity and profile remain unavailable."
+        },
+        {
+          "path": "identity.website",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": null,
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Retained MF response parses successfully with subject null; identity and profile remain unavailable."
+        },
+        {
+          "path": "industries",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": null,
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Retained MF response parses successfully with subject null; identity and profile remain unavailable."
+        },
+        {
+          "path": "markets",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": null,
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Retained MF response parses successfully with subject null; identity and profile remain unavailable."
+        },
+        {
+          "path": "products_services",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": null,
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Retained MF response parses successfully with subject null; identity and profile remain unavailable."
+        },
+        {
+          "path": "recent_developments.0",
+          "state": "missing",
+          "value": null,
+          "context": {},
+          "reason": null,
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Retained MF response parses successfully with subject null; identity and profile remain unavailable."
+        }
+      ],
+      "diagnostics": null,
+      "evaluator_failures": []
+    },
+    {
+      "name": "retained_asseco_poland",
+      "outcome": "published",
+      "prediction_outcome": "published",
+      "error": null,
+      "counts": {
+        "output_outcome_published": 1,
+        "expected_outcome_published": 1,
+        "identity_fields_total": 5,
+        "identity_fields_correct": 5,
+        "identity_cases_total": 1,
+        "identity_cases_correct": 1,
+        "supported_registry": 4,
+        "correct_supported_registry": 4,
+        "eligible_researched": 1,
+        "eligible_uncertain": 1,
+        "over_downgraded": 1
+      },
+      "safety": {
+        "uncertain": {
+          "correct": 8,
+          "total": 8
+        },
+        "unknown": {
+          "correct": 2,
+          "total": 2
+        }
+      },
+      "fields": [
+        {
+          "path": "business_description",
+          "state": "uncertain",
+          "value": "Polish software and IT services company whose solutions support business processes in key economic sectors. The available annual-report material describes its activities across public administration, finance and banking, and general business.",
+          "context": {},
+          "reason": "No exact full-page citation verifies the candidate value, entity, and required context",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": "extraction",
+            "failure_category": "entity_scope_and_candidate_overreach"
+          },
+          "evidence": [
+            {
+              "source_id": "S006",
+              "excerpt": "The segment’s results were supported by Asseco’s involvement in the development of the digital government ecosystem, numerous financial sector transformation projects, and the execution of contracts for nearly half of the hospitals covered by the National Recovery Plan (KPO)."
+            }
+          ],
+          "note": "Full page establishes Group/Asseco Poland Segment activities, not a fully supported standalone-company summary; conservative uncertainty is not a proven gate loss."
+        },
+        {
+          "path": "employees",
+          "state": "unknown",
+          "value": null,
+          "context": {
+            "as_of": null
+          },
+          "reason": "The available official sources give group or segment workforce information, but not a verified standalone employee count for Asseco Poland S.A. Group headcount is not used as a substitute.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": "unavailable",
+            "failure_category": "no_standalone_full_page_evidence"
+          },
+          "evidence": [
+            {
+              "source_id": "S002",
+              "excerpt": "30,206 employees hired under employment contracts"
+            }
+          ],
+          "note": "Only a discovery snippet gives Asseco Group workforce; no full-page standalone employee observation."
+        },
+        {
+          "path": "financials.0",
+          "state": "unknown",
+          "value": null,
+          "context": {
+            "metric": "revenue",
+            "period": null,
+            "currency": null,
+            "unit": null,
+            "scope": null,
+            "group_name": null
+          },
+          "reason": "The annual-report search result states 2025 Asseco Poland revenue of PLN 1,703.4 million, but it is a discovery snippet rather than retrieved page/text evidence. The linked report could not be read by the page tool; amount is therefore not reported.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": "unavailable",
+            "failure_category": "snippet_only_financial_evidence"
+          },
+          "evidence": [
+            {
+              "source_id": "S002",
+              "excerpt": "In 2025, Asseco Poland’s revenues reached PLN 1 703.4 million"
+            }
+          ],
+          "note": "PDF discovery snippet only; linked report text was not retained. Do not gold the standalone figure from a snippet."
+        },
+        {
+          "path": "financials.1",
+          "state": "unknown",
+          "value": null,
+          "context": {
+            "metric": "net_result",
+            "period": null,
+            "currency": null,
+            "unit": null,
+            "scope": null,
+            "group_name": null
+          },
+          "reason": "No eligible retrieved official HTML/text evidence for Asseco Poland S.A.’s total net result was available. Group net profit attributable to parent shareholders is not a substitute for the entity’s total net result.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": "unavailable",
+            "failure_category": "entity_metric_and_snippet_limitation"
+          },
+          "evidence": [
+            {
+              "source_id": "S002",
+              "excerpt": "Net profit attributable to shareholders of the parent company"
+            }
+          ],
+          "note": "Snippet refers to parent-shareholder net profit, not entity total net result, and is not retrieved report text."
+        },
+        {
+          "path": "identity.krs",
+          "state": "supported",
+          "value": "0000033391",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "mf-vat-5220003782-20261003T122434221952Z",
+              "excerpt": "0000033391"
+            }
+          ],
+          "note": "Exact registry KRS."
+        },
+        {
+          "path": "identity.legal_name",
+          "state": "supported",
+          "value": "\"ASSECO POLAND\" SPÓŁKA AKCYJNA",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "mf-vat-5220003782-20261003T122434221952Z",
+              "excerpt": "\"\\\"ASSECO POLAND\\\" SPÓŁKA AKCYJNA\""
+            }
+          ],
+          "note": "Exact registry legal name."
+        },
+        {
+          "path": "identity.registered_address",
+          "state": "supported",
+          "value": "OLCHOWA 14, 35-322 RZESZÓW",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "mf-vat-5220003782-20261003T122434221952Z",
+              "excerpt": "OLCHOWA 14, 35-322 RZESZÓW"
+            }
+          ],
+          "note": "Exact registry address; do not infer separately represented city."
+        },
+        {
+          "path": "identity.registered_city",
+          "state": "unknown",
+          "value": null,
+          "context": {},
+          "reason": "Registry provides no separate city field; no city inferred from address",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Registry provides no separate city field; city is not inferred from registered address."
+        },
+        {
+          "path": "identity.regon",
+          "state": "supported",
+          "value": "010334578",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "mf-vat-5220003782-20261003T122434221952Z",
+              "excerpt": "010334578"
+            }
+          ],
+          "note": "Exact registry REGON."
+        },
+        {
+          "path": "identity.website",
+          "state": "unknown",
+          "value": null,
+          "context": {},
+          "reason": "This registry supplies no website; no website verification performed",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Registry supplies no website and no website verification was retained."
+        },
+        {
+          "path": "industries",
+          "state": "uncertain",
+          "value": [
+            "Information technology and software",
+            "Public administration",
+            "Finance and banking",
+            "Healthcare",
+            "General business and ERP"
+          ],
+          "context": {},
+          "reason": "Evidence is absent, snippet-only, or not an exact NFC/whitespace-normalized excerpt from a retained full page",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": "extraction",
+            "failure_category": "entity_scope_and_candidate_overreach"
+          },
+          "evidence": [
+            {
+              "source_id": "S006",
+              "excerpt": "The segment’s results were supported by Asseco’s involvement in the development of the digital government ecosystem, numerous financial sector transformation projects, and the execution of contracts for nearly half of the hospitals covered by the National Recovery Plan (KPO)."
+            }
+          ],
+          "note": "Full-page evidence supports segment context, not an unqualified standalone portfolio."
+        },
+        {
+          "path": "markets",
+          "state": "uncertain",
+          "value": [
+            "Poland"
+          ],
+          "context": {},
+          "reason": "No exact full-page citation verifies the candidate value, entity, and required context",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": "extraction",
+            "failure_category": "entity_scope_and_candidate_overreach"
+          },
+          "evidence": [
+            {
+              "source_id": "S006",
+              "excerpt": "Sales revenues in the Asseco Poland Segment increased by 12% to PLN 607 million (EUR 143 million)."
+            }
+          ],
+          "note": "The cited revenue sentence identifies segment scope and does not establish the candidate's Poland market footprint."
+        },
+        {
+          "path": "products_services",
+          "state": "uncertain",
+          "value": [
+            "Proprietary software and IT services",
+            "Solutions for public institutions and digital government",
+            "Financial and banking solutions",
+            "ERP solutions",
+            "Healthcare IT"
+          ],
+          "context": {},
+          "reason": "No exact full-page citation verifies the candidate value, entity, and required context",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": "extraction",
+            "failure_category": "entity_scope_and_candidate_overreach"
+          },
+          "evidence": [
+            {
+              "source_id": "S006",
+              "excerpt": "The segment’s results were supported by Asseco’s involvement in the development of the digital government ecosystem, numerous financial sector transformation projects, and the execution of contracts for nearly half of the hospitals covered by the National Recovery Plan (KPO)."
+            }
+          ],
+          "note": "Specific Group/segment activity is retained, but not all candidate product assertions are independently established for Asseco Poland S.A."
+        },
+        {
+          "path": "recent_developments.0",
+          "state": "uncertain",
+          "value": null,
+          "context": {},
+          "reason": "Event publication date or content could not be verified; details cleared",
+          "supported_approved": false,
+          "eligible": true,
+          "state_allowed": false,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": "extraction",
+            "failure_category": "model_altered_nonmatching_citation"
+          },
+          "evidence": [
+            {
+              "source_id": "S006",
+              "excerpt": "2026-05-27\nInvestor\nEvents\nPress Releases\nAsseco Group news\nShare\nPrint\nAsseco Group reports strong results for Q1, 2026 – growth in profits and order backlog"
+            },
+            {
+              "source_id": "S006",
+              "excerpt": "Sales revenues in the Asseco Poland Segment increased by 12% to PLN 607 million (EUR 143 million)."
+            },
+            {
+              "source_id": "S006",
+              "excerpt": "The segment’s results were supported by Asseco’s involvement in the development of the digital government ecosystem, numerous financial sector transformation projects, and the execution of contracts for nearly half of the hospitals covered by the National Recovery Plan (KPO)."
+            }
+          ],
+          "note": "Manually verified original segment-qualified summary against full-page body. Publication date is explicit directly above the article category/title despite null retriever metadata. Original candidate citation inserts an ellipsis that is not in retained text; this is extraction loss, not evidence of gate malfunction."
+        },
+        {
+          "path": "recent_developments.1",
+          "state": "uncertain",
+          "value": null,
+          "context": {},
+          "reason": "Unverified event occurrence date removed; Event publication date or content could not be verified; details cleared",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": "unavailable",
+            "failure_category": "listing_only_appointment_details"
+          },
+          "evidence": [
+            {
+              "source_id": "S010",
+              "excerpt": "Regulatory Filings"
+            }
+          ],
+          "note": "Retained full page is a regulatory-filings index, not the appointment filing body; snippet-only details do not establish the candidate event."
+        }
+      ],
+      "diagnostics": {
+        "model": "openai-codex:gpt-6-luna",
+        "status": "completed",
+        "stop_reason": "Unsupported non-page document content",
+        "model_requests": 5,
+        "searches": 4,
+        "page_reads": 3,
+        "dynamic_reads": 0,
+        "output_retries": 0,
+        "input_tokens": 57142,
+        "output_tokens": 2103,
+        "duration_seconds": 73.28119125030935,
+        "cost_usd": null
+      },
+      "evaluator_failures": []
+    },
+    {
+      "name": "retained_lpp",
+      "outcome": "published",
+      "prediction_outcome": "published",
+      "error": null,
+      "counts": {
+        "output_outcome_published": 1,
+        "expected_outcome_published": 1,
+        "identity_fields_total": 5,
+        "identity_fields_correct": 5,
+        "identity_cases_total": 1,
+        "identity_cases_correct": 1,
+        "eligible_researched": 6,
+        "eligible_uncertain": 6,
+        "over_downgraded": 6,
+        "supported_registry": 4,
+        "correct_supported_registry": 4
+      },
+      "safety": {
+        "uncertain": {
+          "correct": 4,
+          "total": 4
+        },
+        "unknown": {
+          "correct": 2,
+          "total": 2
+        }
+      },
+      "fields": [
+        {
+          "path": "business_description",
+          "state": "uncertain",
+          "value": "Polish fashion company that designs and sells clothing collections and accessories through five brands, using physical stores and online channels.",
+          "context": {},
+          "reason": "No exact full-page citation verifies the candidate value, entity, and required context",
+          "supported_approved": false,
+          "eligible": true,
+          "state_allowed": false,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": "extraction",
+            "failure_category": "model_altered_nonmatching_brand_citation"
+          },
+          "evidence": [
+            {
+              "source_id": "S007",
+              "excerpt": "LPP\nis a Polish family-owned company and one of the fastest-growing fashion companies in Central Europe."
+            },
+            {
+              "source_id": "S007",
+              "excerpt": "For 30 years, it has successfully designed and sold its collections and accessories in Poland and abroad."
+            },
+            {
+              "source_id": "S007",
+              "excerpt": "LPP manages five fashion brands: Reserved, Cropp, House, Mohito and Sinsay, with their product ranges now available in stores and online in 47 markets worldwide."
+            }
+          ],
+          "note": "Original candidate value manually approved against official retained full pages, including physical/online channels and Sinsay marketplace. Its brand citation changes the source wording; real source truth exists but the exact candidate citation is defective."
+        },
+        {
+          "path": "employees",
+          "state": "uncertain",
+          "value": null,
+          "context": {
+            "as_of": null
+          },
+          "reason": "No exact full-page citation verifies the candidate value, entity, and required context; Unverified employee as-of date removed",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": "extraction",
+            "failure_category": "group_scope_not_standalone_headcount"
+          },
+          "evidence": [
+            {
+              "source_id": "S007",
+              "excerpt": "LPP also plays an important role in job creation, employing nearly 63,000 people in offices and retail operations in Poland and elsewhere in Europe, Asia and Africa."
+            }
+          ],
+          "note": "Group-wide workforce, not standalone company headcount; page publication date is not employee observation date."
+        },
+        {
+          "path": "financials.0",
+          "state": "unknown",
+          "value": null,
+          "context": {
+            "metric": "revenue",
+            "period": null,
+            "currency": null,
+            "unit": null,
+            "scope": null,
+            "group_name": null
+          },
+          "reason": "The official 2025 results release reports Group revenue exceeding PLN 23bn, but retrieved HTML does not specify fiscal-period start and end dates. The annual report's financial tables were available as a linked PDF/ZIP, not retrieved as eligible HTML/text, so a fully specified amount and period cannot be reported.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": "extraction",
+            "failure_category": "group_scope_and_period_context"
+          },
+          "evidence": [
+            {
+              "source_id": "S001",
+              "excerpt": "in 2025, the LPP Group’s revenue exceeded PLN 23 bn"
+            }
+          ],
+          "note": "Full page provides Group revenue but not standalone amount or an explicit fiscal interval; not eligible for standalone structured financial gold."
+        },
+        {
+          "path": "financials.1",
+          "state": "unknown",
+          "value": null,
+          "context": {
+            "metric": "net_result",
+            "period": null,
+            "currency": null,
+            "unit": null,
+            "scope": null,
+            "group_name": null
+          },
+          "reason": "The official 2025 results release reports Group net profit of PLN 2.4bn, but retrieved HTML does not specify fiscal-period start and end dates. The annual report financial tables were not retrieved as eligible HTML/text; no separate-entity total net result was established.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": "extraction",
+            "failure_category": "group_scope_and_period_context"
+          },
+          "evidence": [
+            {
+              "source_id": "S001",
+              "excerpt": "net profit stood at PLN 2.4 bn"
+            }
+          ],
+          "note": "Full page provides Group net profit but not standalone total net result or explicit fiscal interval."
+        },
+        {
+          "path": "identity.krs",
+          "state": "supported",
+          "value": "0000000778",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "mf-vat-5831014898-20261003T122547685494Z",
+              "excerpt": "0000000778"
+            }
+          ],
+          "note": "Exact registry KRS."
+        },
+        {
+          "path": "identity.legal_name",
+          "state": "supported",
+          "value": "LPP SPÓŁKA AKCYJNA",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "mf-vat-5831014898-20261003T122547685494Z",
+              "excerpt": "LPP SPÓŁKA AKCYJNA"
+            }
+          ],
+          "note": "Exact registry legal name."
+        },
+        {
+          "path": "identity.registered_address",
+          "state": "supported",
+          "value": "ŁĄKOWA 39/44, 80-769 GDAŃSK",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "mf-vat-5831014898-20261003T122547685494Z",
+              "excerpt": "ŁĄKOWA 39/44, 80-769 GDAŃSK"
+            }
+          ],
+          "note": "Exact registry address."
+        },
+        {
+          "path": "identity.registered_city",
+          "state": "unknown",
+          "value": null,
+          "context": {},
+          "reason": "Registry provides no separate city field; no city inferred from address",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Registry provides no separate city field; city is not inferred from registered address."
+        },
+        {
+          "path": "identity.regon",
+          "state": "supported",
+          "value": "190852164",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "mf-vat-5831014898-20261003T122547685494Z",
+              "excerpt": "190852164"
+            }
+          ],
+          "note": "Exact registry REGON."
+        },
+        {
+          "path": "identity.website",
+          "state": "unknown",
+          "value": null,
+          "context": {},
+          "reason": "This registry supplies no website; no website verification performed",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Registry supplies no website and no website verification was retained."
+        },
+        {
+          "path": "industries",
+          "state": "uncertain",
+          "value": [
+            "Apparel and fashion",
+            "Retail and e-commerce"
+          ],
+          "context": {},
+          "reason": "No exact full-page citation verifies the candidate value, entity, and required context",
+          "supported_approved": false,
+          "eligible": true,
+          "state_allowed": false,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": "gate",
+            "failure_category": "exact_eligible_classification_rejected"
+          },
+          "evidence": [
+            {
+              "source_id": "S007",
+              "excerpt": "LPP has crossed the landmark threshold of 4,000 stores, confirming its position among the leading players in the European fashion industry."
+            },
+            {
+              "source_id": "S016",
+              "excerpt": "E-commerce boosted revenue by 16.4% year-on-year."
+            }
+          ],
+          "note": "Original apparel/fashion and retail/e-commerce classifications are manually grounded in exact full-page excerpts; neither source scope nor candidate citation mismatch accounts for this downgrade."
+        },
+        {
+          "path": "markets",
+          "state": "uncertain",
+          "value": [
+            "47 worldwide markets, serving customers through stores and online across three continents"
+          ],
+          "context": {},
+          "reason": "No exact full-page citation verifies the candidate value, entity, and required context",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": "extraction",
+            "failure_category": "group_scope_not_standalone_market_footprint"
+          },
+          "evidence": [
+            {
+              "source_id": "S007",
+              "excerpt": "Today, the Group operates across 47 markets worldwide, both in stores and online, with its retail network covering more than 3 million sq m of retail space across three continents."
+            }
+          ],
+          "note": "47 markets are explicitly Group scope; not gold as an unqualified LPP S.A. legal-entity footprint."
+        },
+        {
+          "path": "products_services",
+          "state": "uncertain",
+          "value": [
+            "Clothing collections and accessories",
+            "Fashion retail through Reserved, Cropp, House, Mohito and Sinsay",
+            "Online sales and omnichannel retail",
+            "Sinsay marketplace platform"
+          ],
+          "context": {},
+          "reason": "No exact full-page citation verifies the candidate value, entity, and required context",
+          "supported_approved": false,
+          "eligible": true,
+          "state_allowed": false,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": "extraction",
+            "failure_category": "model_altered_nonmatching_brand_citation"
+          },
+          "evidence": [
+            {
+              "source_id": "S007",
+              "excerpt": "For 30 years, it has successfully designed and sold its collections and accessories in Poland and abroad."
+            },
+            {
+              "source_id": "S007",
+              "excerpt": "LPP manages five fashion brands: Reserved, Cropp, House, Mohito and Sinsay, with their product ranges now available in stores and online in 47 markets worldwide."
+            },
+            {
+              "source_id": "S007",
+              "excerpt": "At its core is an omnichannel model, underpinned by continued investment in logistics, technology and the expansion of the Group’s retail network."
+            },
+            {
+              "source_id": "S007",
+              "excerpt": "Recently, the brand has expanded its online range by introducing a marketplace model that features products from external partners alongside its own range."
+            }
+          ],
+          "note": "Original candidate value manually approved against official retained full pages, including physical/online channels and Sinsay marketplace. Its brand citation changes the source wording; real source truth exists but the exact candidate citation is defective."
+        },
+        {
+          "path": "recent_developments.0",
+          "state": "uncertain",
+          "value": null,
+          "context": {},
+          "reason": "Event publication date or content could not be verified; details cleared",
+          "supported_approved": false,
+          "eligible": true,
+          "state_allowed": false,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": "gate",
+            "failure_category": "exact_eligible_group_news_rejected"
+          },
+          "evidence": [
+            {
+              "source_id": "S007",
+              "excerpt": "Publication date: 07.09.2026"
+            },
+            {
+              "source_id": "S007",
+              "excerpt": "LPP has crossed the landmark threshold of 4,000 stores"
+            },
+            {
+              "source_id": "S007",
+              "excerpt": "Central Asia plays a particularly important role in the Group’s current growth strategy."
+            }
+          ],
+          "note": "Original Group-qualified value and null occurrence date manually approved against exact full-page contents and publication metadata; this is a gate false-negative opportunity."
+        },
+        {
+          "path": "recent_developments.1",
+          "state": "uncertain",
+          "value": null,
+          "context": {},
+          "reason": "Unverified event occurrence date removed; Event publication date or content could not be verified; details cleared",
+          "supported_approved": false,
+          "eligible": true,
+          "state_allowed": false,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": "extraction",
+            "failure_category": "constant_currency_omission_and_invented_day"
+          },
+          "evidence": [
+            {
+              "source_id": "S016",
+              "excerpt": "Publication date: 17.09.2026"
+            },
+            {
+              "source_id": "S016",
+              "excerpt": "The LPP Group’s revenue in the second quarter of 2026 increased by 18% year-on-year in constant currencies, reaching PLN 6.6bn."
+            },
+            {
+              "source_id": "S016",
+              "excerpt": "net profit by 48% year-on-year to PLN 768m."
+            },
+            {
+              "source_id": "S016",
+              "excerpt": "In July this year, the Group launched a new distribution centre in that country, restoring full logistical capacity in the region."
+            }
+          ],
+          "note": "Correct gold includes the constant-currency qualifier and no day precision. Original candidate drops the growth basis and invents July 1 despite month-only occurrence evidence; the downgrade is not a pure gate defect."
+        },
+        {
+          "path": "recent_developments.2",
+          "state": "uncertain",
+          "value": null,
+          "context": {},
+          "reason": "Event publication date or content could not be verified; details cleared",
+          "supported_approved": false,
+          "eligible": true,
+          "state_allowed": false,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": "gate",
+            "failure_category": "exact_eligible_group_news_rejected"
+          },
+          "evidence": [
+            {
+              "source_id": "S001",
+              "excerpt": "Publication date: 26.03.2026"
+            },
+            {
+              "source_id": "S001",
+              "excerpt": "in 2025, the LPP Group’s revenue exceeded PLN 23 bn"
+            },
+            {
+              "source_id": "S001",
+              "excerpt": "net profit stood at PLN 2.4 bn"
+            }
+          ],
+          "note": "Original Group-qualified value and null occurrence date manually approved against exact full-page contents and publication metadata; this is a gate false-negative opportunity."
+        }
+      ],
+      "diagnostics": {
+        "model": "openai-codex:gpt-6-luna",
+        "status": "completed",
+        "stop_reason": "Unsupported non-page document content",
+        "model_requests": 6,
+        "searches": 6,
+        "page_reads": 8,
+        "dynamic_reads": 0,
+        "output_retries": 0,
+        "input_tokens": 105926,
+        "output_tokens": 2427,
+        "duration_seconds": 81.94383554207161,
+        "cost_usd": null
+      },
+      "evaluator_failures": []
+    },
+    {
+      "name": "retained_orlen",
+      "outcome": "published",
+      "prediction_outcome": "published",
+      "error": null,
+      "counts": {
+        "output_outcome_published": 1,
+        "expected_outcome_published": 1,
+        "identity_fields_total": 5,
+        "identity_fields_correct": 5,
+        "identity_cases_total": 1,
+        "identity_cases_correct": 1,
+        "supported_registry": 4,
+        "correct_supported_registry": 4
+      },
+      "safety": {
+        "uncertain": {
+          "correct": 10,
+          "total": 10
+        },
+        "unknown": {
+          "correct": 2,
+          "total": 2
+        }
+      },
+      "fields": [
+        {
+          "path": "business_description",
+          "state": "uncertain",
+          "value": "ORLEN S.A.'s principal activity is the manufacture and processing of refined petroleum products. The wider ORLEN Group also operates across power, hydrocarbon exploration and production, fuels, petrochemicals and chemicals.",
+          "context": {},
+          "reason": "Evidence is absent, snippet-only, or not an exact NFC/whitespace-normalized excerpt from a retained full page",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": "unavailable",
+            "failure_category": "snippet_only_no_full_page"
+          },
+          "evidence": [
+            {
+              "source_id": "S016",
+              "excerpt": "ORLEN S.A. The Company’s main business activity is the manufacture and processing of refined petroleum products."
+            }
+          ],
+          "note": "Candidate cites discovery snippets; no full-page retrieval retained, so candidate and Group snippets do not qualify as eligible gold."
+        },
+        {
+          "path": "employees",
+          "state": "uncertain",
+          "value": null,
+          "context": {
+            "as_of": null
+          },
+          "reason": "Evidence is absent, snippet-only, or not an exact NFC/whitespace-normalized excerpt from a retained full page; Unverified employee as-of date removed",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": "unavailable",
+            "failure_category": "snippet_group_headcount"
+          },
+          "evidence": [
+            {
+              "source_id": "S011",
+              "excerpt": "As at the end of 2025, the ORLEN Group had 66,563 employees with employment contracts"
+            }
+          ],
+          "note": "Search snippet only, explicitly Group-wide; no full-page standalone employee observation."
+        },
+        {
+          "path": "financials.0",
+          "state": "unknown",
+          "value": null,
+          "context": {
+            "metric": "revenue",
+            "period": null,
+            "currency": null,
+            "unit": null,
+            "scope": null,
+            "group_name": null
+          },
+          "reason": "Official report-page retrieval failed. Revenue figures surfaced only in search discovery snippets, which do not meet the required retrieved-page/text evidence standard.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": "unavailable",
+            "failure_category": "report_read_failure_snippet_only"
+          },
+          "evidence": [
+            {
+              "source_id": "S001",
+              "excerpt": "| Revenue | 13,798 | 13,116 |"
+            }
+          ],
+          "note": "Report page read failed; discovery-snippet table is not eligible financial evidence and its scope cannot be promoted to standalone gold."
+        },
+        {
+          "path": "financials.1",
+          "state": "unknown",
+          "value": null,
+          "context": {
+            "metric": "net_result",
+            "period": null,
+            "currency": null,
+            "unit": null,
+            "scope": null,
+            "group_name": null
+          },
+          "reason": "Official report-page retrieval failed. Search discovery snippets do not meet the required retrieved-page/text evidence standard for a financial amount.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": "unavailable",
+            "failure_category": "report_read_failure_snippet_only"
+          },
+          "evidence": [
+            {
+              "source_id": "S001",
+              "excerpt": "| Net profit | 239 | 185 |"
+            }
+          ],
+          "note": "No retained full-page net-result amount/context; discovery-snippet table is not eligible financial evidence."
+        },
+        {
+          "path": "identity.krs",
+          "state": "supported",
+          "value": "0000028860",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "mf-vat-7740001454-20261003T122709914638Z",
+              "excerpt": "0000028860"
+            }
+          ],
+          "note": "Exact registry KRS."
+        },
+        {
+          "path": "identity.legal_name",
+          "state": "supported",
+          "value": "ORLEN SPÓŁKA AKCYJNA",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "mf-vat-7740001454-20261003T122709914638Z",
+              "excerpt": "ORLEN SPÓŁKA AKCYJNA"
+            }
+          ],
+          "note": "Exact registry legal name."
+        },
+        {
+          "path": "identity.registered_address",
+          "state": "supported",
+          "value": "CHEMIKÓW 7, 09-411 PŁOCK",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "mf-vat-7740001454-20261003T122709914638Z",
+              "excerpt": "CHEMIKÓW 7, 09-411 PŁOCK"
+            }
+          ],
+          "note": "Exact registry address."
+        },
+        {
+          "path": "identity.registered_city",
+          "state": "unknown",
+          "value": null,
+          "context": {},
+          "reason": "Registry provides no separate city field; no city inferred from address",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Registry provides no separate city field; city is not inferred from registered address."
+        },
+        {
+          "path": "identity.regon",
+          "state": "supported",
+          "value": "610188201",
+          "context": {},
+          "reason": null,
+          "supported_approved": true,
+          "eligible": true,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [
+            {
+              "source_id": "mf-vat-7740001454-20261003T122709914638Z",
+              "excerpt": "610188201"
+            }
+          ],
+          "note": "Exact registry REGON."
+        },
+        {
+          "path": "identity.website",
+          "state": "unknown",
+          "value": null,
+          "context": {},
+          "reason": "This registry supplies no website; no website verification performed",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": null,
+            "failure_category": null
+          },
+          "evidence": [],
+          "note": "Registry supplies no website and no website verification was retained."
+        },
+        {
+          "path": "industries",
+          "state": "uncertain",
+          "value": [
+            "Oil refining and petroleum products",
+            "Energy and utilities",
+            "Oil and gas exploration and production",
+            "Petrochemicals and chemicals"
+          ],
+          "context": {},
+          "reason": "Evidence is absent, snippet-only, or not an exact NFC/whitespace-normalized excerpt from a retained full page",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": "unavailable",
+            "failure_category": "snippet_only_no_full_page"
+          },
+          "evidence": [
+            {
+              "source_id": "S016",
+              "excerpt": "The ORLEN Group’s core business consists in electricity generation, distribution and trading, crude oil processing, production of fuels, petrochemicals and chemicals"
+            }
+          ],
+          "note": "No retained full-page evidence for candidate industries."
+        },
+        {
+          "path": "markets",
+          "state": "uncertain",
+          "value": [
+            "Poland and Central Europe"
+          ],
+          "context": {},
+          "reason": "The identified official material establishes the Group's regional energy focus but does not sufficiently verify a complete geographic market footprint.",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": "unavailable",
+            "failure_category": "snippet_strategy_not_market_evidence"
+          },
+          "evidence": [
+            {
+              "source_id": "S003",
+              "excerpt": "Zapewnienie stabilnych dostaw energii, paliw i gazu z przyjaznych środowisku źródeł to główny cel połączonej Grupy ORLEN do 2030 roku."
+            }
+          ],
+          "note": "A Group strategy snippet is not full-page evidence or a verified complete market footprint."
+        },
+        {
+          "path": "products_services",
+          "state": "uncertain",
+          "value": [
+            "Refined petroleum products",
+            "Crude oil processing",
+            "Fuels, petrochemicals and chemicals",
+            "Electricity generation, distribution and trading",
+            "Hydrocarbon exploration, production and import",
+            "Storage, marketing and distribution of gaseous and liquid fuels"
+          ],
+          "context": {},
+          "reason": "Evidence is absent, snippet-only, or not an exact NFC/whitespace-normalized excerpt from a retained full page",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": "unavailable",
+            "failure_category": "snippet_only_group_scope"
+          },
+          "evidence": [
+            {
+              "source_id": "S016",
+              "excerpt": "The ORLEN Group’s core business consists in electricity generation, distribution and trading, crude oil processing, production of fuels, petrochemicals and chemicals"
+            }
+          ],
+          "note": "Group-only offerings occur in search snippet; not full-page evidence or standalone service scope."
+        },
+        {
+          "path": "recent_developments.0",
+          "state": "uncertain",
+          "value": null,
+          "context": {},
+          "reason": "Official press-release page could not be retrieved; evidence is the search result listing only.; Unverified event occurrence date removed; Event publication date or content could not be verified; details cleared",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": "unavailable",
+            "failure_category": "listing_snippet_only"
+          },
+          "evidence": [
+            {
+              "source_id": "S007",
+              "excerpt": "PRESS RELEASES 20.01.2026"
+            },
+            {
+              "source_id": "S007",
+              "excerpt": "ORLEN Announces Gas Discovery in the North Sea"
+            }
+          ],
+          "note": "Discovery listing snippet only; release page absent from retained full-page corpus."
+        },
+        {
+          "path": "recent_developments.1",
+          "state": "uncertain",
+          "value": null,
+          "context": {},
+          "reason": "Official press-release page could not be retrieved; evidence is the search result listing only.; Unverified event occurrence date removed; Event publication date or content could not be verified; details cleared",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": "unavailable",
+            "failure_category": "listing_snippet_only"
+          },
+          "evidence": [
+            {
+              "source_id": "S006",
+              "excerpt": "ORLEN and the Port of Gdynia Authority have signed an agreement to explore the use of LNG and bioLNG as marine vessel fuels."
+            }
+          ],
+          "note": "Discovery listing snippet only; release page absent."
+        },
+        {
+          "path": "recent_developments.2",
+          "state": "uncertain",
+          "value": null,
+          "context": {},
+          "reason": "Official press-release page could not be retrieved; evidence is the search result listing only.; Unverified event occurrence date removed; Event publication date or content could not be verified; details cleared",
+          "supported_approved": false,
+          "eligible": false,
+          "state_allowed": true,
+          "required_fields_satisfied": true,
+          "safety_failure": false,
+          "gold_loss": {
+            "failure_layer": "unavailable",
+            "failure_category": "listing_snippet_only"
+          },
+          "evidence": [
+            {
+              "source_id": "S006",
+              "excerpt": "PRESS RELEASES 08.09.2026"
+            }
+          ],
+          "note": "Candidate is based on listing material only; no retained article text establishes content/date as a full-page fact."
+        }
+      ],
+      "diagnostics": {
+        "model": "openai-codex:gpt-6-luna",
+        "status": "completed",
+        "stop_reason": "Page read failed (Error); Research dynamic budget exhausted; Static page read failed (CertificateVerifyError)",
+        "model_requests": 4,
+        "searches": 4,
+        "page_reads": 7,
+        "dynamic_reads": 2,
+        "output_retries": 1,
+        "input_tokens": 36096,
+        "output_tokens": 2540,
+        "duration_seconds": 68.01006879098713,
+        "cost_usd": null
+      },
+      "evaluator_failures": []
+    }
+  ],
+  "failed_cases": [],
+  "report_evaluator_failures": [],
+  "counts": {
+    "output_outcome_published": 9,
+    "expected_outcome_published": 9,
+    "identity_fields_total": 60,
+    "identity_fields_correct": 60,
+    "identity_cases_total": 10,
+    "identity_cases_correct": 10,
+    "supported_researched": 2,
+    "correct_supported_researched": 2,
+    "eligible_researched": 19,
+    "eligible_supported": 2,
+    "eligible_uncertain": 17,
+    "over_downgraded": 17,
+    "supported_registry": 42,
+    "correct_supported_registry": 42,
+    "output_outcome_rejected": 1,
+    "expected_outcome_rejected": 1,
+    "output_outcome_invalid_input": 1,
+    "expected_outcome_invalid_input": 1,
+    "output_outcome_unresolved": 1,
+    "expected_outcome_unresolved": 1,
+    "report_evaluator_failures": 0
+  },
+  "metrics": {
+    "identity_correctness": {
+      "numerator": 10,
+      "denominator": 10,
+      "rate": 1.0
+    },
+    "identity_field_correctness": {
+      "numerator": 60,
+      "denominator": 60,
+      "rate": 1.0
+    },
+    "supported_precision": {
+      "numerator": 44,
+      "denominator": 44,
+      "rate": 1.0
+    },
+    "registry_precision": {
+      "numerator": 42,
+      "denominator": 42,
+      "rate": 1.0
+    },
+    "researched_precision": {
+      "numerator": 2,
+      "denominator": 2,
+      "rate": 1.0
+    },
+    "unsupported_as_supported": 0,
+    "researched_recall": {
+      "numerator": 2,
+      "denominator": 19,
+      "rate": 0.10526315789473684
+    },
+    "over_downgrade_rate": {
+      "numerator": 17,
+      "denominator": 19,
+      "rate": 0.8947368421052632
+    },
+    "eligible_outcomes": {
+      "eligible_supported": 2,
+      "eligible_supported_wrong": 0,
+      "eligible_uncertain": 17,
+      "eligible_unknown": 0,
+      "eligible_missing": 0
+    },
+    "correct_uncertain_handling": {
+      "numerator": 26,
+      "denominator": 28,
+      "rate": 0.9285714285714286
+    },
+    "correct_unknown_handling": {
+      "numerator": 39,
+      "denominator": 46,
+      "rate": 0.8478260869565217
+    },
+    "safety": {
+      "unknown": {
+        "correct": 39,
+        "total": 46,
+        "rate": {
+          "numerator": 39,
+          "denominator": 46,
+          "rate": 0.8478260869565217
+        }
+      },
+      "uncertain": {
+        "correct": 26,
+        "total": 28,
+        "rate": {
+          "numerator": 26,
+          "denominator": 28,
+          "rate": 0.9285714285714286
+        }
+      }
+    }
+  },
+  "reference_production_commit": "59e76de",
+  "runtime_source_hashes": {
+    "src/company_bi/evidence.py": "3c2d0bda4ff2fe9e6a1abe224bb3f46c3232921c63b38431cc73ad5e8ac62a3b",
+    "src/company_bi/models.py": "f831165ff4de46a3c5a31dca5717739f4eab49b1bb5dc84de131f78addb12e38",
+    "src/company_bi/nip.py": "e5cc0c4750a3858213fc72385f8ff9b053baa9165193d7d93fad2cd799c85394",
+    "src/company_bi/registry.py": "366afe77ccbf7f74fcda6e455cb3183f1ab1a05ef63f89f853e18860568371b1",
+    "src/company_bi/agent.py": "1266bdea0899397483213378ec7530fd668a393a8657a83181e3a46849616438",
+    "src/company_bi/renderer.py": "db019af78c8773ab2f35c8be32b81d1d563821603f9a7c69b73f8bd730e03c6d"
+  },
+  "hashes": {
+    "examples/evals/dataset.json": "82165a718e37c6f42dc0cfce8374fc741b1ae08c4c9144148e23fe70c8cefb61",
+    "controlled/fully_supported.json": "60c4049f63182331df1f0af53776b49cab037e44f7500702cd516f958bf3293a",
+    "controlled/employee_exact_official.json": "8785a44258549140c7fcd8e14e5e13e40333015b119534269ba00407d8807c04",
+    "controlled/employee_conflict.json": "49f26d49371bcab3226b622264b0c4cf6dec8b6be83e4b2b49baeda208bded2f",
+    "controlled/employee_range_stale.json": "a1dabbb5414897938e638d108f4f19c6e4662ca5291c5a1244350233d2c030d1",
+    "controlled/ellipsis_snippet.json": "7c7f5cb5a4df0d0d9fdfcbe859b23249f5da168de5f6c53227b6c6b361ce5dd3",
+    "controlled/financial_context_metric.json": "7a419ec77685247953bb4dfd0bdc2a5ab854dfb1ae00b28052e00c86c1cf4552",
+    "controlled/invalid_source_id.json": "95189d46498e85be44cfa4d8ed2edf528e111b0eeb319c21daaed9f1640a1c86",
+    "controlled/unresolved-mf-response.json": "b9747290a8cfc9569f446541cbdf8d2c64632c4104c4ad61a3d4bdad00793559",
+    "retained/asseco-poland.json": "41b9bf80321988d51fe4230adb5ec28b85d6954c7b1399c1a68da116afb86325",
+    "retained/lpp.json": "0aaf6fb2d7ab5a7c30d45489782c38f085fcaa6a53258d8eec8f74bd51821754",
+    "retained/orlen.json": "26c969534a1dcf6ec60ed750c03fddea8fc05caf7425da64090abe34e0adcad4"
+  },
+  "input_hash_errors": []
+}

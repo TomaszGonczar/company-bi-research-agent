@@ -1,0 +1,162 @@
+{
+  "identity": {
+    "nip": "9360000001",
+    "legal_name": {
+      "state": "supported",
+      "value": "Fictional Quartz Works sp. z o.o.",
+      "evidence": [
+        {
+          "source_id": "registry-financial_context_metric",
+          "excerpt": "\"Fictional Quartz Works sp. z o.o.\""
+        }
+      ]
+    },
+    "krs": {
+      "state": "supported",
+      "value": "0000123456",
+      "evidence": [
+        {
+          "source_id": "registry-financial_context_metric",
+          "excerpt": "KRS 0000123456"
+        }
+      ]
+    },
+    "regon": {
+      "state": "supported",
+      "value": "123456789",
+      "evidence": [
+        {
+          "source_id": "registry-financial_context_metric",
+          "excerpt": "REGON 123456789"
+        }
+      ]
+    },
+    "registered_city": {
+      "state": "supported",
+      "value": "Fictionalowo",
+      "evidence": [
+        {
+          "source_id": "registry-financial_context_metric",
+          "excerpt": "registered address Example Avenue 10, Fictionalowo"
+        }
+      ]
+    },
+    "registered_address": {
+      "state": "supported",
+      "value": "Example Avenue 10, Fictionalowo",
+      "evidence": [
+        {
+          "source_id": "registry-financial_context_metric",
+          "excerpt": "registered address Example Avenue 10, Fictionalowo"
+        }
+      ]
+    },
+    "website": {
+      "state": "unknown",
+      "reason": "Official registry snapshot does not provide a website."
+    },
+    "resolved_at": "2026-10-02T11:00:00Z"
+  },
+  "draft": {
+    "business_description": {
+      "state": "unknown",
+      "reason": "No supported business description retained."
+    },
+    "products_services": {
+      "state": "unknown",
+      "reason": "No supported products or services retained."
+    },
+    "industries": {
+      "state": "unknown",
+      "reason": "No supported industry retained."
+    },
+    "markets": {
+      "state": "unknown",
+      "reason": "No supported market retained."
+    },
+    "employees": {
+      "state": "unknown",
+      "reason": "No supported employee observation retained."
+    },
+    "financials": [
+      {
+        "state": "uncertain",
+        "value": null,
+        "evidence": [
+          {
+            "source_id": "finance-page",
+            "excerpt": "For 2025, fictional Quartz Works reported operating profit of PLN 24 thousand."
+          }
+        ],
+        "reason": "Operating profit is not net result.",
+        "metric": "net_result",
+        "period": {
+          "start": "2025-01-01",
+          "end": "2025-12-31"
+        },
+        "currency": "PLN",
+        "unit": "thousands",
+        "scope": "legal_entity"
+      },
+      {
+        "state": "supported",
+        "value": "81",
+        "evidence": [
+          {
+            "source_id": "finance-page",
+            "excerpt": "Revenue was 2025: 81."
+          }
+        ],
+        "metric": "revenue",
+        "period": {
+          "start": "2025-01-01",
+          "end": "2025-12-31"
+        },
+        "currency": "PLN",
+        "unit": "millions",
+        "scope": "legal_entity"
+      }
+    ],
+    "recent_developments": [],
+    "limitations": [
+      "Insufficient retained source material for complete profile."
+    ]
+  },
+  "sources": [
+    {
+      "source": {
+        "source_id": "registry-financial_context_metric",
+        "url": "https://registry-financial_context_metric.example/",
+        "title": "Fictional national register",
+        "retrieved_at": "2026-10-02T12:00:00Z"
+      },
+      "kind": "registry",
+      "content": "Registry identity: \"Fictional Quartz Works sp. z o.o.\"; NIP 9360000001; KRS 0000123456; REGON 123456789; registered address Example Avenue 10, Fictionalowo.",
+      "fetch_mode": "registry"
+    },
+    {
+      "source": {
+        "source_id": "finance-page",
+        "url": "https://finance-page.example/",
+        "title": "Fictional Quartz Works financial extract",
+        "retrieved_at": "2026-10-02T12:00:00Z"
+      },
+      "kind": "full_page",
+      "content": "For 2025, fictional Quartz Works reported operating profit of PLN 24 thousand. Revenue was 2025: 81.",
+      "fetch_mode": "static"
+    }
+  ],
+  "diagnostics": {
+    "model": "offline-retained-run",
+    "status": "completed",
+    "model_requests": 0,
+    "searches": 0,
+    "page_reads": 0,
+    "dynamic_reads": 0,
+    "output_retries": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "duration_seconds": 0
+  },
+  "generated_at": "2026-10-03T12:00:00Z"
+}

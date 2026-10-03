@@ -1,0 +1,498 @@
+{
+  "identity": {
+    "nip": "7740001454",
+    "legal_name": {
+      "state": "supported",
+      "value": "ORLEN SPÓŁKA AKCYJNA",
+      "evidence": [
+        {
+          "source_id": "mf-vat-7740001454-20261003T122709914638Z",
+          "excerpt": "\"ORLEN SPÓŁKA AKCYJNA\""
+        }
+      ],
+      "reason": null
+    },
+    "krs": {
+      "state": "supported",
+      "value": "0000028860",
+      "evidence": [
+        {
+          "source_id": "mf-vat-7740001454-20261003T122709914638Z",
+          "excerpt": "\"0000028860\""
+        }
+      ],
+      "reason": null
+    },
+    "regon": {
+      "state": "supported",
+      "value": "610188201",
+      "evidence": [
+        {
+          "source_id": "mf-vat-7740001454-20261003T122709914638Z",
+          "excerpt": "\"610188201\""
+        }
+      ],
+      "reason": null
+    },
+    "registered_city": {
+      "state": "unknown",
+      "value": null,
+      "evidence": [],
+      "reason": "Registry provides no separate city field; no city inferred from address"
+    },
+    "registered_address": {
+      "state": "supported",
+      "value": "CHEMIKÓW 7, 09-411 PŁOCK",
+      "evidence": [
+        {
+          "source_id": "mf-vat-7740001454-20261003T122709914638Z",
+          "excerpt": "\"CHEMIKÓW 7, 09-411 PŁOCK\""
+        }
+      ],
+      "reason": null
+    },
+    "website": {
+      "state": "unknown",
+      "value": null,
+      "evidence": [],
+      "reason": "This registry supplies no website; no website verification performed"
+    },
+    "resolved_at": "2026-10-03T12:27:09.915501Z"
+  },
+  "draft": {
+    "business_description": {
+      "state": "supported",
+      "value": "ORLEN S.A.'s principal activity is the manufacture and processing of refined petroleum products. The wider ORLEN Group also operates across power, hydrocarbon exploration and production, fuels, petrochemicals and chemicals.",
+      "evidence": [
+        {
+          "source_id": "S016",
+          "excerpt": "ORLEN S.A. The Company’s main business activity is the manufacture and processing of refined petroleum products."
+        },
+        {
+          "source_id": "S018",
+          "excerpt": "The ORLEN Group’s core business consists in electricity generation, distribution and trading, crude oil processing, production of fuels, petrochemicals and chemicals"
+        }
+      ],
+      "reason": null
+    },
+    "products_services": {
+      "state": "supported",
+      "value": [
+        "Refined petroleum products",
+        "Crude oil processing",
+        "Fuels, petrochemicals and chemicals",
+        "Electricity generation, distribution and trading",
+        "Hydrocarbon exploration, production and import",
+        "Storage, marketing and distribution of gaseous and liquid fuels"
+      ],
+      "evidence": [
+        {
+          "source_id": "S016",
+          "excerpt": "The ORLEN Group’s core business consists in electricity generation, distribution and trading, crude oil processing, production of fuels, petrochemicals and chemicals, wholesale and retail sale of the Group’s fuel products, as well as storage, marketing and distribution of gaseous and liquid fuels."
+        },
+        {
+          "source_id": "S016",
+          "excerpt": "The Company’s main business activity is the manufacture and processing of refined petroleum products."
+        }
+      ],
+      "reason": null
+    },
+    "industries": {
+      "state": "supported",
+      "value": [
+        "Oil refining and petroleum products",
+        "Energy and utilities",
+        "Oil and gas exploration and production",
+        "Petrochemicals and chemicals"
+      ],
+      "evidence": [
+        {
+          "source_id": "S016",
+          "excerpt": "The ORLEN Group’s core business consists in electricity generation, distribution and trading, crude oil processing, production of fuels, petrochemicals and chemicals"
+        }
+      ],
+      "reason": null
+    },
+    "markets": {
+      "state": "uncertain",
+      "value": [
+        "Poland and Central Europe"
+      ],
+      "evidence": [
+        {
+          "source_id": "S003",
+          "excerpt": "Zapewnienie stabilnych dostaw energii, paliw i gazu ... to główny cel połączonej Grupy ORLEN do 2030 roku."
+        }
+      ],
+      "reason": "The identified official material establishes the Group's regional energy focus but does not sufficiently verify a complete geographic market footprint."
+    },
+    "employees": {
+      "state": "supported",
+      "value": {
+        "kind": "exact",
+        "count": 66563
+      },
+      "evidence": [
+        {
+          "source_id": "S011",
+          "excerpt": "As at the end of 2025, the ORLEN Group had 66,563 employees with employment contracts"
+        }
+      ],
+      "reason": null,
+      "as_of": "2025-12-31"
+    },
+    "financials": [
+      {
+        "state": "unknown",
+        "value": null,
+        "evidence": [],
+        "reason": "Official report-page retrieval failed. Revenue figures surfaced only in search discovery snippets, which do not meet the required retrieved-page/text evidence standard.",
+        "metric": "revenue",
+        "period": null,
+        "currency": null,
+        "unit": null,
+        "scope": null,
+        "group_name": null
+      },
+      {
+        "state": "unknown",
+        "value": null,
+        "evidence": [],
+        "reason": "Official report-page retrieval failed. Search discovery snippets do not meet the required retrieved-page/text evidence standard for a financial amount.",
+        "metric": "net_result",
+        "period": null,
+        "currency": null,
+        "unit": null,
+        "scope": null,
+        "group_name": null
+      }
+    ],
+    "recent_developments": [
+      {
+        "state": "uncertain",
+        "value": {
+          "title": "North Sea gas discovery announced",
+          "summary": "A company press-release listing says ORLEN Upstream Norway and Equinor discovered natural gas resources on the Norwegian Continental Shelf; it reports expected production of about 1 billion cubic metres from the Sissel discovery.",
+          "published_on": "2026-01-20",
+          "occurred_on": "2026-01-20"
+        },
+        "evidence": [
+          {
+            "source_id": "S007",
+            "excerpt": "PRESS RELEASES 20.01.2026 ... ORLEN Upstream Norway, in partnership with Equinor, has discovered new natural gas resources on the Norwegian Continental Shelf."
+          }
+        ],
+        "reason": "Official press-release page could not be retrieved; evidence is the search result listing only."
+      },
+      {
+        "state": "uncertain",
+        "value": {
+          "title": "ORLEN and Port of Gdynia explore LNG and bioLNG shipping fuels",
+          "summary": "A company press-release listing reports an agreement to assess demand and infrastructure for LNG and bioLNG bunkering along the Polish coast.",
+          "published_on": "2026-09-03",
+          "occurred_on": "2026-09-03"
+        },
+        "evidence": [
+          {
+            "source_id": "S006",
+            "excerpt": "ORLEN and the Port of Gdynia Authority have signed an agreement to explore the use of LNG and bioLNG as marine vessel fuels."
+          }
+        ],
+        "reason": "Official press-release page could not be retrieved; evidence is the search result listing only."
+      },
+      {
+        "state": "uncertain",
+        "value": {
+          "title": "Baltic Energy Initiative established",
+          "summary": "A company press-release listing reports ORLEN joined 13 Northern and Central European energy companies and organisations in an initiative on offshore wind, LNG and bioLNG, hydrogen, CCS, nuclear power and SMRs.",
+          "published_on": "2026-09-03",
+          "occurred_on": "2026-09-03"
+        },
+        "evidence": [
+          {
+            "source_id": "S006",
+            "excerpt": "ORLEN has joined forces with 13 energy companies and organisations from Northern and Central Europe to establish the Baltic Energy Initiative."
+          }
+        ],
+        "reason": "Official press-release page could not be retrieved; evidence is the search result listing only."
+      }
+    ],
+    "limitations": [
+      "Official full-page retrieval failed for the annual report and press-release pages; relevant business descriptions, employee data and development leads are based on available search-result text and should be treated with that limitation.",
+      "The employee count is for the ORLEN Group, not verified standalone ORLEN S.A.",
+      "No standalone legal-entity financial figures were verified.",
+      "Page read failed (Error)",
+      "Research dynamic budget exhausted",
+      "Static page read failed (CertificateVerifyError)"
+    ]
+  },
+  "sources": [
+    {
+      "source": {
+        "source_id": "mf-vat-7740001454-20261003T122709914638Z",
+        "url": "https://wl-api.mf.gov.pl/api/search/nip/7740001454?date=2026-10-03",
+        "title": "Ministerstwo Finansów — Wykaz podatników VAT",
+        "retrieved_at": "2026-10-03T12:27:09.914638Z",
+        "published_on": null
+      },
+      "kind": "registry",
+      "content": "MF VAT register identity material (not a raw registry response):\nlegal_name: ORLEN SPÓŁKA AKCYJNA\nlegal_name evidence from mf-vat-7740001454-20261003T122709914638Z: \"ORLEN SPÓŁKA AKCYJNA\"\nkrs: 0000028860\nkrs evidence from mf-vat-7740001454-20261003T122709914638Z: \"0000028860\"\nregon: 610188201\nregon evidence from mf-vat-7740001454-20261003T122709914638Z: \"610188201\"\nregistered_city: unknown; Registry provides no separate city field; no city inferred from address\nregistered_address: CHEMIKÓW 7, 09-411 PŁOCK\nregistered_address evidence from mf-vat-7740001454-20261003T122709914638Z: \"CHEMIKÓW 7, 09-411 PŁOCK\"\nwebsite: unknown; This registry supplies no website; no website verification performed\nNIP: 7740001454",
+      "fetch_mode": "registry"
+    },
+    {
+      "source": {
+        "source_id": "S001",
+        "url": "https://raportroczny.orlen.pl/en/management-report/our-performance-in-2025/financial-performance",
+        "title": "Financial Performance - ORLEN Report",
+        "retrieved_at": "2026-10-03T12:27:18.131615Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "| 2025 | 2024 |\n --- |\n| Revenue | 13,798 | 13,116 |\n| EBITDA | 561 | 481 |\n| EBIT | 339 | 263 |\n| Net profit | 239 | 185 |\n| Equity | 1,019 | 973 |\n| Total assets | 4,080 | 3,288 |\n\n## Download\n\nPDF\n\n### Consolidated Financial Statements 2025\n\n Download PDF\n\nPDF\n\n### Separate Financial Statements 2025\n\n Download PDF\n\nXLS\n\n### Consolidated Financial Data 2025\n\n Download XLS\n\nXLS\n\n### Separate Financial Data 2025\n\n Download XLS\n\nXLS\n\n### Segment Data 2025\n\n Download XLS\n\n## Management Report [...] | 2025 | 2024 |\n --- |\n| Revenue | 10,177 | 11,509 |\n| EBITDA | 6,969 | 8,512 |\n| EBIT | 4,347 | 5,542 |\n| Net profit | 942 | 1,597 |\n| Equity | 4,831 | 4,132 |\n| Total assets | 20,392 | 19,017 |\n\n| 2025 | 2024 |\n --- |\n| Revenue | 8,951 | 7,297 |\n| EBITDA | 4,274 | 3,120 |\n| EBIT | 2,606 | 1,556 |\n| Net profit | 1,658 | 801 |\n| Equity | 18,682 | 17,034 |\n| Total assets | 29,593 | 28,468 | [...] ORLEN Group’s net profit for the 12 months ended 31 December 2025 totalled PLN 2,648 million after tax of PLN 6,365 million, which means an decrease of PLN 99 million year on year.\n\nFor detailed information on finance income and finance costs (Section 11.5) and income tax (Section 11.8), see the consolidated financial statements for 2025.\n\n## Discussion of the consolidated statement of financial position",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S002",
+        "url": "https://www.orlen.pl/content/dam/internet/orlen/pl/en/investor-relations/reports-and-publications/financial-results/2001/documents/year/ORLEN_annual_report_2001.pdf",
+        "title": "[PDF] annual report 2 0 0 1 - ORLEN",
+        "retrieved_at": "2026-10-03T12:27:18.131615Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "companies accounted for under the equity method 25 48 Profit before income tax and minority interests 544 1,287 Income tax 24 (153) (362) Minority interests (15) (23) Net profit for the year 376 902 Basic and diluted earnings per share for the year (in zloty per share) 0.89 2.15 98 The accompanying notes are an integral part of these financial statements. [...] period profit 153 362 Net income tax paid (105) (313) (Increase) /decrease in receivables 209 (520) (Increase )/ decrease in inventories 651 (663) Increase / (decrease) in accrued expenses and payables (366) 264 Increase / (decrease) in provisions (121) (1) Increase / (decrease) in deferred income 5 (8) Other 51 (47) Net cash flows from operating activities 2,112 1,073 Cash flows from investing activities Acquisition of property, plant and equipment (1,482) (1,423) Acquisition of intangible [...] CPN employee shares acquisition, net 83 94 IFRS treatment of negative goodwill (79) (62) Fair value of shares convertible bonds- fair value adjustment (19) -Valuation of embedded financial instruments 27 -Deferred tax on the above (153) (133) Other 10 25 IFRS Consolidated 7,958 7,596 a. Distribution from Profit According to Polish business practice shareholders of the Company have the right to distribute the profit for the employees benefits, i.e. for bonus payment or for the Company’s social",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S003",
+        "url": "https://raportzintegrowany2021.orlen.pl/en",
+        "title": "Strona Główna - Orlen Raport",
+        "retrieved_at": "2026-10-03T12:27:18.131615Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "### Cele do 2050\n\n### NetZero\n\ndla zakresów emisji 1, 2, 3 zgodnie z porozumieniem paryskim\n\n## Strategia Grupy ORLEN do 2030 roku\n\nZapewnienie stabilnych dostaw energii, paliw i gazu z przyjaznych środowisku źródeł to główny cel połączonej Grupy ORLEN do 2030 roku.\n\nDowiedz się więcej\n\n### Wydobycie i obrót gazem\n\n#### Znaczący operator wydobycia gazu [...] kwalifikuje się do systematyki Taksonomii\n\n## 24,21%\n\nCapEx Grupy ORLEN\n\nkwalifikuje się do systematyki Taksonomii\n\n## 15,98%\n\nOpEx Grupy ORLEN\n\nkwalifikuje się do systematyki Taksonomii\n\n## 2\n\nmld PLN\n\nobligacji powiązanych z ratingiem ESG w obrocie\n\n## Cele operacyjne redukcji emisji Grupy ORLEN\n\n### Cele do 2030\n\n### -25%\n\nabsolutnej ilości emisji w segmentach rafinerii, petrochemii i wydobycia\n\n### -40%\n\nintensywności emisji w segmencie energetyki\n\n### -15%\n\nintensywności emisji (NCl) [...] #### Znaczący producent biogazu w Europie Środkowej\n\n+ Rozbudowa portfela biogazowni i biometanowni\n+ Wsparcie budowy lokalnego łańcucha wartości biogazu poprzez zarządzanie centralną bazą surowcową i integrację rozproszonych aktywów\n\n#### Zintegrowany producent odnawialnego wodoru dla przemysłu oraz transportu",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S004",
+        "url": "https://raportzintegrowany2019.orlen.pl/en/noty_objasniajace/11-3",
+        "title": "Strona Główna - Orlen Raport",
+        "retrieved_at": "2026-10-03T12:27:18.131615Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "### Cele do 2050\n\n### NetZero\n\ndla zakresów emisji 1, 2, 3 zgodnie z porozumieniem paryskim\n\n## Strategia Grupy ORLEN do 2030 roku\n\nZapewnienie stabilnych dostaw energii, paliw i gazu z przyjaznych środowisku źródeł to główny cel połączonej Grupy ORLEN do 2030 roku.\n\nDowiedz się więcej\n\n### Wydobycie i obrót gazem\n\n#### Znaczący operator wydobycia gazu [...] kwalifikuje się do systematyki Taksonomii\n\n## 24,21%\n\nCapEx Grupy ORLEN\n\nkwalifikuje się do systematyki Taksonomii\n\n## 15,98%\n\nOpEx Grupy ORLEN\n\nkwalifikuje się do systematyki Taksonomii\n\n## 2\n\nmld PLN\n\nobligacji powiązanych z ratingiem ESG w obrocie\n\n## Cele operacyjne redukcji emisji Grupy ORLEN\n\n### Cele do 2030\n\n### -25%\n\nabsolutnej ilości emisji w segmentach rafinerii, petrochemii i wydobycia\n\n### -40%\n\nintensywności emisji w segmencie energetyki\n\n### -15%\n\nintensywności emisji (NCl) [...] #### Znaczący producent biogazu w Europie Środkowej\n\n+ Rozbudowa portfela biogazowni i biometanowni\n+ Wsparcie budowy lokalnego łańcucha wartości biogazu poprzez zarządzanie centralną bazą surowcową i integrację rozproszonych aktywów\n\n#### Zintegrowany producent odnawialnego wodoru dla przemysłu oraz transportu",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S005",
+        "url": "https://raportzintegrowany2020.orlen.pl/en/financial-results/notes-and-other-information/notes-to-the-statement-of-profit-or-loss-and-other-comprehensive-income/costs/cost-of-sales",
+        "title": "Strona Główna - Orlen Raport",
+        "retrieved_at": "2026-10-03T12:27:18.131615Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "### Cele do 2050\n\n### NetZero\n\ndla zakresów emisji 1, 2, 3 zgodnie z porozumieniem paryskim\n\n## Strategia Grupy ORLEN do 2030 roku\n\nZapewnienie stabilnych dostaw energii, paliw i gazu z przyjaznych środowisku źródeł to główny cel połączonej Grupy ORLEN do 2030 roku.\n\nDowiedz się więcej\n\n### Wydobycie i obrót gazem\n\n#### Znaczący operator wydobycia gazu [...] kwalifikuje się do systematyki Taksonomii\n\n## 24,21%\n\nCapEx Grupy ORLEN\n\nkwalifikuje się do systematyki Taksonomii\n\n## 15,98%\n\nOpEx Grupy ORLEN\n\nkwalifikuje się do systematyki Taksonomii\n\n## 2\n\nmld PLN\n\nobligacji powiązanych z ratingiem ESG w obrocie\n\n## Cele operacyjne redukcji emisji Grupy ORLEN\n\n### Cele do 2030\n\n### -25%\n\nabsolutnej ilości emisji w segmentach rafinerii, petrochemii i wydobycia\n\n### -40%\n\nintensywności emisji w segmencie energetyki\n\n### -15%\n\nintensywności emisji (NCl) [...] #### Znaczący producent biogazu w Europie Środkowej\n\n+ Rozbudowa portfela biogazowni i biometanowni\n+ Wsparcie budowy lokalnego łańcucha wartości biogazu poprzez zarządzanie centralną bazą surowcową i integrację rozproszonych aktywów\n\n#### Zintegrowany producent odnawialnego wodoru dla przemysłu oraz transportu",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S006",
+        "url": "https://www.orlen.pl/en/about-the-company/media/press-releases/archive/2006/August-2006/Press-Release-Re-Mazeikiu-Nafta",
+        "title": "Press Release Re. Mazeikiu Nafta",
+        "retrieved_at": "2026-10-03T12:27:21.527463Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "### Latest news\n\n PRESS RELEASES 08.09.2026\n\n  ## ORLEN in Your Portfolio: joining the programme has never been easier\n\n  ORLEN shareholders can now join ORLEN in Your Portfolio directly via a form available on the programme website, regardless of the brokerage firm where they hold their account. More than 37,000 retail investors already participate. In 2025, the average total return on ORLEN shares for programme participants exceeded 120%.\n\n  More\n PRESS RELEASES 03.09.2026 [...] ## ORLEN expands LNG and bioLNG use in shipping\n\n  ORLEN and the Port of Gdynia Authority have signed an agreement to explore the use of LNG and bioLNG as marine vessel fuels. The partnership will assess potential market demand for LNG and bioLNG bunkering services, and infrastructure solutions that would increase the availability of alternative marine fuels along the Polish coast.\n\n  More\n PRESS RELEASE 03.09.2026\n\n  ## ORLEN forges new Baltic energy alliance [...] ORLEN has joined forces with 13 energy companies and organisations from Northern and Central Europe to establish the Baltic Energy Initiative. The partners will work together on projects designed to strengthen energy security and competitiveness across the region, covering offshore wind, LNG and bioLNG, hydrogen, carbon capture and storage (CCS), nuclear power and small modular reactors (SMRs).\n\n  More\n\nSee all",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S007",
+        "url": "https://www.orlen.pl/en/about-the-company/media/press-releases/archive/2020/december/pkn-orlen-to-take-over-polska-press",
+        "title": "PKN ORLEN to take over Polska Press | PKN ORLEN",
+        "retrieved_at": "2026-10-03T12:27:21.527463Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "More\n PRESS RELEASES 20.01.2026\n\n  ## ORLEN Announces Gas Discovery in the North Sea\n\n  ORLEN Upstream Norway, in partnership with Equinor, has discovered new natural gas resources on the Norwegian Continental Shelf. The company expects to produce approximately 1 billion cubic meters of gas from the Sissel discovery, which will be transported to Poland via the Baltic Pipe.\n\n  More\n\nSee all [...] More\n PRESS RELEASES 27.01.2026\n\n  ## Hydrogen from Finland for Polish industry – ORLEN signs key agreements [...] ​The ORLEN Group’s presence in the media and advertising market could also optimise logistics costs. In order to maximise the synergies, the Group will consider developing RUCH logistics centres at Polska Press’ modern printing facilities. It is important to note that the ORLEN Group will also have full access to in-house printing resources that can be used for the purposes of large-scale marketing campaigns and other activities.\n\n### More press releases\n\n PRESS RELEASES 26.01.2026",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S008",
+        "url": "https://www.orlen.pl/en/about-the-company/media/press-pack",
+        "title": "Press-pack - Media | ORLEN",
+        "retrieved_at": "2026-10-03T12:27:21.527463Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "ORLEN Administracja\n ORLEN Asfalt\n ORLEN Austria\n ORLEN Aviation\n ORLEN Baltics Retail\n ORLEN Biometan\n ORLEN Budonaft\n ORLEN Capital\n ORLEN Centrum Serwisowe\n ORLEN CUK\n ORLEN Deutschland\n ORLEN Eko\n ORLEN Gazoprojekt\n ORLEN Kolej\n ORLEN Laboratorium\n ORLEN Lietuva\n ORLEN Neptun\n ORLEN Ochrona\n ORLEN OIL\n ORLEN Paliwa\n ORLEN Petrobaltic\n ORLEN Południe\n ORLEN Projekt\n ORLEN Projekt Ceska Republika\n ORLEN Serwis\n ORLEN Trading GmbH\n ORLEN Transport\n ORLEN Unipetrol\n ORLEN Upstream Polska [...] Our vision\n Public Dialogue\n  + Our statements\n  + ORLEN's key policy asks at the EU Forum\n Strategy 2035\n What we do\n Key projects\n  + Wind Farms\n    - Baltic Power\n    - ORLEN Neptun\n  + New Chemistry\n  + SMR\n Code of ethics\n Our support\n  + Sponsorship\n  + ORLEN Group foundations\n    - Fundacja ORLEN\n    - Fundacja Anwil\n    - The ORLEN Unipetrol Foundation\n    - The Energa Foundation\n    - ORLEN Foundation for Pomerania\n    - Ignacy Łukasiewicz ORLEN Foundation [...] Read more\n\n## Sustainability\n\nWe are implementing an energy transformation in Central Europe. We are developing in accordance with the principles of sustainable development, reducing our impact on the climate and the environment.\n\nFind out more Find out more",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S009",
+        "url": "https://www.orlen.pl/en/contact/press-office",
+        "title": "Press Office | ORLEN",
+        "retrieved_at": "2026-10-03T12:27:21.527463Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "ORLEN Administracja\n ORLEN Asfalt\n ORLEN Austria\n ORLEN Aviation\n ORLEN Baltics Retail\n ORLEN Biometan\n ORLEN Budonaft\n ORLEN Capital\n ORLEN Centrum Serwisowe\n ORLEN CUK\n ORLEN Deutschland\n ORLEN Eko\n ORLEN Kolej\n ORLEN Laboratorium\n ORLEN Lietuva\n ORLEN Neptun\n ORLEN Ochrona\n ORLEN OIL\n ORLEN Paliwa\n ORLEN Petrobaltic\n ORLEN Południe\n ORLEN Projekt\n ORLEN Projekt Ceska Republika\n ORLEN Serwis\n ORLEN Trading GmbH\n ORLEN Transport\n ORLEN Unipetrol\n ORLEN Upstream Polska\n ORLEN Upstream Canada [...] Our vision\n Public Dialogue\n  + Our statements\n  + ORLEN's key policy asks at the EU Forum\n Strategy 2035\n What we do\n Key projects\n  + Wind Farms\n    - Baltic Power\n    - ORLEN Neptun\n  + New Chemistry\n  + SMR\n Code of ethics\n Our support\n  + Sponsorship\n  + ORLEN Group foundations\n    - Fundacja ORLEN\n    - Fundacja Anwil\n    - The ORLEN Unipetrol Foundation\n    - The Energa Foundation\n    - ORLEN Foundation for Pomerania\n    - Ignacy Łukasiewicz ORLEN Foundation [...] ORLEN Upstream Norway\n ORLEN VC\n ANWIL\n Baltic Power\n Centrum Edukacji\n Fundacja ANWIL\n Fundacja ORLEN\n Fundacja ORLEN dla Pomorza\n Grupa Energa\n IKS Solino\n myORLEN\n Polska Press\n PPPT\n Re58\n Świnoujście Offshore Terminal\n Technical Ship Management\n Usługi Logistyczne",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S010",
+        "url": "https://www.orlen.pl/en/about-the-company/media/contact",
+        "title": "Media - Contact | ORLEN",
+        "retrieved_at": "2026-10-03T12:27:21.527463Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "Our vision\n Public Dialogue\n  + Our statements\n  + ORLEN's key policy asks at the EU Forum\n Strategy 2035\n What we do\n Key projects\n  + Wind Farms\n    - Baltic Power\n    - ORLEN Neptun\n  + New Chemistry\n  + SMR\n Code of ethics\n Our support\n  + Sponsorship\n  + ORLEN Group foundations\n    - Fundacja ORLEN\n    - Fundacja Anwil\n    - The ORLEN Unipetrol Foundation\n    - The Energa Foundation\n    - ORLEN Foundation for Pomerania\n    - Ignacy Łukasiewicz ORLEN Foundation",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S011",
+        "url": "https://raportroczny.orlen.pl/pliki/Management_Boards_Report_2025.pdf",
+        "title": "Management Board's Report",
+        "retrieved_at": "2026-10-03T12:27:23.557011Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "at the end of the reporting period. As at the end of 2025, the ORLEN Group had 66,563 employees with employment contracts, which was the most representative measure of the workforce size reflected in employee benefits expense in the financial statements (see Note 11.3). For the total number of employees by contract type and region, refer to disclosure ESRS 2. The measurement of these metrics has not been validated by an external body. 6.8.7 Employment conditions [S1-8] [S1-10] [S1-11] [S1-14] [...] Women 0 0 Men 0 0 Total number of employees 0 0 Number of full-time employees (headcount) Women 17,911 18,396 Men 47,978 48,568 Total number of employees 65,889 66,964 Number of part-time employees (headcount) Women 387 460 Men 287 385 Total number of employees 674 845 The data is provided as the headcount of employees with employment contracts at the end of the reporting period. Management Board’s Report on the operations of the ORLEN Group and ORLEN S.A. in 2025 / 214 ORLEN GROUP Business [...] the experience and expectations of our employees. In 2025, they covered 20 Group companies. Feedback gathered through employee satisfaction surveys informs targeted solutions that are implemented to improve the conditions of work and employment, safeguard employee well-being, and streamline organisational processes. • At ORLEN S.A., we operate a dedicated email channel (bezbarier@orlen.pl), which enables people in our own workforce to submit queries, ideas and suggestions related to disability,",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S012",
+        "url": "https://www.reveliolabs.com/companies/orlen/employees",
+        "title": "ORLEN Number of Employees 2026 | Employee Count & Headcount Data | Revelio Labs",
+        "retrieved_at": "2026-10-03T12:27:23.557011Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "ORLEN had 66,363 employees in 2026, a 0.1% increase (+1,252) from 2025.\n ORLEN had 66,169 employees in 2025, a 0.2% increase (+1,247) from 2024.\n ORLEN had 64,922 employees in 2024, a 0% no change (+786) from 2023.\n ORLEN had 64,136 employees in 2023, a 1.9% increase (+2,033) from 2022.\n\nORLEN's total workforce has grown from 63,624 employees in 2023 to 66,363 in 2026.\n\n### ORLEN SA quarterly employee count [...] How fast is ORLEN growing?\n:   In 2026, ORLEN's headcount grew 0.1% to 66,363 employees, up from 65,111 in 2025.\n:   See the full headcount history\n\nWhere are ORLEN employees located?\n:   Most ORLEN employees are based in Eastern Europe (90.5% of headcount), followed by Western Europe and Northern Europe.\n:   Explore where the workforce is based\n\nWhat is the average salary at ORLEN?\n:   The average employee salary at ORLEN is approximately $28.7k per year.\n:   Analyze the salary distribution [...] Yes, ORLENisactivelyhiring. ORLENhad1,241active job postings in 2026, a 113.6% increasefrom 2025—see job openings & hiring trends.\n\n## About ORLEN’s Workforce\n\nORLEN SA (PKN) is an Energy and Resources company that employs 66,363 people worldwide as of March 2026. It is the 3rd-largest by headcount among its peers. Founded in 1999, the company is headquartered in Poland and trades on the Warsaw Stock Exchange.",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S013",
+        "url": "https://raportroczny.orlen.pl/en",
+        "title": "Home Page - ORLEN Report",
+        "retrieved_at": "2026-10-03T12:27:23.557011Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "In 2025, the ORLEN Group delivered strong operational and financial performance, with LIFO EBITDA of PLN 41.5 bn and robust operating cash flows of PLN 47.2 bn. At the same time, it maintained a solid financial position and executed significant capital investments supporting further transformation and growth.\n\n2025\n\n2024\n\nEBITDA LIFO IN 2025\n\nPLN 41.5 bn\n\n2024: PLN 37.5 bn\n\n2025\n\n2024\n\nOperating cashflow in 2025\n\nPLN 47.2 bn\n\n2024: PLN 36.6 bn\n\n2025\n\n2024\n\nRevenues in 2025\n\nPLN 267.8 bn [...] Annual Report 2025\n\nTranslator for:\n\n PL\n\n# ORLEN The Energy of Tomorrow Starts Today\n\nManagement Board’s Report on the operations of the ORLEN Group in 2025\n\n'/%3e%3c/svg%3e)\n\n## CEO Letter\n\nIt was a record-breaking year for the ORLEN Group, marked by the highest capital investments in our history and the highest market capitalization of any company listed on the Warsaw Stock Exchange. These achievements reflect the success of the entire ORLEN Group team.\n\nIreneusz Fąfara",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S014",
+        "url": "https://www.orlen.pl/content/dam/internet/orlen/pl/en/investor-relations/reports-and-publications/financial-results/2025/4q2025/ORLEN_260219_2025kw4-RaportIVQ2025_ENG.pdf.coredownload.pdf",
+        "title": "ORLEN GROUP",
+        "retrieved_at": "2026-10-03T12:27:23.557011Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "Corporate Functions (12) (8) (46) (12) Total (7,952) (3,341) (13,515) (8,752) ORLEN GROUP (PLN million) CONSOLIDATED QUARTERLY REPORT FOR Q4 2025 38 / 72 Net impairment losses on property, plant and equipment, intangible assets, goodwill and rights-of-use assets of the Group, by company: Company/Group 12 MONTHS ENDED 31/12/2025 (unaudited) 3 MONTHS ENDED 31/12/2025 (unaudited) 12 MONTHS ENDED 31/12/2024 (unaudited) 3 MONTHS ENDED 31/12/2024 (unaudited) ORLEN (4,989) (1,710) (5,196) (3,042) [...] 2031+ 2025-12-31 - 6.35% 6.29% 6.50% 6.74% 6.97% 6.00% 2024-12-31 7.43% 7.56% 7.71% 7.80% 7.87% 6.20% - ORLEN GROUP (PLN million) CONSOLIDATED QUARTERLY REPORT FOR Q4 2025 39 / 72 Sensitivity analyses of the value-in-use calculations for the Petrochemicals CGU in ORLEN and the Refinery CGU in ORLEN Lietuva, assuming a ±1 percentage-point change in the discount rate and a ±5% change in EBITDA, showed no effect on the amount of the recognised impairment loss. The Group continues restructuring [...] Officer; • Sławomir Staszak, with effect from 29 September 2025, as Member of the Management Board, Energy & Energy Transition. Both appointments were made for the joint term of office of the Management Board, which will end on the date of the Annual General Meeting approving the Company’s financial statements for 2025. Purchase of shares in ORLEN S.A. ORLEN reported that on 23 September 2025 it received notifications of the purchase of ORLEN S.A. shares by: • Ireneusz Fąfara, President of the",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S015",
+        "url": "https://raportroczny.orlen.pl/en/management-report/our-company/orlen-group",
+        "title": "ORLEN Group - ORLEN Report",
+        "retrieved_at": "2026-10-03T12:27:23.557011Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "As at 31 December 2025, the ORLEN Group consisted of the parent and 179 companies over which the parent had direct or indirect control, as defined in International Financial Reporting Standard 10 (IFRS 10). [...] Annual Report 2025\n\nTranslator for:\n\n PL\n\n0%\n\n Home\n Management Report\n Our Company\n ORLEN Group\n\n# ORLEN Group\n\n## Upstream & Supply\n\n## Downstream\n\n## Energy\n\n## Consumers & Products\n\n## Structure of the ORLEN Group\n\nAs at 31 December 2025, ORLEN S.A. held direct and indirect equity interests in nearly 340 companies. [...] In 2025, an amendment was drafted to the ORLEN Group Cooperation Agreement applicable across the ORLEN Group companies (the so-called “ORLEN Group Constitution”). Its main purpose was to further standardise and strengthen the companies’ operation in line with the interests and common strategy of the ORLEN Group, while also clarifying and reinforcing the principles of cooperation between ORLEN Group companies.\n\n## Management Report",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S016",
+        "url": "https://raportzintegrowany2022.orlen.pl/en/operating-segments/about-the-orlen-group",
+        "title": "About the ORLEN Group - Orlen Raport",
+        "retrieved_at": "2026-10-03T12:27:24.619505Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "| ORLEN S.A.  The Company’s main business activity is the manufacture and processing of refined petroleum products. |\n| ENERGA S.A.  Generation and distribution of electricity and heat in Poland. | [...] The ORLEN Group’s core business consists in electricity generation, distribution and trading, crude oil processing, production of fuels, petrochemicals and chemicals, wholesale and retail sale of the Group’s fuel products, as well as storage, marketing and distribution of gaseous and liquid fuels. The Group operates in the areas of exploration, appraisal, production and import of hydrocarbons. [...] ORLEN Group companies provide a variety of services: crude oil and fuel storage, transport, maintenance and repair, laboratory, security, design, administrative, courier, press distribution, insurance, financial, and media (newspapers and Internet website) services.",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S017",
+        "url": "https://www.investing.com/equities/pkn-orlen-company-profile",
+        "title": "About ORLEN SA (PKN) - Investing.com",
+        "retrieved_at": "2026-10-03T12:27:24.619505Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "Orlen S.A. operates in refining, petrochemical, energy, retail, gas, and upstream business. It engages in the processing and wholesale of refinery products, such as crude oil; production and sale of fuel, oil, chemicals, and petrochemicals, as well as provision of supporting services; production, distribution, and sale of electricity and heat from conventional and renewable energy sources comprising solar photovoltaics, as well as natural gas; trading of electricity; exploration and extraction [...] and extraction of mineral resources; exploration, production, and import of natural gas; and trading and storage of gas and liquid gas. The company is also involved in the exploration, recognition, and extraction of hydrocarbons; fuel station activities; and provision of transportation, maintenance and overhaul, laboratory, security, design, administrative, courier, insurance, and financial services, as well as press distribution, and media activities, such as newspapers and websites. It offers",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S018",
+        "url": "https://raportzintegrowany2022.orlen.pl/en/operating-segments/business-model",
+        "title": "Business model - Orlen Raport",
+        "retrieved_at": "2026-10-03T12:27:24.619505Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "The ORLEN Group’s core business consists in electricity generation, distribution and trading, crude oil processing, production of fuels, petrochemicals and chemicals, wholesale and retail sale of the Group’s fuel products, as well as storage, marketing and distribution of gaseous and liquid fuels. The Group operates in the areas of exploration, appraisal, production and import of hydrocarbons. [...] ORLEN Group companies provide a variety of services: crude oil and fuel storage, transport, maintenance and repair, laboratory, security, design, administrative, courier, press distribution, insurance, financial, and media (newspapers and Internet website) services. [...] Integrated  \nReport\n\nInteractive ESG data\n\n Social responsibility\n Human capital\n\nPL\n\nPL\n\n# Business model\n\n Home page\n Activities of the ORLEN Group\n Business model\n\nCapitals:\n\n Financial\n Manufactured\n Human\n Intellectual\n Social\n\nGRI:\n\n 2-1\n\n  Organisational details\n 2-6\n\n  Activities, value chain and other business relationships\n\nsdgs:\n\n Goal 7\n\n  Affordable and clean energy\n Goal 9\n\n  Industry, innovation and infrastructure\n Goal 11\n\n  Sustainable cities and communities\n Goal 12",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S019",
+        "url": "https://umbrex.com/resources/company-profiles/orlen-sa",
+        "title": "ORLEN Strategy and Business Model",
+        "retrieved_at": "2026-10-03T12:27:24.619505Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "| Key products or services | Transport fuels, natural gas, electricity, heat, petrochemicals, chemical products, fertilizers, convenience retail, EV charging, and upstream oil and gas production. |\n| Geographic footprint | Poland at the core, with major operations across the Czech Republic, Lithuania, Germany, Slovakia, Hungary, Austria, Norway, and international trading and sourcing links. | [...] Petrochemicals and chemicals. ORLEN supplies petrochemical feedstocks and higher-value chemical products, including polymers and industrial chemical inputs, and it also has fertilizer and related chemical exposure through group companies.\n Retail convenience services. At service stations, ORLEN sells foodservice, convenience items, car-wash services, and other ancillary products that can carry better margins than fuel. [...] ## 4. What Products and/or Services Does ORLEN Sell?\n\nORLEN sells a broad portfolio of energy, fuel, petrochemical, and retail products. The most important categories are:",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S020",
+        "url": "https://www.globaldata.com/company-profile/polski-koncern-naftowy-orlen-sa",
+        "title": "Polski Koncern Naftowy Orlen SA Company Profile - Polski Koncern Naftowy Orlen SA Overview - GlobalData",
+        "retrieved_at": "2026-10-03T12:27:24.619505Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "Orlen SA (Orlen), formerly Polski Koncern Naftowy ORLEN, is an integrated multi-utility corporation that operates primarily in the energy and fuel sectors. The company's main activities include upstream and downstream operations in the oil and gas industry, power generation, and distribution. Orlen's advanced products, which are sold globally, include a range of energy and fuel supplies. Its product portfolio includes medium distillates, light distillates, heavy fractions, monomers, polymers, [...] | Products | Services | Brands |\n --- \n| Fuels: | Electricity Distribution and Trading | Star |\n| Automotive Fuels | E-Mobility | Stop. Cafe |\n| Marine Fuels | Heat trading and Distribution | Verva |\n| XYZ | XYZ | XYZ |\n| XYZ | XYZ | XYZ |\n| XYZ | XYZ | XYZ |\n\nUnderstand Orlen SA portfolio and identify potential areas for collaboration\n\nUnderstand Orlen SA portfolio and identify potential areas for collaboration\nLearn more\n\n## History [...] Access detailed information on all line and substation projects and T&D infrastructure with Orlen SA.\n\n## 7\n\n#### Downstream\n\nView detailed information on global active, upcoming , decommissioned, and cancelled crude oil refineries, heavy oil upgraders and condensate splitters.\n\n## 1\n\n#### Energy Storage Projects\n\nUnderstand the energy storage landscape for Orlen SA, drawing on intelligence spanning electrochemical, electromechanical, thermal and hydrogen storage.\n\n## Products and Services",
+      "fetch_mode": "tavily"
+    }
+  ],
+  "diagnostics": {
+    "model": "openai-codex:gpt-6-luna",
+    "status": "completed",
+    "stop_reason": "Page read failed (Error); Research dynamic budget exhausted; Static page read failed (CertificateVerifyError)",
+    "model_requests": 4,
+    "searches": 4,
+    "page_reads": 7,
+    "dynamic_reads": 2,
+    "output_retries": 1,
+    "input_tokens": 36096,
+    "output_tokens": 2540,
+    "duration_seconds": 68.01006879098713,
+    "cost_usd": null
+  },
+  "generated_at": "2026-10-03T12:28:17.926635Z"
+}

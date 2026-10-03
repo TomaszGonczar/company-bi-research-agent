@@ -1,0 +1,616 @@
+{
+  "identity": {
+    "nip": "5831014898",
+    "legal_name": {
+      "state": "supported",
+      "value": "LPP SPÓŁKA AKCYJNA",
+      "evidence": [
+        {
+          "source_id": "mf-vat-5831014898-20261003T122547685494Z",
+          "excerpt": "\"LPP SPÓŁKA AKCYJNA\""
+        }
+      ],
+      "reason": null
+    },
+    "krs": {
+      "state": "supported",
+      "value": "0000000778",
+      "evidence": [
+        {
+          "source_id": "mf-vat-5831014898-20261003T122547685494Z",
+          "excerpt": "\"0000000778\""
+        }
+      ],
+      "reason": null
+    },
+    "regon": {
+      "state": "supported",
+      "value": "190852164",
+      "evidence": [
+        {
+          "source_id": "mf-vat-5831014898-20261003T122547685494Z",
+          "excerpt": "\"190852164\""
+        }
+      ],
+      "reason": null
+    },
+    "registered_city": {
+      "state": "unknown",
+      "value": null,
+      "evidence": [],
+      "reason": "Registry provides no separate city field; no city inferred from address"
+    },
+    "registered_address": {
+      "state": "supported",
+      "value": "ŁĄKOWA 39/44, 80-769 GDAŃSK",
+      "evidence": [
+        {
+          "source_id": "mf-vat-5831014898-20261003T122547685494Z",
+          "excerpt": "\"ŁĄKOWA 39/44, 80-769 GDAŃSK\""
+        }
+      ],
+      "reason": null
+    },
+    "website": {
+      "state": "unknown",
+      "value": null,
+      "evidence": [],
+      "reason": "This registry supplies no website; no website verification performed"
+    },
+    "resolved_at": "2026-10-03T12:25:47.686112Z"
+  },
+  "draft": {
+    "business_description": {
+      "state": "supported",
+      "value": "Polish fashion company that designs and sells clothing collections and accessories through five brands, using physical stores and online channels.",
+      "evidence": [
+        {
+          "source_id": "S006",
+          "excerpt": "For 30 years, it has been successfully designing and selling the collections and accessories in Poland and abroad."
+        },
+        {
+          "source_id": "S007",
+          "excerpt": "LPP manages the Reserved, Cropp, House, Mohito and Sinsay brands."
+        }
+      ],
+      "reason": null
+    },
+    "products_services": {
+      "state": "supported",
+      "value": [
+        "Clothing collections and accessories",
+        "Fashion retail through Reserved, Cropp, House, Mohito and Sinsay",
+        "Online sales and omnichannel retail",
+        "Sinsay marketplace platform"
+      ],
+      "evidence": [
+        {
+          "source_id": "S007",
+          "excerpt": "LPP manages the Reserved, Cropp, House, Mohito and Sinsay brands."
+        },
+        {
+          "source_id": "S007",
+          "excerpt": "brand has expanded its online range by introducing a marketplace model"
+        },
+        {
+          "source_id": "S006",
+          "excerpt": "designing and selling the collections and accessories"
+        }
+      ],
+      "reason": null
+    },
+    "industries": {
+      "state": "supported",
+      "value": [
+        "Apparel and fashion",
+        "Retail and e-commerce"
+      ],
+      "evidence": [
+        {
+          "source_id": "S007",
+          "excerpt": "leading players in the European fashion industry"
+        },
+        {
+          "source_id": "S016",
+          "excerpt": "E-commerce boosted revenue by 16.4% year-on-year."
+        }
+      ],
+      "reason": null
+    },
+    "markets": {
+      "state": "supported",
+      "value": [
+        "47 worldwide markets, serving customers through stores and online across three continents"
+      ],
+      "evidence": [
+        {
+          "source_id": "S007",
+          "excerpt": "Today, the Group operates across 47 markets worldwide, both in stores and online"
+        },
+        {
+          "source_id": "S007",
+          "excerpt": "distributing its products across three continents"
+        }
+      ],
+      "reason": null
+    },
+    "employees": {
+      "state": "supported",
+      "value": {
+        "kind": "range",
+        "minimum": 60000,
+        "maximum": 69999
+      },
+      "evidence": [
+        {
+          "source_id": "S007",
+          "excerpt": "employing nearly 63,000 people in offices and retail operations in Poland and elsewhere in Europe, Asia and Africa."
+        }
+      ],
+      "reason": "The nearly 63,000 figure is Group-wide; a separate employee count for LPP S.A. was not established.",
+      "as_of": "2026-09-07"
+    },
+    "financials": [
+      {
+        "state": "unknown",
+        "value": null,
+        "evidence": [],
+        "reason": "The official 2025 results release reports Group revenue exceeding PLN 23bn, but retrieved HTML does not specify fiscal-period start and end dates. The annual report's financial tables were available as a linked PDF/ZIP, not retrieved as eligible HTML/text, so a fully specified amount and period cannot be reported.",
+        "metric": "revenue",
+        "period": null,
+        "currency": null,
+        "unit": null,
+        "scope": null,
+        "group_name": null
+      },
+      {
+        "state": "unknown",
+        "value": null,
+        "evidence": [],
+        "reason": "The official 2025 results release reports Group net profit of PLN 2.4bn, but retrieved HTML does not specify fiscal-period start and end dates. The annual report financial tables were not retrieved as eligible HTML/text; no separate-entity total net result was established.",
+        "metric": "net_result",
+        "period": null,
+        "currency": null,
+        "unit": null,
+        "scope": null,
+        "group_name": null
+      }
+    ],
+    "recent_developments": [
+      {
+        "state": "supported",
+        "value": {
+          "title": "LPP Group reaches 4,000 stores",
+          "summary": "LPP reported passing the 4,000-store milestone and operating in 47 markets, with Central Asia identified as a key growth area and Sinsay as the main expansion driver.",
+          "published_on": "2026-09-07",
+          "occurred_on": null
+        },
+        "evidence": [
+          {
+            "source_id": "S007",
+            "excerpt": "LPP has crossed the landmark threshold of 4,000 stores"
+          },
+          {
+            "source_id": "S007",
+            "excerpt": "Central Asia plays a particularly important role in the Group’s current growth strategy."
+          }
+        ],
+        "reason": null
+      },
+      {
+        "state": "supported",
+        "value": {
+          "title": "Second-quarter 2026 sales growth accelerates",
+          "summary": "Group revenue rose 18% year-on-year to PLN 6.6bn; the release also reported net profit of PLN 768m. A Romanian distribution centre launched in July restored full logistics capacity in the region.",
+          "published_on": "2026-09-17",
+          "occurred_on": "2026-07-01"
+        },
+        "evidence": [
+          {
+            "source_id": "S016",
+            "excerpt": "The LPP Group’s revenue in the second quarter of 2026 increased by 18% year-on-year in constant currencies, reaching PLN 6.6bn."
+          },
+          {
+            "source_id": "S016",
+            "excerpt": "net profit by 48% year-on-year to PLN 768m."
+          },
+          {
+            "source_id": "S016",
+            "excerpt": "In July this year, the Group launched a new distribution centre in that country, restoring full logistical capacity in the region."
+          }
+        ],
+        "reason": null
+      },
+      {
+        "state": "supported",
+        "value": {
+          "title": "LPP reports 2025 Group results",
+          "summary": "The company reported Group revenue above PLN 23bn and net profit of PLN 2.4bn for 2025, with store expansion and logistics and technology investment supporting growth.",
+          "published_on": "2026-03-26",
+          "occurred_on": null
+        },
+        "evidence": [
+          {
+            "source_id": "S001",
+            "excerpt": "in 2025, the LPP Group’s revenue exceeded PLN 23 bn"
+          },
+          {
+            "source_id": "S001",
+            "excerpt": "net profit stood at PLN 2.4 bn"
+          }
+        ],
+        "reason": null
+      }
+    ],
+    "limitations": [
+      "Employee figure reflects the Group, not solely the identified legal entity.",
+      "Financial amounts in the retrieved release are Group-level; financial results remain unknown in structured fields because explicit fiscal start/end dates and eligible statement-table text were unavailable.",
+      "Unsupported non-page document content"
+    ]
+  },
+  "sources": [
+    {
+      "source": {
+        "source_id": "mf-vat-5831014898-20261003T122547685494Z",
+        "url": "https://wl-api.mf.gov.pl/api/search/nip/5831014898?date=2026-10-03",
+        "title": "Ministerstwo Finansów — Wykaz podatników VAT",
+        "retrieved_at": "2026-10-03T12:25:47.685494Z",
+        "published_on": null
+      },
+      "kind": "registry",
+      "content": "MF VAT register identity material (not a raw registry response):\nlegal_name: LPP SPÓŁKA AKCYJNA\nlegal_name evidence from mf-vat-5831014898-20261003T122547685494Z: \"LPP SPÓŁKA AKCYJNA\"\nkrs: 0000000778\nkrs evidence from mf-vat-5831014898-20261003T122547685494Z: \"0000000778\"\nregon: 190852164\nregon evidence from mf-vat-5831014898-20261003T122547685494Z: \"190852164\"\nregistered_city: unknown; Registry provides no separate city field; no city inferred from address\nregistered_address: ŁĄKOWA 39/44, 80-769 GDAŃSK\nregistered_address evidence from mf-vat-5831014898-20261003T122547685494Z: \"ŁĄKOWA 39/44, 80-769 GDAŃSK\"\nwebsite: unknown; This registry supplies no website; no website verification performed\nNIP: 5831014898",
+      "fetch_mode": "registry"
+    },
+    {
+      "source": {
+        "source_id": "S001",
+        "url": "https://www.lpp.com/en/press-releases/lpp-has-delivered-on-its-2025-plan-record-profits-at-every-level-and-investments-in-technology-and-logistics-as-the-foundations-for-the-groups-further-growth",
+        "title": "LPP has delivered on its 2025 plan – record profits at every level and investments in technology and logistics as the foundations for the Group’s further growth - The official website of LPP SA",
+        "retrieved_at": "2026-10-03T12:25:55.173316Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "The LPP Group closed 2025 with a very strong financial performance, combining dynamic revenue growth to PLN 23 bn (21% YoY in constant currencies) with improved profitability.\n Positive growth was evident at all profit levels: EBITDA rose by 31% YoY, EBIT by 37% YoY, whilst net profit for the year increased by 36%. [...] total retail space increased by 25% YoY. The effectiveness of the chosen direction is confirmed by very strong financial results – in 2025, the LPP Group’s revenue exceeded PLN 23 bn (i.e. a 21% YoY increase in constant currencies and 19% on a reported basis). Parallel double-digit sales growth in the online channel (19% YoY) and offline channel (22% YoY) demonstrates the effectiveness of the Group’s omnichannel model. [...] The Group’s priority of maintaining profitability has translated into improved results across all key metrics – in 2025 EBITDA rose by 31% year-on-year to PLN 5.4 bn, operating profit increased by 37% year-on-year to PLN 3.3 bn, and net profit stood at PLN 2.4 bn, representing a 36% year-on-year increase. The positive trend was consistently evident in every quarter and resulted from further scaling of operations, cost discipline and the maintenance of stable margin levels – including an annual",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S002",
+        "url": "https://www.lpp.com/en/investor-relations/calendar",
+        "title": "Calendar - The official website of LPP SA",
+        "retrieved_at": "2026-10-03T12:25:55.173316Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "23.01.2026\n\n#### THE EXTRAORDINARY GENERAL MEETING OF SHERHOLDERS OF LPP SA, AT 10.00 AM, UL. ŁĄKOWA 39/44, GDANSK\n\n### March\n\n26.03.2026\n\n#### PUBLICATION OF CONSOLIDATED AND SEPARATE ANNUAL REPORT OF 2025\n\n26.03.2026\n\n#### ANALYSTS & INVESTORS CONFERENCE ON 2025 FINANCIAL RESULTS OF LPP SA CAPITAL GROUP\n\n### April\n\n23.04.2026\n\n#### DETERMINATION OF THE RIGHT TO DIVIDEND IN THE AMOUNT OF PLN 400.00 PER SHARE\n\n30.04.2026 [...] ### July\n\n11.07.2025\n\n#### THE ORDINARY GENERAL MEETING OF SHERHOLDERS OF LPP SA, AT 10.00 AM, UL. ŁĄKOWA 39/44, GDANSK\n\n### September\n\n25.09.2025\n\n#### ANALYSTS & INVESTORS CONFERENCE ON 1H 2025 FINANCIAL RESULTS OF LPP SA CAPITAL GROUP\n\n25.09.2025\n\n#### PUBLICATION OF THE CONSOLIDATED REPORT FOR 1H 2025\n\n### October\n\n11.10.2025\n\n#### DETERMINATION OF THE RIGHT TO 2ND DIVIDEND TRANCHE IN THE AMOUNT OF PLN 330.00 PER SHARE\n\n31.10.2025",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S003",
+        "url": "https://www.lpp.com/wp-content/uploads/2025/09/Consolidated-interim-financial-report-for-1H-2025.pdf",
+        "title": "LPP GROUP Consolidated condensed Interim Report for 1H ...",
+        "retrieved_at": "2026-10-03T12:25:55.173316Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "The geographical areas indicated below com-prise individual countries where revenue and other results were generated for the LPP SA Group. The breakdown of countries is as follows: 01.02.2025 – 31.07 .2025 (PLN m) Poland Western Europe Central and Eastern Europe Southern and Eastern Europe Countries of the Baltic Sea region Trade agents Other Total Revenues 4,657 718 1,311 2,389 420 0 1,013 10,508 Operating profit (loss) 631 44 114 195 33 0 136 1,153 Profit before tax 953 Income tax 154 Net [...] LPP SA is a company involved in the design and distribution of clothing in Poland, the European countries and in the Mid-dle East. The basic products of the Company are designated with the following trademarks: Sinsay, Reserved, Cropp, House and Mohito.\nThese separate condensed interim financial statements of the Company for the 6-month period ended 31 July 2025 were approved by the Management Board of for publication on 24 September 2025. [...] H 2 0 2 5 1 1 SALES REVENUES In 1H 2025, the LPP Group generated revenu-es of PLN 10.5 billion, i.e. 12.9% higher YoY. At the same time, on a comparable basis (data for 2024 cleared of the impact of transactions with purchasing agents), revenue generated by the Group was 19.3% higher YoY and 21.3% higher in constant currency.",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S004",
+        "url": "https://www.lpp.com/en/investor-relations/reports/financial-reports",
+        "title": "Financial reports - The official website of LPP SA",
+        "retrieved_at": "2026-10-03T12:25:55.173316Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "Separate and consolidated report for 2025: March 26, 2026\n Sustainability report for 2025: March 26, 2026\n Consolidated report for the first half of 2026: September 17, 2026\n Consolidated Quarterly Reports:  \n   Extended consolidated report for 1Q 2026: June 11, 2026  \n   Extended consolidated report for 3Q 2026: December 03, 2026\n\nIcon\n\n### Consolidated Interim Report for 1Q 2026\n\n pdf Consolidated Interim Report for 1Q 2026\n\nIcon\n\n### Consolidated annual report of LPP SA Group for 2025 [...] pdf Consolidated annual report of LPP SA Group for 2025\n zip LPP\\_SA\\_2025\\_BSSF\\_MSSF\\_SzB\\_EN\n\nIcon\n\n### Consolidated Interim Report for Q3 2025\n\n pdf Consolidated Interim Report for Q3 2025\n\nIcon\n\n### Consolidated interim financial report for 1H 2025\n\n pdf Consolidated interim financial report for 1H 2025\n pdf Report on Review of the Condensed Half-year Interim Consolidated Financial Statements\n\nIcon\n\n### Consolidated Interim Report for Q1 2025\n\n pdf Consolidated Interim Report for Q1 2025",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S005",
+        "url": "https://www.lpp.com/wp-content/uploads/2026/06/GK_LPP-Consolidated-interim-report-for-1Q26.pdf",
+        "title": "[PDF] LPP GROUP CONSOLIDATED CONDENSED INTERIM REPORT ...",
+        "retrieved_at": "2026-10-03T12:25:55.173316Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "GDAŃSK, 11 JUNE 2026 3 5 C O N S O L I D AT E D C O N D E N S E D I N T E R I M R E P O R T F O R 1 Q 2 0 2 6 3 5 PLN m EUR m Cumulatively Selected separate financial data 01.02.2026 – 30.04.2026 01.02.2025 – 30.04.2025 01.02.2026 – 30.04.2026 01.02.2025 – 30.04.2025 Revenues 4,502 4,206 1,058 1,000 Operating profit (loss) 652 480 153 114 Profit (loss) 718 529 169 126 Net profit (loss) 553 433 130 103 Weighted average number of shares 1,856,471 1,855,190 1,856,471 1,855,190 Profit (loss) per [...] translation on foreign operations 0 0 0 12 0 12 0 12 Total comprehensive income 0 0 0 12 334 346 -2 344 As at 30 April 2025 4 364 2,980 -54 2,351 5,645 1 5,646 C O N S O L I D AT E D C O N D E N S E D I N T E R I M R E P O R T F O R 1 Q 2 0 2 6 2 4 2 4 03 Notes to the interim consolidated financial statements Basis for the preparation of the consolidated condensed interim financial statements and information on changes to the accounting poli-cies and notes 2 5 C O N S O L I D AT E D C O N D E N [...] GDAŃSK, 11 JUNE 2026 1 9 C O N S O L I D AT E D C O N D E N S E D I N T E R I M R E P O R T F O R 1 Q 2 0 2 6 1 9 PLN m EUR m Cumulatively Selected consolidated financial data 01.02.2026 – 30.04.2026 01.02.2025 – 30.04.2025 01.02.2026 – 30.04.2026 01.02.2025 – 30.04.2025 Revenues 5,472 4,954 1,285 1,178 Operating profit (loss) 688 464 162 110 Profit (loss) 636 439 149 104 Net profit (loss) attributable to share-holders of the parent company 475 334 112 79 Weighted average number of shares",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S006",
+        "url": "https://www.lpp.com/en/press-releases/fifth-consecutive-quarter-of-year-on-year-profitability-improvement-lpp-summarises-q1-2026",
+        "title": "Fifth consecutive quarter of year-on-year profitability improvement. LPP summarises Q1 2026 - The official website of LPP SA",
+        "retrieved_at": "2026-10-03T12:25:58.024109Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "LPP is a Polish family business and one of the fastest growing clothing companies in the region of Central Europe. For 30 years, it has been successfully designing and selling the collections and accessories in Poland and abroad. LPP manages five fashion brands: Reserved, Cropp, House, Mohito, and Sinsay, whose offer is available today in stationary and online stores in 47 markets worldwide. The company has a chain of over 3,800 stores with the total area of over 3 million m2 and distributes [...] In the first quarter, LPP opened 121 new stores, including 102 Sinsay stores. The Group’s retail space has already exceeded 3 million m², and Sinsay remains a key brand in its development plans. At the same time, the company is adjusting the pace of new openings to current market and operational conditions, placing greater emphasis on the long-term quality of expansion and the profitability potential of new locations. [...] Since the beginning of May, the company has observed a marked upturn in sales, recording high, positive growth rates of up to +20% on an omnichannel basis. The positive trend is expected to be sustained by further strengthening of the Sinsay brand under the smart value formula, based on an attractive price-quality ratio, better alignment of the collection with seasonality and customer needs, and more frequent reordering of top-selling products. The changes will cover the brick-and-mortar",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S007",
+        "url": "https://www.lpp.com/en/press-releases/lpps-retail-network-reaches-4000-stores-another-milestone-for-this-gdansk-based-company",
+        "title": "LPP’s retail network reaches 4,000 stores. Another milestone for this Gdańsk-based company - The official website of LPP SA",
+        "retrieved_at": "2026-10-03T12:25:58.024109Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "In the first half of 2026 alone, LPP opened 351 new stores, 314 of which were Sinsay locations. At the same time, the Group’s retail space exceeded 3.2 million sq m, while also recording a year-on-year improvement in profitability for the sixth consecutive quarter. In recent weeks, the Group has opened nearly 30 new stores in Azerbaijan, Bosnia and Herzegovina, Bulgaria, Greece, Kazakhstan, Lithuania, Poland, Romania, Ukraine and Uzbekistan. These openings reflect the Group’s consistent focus [...] In July 2026, Sinsay celebrated the opening of its 2,500th store in Tashkent. Within just a few months, the brand added hundreds of new locations to its network, establishing itself as one of the fastest-growing retail formats in the European fashion industry. Today, Sinsay accounts for the majority of the Group’s new store openings and plays a key role in implementing LPP’s long-term growth plans.",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S008",
+        "url": "https://www.lpp.com/en",
+        "title": "The official website of LPP SA - Polish clothing company",
+        "retrieved_at": "2026-10-03T12:25:58.024109Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "SAVE THE DATE: LPP’s conference, 2Q2026 results, 17th September, 18.00 CEST Icon\n\nLPP’s retail network reaches 4,000 stores. Another milestone for this Gdańsk-based company\n\n07.09.2026 Business\n\nLPP’s retail network reaches 4,000 stores. Another milestone for this Gdańsk-based company Icon\n\nLPP Group launches the Sinsay marketplace\n\n02.09.2026 Business\n\nLPP Group launches the Sinsay marketplace Icon\n\nWhere fashion meets culture – LPP backs the arts across the Tri-City [...] LPP Logistics is launching a new distribution centre in Romania. The facility will support the LPP Group’s expansion in South-Eastern Europe Icon\n\nLPP expands its use of AI in marketing through a partnership with Polish start-up pirxe\n\n22.07.2026 Business\n\nLPP expands its use of AI in marketing through a partnership with Polish start-up pirxe Icon\n\nSee allIcon\n\nWORK WITH US\n\n## Career in LPP\n\nWe are full of energy and pursue spectacular goals. Want to be part of something special? Join us! [...] 13.08.2026 ESG Activities\n\nWhere fashion meets culture – LPP backs the arts across the Tri-City Icon\n\nLPP expands its partnership with Wtórpol and launches a new model of clothing collection\n\n03.08.2026 ESG Activities\n\nLPP expands its partnership with Wtórpol and launches a new model of clothing collection Icon\n\nLPP Logistics is launching a new distribution centre in Romania. The facility will support the LPP Group’s expansion in South-Eastern Europe\n\n28.07.2026 Business",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S009",
+        "url": "https://www.lpp.com/en/press-releases/sinsay-debuts-in-moldova-lpp-group-achieves-record-expansion",
+        "title": "Sinsay debuts in Moldova LPP Group achieves record expansion, entering five new markets in just 11 months - The official website of LPP SA",
+        "retrieved_at": "2026-10-03T12:25:58.024109Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "The opening of the first two stores marks just the beginning of Sinsay’s presence in the Moldovan market. The brand is focused on developing a strong nationwide footprint, from Briceni in the north to Cahul in the south. In 2026, the company plans to launch more than 10 new stores, including in Chișinău, the capital and principal retail centre of the country, further reinforcing its market position and generating new employment opportunities in the region. Each store will deliver a modern",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S010",
+        "url": "https://www.lpp.com/en/for-the-media/press-releases",
+        "title": "Press releases - The official website of LPP SA",
+        "retrieved_at": "2026-10-03T12:25:58.024109Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "Read moreIcon\n\nLPP Group launches the Sinsay marketplace\n\n### LPP Group launches the Sinsay marketplace\n\nBusiness 02.09.2026\n\nSinsay, a brand owned by the LPP Group, is launching a marketplace and, for the first time, opening its...\n\nRead moreIcon\n\nWhere fashion meets culture – LPP backs the arts across the Tri-City\n\n### Where fashion meets culture – LPP backs the arts across the Tri-City\n\nESG Activities 13.08.2026 [...] # Press releases\n\nWe are constantly looking for new challenges, debuting on new markets, surprising with new campaigns, and showing active involvement in operations for the benefit of our immediate surroundings and the environment. We write about this and many other interesting facts from the life of LPP in our press releases\n\nA marked acceleration in LPP’s revenue growth. Both sales channels recorded double-digit growth in the second quarter of 2026. [...] Dear Sir or Madame, LPP, the leading CEE fashion company, has the pleasure to invite you to participate in...\n\nRead moreIcon\n\nLPP’s retail network reaches 4,000 stores. Another milestone for this Gdańsk-based company\n\n### LPP’s retail network reaches 4,000 stores. Another milestone for this Gdańsk-based company\n\nBusiness 07.09.2026\n\nLPP has crossed the landmark threshold of 4,000 stores, confirming its position among the leading players in the European...\n\nRead moreIcon",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S011",
+        "url": "https://wikirate-production-storage.fra1.cdn.digitaloceanspaces.com/files/25476098/55270566.pdf",
+        "title": "CONSOLIDATED ANNUAL REPORT FOR 2025",
+        "retrieved_at": "2026-10-03T12:25:59.349159Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "15,007 40.1% 12,822 37 .9% Employees over 50 years of age 1,026 2.7% 798 2.4% Total 37,445 100% 33,828 100% HEALTH AND SAFETY METRICS S1-14, MDR-M In accordance with Polish law, all persons constituting the own workforce of Polish LPP com-panies are covered by the health and safety management system. LPP SA subsidiaries apply health and safety management practices which, due to the specific nature of the country, may differ in their approach to covering employees and non-employees with these [...] TABLE 17. Employees and non-employees who form part of the LPP Group’ s workforce 2025 2024 Our own workforce Number of people Employees 37 ,445 33,828 Non-employees 25,326 20,551 Total 62,771 54,379 L P P G R O U P C O N S O L I D AT E D A N N U A L R E P O R T F O R 2 0 2 5 1 3 5 1 . L E T T E R O F C E O 2 . R E P O R T O F M A N A G E M E N T B O A R D 3 . C O N S O L I D AT E D F I N A N C I A L S TAT E M E N T S 4 . S TAT E M E N T S O F M A N A G E M E N T B O A R D 5 . S TAT E M E N T O [...] In 2025, systematic training of employees on the principles of the Code of Conduct was also continued. The training was attended by 335 people – buyers of all LPP brands and em-ployees of the Central Purchasing Department. The targets of the training are to sensitise employees to the working con-ditions in the factories they visit and to draw additional at-tention to the ethical business practices of the suppliers they work with. The internal training platform also offers a course on \"Ethics in",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S012",
+        "url": "https://en.wikipedia.org/wiki/LPP_(company)",
+        "title": "LPP (company) - Wikipedia",
+        "retrieved_at": "2026-10-03T12:25:59.349159Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "| Operating income | $610 million (2025) |\n| Net income | $510 million (2025) |\n| Number of employees | 30,000 |\n| Subsidiaries | Reserved House \"House (brand)\") Cropp \"Cropp (brand)\") Mohito Sinsay |\n| Website | www.lpp.com | [...] 1. ↑ \"Prezentacja wyników za 202\" (PDF). lpp.com. Retrieved 3 April 2025.\n2. ↑ \"About Us\". LPP. About Us. Retrieved 9 April 2025.\n3. ↑ \"Ludzie\". Oficjalna strona LPP SA (in Polish). 2023-05-21. Retrieved 2023-12-03.\n4. ↑ \"LPP Raport Zintegrowany 2020 – Online – PL (lppsa.com) (str. 10)\" (PDF). www.lppsa.com.\n5. 1 2 \"LPP to polska firma odzieżowa\". 17 March 2023.\n6. 1 2 3 4 5 \"Annual Report - The official website of LPP SA\". www.lpp.com. Retrieved 2022-12-08. [...] 47. ↑ Jakubowska, Alicja (2025-04-03). \"LPP to double its revenue by 2027. The driving force behind the Group's development will be the Sinsay brand\". The official website of LPP SA. Retrieved 2025-04-09.\n48. ↑ \"Poland's LPP bets on rapid Sinsay expansion to boost sales\". Reuters. Archived from the original on 2025-04-04. Retrieved 2025-04-09.\n49. ↑ \"LPP zawiesza działalność w Rosji. Ma tu prawie 500 sklepów i centrum dystrybucyjne\" (in Polish). 4 March 2022. Retrieved 10 April 2022.",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S004",
+        "url": "https://www.lpp.com/en/investor-relations/reports/financial-reports",
+        "title": "Financial reports - The official website of LPP SA",
+        "retrieved_at": "2026-10-03T12:25:59.349159Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "Separate and consolidated report for 2025: March 26, 2026\n Sustainability report for 2025: March 26, 2026\n Consolidated report for the first half of 2026: September 17, 2026\n Consolidated Quarterly Reports:  \n   Extended consolidated report for 1Q 2026: June 11, 2026  \n   Extended consolidated report for 3Q 2026: December 03, 2026\n\nIcon\n\n### Consolidated Interim Report for 1Q 2026\n\n pdf Consolidated Interim Report for 1Q 2026\n\nIcon\n\n### Consolidated annual report of LPP SA Group for 2025 [...] pdf Consolidated annual report of LPP SA Group for 2025\n zip LPP\\_SA\\_2025\\_BSSF\\_MSSF\\_SzB\\_EN\n\nIcon\n\n### Consolidated Interim Report for Q3 2025\n\n pdf Consolidated Interim Report for Q3 2025\n\nIcon\n\n### Consolidated interim financial report for 1H 2025\n\n pdf Consolidated interim financial report for 1H 2025\n pdf Report on Review of the Condensed Half-year Interim Consolidated Financial Statements\n\nIcon\n\n### Consolidated Interim Report for Q1 2025\n\n pdf Consolidated Interim Report for Q1 2025",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S013",
+        "url": "https://www.lpp.com/en/reports/consolidated-annual-report-of-lpp-sa-group-for-2025",
+        "title": "Consolidated annual report of LPP SA Group for 2025 - The official website of LPP SA",
+        "retrieved_at": "2026-10-03T12:25:59.349159Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "The official website of LPP SA logo\n\n EN\n  + PL\n\nAccessibility Menu Icon \n\nText size:\n\nContrast:\n\nLikes Icon\n\nLikes IconLiked offers (0)\n\n Home Page\n Investor Relations\n 2026\n Consolidated annual report of LPP SA Group for 2025\n\n# Consolidated annual report of LPP SA Group for 2025\n\nPublication date: 25.03.2026\n\n#### Files to download\n\n pdf Consolidated annual report of LPP SA Group for 2025\n zip LPP\\_SA\\_2025\\_BSSF\\_MSSF\\_SzB\\_EN\n\nShare:",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S014",
+        "url": "https://www.investing.com/equities/lpp-earnings",
+        "title": "LPP SA (LPPP) Earnings Date & Report - Investing.com",
+        "retrieved_at": "2026-10-03T12:25:59.349159Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "|  | 10/2025 | -8.61 | /300.09 | 6.14B | /6.11B | -102.87% | +0.49% | Free Sign Up |\n|  | 07/2025 | 251.63 | /176.04 | 5.55B | /5.48B | +42.94% | +1.28% | Free Sign Up |\n|  | 04/2025 | 180.04 | /166.56 | 4.95B | /4.94B | +8.09% | +0.2% | Free Sign Up |\n|  | 01/2025 | 245.38 | /229.46 | 5.67B | /5.79B | +6.94% | -2.07% | Free Sign Up |\n|  | 10/2024 | 310.90 | /289.22 | 5.21B | /5.20B | +7.5% | +0.19% | Free Sign Up | [...] | Release Date | Period End | EPS | /Forecast | Revenue | /Forecast | EPS Surprise % | Revenue Surprise % | Reaction |\n ---  ---  ---  --- \n|  | 10/2026  /460.52  /6.86B  -- | Free Sign Up |\n|  | 07/2026 | 472.67 | /389.56 | 6.58B | /6.53B | +21.33% | +0.77% | Free Sign Up |\n|  | 04/2026 | 298.00 | /254.91 | 5.47B | /5.62B | +16.9% | -2.67% | Free Sign Up |\n|  | 01/2026 | 407.87 | /328.06 | 6.46B | /6.42B | +24.33% | +0.62% | Free Sign Up | [...] | Name | Last | Chg. % | Vol. |  |\n ---  --- \n| ARM | 316.94 | +8.41% | 2.69M |  |\n| RKLB | 75.590 | +7.28% | 13.89M |  |\n| HPE | 69.25 | +7.23% | 8.92M |  |\n| TER | 444.14 | +6.82% | 1.20M |  |\n| MPWR | 1,447.56 | +6.36% | 207.73K |  |\n| NBIS | 245.84 | +5.84% | 6.55M |  |\n| SPCX | 157.07 | +6.08% | 48.36M |  |",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S015",
+        "url": "https://www.lpp.com/en/investors/results-and-reports",
+        "title": "Page not found – The official website of LPP SA",
+        "retrieved_at": "2026-10-03T12:26:01.051494Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "Page not found – The official website of LPP SA. We use cookies and similar technologies to ensure comfortable use of our website. By agreeing to all cookies, you will allow us to optimise the content displayed to you related to our company’s activities and the promotion of our brands. Improving services and presenting relevant content when you browse our website is in line with your choice. You can change cookie settings or accept them all. ### Necessary cookies. Necessary cookies are used for the proper functioning of the website and allow you to conveniently view content related to the company’s activities.Cookies are responsible for the actions you take to, inter alia, adjust your privacy preferences. Thanks to cookies, the website you use can operate smoothly. ### Functional and personalisation cookies. This type of cookies allows the website to save your settings and to personalise certain functionalities or the content presented. Thanks to these cookies, we can provide you with a greater comfort of using the functionalities of our website by adjusting it to your individual preferences. By agreeing to the functional and personalisation cookies, you guarantee the availability of more features on the website. ### Analytical cookies. Analytical cookies help us develop and adapt to your needs. Analytical cookies allow us to obtain information regarding the use of the website, where and how often you visit our site. By giving your consent to analytical cookies, you guarantee the availability of all functionalities. ### Promotional cookies. Thanks to promotional cookies, we present you content about our company’s activities, business relationships and the promotion of our brands. By accepting promotional cookies, you allow us to take care of your comfort while visiting our website or the websites of our partners Promotional cookies are used to present you, among other things, video content located on social media and to promote our services and brands by displaying relevant content to you on our website. Promotional content may appear on the websites of third parties or our partner companies and other service providers. Disabling these files does not guarantee that company-related content will no longer appear on other websites.",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S016",
+        "url": "https://www.lpp.com/en/press-releases/a-marked-acceleration-in-lpps-revenue-growth-both-sales-channels-recorded-double-digit-growth-in-the-second-quarter-of-2026",
+        "title": "A marked acceleration in LPP’s revenue growth. Both sales channels recorded double-digit growth in the second quarter of 2026. - The official website of LPP SA",
+        "retrieved_at": "2026-10-03T12:26:22.444978Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "The growing scale of sales was accompanied by a marked improvement in the gross margin of 3.7 pp year-on-year to 57.7%. Higher sales profitability, supported by strong demand, translated into a good net profit of PLN 768m, 48% higher than a year earlier. [...] At the same time, the growth in business scale was accompanied by a marked improvement in the gross margin, up by 3.7 pp year-on-year to 57.7%, which translated into higher results across the board – EBITDA rose by 42% year-on-year to PLN 1.7bn, EBIT by 57% year-on-year to PLN 1.1bn, and net profit by 48% year-on-year to PLN 768m. The result was supported by a favourable USD/PLN exchange rate, lower freight rates and improved management of the product range and pricing. [...] In view of the stronger sales growth in the first half of the year, LPP is updating its targets for the end of 2026, raising the expected gross margin to the range of 56.5–57%, the EBITDA margin to 24.0–25.0% and the net profit margin to 10.0–11.0%.",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S017",
+        "url": "https://www.lpp.com/en/press-releases/lpp-group-reports-very-good-sales-third-consecutive-quarter-with-profit-growth-and-improved-profitability",
+        "title": "LPP Group reports very good sales. Third consecutive quarter with profit growth and improved profitability - The official website of LPP SA",
+        "retrieved_at": "2026-10-03T12:26:22.444978Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "The Group’s goals for the coming periods are equally ambitious. In 2026, LPP expects revenues of approximately PLN 28-29 bn and capital expenditure of PLN 2.6 bn, while maintaining current profitability levels. The assumptions also include stabilisation of the gross margin and costs towards the levels indicated for 2025. These goals are part of the Group’s long-term development plan, focused on strengthening the scale of operations and financial stability in the coming years. By the end of [...] The target for 2026 is to increase revenues to approximately PLN 28-29 bn while maintaining the company’s profitability and PLN 2.6 bn in capital expenditure. [...] activity in South-Eastern Europe as early as the second half of 2026. The completion of the expansion of the distribution centre in Brześć Kujawski and further investments in robotic solutions are also planned for next year.",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S018",
+        "url": "https://www.lpp.com/en/press-releases/very-good-profitability-high-cost-efficiency-and-yet-another-period-of-dynamically-growing-profits",
+        "title": "Very good profitability, high cost efficiency and yet another period of dynamically growing profits. LPP is consistently implementing the Group’s development plan - The official website of LPP SA",
+        "retrieved_at": "2026-10-03T12:26:22.444978Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "– The solid results of the second quarter, combined with an intensive opening policy, are the result of our announced expansion strategy, whose primary goal is to maintain the company’s profitability. The key issue in achieving our goals remains maintaining effective cost discipline and working on the efficiency of our traditional network’s development. We have an intensive third quarter ahead of us, and the largest accumulation of new stores is expected at the end of the year – emphasizes [...] The company’s goal for the rest of the year remains the stable and profitable development of its physical network, while simultaneously strengthening online sales. These activities have a positive impact on the recognition of brands from the LPP portfolio, both in Poland and on foreign markets. The strong results of the second quarter, combined with a good start to the third quarter, give LPP grounds to maintain its annual plans for sales, margins and capital expenditure. The results achieved [...] – The visible decrease in SG&A per square metre by 9.4% YoY confirms the effectiveness of our cost discipline, and maintaining full control over expenses, despite intensive expansion, proves the efficiency of our operational activities, which in the second quarter translated into maintaining very good profit dynamics, including double-digit EBITDA growth. All this confirms our belief that the development course we have chosen is the right one and allows us to look to the future with optimism –",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S006",
+        "url": "https://www.lpp.com/en/press-releases/fifth-consecutive-quarter-of-year-on-year-profitability-improvement-lpp-summarises-q1-2026",
+        "title": "Fifth consecutive quarter of year-on-year profitability improvement. LPP summarises Q1 2026 - The official website of LPP SA",
+        "retrieved_at": "2026-10-03T12:26:22.444978Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "A historically high gross margin and cost discipline have resulted in the fifth consecutive quarter of year-on-year profitability improvement at LPP. In the first quarter of 2026, the company recorded high double-digit growth across all key performance metrics: EBITDA increased by 36% year-on-year to PLN 1.3 billion, EBIT by 47% year-on-year, and net profit by 42% year-on-year. [...] and the net profit margin to 9.5–10.5%, which ultimately means maintaining the targets for this year whilst achieving higher business profitability and financial stability for the Group. [...] LPP is updating its financial targets for 2026, taking into account a more selective pace of network expansion and current operational assumptions. The sales forecast for core operations has been revised down to approx. PLN 26–27 billion, from the previous approx. PLN 28–29 billion, with positive growth expected in both the offline and online channels. At the same time, the company has raised its expected gross margin on sales to approx. 56.0%, the EBITDA margin to 23.5–24.5%, and the net",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S019",
+        "url": "https://www.lpp.com/en/press-releases/lpp-stepping-up-growth-third-quarter-of-2024-with-strong-double-digit-sales-dynamics-and-record-growth-in-e-commerce",
+        "title": "LPP stepping up growth. Third quarter of 2024 with strong double-digit sales dynamics and record growth in e-commerce - The official website of LPP SA",
+        "retrieved_at": "2026-10-03T12:26:22.444978Z",
+        "published_on": null
+      },
+      "kind": "search_snippet",
+      "content": "Focusing on growth plans did not prevent the company from generating a solid gross margin of 54.8 per cent and achieving a stable net profit of PLN 577 mn.\n LPP is stepping up the pace of growth, with plans for an accumulation of openings and nearly 300 new stores in the last quarter of this year.\n The company announces ambitious plans for 2025 – It intends to double the number of Sinsay brand stores and open around 100 stores of other brands, as well as debut in two new foreign markets. [...] sales, which in the third quarter of this year accounted for more than 26 per cent of total sales. The company managed to generate a gross margin of 54.8 per cent and a stable net profit of PLN 577 mn. In turn, since the beginning of the year, the Group has achieved over 21 per cent YoY growth in adjusted operating profit and nearly PLN 3 bn in EBITDA.",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S006",
+        "url": "https://www.lpp.com/en/press-releases/fifth-consecutive-quarter-of-year-on-year-profitability-improvement-lpp-summarises-q1-2026",
+        "title": "Fifth consecutive quarter of year-on-year profitability improvement. LPP summarises Q1 2026 - The official website of LPP SA",
+        "retrieved_at": "2026-10-03T12:26:10.117715Z",
+        "published_on": "2026-06-11"
+      },
+      "kind": "full_page",
+      "content": "Fifth consecutive quarter of year-on-year profitability improvement. LPP summarises Q1 2026 - The official website of LPP SA\nAbout us\nStrategy\nLPP in numbers\nCompany authorities\nHeadquarters, offices and logistics\nMission, vision, values\nLPP history\nLPP is a Polish clothing company\nBrands\nReserved\nCropp\nHouse\nMohito\nSinsay\nSustainable development\nEnvironment\nPeople\nLPP’s contribution to the economy – taxes\nOur commitments\nOur rules\nSustainability report\nLPP Foundation\nNews\nMental health\nEquality of social opportunity\nHealthcare\nActivities for employees and the community\nAbout the Foundation\nContact to LPP Foundation\nFor The Media\nPress releases\nMedia Centre\nMedia contacts\nStatement Messages for Customers\nInvestor Relations\nReports\nCurrent Reports\nFinancial reports\nMaterials for investors\nResults presentations\nFact sheet\nFinancial Information\nInvestor presentations\nFactbook\nVideo materials\nCalendar\nLPP on the Stock Exchange\nShareholding Structure\nShare price performance\nAnalysts\nDividend\nCorporate governance\nManagement Board\nSupervisory Board\nGeneral meetings\nOur Strategy\nCorporate documents\nBest practice\nBonds\nContact for Investors\nContact\nCareer\nJob Offers\nHeadquarters\nStores\nLPP Logistics\nSilky Coders\nProjects and events\nEN\nPL\nText size:\nContrast:\nSearch for:\nSearch for:\nLiked offers\n(0)\nHome Page\nFor the Media\nPress releases\nBusiness\nFifth consecutive quarter of year-on-year profitability improvement. LPP summarises Q1 2026\nFifth consecutive quarter of year-on-year profitability improvement. LPP summarises Q1 2026\nPublication date: 11.06.2026\nBusiness\nA historically high gross margin and cost discipline have resulted in the fifth consecutive quarter of year-on-year profitability improvement at LPP. In the first quarter of 2026, the company recorded high double-digit growth across all key performance metrics: EBITDA increased by 36% year-on-year to PLN 1.3 billion, EBIT by 47% year-on-year, and net profit by 42% year-on-year.\nThe Group’s revenue rose by 11% year-on-year in constant currencies, to PLN 5.5 billion. Sales growth was lower than previously forecast, mainly due to colder temperatures in February and April, which limited demand for seasonal collections. Very strong results in March partially mitigated this effect.\nIn the first quarter, LPP opened 121 new stores, including 102 Sinsay stores. The Group’s retail space exceeded 3 million m², with Sinsay remaining the main driver of expansion.\nThe Group’s strong financial foundations support further investment in growth. In the first quarter, LPP’s capital expenditure amounted to PLN 562 million, of which PLN 252 million was allocated to the expansion of the sales network, and PLN 276 million on logistics infrastructure, including the expansion of the Distribution Center in Brześć Kujawski, robotisation, and the start of work on a new fulfillment center in Tczew, which will strengthen online sales operations in foreign markets.\nFollowing the end of the quarter, the company recorded a marked upturn in sales. With the return of warmer weather in early May, omnichannel growth reached 20% (between 1 May and 9 June), providing a positive starting point for the results of the coming period.\nThe start of the spring-summer season brought relatively low temperatures, particularly in February and April, which limited demand for seasonal stock in the fashion sector. Despite the challenging environment, the LPP Group generated PLN 5.5 billion in revenue, representing an 11% year-on-year increase in constant currencies. Sales growth was below earlier forecasts, but very strong results in March partially offset the impact of weaker months. At the same time, LPP maintained high financial efficiency thanks to a historically high gross margin on sales for the first quarter and consistent cost discipline.\n– The first quarter of this year confirmed that LPP is able to respond effectively to changing market conditions and structure its business in a way that strengthens its long-term efficiency. Revenue growth was lower than our projections, but this did not come at the expense of margins or operational discipline. The fifth consecutive quarter of improved profitability shows that the effects of measures taken in the areas of operational agility, cost control and inventory optimisation are sustainable. For us, it is crucial that LPP’s continued growth is not only rapid, but above all profitable and generates long-term value for shareholders\n–\ncomments Marcin Bójko, LPP’s Vice-President for Finance\n.\nRecord gross margin\nThe gross margin on sales in the first quarter of this year reached 58.5%, marking the highest level in the Group’s history for this period. This result was supported by more favourable purchasing conditions, including a stronger zloty against the dollar and lower freight rates, as well as effective management of pricing policy across all brands. The high margin at the start of the season gave the company greater flexibility regarding markdowns and helped mitigate the impact of a weaker start to seasonal sales on the Group’s profitability.\nOnline sales performance, particularly in South-Eastern Europe, was affected by temporary logistical constraints linked to a warehouse fire in Romania in June 2025. These resulted in longer delivery times and a temporary reduction in the available product range. Despite this, the e-commerce channel maintained a stable position within the Group’s business structure, accounting for 26.6% of revenue. An e-commerce facility has been operational in Romania since October 2025, and the restoration of full logistics capacity in the region will be supported by the planned launch of a new distribution center in July 2026.\nSince the beginning of May, the company has observed a marked upturn in sales, recording high, positive growth rates of up to +20% on an omnichannel basis. The positive trend is expected to be sustained by further strengthening of the Sinsay brand under the smart value formula, based on an attractive price-quality ratio, better alignment of the collection with seasonality and customer needs, and more frequent reordering of top-selling products. The changes will cover the brick-and-mortar network – including strengthening store teams, improving product displays, and further developing self-service checkouts. E-commerce growth will be supported by an increased budget for performance marketing, whilst the home category is expected to provide additional growth potential through better organisation of the core and seasonal ranges and clearer displays in stores.\nScaling expansion whilst maintaining the quality of the network\nIn the first quarter, LPP opened 121 new stores, including 102 Sinsay stores. The Group’s retail space has already exceeded 3 million m², and Sinsay remains a key brand in its development plans. At the same time, the company is adjusting the pace of new openings to current market and operational conditions, placing greater emphasis on the long-term quality of expansion and the profitability potential of new locations.\nThis decision stems from the varied situation across different regions. In Central, Eastern and South-Eastern Europe, weaker macroeconomic conditions are evident, including an economic slowdown and inflationary pressure in markets key to LPP, such as Romania. In Central Asia, by contrast, expansion is being driven by demographics and the macroeconomic environment. Logistical challenges and long delivery times remain a significant constraint here, which LPP aims to reduce through a new logistics center planned for 2027.\n– The pace at which we are developing Sinsay far exceeds the industry growth rates seen in the region. At the same time, we are committed to ensuring that this development is aligned with market conditions and operational capabilities. In the current situation, what matters more than the number of new stores is that each new outlet has the right sales and profitability potential. That is why we are postponing some of the openings to later periods, so as to expand the network when the economic environment and operating conditions are more favourable. This decision allows us to better protect our margins and build a more secure growth profile for the Group\n–\nadds Marcin Bójko\n.\nLPP is updating its financial targets for 2026, taking into account a more selective pace of network expansion and current operational assumptions. The sales forecast for core operations has been revised down to approx. PLN 26–27 billion, from the previous approx. PLN 28–29 billion, with positive growth expected in both the offline and online channels. At the same time, the company has raised its expected gross margin on sales to approx. 56.0%, the EBITDA margin to 23.5–24.5%, and the net profit margin to 9.5–10.5%, which ultimately means maintaining the targets for this year whilst achieving higher business profitability and financial stability for the Group.\nRational expansion will remain one of the pillars of LPP’s development in the longer term as well. Looking ahead to 2028 and beyond, the Group plans to further increase the scale of its operations whilst maintaining a focus on profitability, selective site selection and the closure of unprofitable stores. In 2028, Sinsay is set to open around 750 new stores, and from 2029 onwards, the brand’s expansion rate is expected to stabilise at around 300–350 openings per year. At the same time, the Group anticipates a 15–20% annual increase in e-commerce sales, supported by greater market penetration in the region, entry into new markets, omnichannel synergies and the gradual development of the marketplace.\nInvestments for further growth\nSustained high profitability allows LPP to continue its policy of sharing profits with shareholders whilst investing in the development of its sales network and logistics infrastructure.\nFor this reason, the Supervisory Board endorsed the Management Board’s recommendation to allocate PLN 1.7 billion from last year’s profit for distribution to shareholders and to pay a dividend of PLN 900 per share. This decision naturally aligns with the company’s approach to balancing further growth with building value for investors.\nAt the same time, the Group implemented its investment policy in the first quarter, allocating a total of PLN 562 million to further growth, of which PLN 252 million went towards the development of the sales network, mainly the Sinsay brand, and PLN 276 million towards logistics projects – the expansion of the center in Brześć Kujawski, robotisation and the construction of a warehouse in Tczew. The launch of the facility, planned for the first quarter of 2027, will be one of the key elements of the strategy to scale up online sales in foreign markets. Combined with the development of logistics infrastructure in Romania, these investments are intended to increase product availability, shorten delivery times and strengthen the Group’s potential for further growth in the omnichannel model.\n______________________________________________________________________________\nLPP is a Polish family business and one of the fastest growing clothing companies in the region of Central Europe. For 30 years, it has been successfully designing and selling the collections and accessories in Poland and abroad. LPP manages five fashion brands: Reserved, Cropp, House, Mohito, and Sinsay, whose offer is available today in stationary and online stores in 47 markets worldwide. The company has a chain of over 3,800 stores with the total area of over 3 million m2 and distributes the products to 3 continents every year. LPP also plays an important role as it provides employment to nearly 63 thousand people in its offices and sales structures in Poland, Europe, Asia, and Africa. The company is listed on the Warsaw Stock Exchange in the WIG20 index and belongs to the prestigious MSCI Poland index.\nShare:\nO Nas\nDla Mediów\nKontakt\nKariera\nSustainable development\nEnvironment\nPeople\nLPP’s contribution to the economy – taxes\nOur commitments\nOur rules\nSustainability report\nLPP Foundation\nAbout the Foundation\nNews\nProjects\nRules of cooperation\nContact to LPP Foundation\nInvestor Relations\nOur Strategy\nReports\nCalendar\nShareholding Structure\nDividend\nFinancial Information\nShare price performance\nBonds\nVideo materials\nContact for Investors\nCareer\nJob Offers\nHeadquarters\nStores\nLPP Logistics\nSilky Coders\nProjects and events\nBrands\nReserved\nCropp\nHouse\nMohito\nSinsay\nRegulaminy\nPromotional action regulations – 99% discount programme\nPrivacy Policy\nCookies Policy\nCookies List\nTrusted Partners List\nCookie Settings\nSite Map",
+      "fetch_mode": "static"
+    },
+    {
+      "source": {
+        "source_id": "S007",
+        "url": "https://www.lpp.com/en/press-releases/lpps-retail-network-reaches-4000-stores-another-milestone-for-this-gdansk-based-company",
+        "title": "LPP’s retail network reaches 4,000 stores. Another milestone for this Gdańsk-based company - The official website of LPP SA",
+        "retrieved_at": "2026-10-03T12:26:11.222303Z",
+        "published_on": "2026-09-07"
+      },
+      "kind": "full_page",
+      "content": "LPP’s retail network reaches 4,000 stores. Another milestone for this Gdańsk-based company - The official website of LPP SA\nAbout us\nStrategy\nLPP in numbers\nCompany authorities\nHeadquarters, offices and logistics\nMission, vision, values\nLPP history\nLPP is a Polish clothing company\nBrands\nReserved\nCropp\nHouse\nMohito\nSinsay\nSustainable development\nEnvironment\nPeople\nLPP’s contribution to the economy – taxes\nOur commitments\nOur rules\nSustainability report\nLPP Foundation\nNews\nMental health\nEquality of social opportunity\nHealthcare\nActivities for employees and the community\nAbout the Foundation\nContact to LPP Foundation\nFor The Media\nPress releases\nMedia Centre\nMedia contacts\nStatement Messages for Customers\nInvestor Relations\nReports\nCurrent Reports\nFinancial reports\nMaterials for investors\nResults presentations\nFact sheet\nFinancial Information\nInvestor presentations\nFactbook\nVideo materials\nCalendar\nLPP on the Stock Exchange\nShareholding Structure\nShare price performance\nAnalysts\nDividend\nCorporate governance\nManagement Board\nSupervisory Board\nGeneral meetings\nOur Strategy\nCorporate documents\nBest practice\nBonds\nContact for Investors\nContact\nCareer\nJob Offers\nHeadquarters\nStores\nLPP Logistics\nSilky Coders\nProjects and events\nEN\nPL\nText size:\nContrast:\nSearch for:\nSearch for:\nLiked offers\n(0)\nHome Page\nFor the Media\nPress releases\nBusiness\nLPP’s retail network reaches 4,000 stores. Another milestone for this Gdańsk-based company\nLPP’s retail network reaches 4,000 stores. Another milestone for this Gdańsk-based company\nPublication date: 07.09.2026\nBusiness\nLPP has crossed the landmark threshold of 4,000 stores, confirming its position among the leading players in the European fashion industry. The opening of the 4,000th store comes at a time of rapid expansion for the Group, which now operates across 47 markets, is investing in new avenues for growth and continues to pursue a strategy centred on further strengthening its brands and extending its international footprint.\nMore than three decades of growth have enabled LPP to build an international organisation that manages the Reserved, Cropp, House, Mohito and Sinsay brands. Today, the Group operates across 47 markets worldwide, both in stores and online, with its retail network covering more than 3 million sq m of retail space across three continents.\n– Building a network of 4,000 stores means far more to us than just another number in a report. It demonstrates our ability to consistently deliver on goals that, just a few years ago, might have seemed out of reach. Just 18 months ago, we unveiled the Group’s new growth strategy, with a strong focus on rapidly expanding our retail network. Since then, we have increased it by 40%, achieving a pace of growth that is now rarely seen in global retail. We regard this milestone not as a destination, but as a starting point for further growth\n– says\nMarek Piechocki, President of the Management Board of LPP.\nLPP’s business strategy aims to further increase the scale of its operations while maintaining profitability and operational efficiency. At its core is an omnichannel model, underpinned by continued investment in logistics, technology and the expansion of the Group’s retail network. Sinsay plays a particularly important role in implementing these plans and has become the Group’s main growth driver in recent years.\nThe rapid growth of the youngest brand in LPP’s portfolio has been driven by its steady evolution. Originally targeted mainly at young female customers, Sinsay has grown into a comprehensive shopping concept for the whole family, spanning fashion, accessories, beauty products and homeware. Recently, the brand has expanded its online range by introducing a marketplace model that features products from external partners alongside its own range. With its attractive product range, competitive pricing and robust omnichannel model, the brand appeals to customers in both large urban centres and smaller towns.\nIn July 2026, Sinsay celebrated the opening of its 2,500th store in Tashkent. Within just a few months, the brand added hundreds of new locations to its network, establishing itself as one of the fastest-growing retail formats in the European fashion industry. Today, Sinsay accounts for the majority of the Group’s new store openings and plays a key role in implementing LPP’s long-term growth plans.\nIn the first half of 2026 alone, LPP opened 351 new stores, 314 of which were Sinsay locations. At the same time, the Group’s retail space exceeded 3.2 million sq m, while also recording a year-on-year improvement in profitability for the sixth consecutive quarter. In recent weeks, the Group has opened nearly 30 new stores in Azerbaijan, Bosnia and Herzegovina, Bulgaria, Greece, Kazakhstan, Lithuania, Poland, Romania, Ukraine and Uzbekistan. These openings reflect the Group’s consistent focus on making LPP brands more widely accessible, while retaining operational flexibility and tailoring store formats to the needs of local customers.\nCentral Asia plays a particularly important role in the Group’s current growth strategy. LPP has continued to broaden its footprint across the region, entering markets that include Uzbekistan, Azerbaijan and Georgia, while simultaneously expanding its operations in Kazakhstan. This region has emerged as one of the Group’s key growth areas, supported by favourable demographic trends, rising consumer purchasing power and the continued development of retail infrastructure.\n– The scale LPP has reached reflects years of sustained investment in our brands, logistics, technology and organisational capabilities. At the same time, our focus remains on the quality of our growth. We aim to continue expanding our retail network and building a stronger presence in promising markets, while maintaining operational efficiency and strong financial fundamentals. This approach allows us to pursue our ambitious growth plans in a stable and responsible way. The continued expansion of our retail network, driven primarily by Sinsay, also naturally complements the marketplace platform launched a few weeks ago, with stores ultimately able to serve as pick-up points for our customers. Combining the scale of our physical store network with the capabilities of our digital platform creates a competitive advantage that will drive LPP’s growth in the years ahead\n– says\nMarcin Bójko, Vice-President of the Management Board for Finance at LPP.\nThe Group expects its retail network expansion, led primarily by Sinsay, to remain one of its key growth drivers. This growth will be supported by further geographic expansion, including in Central Asia, continued development of the omnichannel model, deeper penetration of existing markets and a gradual broadening of what it offers the marketplace.\n_________________________________\nLPP\nis a Polish family-owned company and one of the fastest-growing fashion companies in Central Europe. For 30 years, it has successfully designed and sold its collections and accessories in Poland and abroad. LPP manages five fashion brands: Reserved, Cropp, House, Mohito and Sinsay, with their product ranges now available in stores and online in 47 markets worldwide. The company operates a network of more than 4,000 stores, covering a total floor area exceeding 3 million m2 and distributing its products across three continents every year. LPP also plays an important role in job creation, employing nearly 63,000 people in offices and retail operations in Poland and elsewhere in Europe, Asia and Africa. The company is listed on the Warsaw Stock Exchange, is a constituent of the WIG20 index and is included in the prestigious MSCI Poland Index.\nShare:\nO Nas\nDla Mediów\nKontakt\nKariera\nSustainable development\nEnvironment\nPeople\nLPP’s contribution to the economy – taxes\nOur commitments\nOur rules\nSustainability report\nLPP Foundation\nAbout the Foundation\nNews\nProjects\nRules of cooperation\nContact to LPP Foundation\nInvestor Relations\nOur Strategy\nReports\nCalendar\nShareholding Structure\nDividend\nFinancial Information\nShare price performance\nBonds\nVideo materials\nContact for Investors\nCareer\nJob Offers\nHeadquarters\nStores\nLPP Logistics\nSilky Coders\nProjects and events\nBrands\nReserved\nCropp\nHouse\nMohito\nSinsay\nRegulaminy\nPromotional action regulations – 99% discount programme\nPrivacy Policy\nCookies Policy\nCookies List\nTrusted Partners List\nCookie Settings\nSite Map",
+      "fetch_mode": "static"
+    },
+    {
+      "source": {
+        "source_id": "S013",
+        "url": "https://www.lpp.com/en/reports/consolidated-annual-report-of-lpp-sa-group-for-2025",
+        "title": "Consolidated annual report of LPP SA Group for 2025 - The official website of LPP SA",
+        "retrieved_at": "2026-10-03T12:26:12.202966Z",
+        "published_on": "2026-03-25"
+      },
+      "kind": "full_page",
+      "content": "Consolidated annual report of LPP SA Group for 2025 - The official website of LPP SA\nAbout us\nStrategy\nLPP in numbers\nCompany authorities\nHeadquarters, offices and logistics\nMission, vision, values\nLPP history\nLPP is a Polish clothing company\nBrands\nReserved\nCropp\nHouse\nMohito\nSinsay\nSustainable development\nEnvironment\nPeople\nLPP’s contribution to the economy – taxes\nOur commitments\nOur rules\nSustainability report\nLPP Foundation\nNews\nMental health\nEquality of social opportunity\nHealthcare\nActivities for employees and the community\nAbout the Foundation\nContact to LPP Foundation\nFor The Media\nPress releases\nMedia Centre\nMedia contacts\nStatement Messages for Customers\nInvestor Relations\nReports\nCurrent Reports\nFinancial reports\nMaterials for investors\nResults presentations\nFact sheet\nFinancial Information\nInvestor presentations\nFactbook\nVideo materials\nCalendar\nLPP on the Stock Exchange\nShareholding Structure\nShare price performance\nAnalysts\nDividend\nCorporate governance\nManagement Board\nSupervisory Board\nGeneral meetings\nOur Strategy\nCorporate documents\nBest practice\nBonds\nContact for Investors\nContact\nCareer\nJob Offers\nHeadquarters\nStores\nLPP Logistics\nSilky Coders\nProjects and events\nEN\nPL\nText size:\nContrast:\nSearch for:\nSearch for:\nLiked offers\n(0)\nHome Page\nInvestor Relations\n2026\nConsolidated annual report of LPP SA Group for 2025\nConsolidated annual report of LPP SA Group for 2025\nPublication date: 25.03.2026\nFiles to download\npdf\nConsolidated annual report of LPP SA Group for 2025\nzip\nLPP_SA_2025_BSSF_MSSF_SzB_EN\nShare:\nO Nas\nDla Mediów\nKontakt\nKariera\nSustainable development\nEnvironment\nPeople\nLPP’s contribution to the economy – taxes\nOur commitments\nOur rules\nSustainability report\nLPP Foundation\nAbout the Foundation\nNews\nProjects\nRules of cooperation\nContact to LPP Foundation\nInvestor Relations\nOur Strategy\nReports\nCalendar\nShareholding Structure\nDividend\nFinancial Information\nShare price performance\nBonds\nVideo materials\nContact for Investors\nCareer\nJob Offers\nHeadquarters\nStores\nLPP Logistics\nSilky Coders\nProjects and events\nBrands\nReserved\nCropp\nHouse\nMohito\nSinsay\nRegulaminy\nPromotional action regulations – 99% discount programme\nPrivacy Policy\nCookies Policy\nCookies List\nTrusted Partners List\nCookie Settings\nSite Map",
+      "fetch_mode": "static"
+    },
+    {
+      "source": {
+        "source_id": "S004",
+        "url": "https://www.lpp.com/en/investor-relations/reports/financial-reports",
+        "title": "Financial reports - The official website of LPP SA",
+        "retrieved_at": "2026-10-03T12:26:13.490280Z",
+        "published_on": "2023-03-31"
+      },
+      "kind": "full_page",
+      "content": "Financial reports - The official website of LPP SA\nAbout us\nStrategy\nLPP in numbers\nCompany authorities\nHeadquarters, offices and logistics\nMission, vision, values\nLPP history\nLPP is a Polish clothing company\nBrands\nReserved\nCropp\nHouse\nMohito\nSinsay\nSustainable development\nEnvironment\nPeople\nLPP’s contribution to the economy – taxes\nOur commitments\nOur rules\nSustainability report\nLPP Foundation\nNews\nMental health\nEquality of social opportunity\nHealthcare\nActivities for employees and the community\nAbout the Foundation\nContact to LPP Foundation\nFor The Media\nPress releases\nMedia Centre\nMedia contacts\nStatement Messages for Customers\nInvestor Relations\nReports\nCurrent Reports\nFinancial reports\nMaterials for investors\nResults presentations\nFact sheet\nFinancial Information\nInvestor presentations\nFactbook\nVideo materials\nCalendar\nLPP on the Stock Exchange\nShareholding Structure\nShare price performance\nAnalysts\nDividend\nCorporate governance\nManagement Board\nSupervisory Board\nGeneral meetings\nOur Strategy\nCorporate documents\nBest practice\nBonds\nContact for Investors\nContact\nCareer\nJob Offers\nHeadquarters\nStores\nLPP Logistics\nSilky Coders\nProjects and events\nEN\nPL\nText size:\nContrast:\nSearch for:\nSearch for:\nLiked offers\n(0)\nHome Page\nInvestor Relations\nReports\nFinancial reports\nReports\nFinancial reports\nThe financial reports section presents all financial information about the activities of LPP and the capital group , including but not limited to. financial statements, management reports on the company's operations, auditors' opinions and non-financial information. Financial reports are published within the timeframes set by applicable laws. LPP SA strives to make these as short as possible.\nDeadlines for financial reports in 2026:\nSeparate and consolidated report for 2025:\nMarch 26, 2026\nSustainability report for 2025:\nMarch 26, 2026\nConsolidated report for the first half of 2026:\nSeptember 17, 2026\nConsolidated Quarterly Reports:\nExtended consolidated report for 1Q 2026:\nJune 11, 2026\nExtended consolidated report for 3Q 2026:\nDecember 03, 2026\nAll Years\n2026\n2025\n2024\n2023\n2022\n2021\n2020\n2019\n2018\n2017\n2016\n2015\n2014\n2013\n2012\n2011\n2010\n2009\n2008\n2007\n2006\n2005\n2004\n2003\nConsolidated interim financial report for 1H 2026\npdf\nConsolidated interim financial report for 1H 2026\npdf\nReport on Review of the Condensed Half-year Interim Consolidated Financial Statements\nConsolidated Interim Report for 1Q 2026\npdf\nConsolidated Interim Report for 1Q 2026\nConsolidated annual report of LPP SA Group for 2025\npdf\nConsolidated annual report of LPP SA Group for 2025\nzip\nLPP_SA_2025_BSSF_MSSF_SzB_EN\nConsolidated Interim Report for Q3 2025\npdf\nConsolidated Interim Report for Q3 2025\nConsolidated interim financial report for 1H 2025\npdf\nConsolidated interim financial report for 1H 2025\npdf\nReport on Review of the Condensed Half-year Interim Consolidated Financial Statements\nConsolidated Interim Report for Q1 2025\npdf\nConsolidated Interim Report for Q1 2025\nConsolidated annual report of LPP SA Group for 2024\npdf\nConsolidated annual report of LPP SA Group for 2024\nzip\nLPP_SA_2024_BSSF_MSSF_SzB_EN\nConsolidated Interim Report for Q3 2024\npdf\nConsolidated Interim Report for 3Q 2024\nConsolidated interim financial report for 1H 2024\npdf\nConsolidated interim financial report for 1H 2024\npdf\nReport on Review of the Condensed Half-year Interim Consolidated Financial Statements\nConsolidated Interim Report for Q1 2024\npdf\nConsolidated Interim Report for Q1 2024\nLPP Group Sustainability Report for 2023\npdf\nLPP Group Sustainability Report for 2023\nConsolidated annual report of LPP SA Group for 2023\npdf\nConsolidated annual report of LPP SA Group for 2023\npdf\nIndependent Auditor’s Report on Annual Consolidated Financial Statements\nConsolidated Interim Report for Q3 2023/24\npdf\nConsolidated Interim Report for 3Q 2023/24\nConsolidated interim financial report for 1H 2023/24\npdf\nConsolidated interim financial report for 1H 2023/24\npdf\nReport on Review of the Condensed Interim Consolidated Financial Statements\npdf\nReport on Review of the Condensed Interim Financial Statements\nConsolidated Interim Report for Q1 2023/24\npdf\nConsolidated Interim Report for Q1 2023/24\nLPP Group Sustainability Report for 2022/23\npdf\nLPP Group Sustainability Report for 2022/23\npdf\nLPP ESG Factsheet 2022-2023\nConsolidated annual report of LPP SA Group for 2022/23\npdf\nConsolidated annual report of LPP SA Group for 2022 23  correction\npdf\nConsolidated annual report of LPP SA Group for 2022/23\npdf\nIndependent Auditor’s Report on Annual Consolidated Financial Statements\nConsolidated Interim Report for Q3 2022/23\npdf\nConsolidated Interim Report for Q3 2022/23\nConsolidated interim financial report for IH2022/23 (corrected)\npdf\nLPP Group Consolidated Interim Report for H1 2022/23 - corrected\npdf\nReport on Review of the Condensed Interim Consolidated Financial Statements\nConsolidated interim financial report for H1 2022/23\npdf\nLPP Group Consolidated Interim Report for H1 2022/23\npdf\nReport on Review of the Condensed Interim Consolidated Financial Statements\nCondensed interim financial statement for Q1 2022/23\npdf\nCondensed interim financial statement for Q1 2022/23\nLPP Group Sustainability Report for 2021/22\npdf\nLPP Group Sustainability Report for 2021/22\npdf\nLPP ESG Factsheet 2021-22\nConsolidated annual report of LPP SA Group for 2021/22\npdf\nConsolidated annual report of LPP SA Group for 2021/22\npdf\nLPP SA Group Audit Report\nConsolidated Interim Report for Q3 2021/22\npdf\nLPP SA GROUP Consolidated Interim Report for Q3 2021/22\nConsolidated interim financial report for IH 2021/22\npdf\nLPP Group Consolidated Interim Report for H1 2021/22\npdf\nIndependent auditor's report on review of interim condensed consolidated financial statements\npdf\nIndependent auditor's report on review of interim condensed standalone financial statements\nCondensed interim financial statement for Q1 2021/22\npdf\nCondensed interim financial statement for Q1 2021/22\nLPP Group Integrated Report for 2020/21\npdf\nLPP Group Integrated Report for 2020/21\nConsolidated annual report of LPP SA Capital Group for 2020/21\npdf\nConsolidated annual report of LPP SA Capital Group for 2020/21\npdf\nLPP SA Group Audit Report\nCondensed interim financial statement for Q3 2020/21\npdf\nCondensed interim financial statement for Q3 2020/21\nConsolidated interim financial report for IH 2020/21\npdf\nLPP Group Consolidated Interim Report for H1 2020/21\npdf\nIndependent auditor's report on review of interim condensed consolidated financial statements\n1\n2\n3\nO Nas\nDla Mediów\nKontakt\nKariera\nSustainable development\nEnvironment\nPeople\nLPP’s contribution to the economy – taxes\nOur commitments\nOur rules\nSustainability report\nLPP Foundation\nAbout the Foundation\nNews\nProjects\nRules of cooperation\nContact to LPP Foundation\nInvestor Relations\nOur Strategy\nReports\nCalendar\nShareholding Structure\nDividend\nFinancial Information\nShare price performance\nBonds\nVideo materials\nContact for Investors\nCareer\nJob Offers\nHeadquarters\nStores\nLPP Logistics\nSilky Coders\nProjects and events\nBrands\nReserved\nCropp\nHouse\nMohito\nSinsay\nRegulaminy\nPromotional action regulations – 99% discount programme\nPrivacy Policy\nCookies Policy\nCookies List\nTrusted Partners List\nCookie Settings\nSite Map",
+      "fetch_mode": "static"
+    },
+    {
+      "source": {
+        "source_id": "S001",
+        "url": "https://www.lpp.com/en/press-releases/lpp-has-delivered-on-its-2025-plan-record-profits-at-every-level-and-investments-in-technology-and-logistics-as-the-foundations-for-the-groups-further-growth",
+        "title": "LPP has delivered on its 2025 plan – record profits at every level and investments in technology and logistics as the foundations for the Group’s further growth - The official website of LPP SA",
+        "retrieved_at": "2026-10-03T12:26:14.742072Z",
+        "published_on": "2026-03-26"
+      },
+      "kind": "full_page",
+      "content": "LPP has delivered on its 2025 plan – record profits at every level and investments in technology and logistics as the foundations for the Group’s further growth - The official website of LPP SA\nAbout us\nStrategy\nLPP in numbers\nCompany authorities\nHeadquarters, offices and logistics\nMission, vision, values\nLPP history\nLPP is a Polish clothing company\nBrands\nReserved\nCropp\nHouse\nMohito\nSinsay\nSustainable development\nEnvironment\nPeople\nLPP’s contribution to the economy – taxes\nOur commitments\nOur rules\nSustainability report\nLPP Foundation\nNews\nMental health\nEquality of social opportunity\nHealthcare\nActivities for employees and the community\nAbout the Foundation\nContact to LPP Foundation\nFor The Media\nPress releases\nMedia Centre\nMedia contacts\nStatement Messages for Customers\nInvestor Relations\nReports\nCurrent Reports\nFinancial reports\nMaterials for investors\nResults presentations\nFact sheet\nFinancial Information\nInvestor presentations\nFactbook\nVideo materials\nCalendar\nLPP on the Stock Exchange\nShareholding Structure\nShare price performance\nAnalysts\nDividend\nCorporate governance\nManagement Board\nSupervisory Board\nGeneral meetings\nOur Strategy\nCorporate documents\nBest practice\nBonds\nContact for Investors\nContact\nCareer\nJob Offers\nHeadquarters\nStores\nLPP Logistics\nSilky Coders\nProjects and events\nEN\nPL\nText size:\nContrast:\nSearch for:\nSearch for:\nLiked offers\n(0)\nHome Page\nFor the Media\nPress releases\nBusiness\nLPP has delivered on its 2025 plan – record profits at every level and investments in technology and logistics as the foundations for the Group’s further growth\nLPP has delivered on its 2025 plan – record profits at every level and investments in technology and logistics as the foundations for the Group’s further growth\nPublication date: 26.03.2026\nBusiness\nThe LPP Group closed 2025 with a very strong financial performance, combining dynamic revenue growth to PLN 23 bn (21% YoY in constant currencies) with improved profitability.\nPositive growth was evident at all profit levels: EBITDA rose by 31% YoY, EBIT by 37% YoY, whilst net profit for the year increased by 36%.\nThese results confirm the Group’s ability to maintain operational efficiency, which is key to sustaining profitability, stable results and consistency in implementing its long-term development strategy.\nThese strong results allow the Group to share its profits with shareholders for the fifteenth consecutive year. The Company has recommended increasing the dividend to PLN 900 per share in line with the growth in profits.\nThe company has also confirmed the effectiveness of its omnichannel model, maintaining a double-digit growth trend throughout the year in both the offline channel (+22% YoY in constant currencies) and the online channel (+19% YoY in constant currencies), which now accounts for 28% of sales.\nThe Group’s strong financial position enabled it to achieve a record level of CAPEX of PLN 3.2 bn in 2025, whilst investments in logistics, robotisation and new technologies have prepared the company for the next phase of growth.\nLPP has reviewed the first year of implementing its new growth strategy, which focuses on rapidly scaling the Sinsay brand whilst maintaining the Group’s stable profitability. The intensive expansion plan resulted in the opening of over 1,000 new LPP brand stores during the year and entry into six new international markets, including the particularly promising region of Central Asia. As a result, the Sinsay brand network exceeded 2,300 stores last year, and the LPP Group’s total retail space increased by 25% YoY. The effectiveness of the chosen direction is confirmed by very strong financial results – in 2025, the LPP Group’s revenue exceeded PLN 23 bn (i.e. a 21% YoY increase in constant currencies and 19% on a reported basis). Parallel double-digit sales growth in the online channel (19% YoY) and offline channel (22% YoY) demonstrates the effectiveness of the Group’s omnichannel model.\n– We had a challenging year, which in practice was a test of our operational capabilities in the face of very ambitious development plans. A year ago, I felt that we were embarking on a new chapter in LPP’s history. It is precisely this ambition that drives us towards further growth; however, the trust of shareholders and the market is built not on declarations, but on results achieved consistently year after year. Today, looking at the financial results and profitability levels, I am proud of where this path is taking us. At the same time, I know that behind this result lies, above all, a year of very hard work by the entire organisation – strong operational discipline, a focus on implementing projects and cost control. I believe that the work we have done provides a solid foundation for further profitable growth and the achievement of our long-term goals\n–\ncomments Marek Piechocki, CEO of LPP\n.\nThe Group’s priority of maintaining profitability has translated into improved results across all key metrics – in 2025 EBITDA rose by 31% year-on-year to PLN 5.4 bn, operating profit increased by 37% year-on-year to PLN 3.3 bn, and net profit stood at PLN 2.4 bn, representing a 36% year-on-year increase. The positive trend was consistently evident in every quarter and resulted from further scaling of operations, cost discipline and the maintenance of stable margin levels – including an annual gross margin of 55.6%, supported, among other things, by a high proportion of full-price sales and a favourable exchange rate for the zloty.\n– We are all the more pleased with this year’s positive results, particularly in terms of profit, as they were achieved against a backdrop of very ambitious growth and record-breaking investment. The strategy adopted a year ago required our full commitment and operational excellence in every area – from financial stability, through logistics, to technology. That is precisely why the Group’s CAPEX exceeded a record PLN 3 bn, of which over PLN 1.3 bn was allocated to logistics development and automation. This has allowed us to maintain control over the growing scale of our operations, but also to lay a strong foundation for further expansion and the building of an efficient and technologically advanced organisation, which currently utilises AI in almost all areas of its operations\n–\ncomments Marcin Bójko, Vice-President of the Management Board of LPP\n.\nIn 2025, the company focused on investments supporting the scaling of operations, increased operational efficiency and improved cost predictability. AI-based solutions played a key role, utilised, amongst other things, in product content creation, customer service, collection design, offer personalisation and sales network development. This resulted in the acceleration of selected business processes, increased sales and the ability to scale the organisation without the need for a proportional increase in the Group’s operational resources. At the same time, in response to growing volumes, the company expanded its warehouse space and invested in the automation and robotisation of logistics.\nLPP Logistics expanded its fleet of robots supporting warehouse operations more than sixfold, from 555 to over 3,500 units in total across three locations in Poland and Romania. As a result, the company significantly increased the throughput of its fulfilment centres (e-commerce warehouses), shortened order fulfilment times and improved operational flexibility, laying the groundwork for further dynamic growth. In November, another e-commerce warehouse was launched in Romania, which further increased operational capacity and streamlined the processing of online orders, whilst the lease agreement for a distribution centre signed at the end of the year in that country will strengthen support for the Group’s stores in the South-East European region.\nThe expansion and modernisation of the logistics infrastructure, together with the use of modern technological solutions, support the Group in effectively managing its growing sales network. Following last year’s launches – including in Uzbekistan, Georgia and Albania – the number of stores across all brands has now exceeded 3,700. The expanded stationary stores network, in turn, plays a key role in the omnichannel model, as best illustrated by the Sinsay brand. Although the mobile app accounts for over 80% of sales here, it is the synergy between channels that delivers the greatest value, with customers using both solutions purchasing as much as five times more frequently. Therefore, in the coming periods, the Group intends to consistently implement the objectives of its adopted strategy, increase its presence in foreign markets, with a particular focus on Central Asia, supported by further technological advancements.\n______________________________________________________________________________\nLPP is a Polish family business and one of the fastest growing clothing companies in the region of Central Europe. For 30 years, it has been successfully designing and selling the collections and accessories in Poland and abroad. LPP manages five fashion brands: Reserved, Cropp, House, Mohito, and Sinsay, whose offer is available today in stationary and online stores in 46 markets worldwide. The company has a chain of over 3,700 stores with the total area of over 3 million m2 and distributes the products to 3 continents every year. LPP also plays an important role as it provides employment to nearly 63 thousand people in its offices and sales structures in Poland, Europe, Asia, and Africa. The company is listed on the Warsaw Stock Exchange in the WIG20 index and belongs to the prestigious MSCI Poland index.\nShare:\nO Nas\nDla Mediów\nKontakt\nKariera\nSustainable development\nEnvironment\nPeople\nLPP’s contribution to the economy – taxes\nOur commitments\nOur rules\nSustainability report\nLPP Foundation\nAbout the Foundation\nNews\nProjects\nRules of cooperation\nContact to LPP Foundation\nInvestor Relations\nOur Strategy\nReports\nCalendar\nShareholding Structure\nDividend\nFinancial Information\nShare price performance\nBonds\nVideo materials\nContact for Investors\nCareer\nJob Offers\nHeadquarters\nStores\nLPP Logistics\nSilky Coders\nProjects and events\nBrands\nReserved\nCropp\nHouse\nMohito\nSinsay\nRegulaminy\nPromotional action regulations – 99% discount programme\nPrivacy Policy\nCookies Policy\nCookies List\nTrusted Partners List\nCookie Settings\nSite Map",
+      "fetch_mode": "static"
+    },
+    {
+      "source": {
+        "source_id": "S016",
+        "url": "https://www.lpp.com/en/press-releases/a-marked-acceleration-in-lpps-revenue-growth-both-sales-channels-recorded-double-digit-growth-in-the-second-quarter-of-2026",
+        "title": "A marked acceleration in LPP’s revenue growth. Both sales channels recorded double-digit growth in the second quarter of 2026. - The official website of LPP SA",
+        "retrieved_at": "2026-10-03T12:26:26.294887Z",
+        "published_on": "2026-09-17"
+      },
+      "kind": "full_page",
+      "content": "A marked acceleration in LPP’s revenue growth. Both sales channels recorded double-digit growth in the second quarter of 2026. - The official website of LPP SA\nAbout us\nStrategy\nLPP in numbers\nCompany authorities\nHeadquarters, offices and logistics\nMission, vision, values\nLPP history\nLPP is a Polish clothing company\nBrands\nReserved\nCropp\nHouse\nMohito\nSinsay\nSustainable development\nEnvironment\nPeople\nLPP’s contribution to the economy – taxes\nOur commitments\nOur rules\nSustainability report\nLPP Foundation\nNews\nMental health\nEquality of social opportunity\nHealthcare\nActivities for employees and the community\nAbout the Foundation\nContact to LPP Foundation\nFor The Media\nPress releases\nMedia Centre\nMedia contacts\nStatement Messages for Customers\nInvestor Relations\nReports\nCurrent Reports\nFinancial reports\nMaterials for investors\nResults presentations\nFact sheet\nFinancial Information\nInvestor presentations\nFactbook\nVideo materials\nCalendar\nLPP on the Stock Exchange\nShareholding Structure\nShare price performance\nAnalysts\nDividend\nCorporate governance\nManagement Board\nSupervisory Board\nGeneral meetings\nOur Strategy\nCorporate documents\nBest practice\nBonds\nContact for Investors\nContact\nCareer\nJob Offers\nHeadquarters\nStores\nLPP Logistics\nSilky Coders\nProjects and events\nEN\nPL\nText size:\nContrast:\nSearch for:\nSearch for:\nLiked offers\n(0)\nHome Page\nFor the Media\nPress releases\nBusiness\nA marked acceleration in LPP’s revenue growth. Both sales channels recorded double-digit growth in the second quarter of 2026.\nA marked acceleration in LPP’s revenue growth. Both sales channels recorded double-digit growth in the second quarter of 2026.\nPublication date: 17.09.2026\nBusiness\nThe LPP Group’s revenue in the second quarter of 2026 increased by 18% year-on-year in constant currencies, reaching PLN 6.6bn. This result was driven by double-digit sales growth across both channels, including improved growth in like-for-like stores and the continued expansion of the network.\nIn the brick-and-mortar channel, sales rose by 18.6% year-on-year. Meanwhile, between May and the end of July, 230 new stores were opened, including 212 Sinsay stores, bringing the total number of locations to over 4,000. Across the entire LPP network, nearly 2,700 stores are now Sinsay outlets.\nE-commerce boosted revenue by 16.4% year-on-year. The improvement in online performance was supported by the restoration of full logistics capacity in South-Eastern Europe, including the launch of a new distribution centre in Romania in July this year.\nThe growing scale of sales was accompanied by a marked improvement in the gross margin of 3.7 pp year-on-year to 57.7%. Higher sales profitability, supported by strong demand, translated into a good net profit of PLN 768m, 48% higher than a year earlier.\nInvestments in logistics infrastructure are supporting further business expansion. Capital expenditure in the second quarter totalled PLN 506m, of which PLN 150m was allocated to logistics, increasing the capacity to serve the growing network of brick-and-mortar stores and online sales.\nIn view of the stronger sales growth in the first half of the year, LPP is updating its targets for the end of 2026, raising the expected gross margin to the range of 56.5–57%, the EBITDA margin to 24.0–25.0% and the net profit margin to 10.0–11.0%.\nThe second quarter of 2026 saw a marked recovery in sales for the LPP Group. Revenue rose by 18% year-on-year in constant currencies to PLN 6.6bn, compared with the 11% growth recorded in the first quarter. This result confirms the positive trend that the company had already signalled at the beginning of May. The pace of growth not only accelerated compared with the first few months of the year, but was also achieved against a high baseline – in the same period a year earlier, sales had risen by 17% year-on-year.\nAt the same time, the growth in business scale was accompanied by a marked improvement in the gross margin, up by 3.7 pp year-on-year to 57.7%, which translated into higher results across the board – EBITDA rose by 42% year-on-year to PLN 1.7bn, EBIT by 57% year-on-year to PLN 1.1bn, and net profit by 48% year-on-year to PLN 768m. The result was supported by a favourable USD/PLN exchange rate, lower freight rates and improved management of the product range and pricing.\nAs a result, after the first half of 2026, the Group’s revenue was 15% higher year-on-year and exceeded PLN 12bn, confirming the improvement in business momentum as the year progressed.\n– In the second quarter, we observed a more favourable sales environment compared with the start of the year. Consumer sentiment in key markets stabilised, and interest in our brands’ collections grew not only thanks to new store openings but also in our existing stores. We are also pleased to see e-commerce return to double-digit growth. From our perspective, the most important thing is that the acceleration in revenue is not currently based on a single source – expansion, like-for-like sales and the online channel are all contributing to it simultaneously. This growth structure gives us greater resilience to fluctuations in individual segments and builds a stronger foundation for further scaling of the business\n–\ncomments Marcin Bójko, LPP’s Vice-President for Finance.\nE-commerce returns to double-digit growth\nThe most noticeable change compared with the previous quarter occurred in online sales. At the start of the year, growth was hampered by temporary logistical difficulties in South-Eastern Europe, resulting from a warehouse fire in Romania. In July this year, the Group launched a new distribution centre in that country, restoring full logistical capacity in the region. As a result, e-commerce sales – further bolstered by an increased budget for performance marketing – rose by 16.4% year-on-year in the second quarter, maintaining double-digit growth across all regions. The strengthening of mobile apps, whose share of online sales is steadily growing, also had a positive impact on e-commerce results – the mobile channel now accounts for 84% of online purchases at Sinsay and 63% at Reserved.\nIn-store sales are rising\nIn parallel with the online channel, sales in high-street stores maintained double-digit growth, rising by 18.6% year-on-year. This was supported by the consistent expansion of the retail network – in the second quarter, the Group opened 230 new stores, including 212 Sinsay stores, thereby exceeding the 4,000-store mark. Throughout the first half of 2026, LPP’s high-street network expanded by 351 new locations, including 314 Sinsay stores.\nThis positive trend was evident across all the Group’s key markets. Overseas sales rose by 22.2% year-on-year – faster than in Poland, though in both cases the growth rate remained in double figures. Particularly strong results were recorded in Eastern Europe and Central Asia, which are increasingly driving the Group’s overall growth.\nOperational initiatives implemented by the Sinsay brand\nPart of this acceleration is the result of measures launched at Sinsay at the start of the year, the first results of which were visible in the second quarter. The brand adopted a ‘back to fashion’ formula and a ‘smart value’ model, combining attractive prices with quality and design, whilst purchasing decisions were accelerated through the use of AI algorithms and the active reordering of best-selling products.\nAt the same time, Sinsay enhanced the in-store shopping experience, including by improving product displays and expanding its network of self-service checkouts, which are now available in 20% of the brand’s stores. The changes also extended to the home section in around 10% of stores in Poland. Online sales, in turn, were supported by an increase in the performance marketing budget, which resulted in higher customer traffic and accelerated sales growth from the start of the quarter.\n– We are returning to the growth trajectory that we consider appropriate for the scale of our business. Sinsay is currently on the right track, and the measures we are systematically implementing are beginning to yield initial results in terms of both our product range and operations. At the same time, the marketplace launched in August opens up a new avenue for growth for the brand – it broadens the product range and diversifies revenue streams. As a result, Sinsay can grow not only through further store openings and sales of its own collections, but also through the development of the platform and the monetisation of its growing customer base. We anticipate that as the marketplace scales up in 2027, its impact will also be felt at the EBITDA level\n–\ncomments Marcin Bójko.\nInvestments to drive further sales growth\nThe development of a broad sales ecosystem requires a parallel expansion of the logistics infrastructure. In the second quarter, LPP consistently implemented its investment plan, allocating a total of PLN 506m to development. Most of the funds went towards further expansion of the retail network, mainly Sinsay, and logistics. PLN 279m was allocated to new stores, and PLN 146m to logistics projects, including the expansion of the distribution centre in Brześć Kujawski, the e-commerce warehouse in Tczew and automation. Since the start of the year, LPP’s total capital expenditure has already exceeded PLN 1bn.\nOutlook for the second half of the year and revised targets for 2026\n– The start of the third quarter is giving us positive signs. The Back-to-School season has brought double-digit growth in both children’s and youth’s collections, with the online channel performing particularly strongly. This shows that our range is responding well to customers’ needs at the start of the season. However, we have some crucial weeks ahead of us with the autumn-winter collections and Black Friday, so it will be important to maintain this momentum in the coming months  – comments Marcin Bójko.\nThe first-half results have enabled the Group to raise its profitability expectations. LPP is maintaining its core business sales target at around PLN 26–27bn and its capital expenditure target at PLN 2.5bn. However, it is raising its forecast for the gross profit margin to 56.5–57.0% from the previous 56.0%, the EBITDA margin to 24.0–25.0% from 23.5–24.5%, and the net profit margin to 10.0–11.0% from 9.5–10.5%.\n_________________________________\nLPP is a Polish family business and one of the fastest growing clothing companies in the region of Central Europe. For 30 years, it has been successfully designing and selling the collections and accessories in Poland and abroad. LPP manages five fashion brands: Reserved, Cropp, House, Mohito, and Sinsay, whose offer is available today in stationary and online stores in 47 markets worldwide. The company has a chain of over 4,000 stores with the total area of over 3 million m2 and distributes the products to 3 continents every year. LPP also plays an important role as it provides employment to nearly 63 thousand people in its offices and sales structures in Poland, Europe, Asia, and Africa. The company is listed on the Warsaw Stock Exchange in the WIG20 index and belongs to the prestigious MSCI Poland index.\nShare:\nO Nas\nDla Mediów\nKontakt\nKariera\nSustainable development\nEnvironment\nPeople\nLPP’s contribution to the economy – taxes\nOur commitments\nOur rules\nSustainability report\nLPP Foundation\nAbout the Foundation\nNews\nProjects\nRules of cooperation\nContact to LPP Foundation\nInvestor Relations\nOur Strategy\nReports\nCalendar\nShareholding Structure\nDividend\nFinancial Information\nShare price performance\nBonds\nVideo materials\nContact for Investors\nCareer\nJob Offers\nHeadquarters\nStores\nLPP Logistics\nSilky Coders\nProjects and events\nBrands\nReserved\nCropp\nHouse\nMohito\nSinsay\nRegulaminy\nPromotional action regulations – 99% discount programme\nPrivacy Policy\nCookies Policy\nCookies List\nTrusted Partners List\nCookie Settings\nSite Map",
+      "fetch_mode": "static"
+    },
+    {
+      "source": {
+        "source_id": "S017",
+        "url": "https://www.lpp.com/en/press-releases/lpp-group-reports-very-good-sales-third-consecutive-quarter-with-profit-growth-and-improved-profitability",
+        "title": "LPP Group reports very good sales. Third consecutive quarter with profit growth and improved profitability - The official website of LPP SA",
+        "retrieved_at": "2026-10-03T12:26:27.492447Z",
+        "published_on": "2025-12-11"
+      },
+      "kind": "full_page",
+      "content": "LPP Group reports very good sales. Third consecutive quarter with profit growth and improved profitability - The official website of LPP SA\nAbout us\nStrategy\nLPP in numbers\nCompany authorities\nHeadquarters, offices and logistics\nMission, vision, values\nLPP history\nLPP is a Polish clothing company\nBrands\nReserved\nCropp\nHouse\nMohito\nSinsay\nSustainable development\nEnvironment\nPeople\nLPP’s contribution to the economy – taxes\nOur commitments\nOur rules\nSustainability report\nLPP Foundation\nNews\nMental health\nEquality of social opportunity\nHealthcare\nActivities for employees and the community\nAbout the Foundation\nContact to LPP Foundation\nFor The Media\nPress releases\nMedia Centre\nMedia contacts\nStatement Messages for Customers\nInvestor Relations\nReports\nCurrent Reports\nFinancial reports\nMaterials for investors\nResults presentations\nFact sheet\nFinancial Information\nInvestor presentations\nFactbook\nVideo materials\nCalendar\nLPP on the Stock Exchange\nShareholding Structure\nShare price performance\nAnalysts\nDividend\nCorporate governance\nManagement Board\nSupervisory Board\nGeneral meetings\nOur Strategy\nCorporate documents\nBest practice\nBonds\nContact for Investors\nContact\nCareer\nJob Offers\nHeadquarters\nStores\nLPP Logistics\nSilky Coders\nProjects and events\nEN\nPL\nText size:\nContrast:\nSearch for:\nSearch for:\nLiked offers\n(0)\nHome Page\nFor the Media\nPress releases\nBusiness\nLPP Group reports very good sales. Third consecutive quarter with profit growth and improved profitability\nLPP Group reports very good sales. Third consecutive quarter with profit growth and improved profitability\nPublication date: 11.12.2025\nBusiness\nIn the third quarter of this year, LPP’s revenue exceeded PLN 6 bn, which represents a 22% increase YoY. The Group’s sales for the first nine months of this year amounted to PLN 16.6 bn (+20% YoY). .\nThe quarter was marked by very good sales in the physical stores, which resulted in positive LFL for most brands.\nLPP’s online sales grew faster than the market, reaching PLN 1.7 bn in the quarter (+21% YoY) and maintaining the upward trend observed since the beginning of the year.\nThanks to its sales results, a favourable gross margin of 57.6% and cost discipline, the Group maintained high profitability at every level, i.e. EBITDA, EBIT and net profit, for the third quarter in a row.\nDouble-digit YoY growth during Black Friday confirmed the stability of demand in this key retail period and is a good sign for the end of the year.\nThe target for 2026 is to increase revenues to approximately PLN 28-29 bn while maintaining the company’s profitability and PLN 2.6 bn in capital expenditure.\nThe third quarter of 2025 brought LPP accelerated profit growth: EBITDA amounted to PLN 1.7 bn (+48% YoY), operating profit to PLN 1.2 bn (+61% YoY) and net profit to PLN 800 million (+39% YoY). Thus, the Group recorded another consecutive quarter of growth at every level of its results, confirming its operational stabilisation and consistent improvement in efficiency. The key factor was good sales of +22% YoY, including PLN 1.7 bn generated in the online channel (+21% YoY). The increased customer interest in LPP brands is also confirmed by over 22% growth in physical store sales and positive like-for-like sales (LFL) indicators at +4.3%.\n–\nThe past quarter was very successful in terms of sales and margin, which we improved by 1 pp compared to the same period last year. Over 20% YoY revenue growth was visible across all channels, confirming both the relevance of our collections and the effectiveness of our shopping formats. Online and offline synergy remains crucial, especially during periods of peak trade. We are pleased with the Black Friday results not only because of the record sales level of +32% YoY, but also because they show that we are operating efficiently with growing volumes. These results provide a stable basis for achieving further development goals while maintaining cost discipline and profitability\n– comments\nMarcin Bójko, Vice-President of the Management Board of LPP.\nOne of the main factors supporting profitability in the third quarter was the gross margin of 57.6 per cent, achieved thanks to good full-price sales and the strong Polish zloty. At the same time, the company significantly improved its operational efficiency, as evidenced by a 9% YoY decrease in the SG&A/m² ratio, resulting from cost discipline and strategic measures in the area of logistics process automation. As a result, total cost growth was lower than sales growth, which allowed for an improvement in profitability YoY, despite the challenging market environment.\nThe financial results for the third quarter and the positive outlook for the last months of the year create favourable conditions for the company to implement its development plans. From August to the end of October, 232 stores were opened, including 200 Sinsay stores, and in recent months the brand made its debut in two foreign markets: in October in Azerbaijan and in December in Moldova.  The growth in the scale of LPP’s operations, concentrated on its youngest brand, is visible in all key regions, with the largest increase in the number of stores recorded in South-Eastern Europe.\n–\nThe strategic direction of our development plans remains unchanged, and the Sinsay brand continues to be the main driver of the Group’s growth, both in terms of scale and operating results. At the same time, we are adjusting the pace of expansion to market conditions, analysing various scenarios and choosing the best tactics to tap into Sinsay’s potential. We remain flexible and ready to accelerate as soon as the environment becomes favourable. An example of activities aimed at optimising potential are the tests of the mini-store format. We recognise its potential, and initial observations are positive. We will make decisions regarding wider implementation after confirming the sustainability of the effects in the longer term\n– comments\nMarcin Bójko\n.\nThe implementation of the next stages of the strategy and the scaling of operations in the coming years will be supported by investments in logistics infrastructure and solutions to improve supply chain management. In October this year, the LPP Group launched an e-commerce warehouse in Romania with an area of 65,000 sq m and a fleet of nearly 1,100 robots. A new distribution centre is planned in the immediate vicinity of the facility, which will strengthen the company’s activity in South-Eastern Europe as early as the second half of 2026. The completion of the expansion of the distribution centre in Brześć Kujawski and further investments in robotic solutions are also planned for next year.\nThe fourth quarter of this year is likely to be the most intense period of the year for LPP, both in terms of forecast sales and planned openings. By the end of January, the company plans to launch 350-400 new stores of all brands and end the financial year with revenues of at least PLN 23 bn.\nThe Group’s goals for the coming periods are equally ambitious. In 2026, LPP expects revenues of approximately PLN 28-29 bn and capital expenditure of PLN 2.6 bn, while maintaining current profitability levels. The assumptions also include stabilisation of the gross margin and costs towards the levels indicated for 2025. These goals are part of the Group’s long-term development plan, focused on strengthening the scale of operations and financial stability in the coming years. By the end of 2027, the company intends to increase its revenues to approximately PLN 33-34 bn, while maintaining a gross margin in the range of 53.5-54% and continuing to exercise cost discipline. These plans mean that the company wants to translate the approx. 20% annual revenue growth into profit growth, which, in line with its current practice, it intends to systematically share with its shareholders.\n_________________________________\nLPP is a Polish family business and one of the fastest growing clothing companies in the region of Central Europe. For 30 years, it has been successfully designing and selling the collections and accessories in Poland and abroad. LPP manages five fashion brands: Reserved, Cropp, House, Mohito, and Sinsay, whose offer is available today in stationary and online stores in 45 markets worldwide. The company has a chain of over 3,400 stores with the total area of over 2.8 million m2 and distributes the products to 3 continents every year. LPP also plays an important role as it provides employment to over 54 thousand people in its offices and sales structures in Poland, Europe, Asia, and Africa. The company is listed on the Warsaw Stock Exchange in the WIG20 index and belongs to the prestigious MSCI Poland index.\nShare:\nO Nas\nDla Mediów\nKontakt\nKariera\nSustainable development\nEnvironment\nPeople\nLPP’s contribution to the economy – taxes\nOur commitments\nOur rules\nSustainability report\nLPP Foundation\nAbout the Foundation\nNews\nProjects\nRules of cooperation\nContact to LPP Foundation\nInvestor Relations\nOur Strategy\nReports\nCalendar\nShareholding Structure\nDividend\nFinancial Information\nShare price performance\nBonds\nVideo materials\nContact for Investors\nCareer\nJob Offers\nHeadquarters\nStores\nLPP Logistics\nSilky Coders\nProjects and events\nBrands\nReserved\nCropp\nHouse\nMohito\nSinsay\nRegulaminy\nPromotional action regulations – 99% discount programme\nPrivacy Policy\nCookies Policy\nCookies List\nTrusted Partners List\nCookie Settings\nSite Map",
+      "fetch_mode": "static"
+    }
+  ],
+  "diagnostics": {
+    "model": "openai-codex:gpt-6-luna",
+    "status": "completed",
+    "stop_reason": "Unsupported non-page document content",
+    "model_requests": 6,
+    "searches": 6,
+    "page_reads": 8,
+    "dynamic_reads": 0,
+    "output_retries": 0,
+    "input_tokens": 105926,
+    "output_tokens": 2427,
+    "duration_seconds": 81.94383554207161,
+    "cost_usd": null
+  },
+  "generated_at": "2026-10-03T12:27:09.631216Z"
+}

@@ -1,0 +1,2941 @@
+{
+  "cases": [
+    {
+      "name": "fully_supported",
+      "inputs": {
+        "nip": "7310000009",
+        "run_file": "controlled/fully_supported.json"
+      },
+      "metadata": {
+        "provenance": "controlled",
+        "categories": [
+          "positive",
+          "zero_value",
+          "news_dates"
+        ],
+        "expected_outcome": "published",
+        "identity": {
+          "nip": "7310000009",
+          "legal_name": "Fictional Aurora Systems sp. z o.o.",
+          "krs": "0000123456",
+          "regon": "123456789",
+          "registered_address": "Example Avenue 10, Fictionalowo"
+        },
+        "claims": [
+          {
+            "path": "identity.legal_name",
+            "eligible": true,
+            "supported_fields": {
+              "value": "Fictional Aurora Systems sp. z o.o."
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-fully_supported",
+                "excerpt": "\"Fictional Aurora Systems sp. z o.o.\""
+              }
+            ],
+            "note": "Registry excerpt establishes exact identity field."
+          },
+          {
+            "path": "identity.krs",
+            "eligible": true,
+            "supported_fields": {
+              "value": "0000123456"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-fully_supported",
+                "excerpt": "KRS 0000123456"
+              }
+            ],
+            "note": "Registry excerpt establishes exact identity field."
+          },
+          {
+            "path": "identity.regon",
+            "eligible": true,
+            "supported_fields": {
+              "value": "123456789"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-fully_supported",
+                "excerpt": "REGON 123456789"
+              }
+            ],
+            "note": "Registry excerpt establishes exact identity field."
+          },
+          {
+            "path": "identity.registered_city",
+            "eligible": true,
+            "supported_fields": {
+              "value": "Fictionalowo"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-fully_supported",
+                "excerpt": "registered address Example Avenue 10, Fictionalowo"
+              }
+            ],
+            "note": "Registry excerpt establishes exact identity field."
+          },
+          {
+            "path": "identity.registered_address",
+            "eligible": true,
+            "supported_fields": {
+              "value": "Example Avenue 10, Fictionalowo"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-fully_supported",
+                "excerpt": "registered address Example Avenue 10, Fictionalowo"
+              }
+            ],
+            "note": "Registry excerpt establishes exact identity field."
+          },
+          {
+            "path": "identity.website",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-fully_supported",
+                "excerpt": "Registry identity: \"Fictional Aurora Systems sp. z o.o.\"; NIP 7310000009; KRS 0000123456; REGON 123456789; registered address Example Avenue 10, Fictionalowo."
+              }
+            ],
+            "note": "Retained registry snapshot does not provide this optional identity field."
+          },
+          {
+            "path": "business_description",
+            "eligible": true,
+            "supported_fields": {
+              "value": "Designs modular water pumps for municipal utilities."
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "annual-report",
+                "excerpt": "Fictional Aurora Systems sp. z o.o. designs modular water pumps for municipal utilities."
+              }
+            ],
+            "note": "Full-page source literally states the business activity."
+          },
+          {
+            "path": "products_services",
+            "eligible": true,
+            "supported_fields": {
+              "value": [
+                "Industrial water pumps",
+                "Control units"
+              ]
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "annual-report",
+                "excerpt": "Its products are industrial water pumps and control units."
+              }
+            ],
+            "note": "Explicit product list."
+          },
+          {
+            "path": "industries",
+            "eligible": true,
+            "supported_fields": {
+              "value": [
+                "Water infrastructure"
+              ]
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "annual-report",
+                "excerpt": "The company operates in water infrastructure"
+              }
+            ],
+            "note": "Explicit operating sector."
+          },
+          {
+            "path": "markets",
+            "eligible": true,
+            "supported_fields": {
+              "value": [
+                "Poland"
+              ]
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "annual-report",
+                "excerpt": "serves customers in Poland"
+              }
+            ],
+            "note": "Explicit market statement."
+          },
+          {
+            "path": "employees",
+            "eligible": true,
+            "supported_fields": {
+              "value": {
+                "kind": "exact",
+                "count": 0
+              },
+              "as_of": "2026-09-01"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "annual-report",
+                "excerpt": "As of 2026-09-01, Fictional Aurora Systems sp. z o.o. employs 0 employees."
+              }
+            ],
+            "note": "Explicit dated zero is legitimate exact employee count."
+          },
+          {
+            "path": "financials.0",
+            "eligible": true,
+            "supported_fields": {
+              "value": "0",
+              "metric": "revenue",
+              "period": {
+                "start": "2025-01-01",
+                "end": "2025-12-31"
+              },
+              "currency": "PLN",
+              "unit": "units",
+              "scope": "legal_entity"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "annual-report",
+                "excerpt": "For 2025-01-01 to 2025-12-31, standalone revenue was PLN 0"
+              }
+            ],
+            "note": "Full-page explicitly identifies standalone revenue, period, currency and zero amount."
+          },
+          {
+            "path": "financials.1",
+            "eligible": true,
+            "supported_fields": {
+              "value": "0",
+              "metric": "net_result",
+              "period": {
+                "start": "2025-01-01",
+                "end": "2025-12-31"
+              },
+              "currency": "PLN",
+              "unit": "units",
+              "scope": "legal_entity"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "annual-report",
+                "excerpt": "For 2025-01-01 to 2025-12-31, standalone revenue was PLN 0 and standalone net result was PLN 0."
+              }
+            ],
+            "note": "Source explicitly gives zero net result and the interval. The candidate rewrites a revenue-and-net sentence into a nonexistent contiguous net-only quote; zero truth remains eligible, but citation extraction is defective.",
+            "failure_layer": "extraction",
+            "failure_category": "noncontiguous_rewritten_metric_citation"
+          },
+          {
+            "path": "recent_developments.0",
+            "eligible": true,
+            "supported_fields": {
+              "value": {
+                "title": "Opened a test laboratory",
+                "summary": "Opened a test laboratory in Fictionalowo.",
+                "published_on": "2026-08-15",
+                "occurred_on": "2026-08-14"
+              }
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "news-august",
+                "excerpt": "On 2026-08-14 it opened a test laboratory in Fictionalowo."
+              }
+            ],
+            "note": "Occurrence date and separately retained publication metadata support event."
+          },
+          {
+            "path": "recent_developments.1",
+            "eligible": true,
+            "supported_fields": {
+              "value": {
+                "title": "Launched a distribution centre",
+                "summary": "Launched a distribution centre.",
+                "published_on": "2026-08-01",
+                "occurred_on": null
+              }
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "news-july",
+                "excerpt": "In July this year it launched a distribution centre."
+              }
+            ],
+            "note": "July-only phrase does not support specific occurrence day; publication metadata is independently dated.",
+            "required_fields": {
+              "value": {
+                "occurred_on": null
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "employee_exact_official",
+      "inputs": {
+        "nip": "8420000005",
+        "run_file": "controlled/employee_exact_official.json"
+      },
+      "metadata": {
+        "provenance": "controlled",
+        "categories": [
+          "employee_exact_official"
+        ],
+        "expected_outcome": "published",
+        "identity": {
+          "nip": "8420000005",
+          "legal_name": "Fictional Northstar Holdings sp. z o.o.",
+          "krs": "0000123456",
+          "regon": "123456789",
+          "registered_address": "Example Avenue 10, Fictionalowo"
+        },
+        "claims": [
+          {
+            "path": "identity.legal_name",
+            "eligible": true,
+            "supported_fields": {
+              "value": "Fictional Northstar Holdings sp. z o.o."
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-employee_exact_official",
+                "excerpt": "\"Fictional Northstar Holdings sp. z o.o.\""
+              }
+            ],
+            "note": "Registry excerpt establishes exact identity field."
+          },
+          {
+            "path": "identity.krs",
+            "eligible": true,
+            "supported_fields": {
+              "value": "0000123456"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-employee_exact_official",
+                "excerpt": "KRS 0000123456"
+              }
+            ],
+            "note": "Registry excerpt establishes exact identity field."
+          },
+          {
+            "path": "identity.regon",
+            "eligible": true,
+            "supported_fields": {
+              "value": "123456789"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-employee_exact_official",
+                "excerpt": "REGON 123456789"
+              }
+            ],
+            "note": "Registry excerpt establishes exact identity field."
+          },
+          {
+            "path": "identity.registered_city",
+            "eligible": true,
+            "supported_fields": {
+              "value": "Fictionalowo"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-employee_exact_official",
+                "excerpt": "registered address Example Avenue 10, Fictionalowo"
+              }
+            ],
+            "note": "Registry excerpt establishes exact identity field."
+          },
+          {
+            "path": "identity.registered_address",
+            "eligible": true,
+            "supported_fields": {
+              "value": "Example Avenue 10, Fictionalowo"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-employee_exact_official",
+                "excerpt": "registered address Example Avenue 10, Fictionalowo"
+              }
+            ],
+            "note": "Registry excerpt establishes exact identity field."
+          },
+          {
+            "path": "identity.website",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-employee_exact_official",
+                "excerpt": "Registry identity: \"Fictional Northstar Holdings sp. z o.o.\"; NIP 8420000005; KRS 0000123456; REGON 123456789; registered address Example Avenue 10, Fictionalowo."
+              }
+            ],
+            "note": "Retained registry snapshot does not provide this optional identity field."
+          },
+          {
+            "path": "employees",
+            "eligible": true,
+            "supported_fields": {
+              "value": {
+                "kind": "exact",
+                "count": 84
+              },
+              "as_of": "2026-09-30"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "issuer-page",
+                "excerpt": "Issuer NIP 8420000005."
+              },
+              {
+                "source_id": "issuer-page",
+                "excerpt": "As of 2026-09-30, Northstar Holdings employs 84 employees."
+              }
+            ],
+            "note": "Same explicit NIP ties abbreviated issuer name to resolved legal entity; dated exact count is in full-page source."
+          },
+          {
+            "path": "business_description",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "evidence": [],
+            "note": "No eligible retained evidence establishes business description."
+          },
+          {
+            "path": "products_services",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "evidence": [],
+            "note": "No eligible retained evidence establishes this requested profile fact."
+          },
+          {
+            "path": "industries",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "evidence": [],
+            "note": "No eligible retained evidence establishes this requested profile fact."
+          },
+          {
+            "path": "markets",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "evidence": [],
+            "note": "No eligible retained evidence establishes this requested profile fact."
+          },
+          {
+            "path": "financials.0",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "evidence": [],
+            "note": "No eligible revenue observation retained."
+          },
+          {
+            "path": "financials.1",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "evidence": [],
+            "note": "No eligible net result observation retained."
+          },
+          {
+            "path": "recent_developments.0",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "No eligible news item retained. No event item is retained; missing is distinct from a typed unknown Fact."
+          }
+        ]
+      }
+    },
+    {
+      "name": "employee_conflict",
+      "inputs": {
+        "nip": "5930000008",
+        "run_file": "controlled/employee_conflict.json"
+      },
+      "metadata": {
+        "provenance": "controlled",
+        "categories": [
+          "employee_conflict"
+        ],
+        "expected_outcome": "published",
+        "identity": {
+          "nip": "5930000008",
+          "legal_name": "Fictional Cedar Devices sp. z o.o.",
+          "krs": "0000123456",
+          "regon": "123456789",
+          "registered_address": "Example Avenue 10, Fictionalowo"
+        },
+        "claims": [
+          {
+            "path": "identity.legal_name",
+            "eligible": true,
+            "supported_fields": {
+              "value": "Fictional Cedar Devices sp. z o.o."
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-employee_conflict",
+                "excerpt": "\"Fictional Cedar Devices sp. z o.o.\""
+              }
+            ],
+            "note": "Registry excerpt establishes exact identity field."
+          },
+          {
+            "path": "identity.krs",
+            "eligible": true,
+            "supported_fields": {
+              "value": "0000123456"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-employee_conflict",
+                "excerpt": "KRS 0000123456"
+              }
+            ],
+            "note": "Registry excerpt establishes exact identity field."
+          },
+          {
+            "path": "identity.regon",
+            "eligible": true,
+            "supported_fields": {
+              "value": "123456789"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-employee_conflict",
+                "excerpt": "REGON 123456789"
+              }
+            ],
+            "note": "Registry excerpt establishes exact identity field."
+          },
+          {
+            "path": "identity.registered_city",
+            "eligible": true,
+            "supported_fields": {
+              "value": "Fictionalowo"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-employee_conflict",
+                "excerpt": "registered address Example Avenue 10, Fictionalowo"
+              }
+            ],
+            "note": "Registry excerpt establishes exact identity field."
+          },
+          {
+            "path": "identity.registered_address",
+            "eligible": true,
+            "supported_fields": {
+              "value": "Example Avenue 10, Fictionalowo"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-employee_conflict",
+                "excerpt": "registered address Example Avenue 10, Fictionalowo"
+              }
+            ],
+            "note": "Registry excerpt establishes exact identity field."
+          },
+          {
+            "path": "identity.website",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-employee_conflict",
+                "excerpt": "Registry identity: \"Fictional Cedar Devices sp. z o.o.\"; NIP 5930000008; KRS 0000123456; REGON 123456789; registered address Example Avenue 10, Fictionalowo."
+              }
+            ],
+            "note": "Retained registry snapshot does not provide this optional identity field."
+          },
+          {
+            "path": "employees",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "uncertain"
+            ],
+            "evidence": [
+              {
+                "source_id": "source-a",
+                "excerpt": "Cedar Devices employs 84 employees as of 2026-09-30."
+              },
+              {
+                "source_id": "source-b",
+                "excerpt": "Cedar Devices employs 91 employees as of 2026-09-30."
+              }
+            ],
+            "note": "Credible full-page observations conflict on same date; no selection, average, or date is acceptable.",
+            "required_fields": {
+              "value": null,
+              "as_of": null
+            }
+          },
+          {
+            "path": "business_description",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "evidence": [],
+            "note": "No eligible retained evidence establishes business description."
+          },
+          {
+            "path": "products_services",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "evidence": [],
+            "note": "No eligible retained evidence establishes this requested profile fact."
+          },
+          {
+            "path": "industries",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "evidence": [],
+            "note": "No eligible retained evidence establishes this requested profile fact."
+          },
+          {
+            "path": "markets",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "evidence": [],
+            "note": "No eligible retained evidence establishes this requested profile fact."
+          },
+          {
+            "path": "financials.0",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "evidence": [],
+            "note": "No eligible revenue observation retained."
+          },
+          {
+            "path": "financials.1",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "evidence": [],
+            "note": "No eligible net result observation retained."
+          },
+          {
+            "path": "recent_developments.0",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "No eligible news item retained. No event item is retained; missing is distinct from a typed unknown Fact."
+          }
+        ]
+      }
+    },
+    {
+      "name": "employee_range_stale",
+      "inputs": {
+        "nip": "6140000003",
+        "run_file": "controlled/employee_range_stale.json"
+      },
+      "metadata": {
+        "provenance": "controlled",
+        "categories": [
+          "employee_range_stale"
+        ],
+        "expected_outcome": "published",
+        "identity": {
+          "nip": "6140000003",
+          "legal_name": "Fictional Harbor Tools sp. z o.o.",
+          "krs": "0000123456",
+          "regon": "123456789",
+          "registered_address": "Example Avenue 10, Fictionalowo"
+        },
+        "claims": [
+          {
+            "path": "identity.legal_name",
+            "eligible": true,
+            "supported_fields": {
+              "value": "Fictional Harbor Tools sp. z o.o."
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-employee_range_stale",
+                "excerpt": "\"Fictional Harbor Tools sp. z o.o.\""
+              }
+            ],
+            "note": "Registry excerpt establishes exact identity field."
+          },
+          {
+            "path": "identity.krs",
+            "eligible": true,
+            "supported_fields": {
+              "value": "0000123456"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-employee_range_stale",
+                "excerpt": "KRS 0000123456"
+              }
+            ],
+            "note": "Registry excerpt establishes exact identity field."
+          },
+          {
+            "path": "identity.regon",
+            "eligible": true,
+            "supported_fields": {
+              "value": "123456789"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-employee_range_stale",
+                "excerpt": "REGON 123456789"
+              }
+            ],
+            "note": "Registry excerpt establishes exact identity field."
+          },
+          {
+            "path": "identity.registered_city",
+            "eligible": true,
+            "supported_fields": {
+              "value": "Fictionalowo"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-employee_range_stale",
+                "excerpt": "registered address Example Avenue 10, Fictionalowo"
+              }
+            ],
+            "note": "Registry excerpt establishes exact identity field."
+          },
+          {
+            "path": "identity.registered_address",
+            "eligible": true,
+            "supported_fields": {
+              "value": "Example Avenue 10, Fictionalowo"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-employee_range_stale",
+                "excerpt": "registered address Example Avenue 10, Fictionalowo"
+              }
+            ],
+            "note": "Registry excerpt establishes exact identity field."
+          },
+          {
+            "path": "identity.website",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-employee_range_stale",
+                "excerpt": "Registry identity: \"Fictional Harbor Tools sp. z o.o.\"; NIP 6140000003; KRS 0000123456; REGON 123456789; registered address Example Avenue 10, Fictionalowo."
+              }
+            ],
+            "note": "Retained registry snapshot does not provide this optional identity field."
+          },
+          {
+            "path": "employees",
+            "eligible": true,
+            "supported_fields": {
+              "value": {
+                "kind": "range",
+                "minimum": 51,
+                "maximum": 200
+              },
+              "as_of": "2021-06-30"
+            },
+            "allowed_states": [
+              "supported",
+              "uncertain"
+            ],
+            "evidence": [
+              {
+                "source_id": "historical-page",
+                "excerpt": "Harbor Tools had between 51 and 200 employees as of 2021-06-30."
+              }
+            ],
+            "note": "Source supports range and historical date; exact midpoint/current date are not gold.",
+            "required_fields": {
+              "value": null,
+              "as_of": null
+            },
+            "failure_layer": "extraction",
+            "failure_category": "invented_precision_or_date"
+          },
+          {
+            "path": "business_description",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "evidence": [],
+            "note": "No eligible retained evidence establishes business description."
+          },
+          {
+            "path": "products_services",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "evidence": [],
+            "note": "No eligible retained evidence establishes this requested profile fact."
+          },
+          {
+            "path": "industries",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "evidence": [],
+            "note": "No eligible retained evidence establishes this requested profile fact."
+          },
+          {
+            "path": "markets",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "evidence": [],
+            "note": "No eligible retained evidence establishes this requested profile fact."
+          },
+          {
+            "path": "financials.0",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "evidence": [],
+            "note": "No eligible revenue observation retained."
+          },
+          {
+            "path": "financials.1",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "evidence": [],
+            "note": "No eligible net result observation retained."
+          },
+          {
+            "path": "recent_developments.0",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "No eligible news item retained. No event item is retained; missing is distinct from a typed unknown Fact."
+          }
+        ]
+      }
+    },
+    {
+      "name": "ellipsis_snippet",
+      "inputs": {
+        "nip": "7250000016",
+        "run_file": "controlled/ellipsis_snippet.json"
+      },
+      "metadata": {
+        "provenance": "controlled",
+        "categories": [
+          "ellipsis_snippet"
+        ],
+        "expected_outcome": "published",
+        "identity": {
+          "nip": "7250000016",
+          "legal_name": "Fictional Maple Analytics sp. z o.o.",
+          "krs": "0000123456",
+          "regon": "123456789",
+          "registered_address": "Example Avenue 10, Fictionalowo"
+        },
+        "claims": [
+          {
+            "path": "identity.legal_name",
+            "eligible": true,
+            "supported_fields": {
+              "value": "Fictional Maple Analytics sp. z o.o."
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-ellipsis_snippet",
+                "excerpt": "\"Fictional Maple Analytics sp. z o.o.\""
+              }
+            ],
+            "note": "Registry excerpt establishes exact identity field."
+          },
+          {
+            "path": "identity.krs",
+            "eligible": true,
+            "supported_fields": {
+              "value": "0000123456"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-ellipsis_snippet",
+                "excerpt": "KRS 0000123456"
+              }
+            ],
+            "note": "Registry excerpt establishes exact identity field."
+          },
+          {
+            "path": "identity.regon",
+            "eligible": true,
+            "supported_fields": {
+              "value": "123456789"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-ellipsis_snippet",
+                "excerpt": "REGON 123456789"
+              }
+            ],
+            "note": "Registry excerpt establishes exact identity field."
+          },
+          {
+            "path": "identity.registered_city",
+            "eligible": true,
+            "supported_fields": {
+              "value": "Fictionalowo"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-ellipsis_snippet",
+                "excerpt": "registered address Example Avenue 10, Fictionalowo"
+              }
+            ],
+            "note": "Registry excerpt establishes exact identity field."
+          },
+          {
+            "path": "identity.registered_address",
+            "eligible": true,
+            "supported_fields": {
+              "value": "Example Avenue 10, Fictionalowo"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-ellipsis_snippet",
+                "excerpt": "registered address Example Avenue 10, Fictionalowo"
+              }
+            ],
+            "note": "Registry excerpt establishes exact identity field."
+          },
+          {
+            "path": "identity.website",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-ellipsis_snippet",
+                "excerpt": "Registry identity: \"Fictional Maple Analytics sp. z o.o.\"; NIP 7250000016; KRS 0000123456; REGON 123456789; registered address Example Avenue 10, Fictionalowo."
+              }
+            ],
+            "note": "Retained registry snapshot does not provide this optional identity field."
+          },
+          {
+            "path": "employees",
+            "eligible": true,
+            "supported_fields": {
+              "value": {
+                "kind": "exact",
+                "count": 84
+              },
+              "as_of": "2026-09-30"
+            },
+            "allowed_states": [
+              "uncertain",
+              "unknown"
+            ],
+            "evidence": [
+              {
+                "source_id": "employee-page",
+                "excerpt": "Maple Analytics employs 84 employees as of 2026-09-30."
+              }
+            ],
+            "note": "Underlying snippet contains complete sentence but submitted candidate altered it with ellipsis; eligible exact truth is independent of candidate; loss is extraction.",
+            "required_fields": {
+              "value": null,
+              "as_of": null
+            },
+            "failure_layer": "extraction",
+            "failure_category": "altered_quote"
+          },
+          {
+            "path": "business_description",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "uncertain",
+              "unknown"
+            ],
+            "evidence": [
+              {
+                "source_id": "search-snippet",
+                "excerpt": "Maple Analytics makes inventory software for independent bookstores."
+              }
+            ],
+            "note": "Discovery-only assertion has no retained full-page support."
+          },
+          {
+            "path": "products_services",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "evidence": [],
+            "note": "No eligible retained evidence establishes this requested profile fact."
+          },
+          {
+            "path": "industries",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "evidence": [],
+            "note": "No eligible retained evidence establishes this requested profile fact."
+          },
+          {
+            "path": "markets",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "evidence": [],
+            "note": "No eligible retained evidence establishes this requested profile fact."
+          },
+          {
+            "path": "financials.0",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "evidence": [],
+            "note": "No eligible financial observation retained for this company.",
+            "required_fields": {
+              "value": null,
+              "metric": "revenue",
+              "currency": null
+            }
+          },
+          {
+            "path": "financials.1",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "evidence": [],
+            "note": "No eligible financial observation retained for this company.",
+            "required_fields": {
+              "value": null,
+              "currency": null,
+              "period": null
+            }
+          },
+          {
+            "path": "recent_developments.0",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "No eligible news item retained. No event item is retained; missing is distinct from a typed unknown Fact."
+          }
+        ]
+      }
+    },
+    {
+      "name": "financial_context_metric",
+      "inputs": {
+        "nip": "9360000001",
+        "run_file": "controlled/financial_context_metric.json"
+      },
+      "metadata": {
+        "provenance": "controlled",
+        "categories": [
+          "financial_context_metric"
+        ],
+        "expected_outcome": "published",
+        "identity": {
+          "nip": "9360000001",
+          "legal_name": "Fictional Quartz Works sp. z o.o.",
+          "krs": "0000123456",
+          "regon": "123456789",
+          "registered_address": "Example Avenue 10, Fictionalowo"
+        },
+        "claims": [
+          {
+            "path": "identity.legal_name",
+            "eligible": true,
+            "supported_fields": {
+              "value": "Fictional Quartz Works sp. z o.o."
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-financial_context_metric",
+                "excerpt": "\"Fictional Quartz Works sp. z o.o.\""
+              }
+            ],
+            "note": "Registry excerpt establishes exact identity field."
+          },
+          {
+            "path": "identity.krs",
+            "eligible": true,
+            "supported_fields": {
+              "value": "0000123456"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-financial_context_metric",
+                "excerpt": "KRS 0000123456"
+              }
+            ],
+            "note": "Registry excerpt establishes exact identity field."
+          },
+          {
+            "path": "identity.regon",
+            "eligible": true,
+            "supported_fields": {
+              "value": "123456789"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-financial_context_metric",
+                "excerpt": "REGON 123456789"
+              }
+            ],
+            "note": "Registry excerpt establishes exact identity field."
+          },
+          {
+            "path": "identity.registered_city",
+            "eligible": true,
+            "supported_fields": {
+              "value": "Fictionalowo"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-financial_context_metric",
+                "excerpt": "registered address Example Avenue 10, Fictionalowo"
+              }
+            ],
+            "note": "Registry excerpt establishes exact identity field."
+          },
+          {
+            "path": "identity.registered_address",
+            "eligible": true,
+            "supported_fields": {
+              "value": "Example Avenue 10, Fictionalowo"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-financial_context_metric",
+                "excerpt": "registered address Example Avenue 10, Fictionalowo"
+              }
+            ],
+            "note": "Registry excerpt establishes exact identity field."
+          },
+          {
+            "path": "identity.website",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-financial_context_metric",
+                "excerpt": "Registry identity: \"Fictional Quartz Works sp. z o.o.\"; NIP 9360000001; KRS 0000123456; REGON 123456789; registered address Example Avenue 10, Fictionalowo."
+              }
+            ],
+            "note": "Retained registry snapshot does not provide this optional identity field."
+          },
+          {
+            "path": "business_description",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "evidence": [],
+            "note": "No eligible retained evidence establishes business description."
+          },
+          {
+            "path": "products_services",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "evidence": [],
+            "note": "No eligible retained evidence establishes this requested profile fact."
+          },
+          {
+            "path": "industries",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "evidence": [],
+            "note": "No eligible retained evidence establishes this requested profile fact."
+          },
+          {
+            "path": "markets",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "evidence": [],
+            "note": "No eligible retained evidence establishes this requested profile fact."
+          },
+          {
+            "path": "financials.0",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "uncertain",
+              "unknown"
+            ],
+            "evidence": [
+              {
+                "source_id": "finance-page",
+                "excerpt": "For 2025, fictional Quartz Works reported operating profit of PLN 24 thousand."
+              }
+            ],
+            "note": "Operating profit cannot substantiate net result; do not invent a net amount.",
+            "required_fields": {
+              "value": null
+            }
+          },
+          {
+            "path": "financials.1",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "uncertain",
+              "unknown"
+            ],
+            "evidence": [
+              {
+                "source_id": "finance-page",
+                "excerpt": "Revenue was 2025: 81."
+              }
+            ],
+            "note": "Retained text does not establish amount currency or reporting context.",
+            "required_fields": {
+              "value": null,
+              "metric": "revenue"
+            }
+          },
+          {
+            "path": "recent_developments.0",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "No eligible news item retained. No event item is retained; missing is distinct from a typed unknown Fact."
+          },
+          {
+            "path": "employees",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "evidence": [],
+            "note": "No eligible employee observation retained."
+          }
+        ]
+      }
+    },
+    {
+      "name": "invalid_source_id",
+      "inputs": {
+        "nip": "4170000001",
+        "run_file": "controlled/invalid_source_id.json"
+      },
+      "metadata": {
+        "provenance": "controlled",
+        "categories": [
+          "invalid_reference"
+        ],
+        "expected_outcome": "rejected",
+        "identity": {
+          "nip": "4170000001",
+          "legal_name": "Fictional Orchid Components sp. z o.o.",
+          "krs": "0000123456",
+          "regon": "123456789",
+          "registered_address": "Example Avenue 10, Fictionalowo"
+        },
+        "claims": [
+          {
+            "path": "identity.legal_name",
+            "eligible": true,
+            "supported_fields": {
+              "value": "Fictional Orchid Components sp. z o.o."
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-invalid_source_id",
+                "excerpt": "\"Fictional Orchid Components sp. z o.o.\""
+              }
+            ],
+            "note": "Registry excerpt establishes exact identity field."
+          },
+          {
+            "path": "identity.krs",
+            "eligible": true,
+            "supported_fields": {
+              "value": "0000123456"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-invalid_source_id",
+                "excerpt": "KRS 0000123456"
+              }
+            ],
+            "note": "Registry excerpt establishes exact identity field."
+          },
+          {
+            "path": "identity.regon",
+            "eligible": true,
+            "supported_fields": {
+              "value": "123456789"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-invalid_source_id",
+                "excerpt": "REGON 123456789"
+              }
+            ],
+            "note": "Registry excerpt establishes exact identity field."
+          },
+          {
+            "path": "identity.registered_city",
+            "eligible": true,
+            "supported_fields": {
+              "value": "Fictionalowo"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-invalid_source_id",
+                "excerpt": "registered address Example Avenue 10, Fictionalowo"
+              }
+            ],
+            "note": "Registry excerpt establishes exact identity field."
+          },
+          {
+            "path": "identity.registered_address",
+            "eligible": true,
+            "supported_fields": {
+              "value": "Example Avenue 10, Fictionalowo"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-invalid_source_id",
+                "excerpt": "registered address Example Avenue 10, Fictionalowo"
+              }
+            ],
+            "note": "Registry excerpt establishes exact identity field."
+          },
+          {
+            "path": "identity.website",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "evidence": [
+              {
+                "source_id": "registry-invalid_source_id",
+                "excerpt": "Registry identity: \"Fictional Orchid Components sp. z o.o.\"; NIP 4170000001; KRS 0000123456; REGON 123456789; registered address Example Avenue 10, Fictionalowo."
+              }
+            ],
+            "note": "Retained registry snapshot does not provide this optional identity field."
+          },
+          {
+            "path": "business_description",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "Run is rejected during typed loading/gating due to orphan evidence reference; no profile state is available."
+          },
+          {
+            "path": "products_services",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "Run is rejected during typed loading/gating due to orphan evidence reference; no profile state is available."
+          },
+          {
+            "path": "industries",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "Run is rejected during typed loading/gating due to orphan evidence reference; no profile state is available."
+          },
+          {
+            "path": "markets",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "Run is rejected during typed loading/gating due to orphan evidence reference; no profile state is available."
+          },
+          {
+            "path": "employees",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "Run is rejected during typed loading/gating due to orphan evidence reference; no profile state is available."
+          },
+          {
+            "path": "financials.0",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "Run is rejected during typed loading/gating due to orphan evidence reference; no profile state is available."
+          },
+          {
+            "path": "financials.1",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "Run is rejected during typed loading/gating due to orphan evidence reference; no profile state is available."
+          },
+          {
+            "path": "recent_developments.0",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "Run is rejected during typed loading/gating due to orphan evidence reference; no profile state is available."
+          }
+        ]
+      }
+    },
+    {
+      "name": "invalid_nip",
+      "inputs": {
+        "nip": "1234567890"
+      },
+      "metadata": {
+        "provenance": "controlled",
+        "categories": [
+          "invalid_input"
+        ],
+        "expected_outcome": "invalid_input",
+        "identity": {
+          "nip": null,
+          "legal_name": null,
+          "krs": null,
+          "regon": null,
+          "registered_address": null
+        },
+        "claims": [
+          {
+            "path": "identity.legal_name",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "Checksum validation rejects before registry lookup; no profile state exists."
+          },
+          {
+            "path": "identity.krs",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "Checksum validation rejects before registry lookup; no profile state exists."
+          },
+          {
+            "path": "identity.regon",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "Checksum validation rejects before registry lookup; no profile state exists."
+          },
+          {
+            "path": "identity.registered_city",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "Checksum validation rejects before registry lookup; no profile state exists."
+          },
+          {
+            "path": "identity.registered_address",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "Checksum validation rejects before registry lookup; no profile state exists."
+          },
+          {
+            "path": "identity.website",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "Checksum validation rejects before registry lookup; no profile state exists."
+          },
+          {
+            "path": "business_description",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "Checksum validation rejects before registry lookup; no profile state exists."
+          },
+          {
+            "path": "products_services",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "Checksum validation rejects before registry lookup; no profile state exists."
+          },
+          {
+            "path": "industries",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "Checksum validation rejects before registry lookup; no profile state exists."
+          },
+          {
+            "path": "markets",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "Checksum validation rejects before registry lookup; no profile state exists."
+          },
+          {
+            "path": "employees",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "Checksum validation rejects before registry lookup; no profile state exists."
+          },
+          {
+            "path": "financials.0",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "Checksum validation rejects before registry lookup; no profile state exists."
+          },
+          {
+            "path": "financials.1",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "Checksum validation rejects before registry lookup; no profile state exists."
+          },
+          {
+            "path": "recent_developments.0",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "Checksum validation rejects before registry lookup; no profile state exists."
+          }
+        ]
+      }
+    },
+    {
+      "name": "unresolved_nip",
+      "inputs": {
+        "nip": "2580000005",
+        "registry_file": "controlled/unresolved-mf-response.json"
+      },
+      "metadata": {
+        "provenance": "controlled",
+        "categories": [
+          "unresolved_registry"
+        ],
+        "expected_outcome": "unresolved",
+        "identity": {
+          "nip": null,
+          "legal_name": null,
+          "krs": null,
+          "regon": null,
+          "registered_address": null
+        },
+        "claims": [
+          {
+            "path": "identity.legal_name",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "Retained MF response parses successfully with subject null; identity and profile remain unavailable."
+          },
+          {
+            "path": "identity.krs",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "Retained MF response parses successfully with subject null; identity and profile remain unavailable."
+          },
+          {
+            "path": "identity.regon",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "Retained MF response parses successfully with subject null; identity and profile remain unavailable."
+          },
+          {
+            "path": "identity.registered_city",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "Retained MF response parses successfully with subject null; identity and profile remain unavailable."
+          },
+          {
+            "path": "identity.registered_address",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "Retained MF response parses successfully with subject null; identity and profile remain unavailable."
+          },
+          {
+            "path": "identity.website",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "Retained MF response parses successfully with subject null; identity and profile remain unavailable."
+          },
+          {
+            "path": "business_description",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "Retained MF response parses successfully with subject null; identity and profile remain unavailable."
+          },
+          {
+            "path": "products_services",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "Retained MF response parses successfully with subject null; identity and profile remain unavailable."
+          },
+          {
+            "path": "industries",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "Retained MF response parses successfully with subject null; identity and profile remain unavailable."
+          },
+          {
+            "path": "markets",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "Retained MF response parses successfully with subject null; identity and profile remain unavailable."
+          },
+          {
+            "path": "employees",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "Retained MF response parses successfully with subject null; identity and profile remain unavailable."
+          },
+          {
+            "path": "financials.0",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "Retained MF response parses successfully with subject null; identity and profile remain unavailable."
+          },
+          {
+            "path": "financials.1",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "Retained MF response parses successfully with subject null; identity and profile remain unavailable."
+          },
+          {
+            "path": "recent_developments.0",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "missing"
+            ],
+            "evidence": [],
+            "note": "Retained MF response parses successfully with subject null; identity and profile remain unavailable."
+          }
+        ]
+      }
+    },
+    {
+      "name": "retained_asseco_poland",
+      "inputs": {
+        "nip": "5220003782",
+        "run_file": "retained/asseco-poland.json"
+      },
+      "metadata": {
+        "provenance": "retained_live",
+        "categories": [
+          "real_replay",
+          "group_segment_scope",
+          "snippet_only_financials",
+          "partial_retrieval"
+        ],
+        "expected_outcome": "published",
+        "identity": {
+          "nip": "5220003782",
+          "legal_name": "\"ASSECO POLAND\" SPÓŁKA AKCYJNA",
+          "krs": "0000033391",
+          "regon": "010334578",
+          "registered_address": "OLCHOWA 14, 35-322 RZESZÓW"
+        },
+        "claims": [
+          {
+            "path": "identity.registered_city",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "required_fields": {
+              "value": null
+            },
+            "evidence": [],
+            "note": "Registry provides no separate city field; city is not inferred from registered address."
+          },
+          {
+            "path": "identity.legal_name",
+            "eligible": true,
+            "supported_fields": {
+              "value": "\"ASSECO POLAND\" SPÓŁKA AKCYJNA"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "mf-vat-5220003782-20261003T122434221952Z",
+                "excerpt": "\"\\\"ASSECO POLAND\\\" SPÓŁKA AKCYJNA\""
+              }
+            ],
+            "note": "Exact registry legal name."
+          },
+          {
+            "path": "identity.krs",
+            "eligible": true,
+            "supported_fields": {
+              "value": "0000033391"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "mf-vat-5220003782-20261003T122434221952Z",
+                "excerpt": "0000033391"
+              }
+            ],
+            "note": "Exact registry KRS."
+          },
+          {
+            "path": "identity.regon",
+            "eligible": true,
+            "supported_fields": {
+              "value": "010334578"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "mf-vat-5220003782-20261003T122434221952Z",
+                "excerpt": "010334578"
+              }
+            ],
+            "note": "Exact registry REGON."
+          },
+          {
+            "path": "identity.registered_address",
+            "eligible": true,
+            "supported_fields": {
+              "value": "OLCHOWA 14, 35-322 RZESZÓW"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "mf-vat-5220003782-20261003T122434221952Z",
+                "excerpt": "OLCHOWA 14, 35-322 RZESZÓW"
+              }
+            ],
+            "note": "Exact registry address; do not infer separately represented city."
+          },
+          {
+            "path": "identity.website",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "evidence": [],
+            "note": "Registry supplies no website and no website verification was retained."
+          },
+          {
+            "path": "business_description",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "uncertain",
+              "unknown"
+            ],
+            "evidence": [
+              {
+                "source_id": "S006",
+                "excerpt": "The segment’s results were supported by Asseco’s involvement in the development of the digital government ecosystem, numerous financial sector transformation projects, and the execution of contracts for nearly half of the hospitals covered by the National Recovery Plan (KPO)."
+              }
+            ],
+            "failure_layer": "extraction",
+            "failure_category": "entity_scope_and_candidate_overreach",
+            "note": "Full page establishes Group/Asseco Poland Segment activities, not a fully supported standalone-company summary; conservative uncertainty is not a proven gate loss."
+          },
+          {
+            "path": "products_services",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "uncertain",
+              "unknown"
+            ],
+            "evidence": [
+              {
+                "source_id": "S006",
+                "excerpt": "The segment’s results were supported by Asseco’s involvement in the development of the digital government ecosystem, numerous financial sector transformation projects, and the execution of contracts for nearly half of the hospitals covered by the National Recovery Plan (KPO)."
+              }
+            ],
+            "failure_layer": "extraction",
+            "failure_category": "entity_scope_and_candidate_overreach",
+            "note": "Specific Group/segment activity is retained, but not all candidate product assertions are independently established for Asseco Poland S.A."
+          },
+          {
+            "path": "industries",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "uncertain",
+              "unknown"
+            ],
+            "evidence": [
+              {
+                "source_id": "S006",
+                "excerpt": "The segment’s results were supported by Asseco’s involvement in the development of the digital government ecosystem, numerous financial sector transformation projects, and the execution of contracts for nearly half of the hospitals covered by the National Recovery Plan (KPO)."
+              }
+            ],
+            "failure_layer": "extraction",
+            "failure_category": "entity_scope_and_candidate_overreach",
+            "note": "Full-page evidence supports segment context, not an unqualified standalone portfolio."
+          },
+          {
+            "path": "markets",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "uncertain",
+              "unknown"
+            ],
+            "evidence": [
+              {
+                "source_id": "S006",
+                "excerpt": "Sales revenues in the Asseco Poland Segment increased by 12% to PLN 607 million (EUR 143 million)."
+              }
+            ],
+            "failure_layer": "extraction",
+            "failure_category": "entity_scope_and_candidate_overreach",
+            "note": "The cited revenue sentence identifies segment scope and does not establish the candidate's Poland market footprint."
+          },
+          {
+            "path": "employees",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown",
+              "uncertain"
+            ],
+            "evidence": [
+              {
+                "source_id": "S002",
+                "excerpt": "30,206 employees hired under employment contracts"
+              }
+            ],
+            "failure_layer": "unavailable",
+            "failure_category": "no_standalone_full_page_evidence",
+            "note": "Only a discovery snippet gives Asseco Group workforce; no full-page standalone employee observation."
+          },
+          {
+            "path": "financials.0",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown",
+              "uncertain"
+            ],
+            "evidence": [
+              {
+                "source_id": "S002",
+                "excerpt": "In 2025, Asseco Poland’s revenues reached PLN 1 703.4 million"
+              }
+            ],
+            "failure_layer": "unavailable",
+            "failure_category": "snippet_only_financial_evidence",
+            "note": "PDF discovery snippet only; linked report text was not retained. Do not gold the standalone figure from a snippet."
+          },
+          {
+            "path": "financials.1",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown",
+              "uncertain"
+            ],
+            "evidence": [
+              {
+                "source_id": "S002",
+                "excerpt": "Net profit attributable to shareholders of the parent company"
+              }
+            ],
+            "failure_layer": "unavailable",
+            "failure_category": "entity_metric_and_snippet_limitation",
+            "note": "Snippet refers to parent-shareholder net profit, not entity total net result, and is not retrieved report text."
+          },
+          {
+            "path": "recent_developments.0",
+            "eligible": true,
+            "supported_fields": {
+              "value": {
+                "title": "Q1 2026 growth in the Asseco Poland Segment",
+                "summary": "The segment recorded 12% revenue growth to PLN 607 million in Q1 2026, with results supported by digital-government development, financial-sector transformation projects, and hospital contracts. This is segment-level rather than standalone legal-entity financial information.",
+                "published_on": "2026-05-27",
+                "occurred_on": null
+              }
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "S006",
+                "excerpt": "2026-05-27\nInvestor\nEvents\nPress Releases\nAsseco Group news\nShare\nPrint\nAsseco Group reports strong results for Q1, 2026 – growth in profits and order backlog"
+              },
+              {
+                "source_id": "S006",
+                "excerpt": "Sales revenues in the Asseco Poland Segment increased by 12% to PLN 607 million (EUR 143 million)."
+              },
+              {
+                "source_id": "S006",
+                "excerpt": "The segment’s results were supported by Asseco’s involvement in the development of the digital government ecosystem, numerous financial sector transformation projects, and the execution of contracts for nearly half of the hospitals covered by the National Recovery Plan (KPO)."
+              }
+            ],
+            "failure_layer": "extraction",
+            "failure_category": "model_altered_nonmatching_citation",
+            "note": "Manually verified original segment-qualified summary against full-page body. Publication date is explicit directly above the article category/title despite null retriever metadata. Original candidate citation inserts an ellipsis that is not in retained text; this is extraction loss, not evidence of gate malfunction."
+          },
+          {
+            "path": "recent_developments.1",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "uncertain",
+              "unknown"
+            ],
+            "evidence": [
+              {
+                "source_id": "S010",
+                "excerpt": "Regulatory Filings"
+              }
+            ],
+            "failure_layer": "retrieval",
+            "failure_category": "filing_index_not_document_body",
+            "note": "Retained full page is a regulatory-filings index, not the appointment filing body; snippet-only details do not establish the candidate event."
+          }
+        ]
+      }
+    },
+    {
+      "name": "retained_lpp",
+      "inputs": {
+        "nip": "5831014898",
+        "run_file": "retained/lpp.json"
+      },
+      "metadata": {
+        "provenance": "retained_live",
+        "categories": [
+          "real_replay",
+          "full_page_business_news",
+          "group_scope",
+          "date_role_distinction"
+        ],
+        "expected_outcome": "published",
+        "identity": {
+          "nip": "5831014898",
+          "legal_name": "LPP SPÓŁKA AKCYJNA",
+          "krs": "0000000778",
+          "regon": "190852164",
+          "registered_address": "ŁĄKOWA 39/44, 80-769 GDAŃSK"
+        },
+        "claims": [
+          {
+            "path": "identity.registered_city",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "required_fields": {
+              "value": null
+            },
+            "evidence": [],
+            "note": "Registry provides no separate city field; city is not inferred from registered address."
+          },
+          {
+            "path": "identity.legal_name",
+            "eligible": true,
+            "supported_fields": {
+              "value": "LPP SPÓŁKA AKCYJNA"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "mf-vat-5831014898-20261003T122547685494Z",
+                "excerpt": "LPP SPÓŁKA AKCYJNA"
+              }
+            ],
+            "note": "Exact registry legal name."
+          },
+          {
+            "path": "identity.krs",
+            "eligible": true,
+            "supported_fields": {
+              "value": "0000000778"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "mf-vat-5831014898-20261003T122547685494Z",
+                "excerpt": "0000000778"
+              }
+            ],
+            "note": "Exact registry KRS."
+          },
+          {
+            "path": "identity.regon",
+            "eligible": true,
+            "supported_fields": {
+              "value": "190852164"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "mf-vat-5831014898-20261003T122547685494Z",
+                "excerpt": "190852164"
+              }
+            ],
+            "note": "Exact registry REGON."
+          },
+          {
+            "path": "identity.registered_address",
+            "eligible": true,
+            "supported_fields": {
+              "value": "ŁĄKOWA 39/44, 80-769 GDAŃSK"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "mf-vat-5831014898-20261003T122547685494Z",
+                "excerpt": "ŁĄKOWA 39/44, 80-769 GDAŃSK"
+              }
+            ],
+            "note": "Exact registry address."
+          },
+          {
+            "path": "identity.website",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "evidence": [],
+            "note": "Registry supplies no website and no website verification was retained."
+          },
+          {
+            "path": "business_description",
+            "eligible": true,
+            "supported_fields": {
+              "value": "Polish fashion company that designs and sells clothing collections and accessories through five brands, using physical stores and online channels."
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "S007",
+                "excerpt": "LPP\nis a Polish family-owned company and one of the fastest-growing fashion companies in Central Europe."
+              },
+              {
+                "source_id": "S007",
+                "excerpt": "For 30 years, it has successfully designed and sold its collections and accessories in Poland and abroad."
+              },
+              {
+                "source_id": "S007",
+                "excerpt": "LPP manages five fashion brands: Reserved, Cropp, House, Mohito and Sinsay, with their product ranges now available in stores and online in 47 markets worldwide."
+              }
+            ],
+            "failure_layer": "extraction",
+            "failure_category": "model_altered_nonmatching_brand_citation",
+            "note": "Original candidate value manually approved against official retained full pages, including physical/online channels and Sinsay marketplace. Its brand citation changes the source wording; real source truth exists but the exact candidate citation is defective."
+          },
+          {
+            "path": "products_services",
+            "eligible": true,
+            "supported_fields": {
+              "value": [
+                "Clothing collections and accessories",
+                "Fashion retail through Reserved, Cropp, House, Mohito and Sinsay",
+                "Online sales and omnichannel retail",
+                "Sinsay marketplace platform"
+              ]
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "S007",
+                "excerpt": "For 30 years, it has successfully designed and sold its collections and accessories in Poland and abroad."
+              },
+              {
+                "source_id": "S007",
+                "excerpt": "LPP manages five fashion brands: Reserved, Cropp, House, Mohito and Sinsay, with their product ranges now available in stores and online in 47 markets worldwide."
+              },
+              {
+                "source_id": "S007",
+                "excerpt": "At its core is an omnichannel model, underpinned by continued investment in logistics, technology and the expansion of the Group’s retail network."
+              },
+              {
+                "source_id": "S007",
+                "excerpt": "Recently, the brand has expanded its online range by introducing a marketplace model that features products from external partners alongside its own range."
+              }
+            ],
+            "failure_layer": "extraction",
+            "failure_category": "model_altered_nonmatching_brand_citation",
+            "note": "Original candidate value manually approved against official retained full pages, including physical/online channels and Sinsay marketplace. Its brand citation changes the source wording; real source truth exists but the exact candidate citation is defective."
+          },
+          {
+            "path": "industries",
+            "eligible": true,
+            "supported_fields": {
+              "value": [
+                "Apparel and fashion",
+                "Retail and e-commerce"
+              ]
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "S007",
+                "excerpt": "LPP has crossed the landmark threshold of 4,000 stores, confirming its position among the leading players in the European fashion industry."
+              },
+              {
+                "source_id": "S016",
+                "excerpt": "E-commerce boosted revenue by 16.4% year-on-year."
+              }
+            ],
+            "failure_layer": "gate",
+            "failure_category": "exact_eligible_classification_rejected",
+            "note": "Original apparel/fashion and retail/e-commerce classifications are manually grounded in exact full-page excerpts; neither source scope nor candidate citation mismatch accounts for this downgrade."
+          },
+          {
+            "path": "markets",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "uncertain",
+              "unknown"
+            ],
+            "evidence": [
+              {
+                "source_id": "S007",
+                "excerpt": "Today, the Group operates across 47 markets worldwide, both in stores and online, with its retail network covering more than 3 million sq m of retail space across three continents."
+              }
+            ],
+            "failure_layer": "extraction",
+            "failure_category": "group_scope_not_standalone_market_footprint",
+            "note": "47 markets are explicitly Group scope; not gold as an unqualified LPP S.A. legal-entity footprint."
+          },
+          {
+            "path": "employees",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "uncertain",
+              "unknown"
+            ],
+            "evidence": [
+              {
+                "source_id": "S007",
+                "excerpt": "LPP also plays an important role in job creation, employing nearly 63,000 people in offices and retail operations in Poland and elsewhere in Europe, Asia and Africa."
+              }
+            ],
+            "failure_layer": "extraction",
+            "failure_category": "group_scope_not_standalone_headcount",
+            "note": "Group-wide workforce, not standalone company headcount; page publication date is not employee observation date."
+          },
+          {
+            "path": "financials.0",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown",
+              "uncertain"
+            ],
+            "evidence": [
+              {
+                "source_id": "S001",
+                "excerpt": "in 2025, the LPP Group’s revenue exceeded PLN 23 bn"
+              }
+            ],
+            "failure_layer": "unavailable",
+            "failure_category": "no_explicit_interval_entity_financial_gold",
+            "note": "Full page provides Group revenue but not standalone amount or an explicit fiscal interval; not eligible for standalone structured financial gold."
+          },
+          {
+            "path": "financials.1",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown",
+              "uncertain"
+            ],
+            "evidence": [
+              {
+                "source_id": "S001",
+                "excerpt": "net profit stood at PLN 2.4 bn"
+              }
+            ],
+            "failure_layer": "unavailable",
+            "failure_category": "no_explicit_interval_entity_financial_gold",
+            "note": "Full page provides Group net profit but not standalone total net result or explicit fiscal interval."
+          },
+          {
+            "path": "recent_developments.0",
+            "eligible": true,
+            "supported_fields": {
+              "value": {
+                "title": "LPP Group reaches 4,000 stores",
+                "summary": "LPP reported passing the 4,000-store milestone and operating in 47 markets, with Central Asia identified as a key growth area and Sinsay as the main expansion driver.",
+                "published_on": "2026-09-07",
+                "occurred_on": null
+              }
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "S007",
+                "excerpt": "Publication date: 07.09.2026"
+              },
+              {
+                "source_id": "S007",
+                "excerpt": "LPP has crossed the landmark threshold of 4,000 stores"
+              },
+              {
+                "source_id": "S007",
+                "excerpt": "Central Asia plays a particularly important role in the Group’s current growth strategy."
+              }
+            ],
+            "failure_layer": "gate",
+            "failure_category": "exact_eligible_group_news_rejected",
+            "note": "Original Group-qualified value and null occurrence date manually approved against exact full-page contents and publication metadata; this is a gate false-negative opportunity."
+          },
+          {
+            "path": "recent_developments.1",
+            "eligible": true,
+            "supported_fields": {
+              "value": {
+                "title": "LPP Group second-quarter 2026 results",
+                "summary": "Group revenue increased 18% year-on-year in constant currencies to PLN 6.6bn; net profit was PLN 768m. A new distribution centre launched in July, month only.",
+                "published_on": "2026-09-17",
+                "occurred_on": null
+              }
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "S016",
+                "excerpt": "Publication date: 17.09.2026"
+              },
+              {
+                "source_id": "S016",
+                "excerpt": "The LPP Group’s revenue in the second quarter of 2026 increased by 18% year-on-year in constant currencies, reaching PLN 6.6bn."
+              },
+              {
+                "source_id": "S016",
+                "excerpt": "net profit by 48% year-on-year to PLN 768m."
+              },
+              {
+                "source_id": "S016",
+                "excerpt": "In July this year, the Group launched a new distribution centre in that country, restoring full logistical capacity in the region."
+              }
+            ],
+            "failure_layer": "extraction",
+            "failure_category": "constant_currency_omission_and_invented_day",
+            "note": "Correct gold includes the constant-currency qualifier and no day precision. Original candidate drops the growth basis and invents July 1 despite month-only occurrence evidence; the downgrade is not a pure gate defect."
+          },
+          {
+            "path": "recent_developments.2",
+            "eligible": true,
+            "supported_fields": {
+              "value": {
+                "title": "LPP reports 2025 Group results",
+                "summary": "The company reported Group revenue above PLN 23bn and net profit of PLN 2.4bn for 2025, with store expansion and logistics and technology investment supporting growth.",
+                "published_on": "2026-03-26",
+                "occurred_on": null
+              }
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "S001",
+                "excerpt": "Publication date: 26.03.2026"
+              },
+              {
+                "source_id": "S001",
+                "excerpt": "in 2025, the LPP Group’s revenue exceeded PLN 23 bn"
+              },
+              {
+                "source_id": "S001",
+                "excerpt": "net profit stood at PLN 2.4 bn"
+              }
+            ],
+            "failure_layer": "gate",
+            "failure_category": "exact_eligible_group_news_rejected",
+            "note": "Original Group-qualified value and null occurrence date manually approved against exact full-page contents and publication metadata; this is a gate false-negative opportunity."
+          }
+        ]
+      }
+    },
+    {
+      "name": "retained_orlen",
+      "inputs": {
+        "nip": "7740001454",
+        "run_file": "retained/orlen.json"
+      },
+      "metadata": {
+        "provenance": "retained_live",
+        "categories": [
+          "real_replay",
+          "snippet_only",
+          "page_read_failures",
+          "scope_constraints"
+        ],
+        "expected_outcome": "published",
+        "identity": {
+          "nip": "7740001454",
+          "legal_name": "ORLEN SPÓŁKA AKCYJNA",
+          "krs": "0000028860",
+          "regon": "610188201",
+          "registered_address": "CHEMIKÓW 7, 09-411 PŁOCK"
+        },
+        "claims": [
+          {
+            "path": "identity.registered_city",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "required_fields": {
+              "value": null
+            },
+            "evidence": [],
+            "note": "Registry provides no separate city field; city is not inferred from registered address."
+          },
+          {
+            "path": "identity.legal_name",
+            "eligible": true,
+            "supported_fields": {
+              "value": "ORLEN SPÓŁKA AKCYJNA"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "mf-vat-7740001454-20261003T122709914638Z",
+                "excerpt": "ORLEN SPÓŁKA AKCYJNA"
+              }
+            ],
+            "note": "Exact registry legal name."
+          },
+          {
+            "path": "identity.krs",
+            "eligible": true,
+            "supported_fields": {
+              "value": "0000028860"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "mf-vat-7740001454-20261003T122709914638Z",
+                "excerpt": "0000028860"
+              }
+            ],
+            "note": "Exact registry KRS."
+          },
+          {
+            "path": "identity.regon",
+            "eligible": true,
+            "supported_fields": {
+              "value": "610188201"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "mf-vat-7740001454-20261003T122709914638Z",
+                "excerpt": "610188201"
+              }
+            ],
+            "note": "Exact registry REGON."
+          },
+          {
+            "path": "identity.registered_address",
+            "eligible": true,
+            "supported_fields": {
+              "value": "CHEMIKÓW 7, 09-411 PŁOCK"
+            },
+            "allowed_states": [
+              "supported"
+            ],
+            "evidence": [
+              {
+                "source_id": "mf-vat-7740001454-20261003T122709914638Z",
+                "excerpt": "CHEMIKÓW 7, 09-411 PŁOCK"
+              }
+            ],
+            "note": "Exact registry address."
+          },
+          {
+            "path": "identity.website",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown"
+            ],
+            "evidence": [],
+            "note": "Registry supplies no website and no website verification was retained."
+          },
+          {
+            "path": "business_description",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "uncertain",
+              "unknown"
+            ],
+            "evidence": [
+              {
+                "source_id": "S016",
+                "excerpt": "ORLEN S.A. The Company’s main business activity is the manufacture and processing of refined petroleum products."
+              }
+            ],
+            "failure_layer": "retrieval",
+            "failure_category": "snippet_only_no_full_page",
+            "note": "Candidate cites discovery snippets; no full-page retrieval retained, so candidate and Group snippets do not qualify as eligible gold."
+          },
+          {
+            "path": "products_services",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "uncertain",
+              "unknown"
+            ],
+            "evidence": [
+              {
+                "source_id": "S016",
+                "excerpt": "The ORLEN Group’s core business consists in electricity generation, distribution and trading, crude oil processing, production of fuels, petrochemicals and chemicals"
+              }
+            ],
+            "failure_layer": "retrieval",
+            "failure_category": "snippet_only_group_scope",
+            "note": "Group-only offerings occur in search snippet; not full-page evidence or standalone service scope."
+          },
+          {
+            "path": "industries",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "uncertain",
+              "unknown"
+            ],
+            "evidence": [
+              {
+                "source_id": "S016",
+                "excerpt": "The ORLEN Group’s core business consists in electricity generation, distribution and trading, crude oil processing, production of fuels, petrochemicals and chemicals"
+              }
+            ],
+            "failure_layer": "retrieval",
+            "failure_category": "snippet_only_no_full_page",
+            "note": "No retained full-page evidence for candidate industries."
+          },
+          {
+            "path": "markets",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "uncertain",
+              "unknown"
+            ],
+            "evidence": [
+              {
+                "source_id": "S003",
+                "excerpt": "Zapewnienie stabilnych dostaw energii, paliw i gazu z przyjaznych środowisku źródeł to główny cel połączonej Grupy ORLEN do 2030 roku."
+              }
+            ],
+            "failure_layer": "retrieval",
+            "failure_category": "snippet_strategy_not_market_evidence",
+            "note": "A Group strategy snippet is not full-page evidence or a verified complete market footprint."
+          },
+          {
+            "path": "employees",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown",
+              "uncertain"
+            ],
+            "evidence": [
+              {
+                "source_id": "S011",
+                "excerpt": "As at the end of 2025, the ORLEN Group had 66,563 employees with employment contracts"
+              }
+            ],
+            "failure_layer": "retrieval",
+            "failure_category": "snippet_group_headcount",
+            "note": "Search snippet only, explicitly Group-wide; no full-page standalone employee observation."
+          },
+          {
+            "path": "financials.0",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown",
+              "uncertain"
+            ],
+            "evidence": [
+              {
+                "source_id": "S001",
+                "excerpt": "| Revenue | 13,798 | 13,116 |"
+              }
+            ],
+            "failure_layer": "retrieval",
+            "failure_category": "report_read_failure_snippet_only",
+            "note": "Report page read failed; discovery-snippet table is not eligible financial evidence and its scope cannot be promoted to standalone gold."
+          },
+          {
+            "path": "financials.1",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "unknown",
+              "uncertain"
+            ],
+            "evidence": [
+              {
+                "source_id": "S001",
+                "excerpt": "| Net profit | 239 | 185 |"
+              }
+            ],
+            "failure_layer": "retrieval",
+            "failure_category": "report_read_failure_snippet_only",
+            "note": "No retained full-page net-result amount/context; discovery-snippet table is not eligible financial evidence."
+          },
+          {
+            "path": "recent_developments.0",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "uncertain",
+              "unknown"
+            ],
+            "evidence": [
+              {
+                "source_id": "S007",
+                "excerpt": "PRESS RELEASES 20.01.2026"
+              },
+              {
+                "source_id": "S007",
+                "excerpt": "ORLEN Announces Gas Discovery in the North Sea"
+              }
+            ],
+            "failure_layer": "retrieval",
+            "failure_category": "listing_snippet_only",
+            "note": "Discovery listing snippet only; release page absent from retained full-page corpus."
+          },
+          {
+            "path": "recent_developments.1",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "uncertain",
+              "unknown"
+            ],
+            "evidence": [
+              {
+                "source_id": "S006",
+                "excerpt": "ORLEN and the Port of Gdynia Authority have signed an agreement to explore the use of LNG and bioLNG as marine vessel fuels."
+              }
+            ],
+            "failure_layer": "retrieval",
+            "failure_category": "listing_snippet_only",
+            "note": "Discovery listing snippet only; release page absent."
+          },
+          {
+            "path": "recent_developments.2",
+            "eligible": false,
+            "supported_fields": null,
+            "allowed_states": [
+              "uncertain",
+              "unknown"
+            ],
+            "evidence": [
+              {
+                "source_id": "S006",
+                "excerpt": "PRESS RELEASES 08.09.2026"
+              }
+            ],
+            "failure_layer": "retrieval",
+            "failure_category": "listing_snippet_only",
+            "note": "Candidate is based on listing material only; no retained article text establishes content/date as a full-page fact."
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,145 @@
+{
+  "identity": {
+    "nip": "6140000003",
+    "legal_name": {
+      "state": "supported",
+      "value": "Fictional Harbor Tools sp. z o.o.",
+      "evidence": [
+        {
+          "source_id": "registry-employee_range_stale",
+          "excerpt": "\"Fictional Harbor Tools sp. z o.o.\""
+        }
+      ]
+    },
+    "krs": {
+      "state": "supported",
+      "value": "0000123456",
+      "evidence": [
+        {
+          "source_id": "registry-employee_range_stale",
+          "excerpt": "KRS 0000123456"
+        }
+      ]
+    },
+    "regon": {
+      "state": "supported",
+      "value": "123456789",
+      "evidence": [
+        {
+          "source_id": "registry-employee_range_stale",
+          "excerpt": "REGON 123456789"
+        }
+      ]
+    },
+    "registered_city": {
+      "state": "supported",
+      "value": "Fictionalowo",
+      "evidence": [
+        {
+          "source_id": "registry-employee_range_stale",
+          "excerpt": "registered address Example Avenue 10, Fictionalowo"
+        }
+      ]
+    },
+    "registered_address": {
+      "state": "supported",
+      "value": "Example Avenue 10, Fictionalowo",
+      "evidence": [
+        {
+          "source_id": "registry-employee_range_stale",
+          "excerpt": "registered address Example Avenue 10, Fictionalowo"
+        }
+      ]
+    },
+    "website": {
+      "state": "unknown",
+      "reason": "Official registry snapshot does not provide a website."
+    },
+    "resolved_at": "2026-10-02T11:00:00Z"
+  },
+  "draft": {
+    "business_description": {
+      "state": "unknown",
+      "reason": "No supported business description retained."
+    },
+    "products_services": {
+      "state": "unknown",
+      "reason": "No supported products or services retained."
+    },
+    "industries": {
+      "state": "unknown",
+      "reason": "No supported industry retained."
+    },
+    "markets": {
+      "state": "unknown",
+      "reason": "No supported market retained."
+    },
+    "employees": {
+      "state": "supported",
+      "value": {
+        "kind": "exact",
+        "count": 126
+      },
+      "evidence": [
+        {
+          "source_id": "historical-page",
+          "excerpt": "Harbor Tools had between 51 and 200 employees as of 2021-06-30."
+        }
+      ],
+      "as_of": "2026-10-03"
+    },
+    "financials": [
+      {
+        "state": "unknown",
+        "reason": "No supported revenue retained.",
+        "metric": "revenue"
+      },
+      {
+        "state": "unknown",
+        "reason": "No supported net result retained.",
+        "metric": "net_result"
+      }
+    ],
+    "recent_developments": [],
+    "limitations": [
+      "Insufficient retained source material for complete profile."
+    ]
+  },
+  "sources": [
+    {
+      "source": {
+        "source_id": "registry-employee_range_stale",
+        "url": "https://registry-employee_range_stale.example/",
+        "title": "Fictional national register",
+        "retrieved_at": "2026-10-02T12:00:00Z"
+      },
+      "kind": "registry",
+      "content": "Registry identity: \"Fictional Harbor Tools sp. z o.o.\"; NIP 6140000003; KRS 0000123456; REGON 123456789; registered address Example Avenue 10, Fictionalowo.",
+      "fetch_mode": "registry"
+    },
+    {
+      "source": {
+        "source_id": "historical-page",
+        "url": "https://historical-page.example/",
+        "title": "Fictional Harbor Tools archived report",
+        "retrieved_at": "2026-10-02T12:00:00Z"
+      },
+      "kind": "full_page",
+      "content": "Harbor Tools had between 51 and 200 employees as of 2021-06-30.",
+      "fetch_mode": "static"
+    }
+  ],
+  "diagnostics": {
+    "model": "offline-retained-run",
+    "status": "completed",
+    "model_requests": 0,
+    "searches": 0,
+    "page_reads": 0,
+    "dynamic_reads": 0,
+    "output_retries": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "duration_seconds": 0
+  },
+  "generated_at": "2026-10-03T12:00:00Z"
+}
