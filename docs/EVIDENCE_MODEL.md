@@ -1,6 +1,6 @@
 # Canonical data and evidence contract
 
-[OG-150](https://linear.app/tpg96/issue/OG-150) · Authoritative code: [`src/company_bi/models.py`](../src/company_bi/models.py). These are publication models, not an implemented research agent, identity resolver, evidence gate or renderer.
+[OG-150](https://linear.app/tpg96/issue/OG-150) established the canonical models in [`src/company_bi/models.py`](../src/company_bi/models.py). The implemented publication gate is [`src/company_bi/evidence.py`](../src/company_bi/evidence.py); the issue sections below record the successive contract extensions.
 
 ## Models
 
@@ -8,7 +8,7 @@
 | --- | --- |
 | `InputRow` | Row number and normalized ten-digit NIP shape. `nip.py` performs normalization/checksum validation before any registry request; the schema itself still checks shape only. |
 | `CompanyIdentity` | Fixed NIP and supported resolved legal name, explicit-state identifiers/address/city/website, and an aware resolution timestamp. No unresolved company profile. |
-| `Source` | Successful-retrieval metadata: application-assigned ID, HTTP(S) URL, title, aware retrieval timestamp and optional publication date. |
+| `Source` | Retriever-owned ID, final HTTP(S) URL, title, aware retrieval timestamp, optional publication date and optional validated redirect chain. |
 | `ProfileSource` | Final source metadata plus required `registry`, `search_snippet` or `full_page` provenance; researched supported facts require retained full-page evidence. |
 | `EvidenceRef` | Existing source ID plus a nonblank excerpt; never a bare URL citation. |
 | `Fact[T]` | Typed value, evidence state, evidence references and a missing-data/uncertainty reason. |
@@ -36,7 +36,7 @@ Conflicting values must not become multiple contradictory supported observations
 
 Schema validators enforce state/value consistency, nonempty evidence, known and unique source IDs, timestamps, ranges, financial context, metric/period uniqueness, at most three financial periods, at most three recent items, and complete/partial coverage consistency. A source cannot have a retrieval timestamp later than report generation. All retrieval/resolution/generation/completion timestamps carry timezone offsets.
 
-**A user/model-supplied `Source` is not proof of retrieval.** The application owns the ledger. The later deterministic gate must independently check:
+**A user/model-supplied `Source` is not proof of retrieval.** The application owns the ledger. The deterministic gate checks:
 
 1. The source ID exists in the trusted successful-retrieval ledger, and metadata matches it.
 2. The excerpt exists in the stored extracted source text, allowing only consistent whitespace normalization—not fuzzy matching, paraphrase, fabricated ellipses or search-only snippets.
@@ -44,9 +44,9 @@ Schema validators enforce state/value consistency, nonempty evidence, known and 
 4. Financial evidence includes the same metric, reporting interval, currency, unit and stated entity/group scope as the candidate amount.
 5. The evidence directly supports the observation; ambiguity/conflict/freshness issues are not hidden.
 
-Exact excerpt presence alone is not semantic proof. Uncertain observations stay uncertain unless a new deterministic gate decision has adequate evidence. Failed reads do not become `Source` entries; record their reasons in limitations. The agent's candidate output will be defined in the research issue, without granting authority over identity, source creation or final supported publication.
+Exact excerpt presence alone is not semantic proof. Uncertain observations stay uncertain unless a new deterministic gate decision has adequate evidence. Failed reads do not become `Source` entries; record their reasons in limitations. Research candidate output grants no authority over identity, source creation or final supported publication.
 
-This foundation deliberately does **not** implement retrieval, excerpt matching or semantic evidence verification. It defines their input/output contract; it does not call schema-valid examples evidence-verified reports.
+The OG-150 foundation alone did not implement retrieval, excerpt matching or semantic evidence verification. The subsequent sections describe the implemented boundaries; schema-valid examples alone are not evidence-verified reports.
 
 ## Quantities, dates and coverage
 
@@ -97,4 +97,36 @@ Date roles are checked before retaining structured dates, including already-unce
 The user's OG-153 completeness rule supersedes the foundation's optional-identifier coverage penalty: missing KRS/REGON/website is displayed but does not alone force partial. Required core gaps and identity conflicts still do. `BatchResult` may additionally retain the actual `ResearchDiagnostics` and a `research_path`; no inferred usage/cost is substituted for unavailable data.
 
 Final paths remain `outputs/<nip>.json`, `outputs/<nip>.md` and `outputs/batch_summary.csv`. A concrete filesystem checkpoint records company outcomes after each company, preserving duplicates as separate ordered input rows. Summary evidence counts include the six canonical identity facts and researched facts. Resume re-gates valid same-NIP retained research with the current deterministic rules and republishes its pair, preserving original diagnostics; a schema-valid old profile alone cannot authorize reuse. Missing/corrupt/mismatched research triggers fresh processing. Explicit partial/failed retry or force controls repeated research. No storage/provider/orchestration framework is added.
+
+## Adversarial correction contract
+
+These corrections do not change the three evidence states, financial required fields, canonical version `0.1`, research instructions, dependencies or usage budgets. Measurements and compatibility losses are recorded separately in [ADVERSARIAL_CORRECTIONS.md](ADVERSARIAL_CORRECTIONS.md).
+
+### Assertion qualification
+
+Literal presence is still necessary, but a nearby verb is not sufficient. Current business/catalog claims require a recognized company-linked affirmative relation in the retained enclosing statement. The finite contract recognizes direct present relations, selected Polish present forms, restricted copular/product-list and passive forms. Actual events have a separate past-event relation set. A past offering, plan, hypothetical/conditional statement or discontinued activity is not a current offering. An excerpt cannot gain support by trimming away an enclosing condition. Recognized contrast clauses can retain an affirmative observation even when a different clause describes a plan or denial.
+
+This remains a bounded heuristic grammar, **not general natural-language entailment**. Unrecognized phrasing, complex scope, attribution and unsupported languages can lose valid observations. A downgrade reason identifies a failed assertion contract without claiming that every rejected sentence has been disproved. Rejected proposed catalog values are cleared; the raw research run retains the original candidate and quote.
+
+### Actual financial observations and sign
+
+In addition to metric, interval, currency, unit, precision and entity scope, evidence must match a direct realized/reporting assertion or the narrow labeled-row form. Targets, forecasts, denials and conditions do not establish actual financial results, including qualifiers after the amount. This is not a universal financial-table or document parser.
+
+An exclusive unsigned `net loss`/`strata netto` magnitude is interpreted as a negative **observation** for comparison. A wrong positive candidate is cleared and downgraded, never silently rewritten to the negative amount. Explicit signs remain meaningful; a combined `net profit/(loss)` label does not itself impose a minus sign. An explicitly reported zero remains valid. Distinct actual amounts for the same metric/context remain a conflict with both citations.
+
+### Employee observation dates
+
+An observation date must belong to the cited employee observation, using a recognized explicit date role such as `as of` or `na dzień`. Publication/retrieval dates do not supply that role. Invalid optional `as_of` is cleared independently of an otherwise verified count. Dated past-tense observations may remain supported within the existing freshness policy; future hiring does not establish headcount.
+
+Differing counts for the same verified date remain uncertain. Distinct verified observation dates are not automatically contradictory. If either date is unresolved, differing counts remain a conflict; the gate does not arbitrarily select the newest source or infer a missing candidate date. Group and other-entity observations are not company alternatives merely because their numbers differ.
+
+### Redirect provenance and trust boundary
+
+`Source.redirect_chain` is empty when no redirect was observed. Otherwise it records two to six HTTP(S) request URLs: the discovered URL, each validated redirect target, and the final URL. A real self-redirect may repeat a URL; the existing five-redirect limit still bounds loops. Retained discovery snippets keep their original URL; full-page/profile metadata keeps the final URL and chain. JSON and Markdown expose that relationship.
+
+Every static hop is public-target validated, and each response URL must match its actual request before response/redirect handling. Static thin-shell → dynamic fallback retains the static chain. An unexplained browser URL change is rejected, not invented as another validated hop. Existing private-target, redirect-limit and browser resource guards remain in force.
+
+Run validation, page storage and publication share the lineage checks. Chain endpoints must agree with retained discovery/full-page URLs; registry/snippet material cannot claim a full-page chain. Without a chain, repeated source IDs require the same normalized URL, ignoring fragments. Neither `www` nor a trailing path slash is silently removed. A legacy run with an unexplained URL change can therefore be rejected; historical redirects cannot be reconstructed from URL similarity.
+
+The chain is trusted application metadata from retrieval, **not cryptographic proof for arbitrary edited JSON**. Structural consistency cannot authenticate a fabricated ledger or establish that a remote publisher's assertions are true.
 

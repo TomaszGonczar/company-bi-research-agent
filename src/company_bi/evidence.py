@@ -8,7 +8,6 @@ from collections import defaultdict
 from datetime import date
 from decimal import Decimal
 from typing import Any
-from urllib.parse import urlsplit
 
 from company_bi.models import (
     CompanyEvent,
@@ -24,6 +23,7 @@ from company_bi.models import (
     ProfileSource,
     RetrievedSource,
     profile_has_gaps,
+    validate_source_lineage,
 )
 
 _SPACE = re.compile(r"\s+")
@@ -89,6 +89,248 @@ _UNIT_WORDS = {
     "millions": {"million", "millions", "mln", "milionów"},
     "billions": {"billion", "billions", "mld", "miliardów"},
 }
+_ASSERTION_CLAUSE_BREAK = re.compile(
+    r";|\b(?:but|however|although|whereas)\b"
+    r"|\band(?=\s+(?:does|do|did|has|have|is|are|was|were|will|plans|intends|aims|not|never|no|could|might|may))"
+    r"|\bi(?=\s+nie\b)",
+    re.I,
+)
+_ASSERTION_NEGATION = {
+    "not",
+    "never",
+    "no",
+    "without",
+    "neither",
+    "nie",
+    "nigdy",
+    "żaden",
+    "discontinued",
+    "ceased",
+    "formerly",
+    "previously",
+    "replaced",
+    "used",
+}
+_ASSERTION_MODALITY = {
+    "will",
+    "shall",
+    "would",
+    "could",
+    "might",
+    "may",
+    "if",
+    "whether",
+    "unless",
+    "plan",
+    "plans",
+    "planned",
+    "intend",
+    "intends",
+    "intended",
+    "aim",
+    "aims",
+    "aimed",
+    "hope",
+    "hopes",
+    "expected",
+    "expect",
+    "expects",
+    "proposed",
+    "proposes",
+    "scheduled",
+    "planuje",
+    "planowano",
+    "zamierza",
+    "zamierzają",
+    "będzie",
+    "będą",
+}
+_CURRENT_RELATIONS = {
+    "provide",
+    "provides",
+    "sell",
+    "sells",
+    "offer",
+    "offers",
+    "manufacture",
+    "manufactures",
+    "produce",
+    "produces",
+    "supply",
+    "supplies",
+    "include",
+    "includes",
+    "serve",
+    "serves",
+    "operate",
+    "operates",
+    "design",
+    "designs",
+    "specialize",
+    "specializes",
+    "employ",
+    "employs",
+    "is",
+    "are",
+    "has",
+    "have",
+    "świadczy",
+    "oferuje",
+    "sprzedaje",
+    "produkuje",
+    "wytwarza",
+    "prowadzi",
+    "jest",
+    "są",
+    "zatrudnia",
+}
+_EVENT_RELATIONS = {
+    "opens",
+    "opened",
+    "launches",
+    "launched",
+    "acquired",
+    "signed",
+    "appointed",
+    "transferred",
+    "built",
+    "introduced",
+    "founded",
+    "expanded",
+    "uruchomiła",
+}
+_PASSIVE_RELATIONS = {"provided", "offered", "sold"}
+_ASSERTION_PREDICATES = (
+    _CURRENT_RELATIONS
+    | _EVENT_RELATIONS
+    | _PASSIVE_RELATIONS
+    | {
+        "manufactured",
+        "produced",
+        "supplied",
+        "included",
+        "served",
+        "operated",
+        "employed",
+        "was",
+        "were",
+        "had",
+    }
+)
+_FINANCIAL_NONACTUAL = {
+    "will",
+    "shall",
+    "would",
+    "could",
+    "might",
+    "may",
+    "target",
+    "targets",
+    "targeted",
+    "forecast",
+    "forecasts",
+    "forecasted",
+    "project",
+    "projects",
+    "projected",
+    "planned",
+    "plan",
+    "plans",
+    "budget",
+    "budgets",
+    "aim",
+    "aims",
+    "expected",
+    "expects",
+    "estimate",
+    "estimated",
+    "considering",
+    "potential",
+    "if",
+    "whether",
+    "unless",
+    "not",
+    "never",
+    "no",
+    "without",
+    "nie",
+    "nigdy",
+    "prognoza",
+    "prognozowane",
+    "planowany",
+    "docelowy",
+}
+_FINANCIAL_REALIZED = {
+    "reported",
+    "reports",
+    "recorded",
+    "records",
+    "generated",
+    "generates",
+    "earned",
+    "earns",
+    "posted",
+    "posts",
+    "incurred",
+    "incurs",
+    "recognized",
+    "recognised",
+    "realized",
+    "realised",
+    "actual",
+    "is",
+    "are",
+    "was",
+    "were",
+    "wykazano",
+    "wykazała",
+    "osiągnął",
+    "osiągnęła",
+    "uzyskał",
+    "uzyskała",
+    "odnotował",
+    "odnotowała",
+    "wyniósł",
+    "wyniosła",
+}
+_FINANCIAL_REPORT_VERBS = _FINANCIAL_REALIZED - {"actual", "is", "are", "was", "were"}
+_FINANCIAL_SUBJECT_BRIDGES = {
+    "a",
+    "an",
+    "the",
+    "currently",
+    "group",
+    "holding",
+    "holdings",
+    "company",
+    "issuer",
+    "it",
+    "its",
+    "standalone",
+    "non",
+    "consolidated",
+    "individual",
+    "jednostkowy",
+    "jednostkowe",
+    "jednostkowo",
+}
+_FINANCIAL_METRIC_BRIDGES = {
+    "a",
+    "an",
+    "the",
+    "standalone",
+    "non",
+    "consolidated",
+    "individual",
+    "net",
+    "annual",
+    "total",
+    "gross",
+    "operating",
+    "jednostkowy",
+    "jednostkowe",
+    "jednostkowo",
+}
 
 
 def _norm(value: str) -> str:
@@ -122,7 +364,7 @@ _SOURCE_SENTENCE_BREAK = re.compile(r"(?<=[!?])\s+|(?<=\.)\s+(?=[A-ZĄĆĘŁŃÓ
 
 
 def _bounded_source_contexts(content: str, excerpt: str) -> list[str]:
-    """Return retained contiguous spans: two sentences before each exact quote occurrence."""
+    """Return bounded source spans through each exact quote's enclosing sentence."""
     normalized = _norm(content)
     quote = _norm(excerpt)
     if not quote:
@@ -136,7 +378,15 @@ def _bounded_source_contexts(content: str, excerpt: str) -> list[str]:
             index for index, start in enumerate(sentence_starts) if start <= offset
         )
         start = sentence_starts[max(0, sentence_index - 2)]
-        contexts.append(normalized[start : offset + len(quote)])
+        quote_end = offset + len(quote)
+        end = next(
+            (boundary for boundary in sentence_starts if boundary > quote_end), len(normalized)
+        )
+        if end < len(normalized) and normalized[end - 1 : end] == ";":
+            end = next(
+                (boundary for boundary in sentence_starts if boundary > end), len(normalized)
+            )
+        contexts.append(normalized[start:end])
         offset += 1
     return contexts
 
@@ -354,6 +604,38 @@ def _entity_attached(text: str, anchors: set[str], run: CompanyResearchRun) -> b
     return False
 
 
+def _shared_contrast_entity_attached(
+    context: str, anchors: set[str], run: CompanyResearchRun
+) -> bool:
+    company_name = _company_name_tokens(run)
+    allowed_names = (
+        set(company_name)
+        | anchors
+        | {
+            "it",
+            "its",
+            "they",
+            "their",
+            "company",
+            "issuer",
+            "the",
+        }
+        | _SENTENCE_INITIAL_NON_NAMES
+    )
+    for sentence in _sentences(context):
+        company_named = False
+        for clause in _ASSERTION_CLAUSE_BREAK.split(sentence):
+            tokens = [token.casefold() for token in _WORD.findall(clause)]
+            if company_named and set(tokens) & anchors:
+                words = _WORD.findall(clause)
+                if not any(
+                    word[:1].isupper() and word.casefold() not in allowed_names for word in words
+                ):
+                    return True
+            company_named |= _contains_sequence(tokens, company_name)
+    return False
+
+
 def _source_entity_attached(text: str, anchors: set[str], run: CompanyResearchRun) -> bool:
     if _tokens(text) & {"group"}:
         return False
@@ -362,7 +644,9 @@ def _source_entity_attached(text: str, anchors: set[str], run: CompanyResearchRu
         return False
     if _entity_attached(sentences[-1], anchors, run):
         return True
-    return _has_company_antecedent(text, run) and _entity_attached(text, anchors, run)
+    return (
+        _has_company_antecedent(text, run) and _entity_attached(text, anchors, run)
+    ) or _shared_contrast_entity_attached(text, anchors, run)
 
 
 def _nearby_negation(text: str, anchors: set[str]) -> bool:
@@ -415,11 +699,119 @@ def _phrase_outside_company_name(phrase: list[str], text: str, run: CompanyResea
     )
 
 
+def _positive_assertion_qualifies(
+    context: str,
+    phrase_tokens: list[str],
+    run: CompanyResearchRun,
+    *,
+    mode: str = "current",
+) -> bool:
+    """Match a bounded company-subject assertion, not an unqualified lexical mention."""
+    company_subjects = set(_legal_name_core_tokens(run)) | {
+        "it",
+        "its",
+        "they",
+        "their",
+        "we",
+        "our",
+        "company",
+        "issuer",
+    }
+    relations = _CURRENT_RELATIONS | _PASSIVE_RELATIONS
+    if mode == "event":
+        relations |= _EVENT_RELATIONS
+    for sentence in _sentences(context):
+        clauses = _ASSERTION_CLAUSE_BREAK.split(sentence)
+        prior_company_subject = False
+        conditional_scope = False
+        for clause in clauses:
+            tokens = [token.casefold() for token in _WORD.findall(clause)]
+            if not tokens:
+                continue
+            if conditional_scope:
+                prior_company_subject |= bool(set(tokens) & company_subjects)
+                continue
+            if set(tokens) & {"if", "whether", "unless"}:
+                conditional_scope = True
+                prior_company_subject |= bool(set(tokens) & company_subjects)
+                continue
+            if set(tokens) & (_ASSERTION_NEGATION | _ASSERTION_MODALITY):
+                prior_company_subject |= bool(set(tokens) & company_subjects)
+                continue
+            for start in range(len(tokens) - len(phrase_tokens) + 1):
+                end = start + len(phrase_tokens)
+                if tokens[start:end] != phrase_tokens:
+                    continue
+                for index, token in enumerate(tokens):
+                    if token not in relations or abs(index - start) > 10:
+                        continue
+                    preceding = tokens[max(0, index - 8) : index]
+                    subject = bool(set(preceding) & company_subjects) or prior_company_subject
+                    passive = (
+                        token in _PASSIVE_RELATIONS
+                        and index > start
+                        and index > 0
+                        and tokens[index - 1] in {"is", "are"}
+                        and tokens[index + 1 : index + 2] == ["by"]
+                        and bool(set(tokens[index + 2 : index + 10]) & company_subjects)
+                    )
+                    if token in _PASSIVE_RELATIONS and not passive:
+                        continue
+                    if not subject and not passive:
+                        continue
+                    if token in {"is", "are"}:
+                        if index >= start:
+                            continue
+                        between = tokens[index + 1 : start]
+                        simple_copula = len(between) <= 2 and set(between).issubset(
+                            {
+                                "a",
+                                "an",
+                                "the",
+                                "in",
+                                "within",
+                                "among",
+                                "active",
+                                "leading",
+                                "major",
+                            }
+                        )
+                        product_list = (
+                            token == "are"
+                            and bool(set(preceding) & {"products", "services", "offerings"})
+                            and between
+                            and between[-1] == "and"
+                            and between.count("and") == 1
+                            and len(between) <= 8
+                            and not any(word.endswith("ing") for word in between)
+                        )
+                        if not simple_copula and not product_list:
+                            continue
+                    elif token in {"has", "have"} and index < start:
+                        if tokens[index + 1 : start] and tokens[index + 1] not in {
+                            "a",
+                            "an",
+                            "the",
+                        }:
+                            continue
+                    elif (
+                        index > start
+                        and not passive
+                        and not (mode == "event" and start <= index < end)
+                    ):
+                        continue
+                    return True
+            prior_company_subject |= bool(set(tokens) & company_subjects)
+    return False
+
+
 def _ordered_phrase_supported(
     phrase: str,
     excerpt: str,
     run: CompanyResearchRun,
     source_content: str | None = None,
+    *,
+    mode: str = "current",
 ) -> bool:
     phrase_tokens = [token.casefold() for token in _WORD.findall(_norm(phrase))]
     if not phrase_tokens:
@@ -446,6 +838,12 @@ def _ordered_phrase_supported(
             exact_claim
             and any(attachment(context, anchors, run) for context in contexts)
             and (phrase_is_negative or not _nearby_negation(sentence, anchors))
+            and any(
+                _positive_assertion_qualifies(
+                    context, claim_tokens or phrase_tokens, run, mode=mode
+                )
+                for context in contexts
+            )
         ):
             return True
     return False
@@ -455,9 +853,42 @@ def _lexical_support(
     fact: Fact[Any], excerpt: str, run: CompanyResearchRun, material: RetrievedSource
 ) -> bool:
     phrases = _candidate_terms(fact.value)
+
     return bool(phrases) and all(
         _ordered_phrase_supported(phrase, excerpt, run, material.content) for phrase in phrases
     )
+
+
+def _has_unqualified_text_assertion(
+    fact: Fact[Any],
+    refs: list[EvidenceRef],
+    run: CompanyResearchRun,
+    by_id: dict[str, list[RetrievedSource]],
+) -> bool:
+    company_tokens = set(_company_name_tokens(run))
+    for ref in refs:
+        for material in by_id.get(ref.source_id, []):
+            if material.kind != "full_page" or not _exact_excerpt(material, ref.excerpt):
+                continue
+            for phrase in _candidate_terms(fact.value):
+                phrase_tokens = [token.casefold() for token in _WORD.findall(_norm(phrase))]
+                claim = [token for token in phrase_tokens if token not in company_tokens]
+                if not claim:
+                    continue
+                for sentence in _sentences(ref.excerpt):
+                    tokens = [token.casefold() for token in _WORD.findall(sentence)]
+                    if not _contains_sequence(tokens, claim):
+                        continue
+                    contexts = _bounded_source_contexts(material.content, sentence)
+                    if not any(
+                        _source_entity_attached(context, set(claim), run) for context in contexts
+                    ):
+                        continue
+                    if not any(
+                        _positive_assertion_qualifies(context, claim, run) for context in contexts
+                    ):
+                        return True
+    return False
 
 
 _DATE_PATTERN = re.compile(r"\b(?:\d{4}-\d{2}-\d{2}|\d{2}\.\d{2}\.\d{4}|\d{2}/\d{2}/\d{4})\b")
@@ -567,6 +998,140 @@ def _observed_metric_amount(text: str, fact: FinancialFact) -> str | None:
     return nearest_amounts[0]
 
 
+def _financial_assertion_kind(text: str, fact: FinancialFact, run: CompanyResearchRun) -> str:
+    """Recognize direct report clauses or a literal, fully labeled financial row."""
+    without_dates = _DATE_PATTERN.sub(" ", text)
+    tokens = [token.casefold() for token in _WORD.findall(without_dates)]
+    metrics = _metric_spans(tokens, fact.metric)
+    core = (
+        set(_legal_name_core_tokens(run))
+        | _tokens(fact.group_name or "")
+        | {
+            "company",
+            "issuer",
+            "it",
+            "its",
+        }
+    )
+    subject_bridges = (
+        _FINANCIAL_SUBJECT_BRIDGES
+        | {token for suffix in _LEGAL_FORM_SUFFIXES for token in suffix}
+        | {"s"}
+    )
+    scope_words = (
+        {"group", "consolidated", "grupa", "skonsolidowany"}
+        if fact.scope == "group"
+        else {
+            "standalone",
+            "non",
+            "consolidated",
+            "individual",
+            "jednostkowy",
+            "jednostkowe",
+            "jednostkowo",
+        }
+    )
+
+    def direct_subject(before: int, bridges: set[str]) -> bool:
+        # A nested pronoun must not restart the subject after an unrecognized verb.
+        if not set(tokens[:before]).issubset(core | bridges):
+            return False
+        return any(
+            token in core
+            and before - index <= 8
+            and set(tokens[index + 1 : before]).issubset(bridges)
+            for index, token in enumerate(tokens[:before])
+        )
+
+    for start, end in metrics:
+        if any(
+            tokens[index] in _FINANCIAL_NONACTUAL
+            for index in range(max(0, start - 8), min(len(tokens), end + 13))
+        ):
+            return "nonactual"
+
+        for index, token in enumerate(tokens):
+            if token in _FINANCIAL_REPORT_VERBS and 0 <= start - index <= 10:
+                predicate_to_metric = tokens[index + 1 : start]
+                if (
+                    len(predicate_to_metric) <= 5
+                    and set(predicate_to_metric).issubset(_FINANCIAL_METRIC_BRIDGES)
+                    and direct_subject(index, subject_bridges)
+                ):
+                    return "reported"
+            if token in {"is", "are", "was", "were"} and end <= index <= end + 3:
+                if direct_subject(start, subject_bridges | scope_words):
+                    return "reported"
+            if (
+                token == "actual"
+                and index < start
+                and start - index <= 2
+                and direct_subject(index, subject_bridges)
+            ):
+                return "reported"
+            if (
+                token in _FINANCIAL_REPORT_VERBS
+                and end <= index <= end + 4
+                and "by" in tokens[index + 1 : index + 4]
+                and any(subject in tokens[index + 1 : index + 7] for subject in core)
+                and set(tokens[:start]).issubset(core | subject_bridges)
+            ):
+                return "reported"
+
+        currencies = _currency_spans(tokens, fact.currency or "")
+        units = _unit_spans(tokens, fact.unit or "")
+        scopes = _phrase_spans(tokens, scope_words)
+        amounts = [
+            len(_WORD.findall(without_dates[: match.start()]))
+            for match in _AMOUNT_PATTERN.finditer(without_dates)
+        ]
+        for scope_start, scope_end in scopes:
+            for currency_start, currency_end in currencies:
+                for unit_start, unit_end in units:
+                    if not (
+                        scope_end
+                        <= start
+                        <= end
+                        <= currency_start
+                        <= currency_end
+                        <= unit_start
+                        <= unit_end
+                        and start - scope_end <= 2
+                        and currency_start - end <= 2
+                        and direct_subject(scope_start, subject_bridges)
+                    ):
+                        continue
+                    if any(unit_end <= amount <= unit_end + 4 for amount in amounts):
+                        return "table"
+    return "unsupported"
+
+
+def _financial_assertion_amount(
+    text: str, fact: FinancialFact, observed: str, run: CompanyResearchRun
+) -> str | None:
+    if _financial_assertion_kind(text, fact, run) not in {"reported", "table"}:
+        return None
+    if fact.metric != "net_result":
+        return observed
+    tokens = [token.casefold() for token in _WORD.findall(_DATE_PATTERN.sub(" ", text))]
+    combined = ("profit" in tokens and "loss" in tokens) or (
+        "zysk" in tokens and "strata" in tokens
+    )
+    if combined:
+        return observed
+    net_loss = any(
+        tokens[index : index + 2] == ["net", "loss"]
+        or tokens[index : index + 2] == ["strata", "netto"]
+        for index in range(len(tokens) - 1)
+    )
+    explicitly_signed = observed.startswith(("+", "-"))
+    if not net_loss:
+        return observed
+    if observed.startswith("+"):
+        return None
+    return observed if explicitly_signed else f"-{observed}"
+
+
 def _date_present(text: str, value: date) -> bool:
     normalized = _norm(text)
     return (
@@ -576,56 +1141,154 @@ def _date_present(text: str, value: date) -> bool:
     )
 
 
-def _financial_observation(
-    fact: FinancialFact, excerpt: str, run: CompanyResearchRun
-) -> str | None:
+def _financial_observations(
+    fact: FinancialFact,
+    excerpt: str,
+    run: CompanyResearchRun,
+    source_content: str | None = None,
+) -> list[str]:
     if fact.period is None or fact.currency is None or fact.unit is None:
-        return None
+        return []
     metric_words = _METRICS[fact.metric]
-    for window in _context_windows(excerpt):
-        tokens = _tokens(window)
-        if not _date_present(window, fact.period.start) or not _date_present(
-            window, fact.period.end
-        ):
-            continue
-        if fact.scope == "group":
-            if not fact.group_name or not _tokens(fact.group_name).issubset(tokens):
+    contexts = (
+        _bounded_source_contexts(source_content, excerpt) if source_content is not None else []
+    ) or [excerpt]
+    observations: list[str] = []
+    normalized_excerpt = _norm(excerpt)
+    for context in contexts:
+        windows = _context_windows(context)
+        windows.sort(
+            key=lambda window: (
+                normalized_excerpt not in _norm(window),
+                len(_sentences(window)),
+                len(window),
+            )
+        )
+        for window in windows:
+            tokens = _tokens(window)
+            if not _date_present(window, fact.period.start) or not _date_present(
+                window, fact.period.end
+            ):
                 continue
-            if not (tokens & {"group", "consolidated", "grupa", "skonsolidowany"}):
+            if fact.scope == "group":
+                if not fact.group_name or not _tokens(fact.group_name).issubset(tokens):
+                    continue
+                if not (tokens & {"group", "consolidated", "grupa", "skonsolidowany"}):
+                    continue
+            elif fact.scope == "legal_entity":
+                if not (
+                    tokens
+                    & {
+                        "standalone",
+                        "non-consolidated",
+                        "individual",
+                        "jednostkowy",
+                        "jednostkowe",
+                        "jednostkowo",
+                    }
+                ):
+                    continue
+            else:
                 continue
-        elif fact.scope == "legal_entity":
-            if not (
-                tokens
-                & {
+            if not _entity_attached(
+                window,
+                metric_words
+                | {
                     "standalone",
                     "non-consolidated",
                     "individual",
                     "jednostkowy",
                     "jednostkowe",
                     "jednostkowo",
-                }
+                },
+                run,
             ):
                 continue
-        else:
+            observed = _observed_metric_amount(window, fact)
+            if observed is not None:
+                normalized = _financial_assertion_amount(window, fact, observed, run)
+                if normalized is not None and normalized not in observations:
+                    observations.append(normalized)
+    return observations
+
+
+def _employee_observation_date(text: str) -> date | None:
+    """Return only an explicitly observation-attached date, never page metadata."""
+    dates: set[date] = set()
+    for match in _DATE_PATTERN.finditer(text):
+        raw = match.group()
+        try:
+            value = (
+                date.fromisoformat(raw)
+                if "-" in raw
+                else date(int(raw[6:]), int(raw[3:5]), int(raw[:2]))
+            )
+        except ValueError:
             continue
-        if not _entity_attached(
-            window,
-            metric_words
-            | {
-                "standalone",
-                "non-consolidated",
-                "individual",
-                "jednostkowy",
-                "jednostkowe",
-                "jednostkowo",
-            },
-            run,
+        before = text[max(0, match.start() - 48) : match.start()].casefold()
+        after = text[match.end() : match.end() + 32].casefold()
+        if re.search(
+            r"(?:as\s+of|as\s+at|as\s+on|na\s+dzień|według\s+stanu\s+na)[\s:,-]*$",
+            before,
+        ) or re.match(
+            r"[\s:,-]*(?:as\s+of|as\s+at|na\s+dzień|według\s+stanu\s+na)\b",
+            after,
         ):
-            continue
-        observed = _observed_metric_amount(window, fact)
-        if observed is not None:
-            return observed
-    return None
+            if not _publication_date_present(text, value):
+                dates.add(value)
+    return next(iter(dates)) if len(dates) == 1 else None
+
+
+def _employee_assertion_supported(context: str) -> bool:
+    for sentence in _sentences(context):
+        for clause in _ASSERTION_CLAUSE_BREAK.split(sentence):
+            tokens = _tokens(clause)
+            if tokens & (_ASSERTION_NEGATION | _ASSERTION_MODALITY):
+                continue
+            if _employee_range_observation(clause) is None:
+                continue
+            if (
+                tokens & {"employed", "had", "was", "were"}
+                and _employee_observation_date(clause) is None
+            ):
+                continue
+            words = [token.casefold() for token in _WORD.findall(clause)]
+            for index, token in enumerate(words):
+                if token in _EMPLOYEE_WORDS:
+                    nearby = words[max(0, index - 8) : index + 4]
+                    if set(nearby) & _ASSERTION_PREDICATES:
+                        return True
+    return False
+
+
+def _has_unqualified_employee_assertion(
+    fact: EmployeeFact,
+    refs: list[EvidenceRef],
+    run: CompanyResearchRun,
+    by_id: dict[str, list[RetrievedSource]],
+) -> bool:
+    if fact.value is None:
+        return False
+    expected = (
+        (fact.value.count, fact.value.count)
+        if isinstance(fact.value, ExactEmployees)
+        else (fact.value.minimum, fact.value.maximum)
+    )
+    for ref in refs:
+        for material in by_id.get(ref.source_id, []):
+            if material.kind != "full_page" or not _exact_excerpt(material, ref.excerpt):
+                continue
+            for sentence in _sentences(ref.excerpt):
+                if _employee_range_observation(sentence) != expected:
+                    continue
+                contexts = _bounded_source_contexts(material.content, sentence)
+                if any(
+                    _employee_entity_attached(context, run)
+                    and not _employee_assertion_supported(context)
+                    for context in contexts
+                ):
+                    return True
+    return False
 
 
 def _employee_supported(
@@ -638,8 +1301,7 @@ def _employee_supported(
             contexts = _bounded_source_contexts(material.content, sentence)
             if (
                 _employee_observation(sentence) == expected
-                and not _employee_qualifier(sentence)
-                and _tokens(sentence) & _EMPLOYEE_WORDS
+                and any(_employee_assertion_supported(context) for context in contexts)
                 and any(_employee_entity_attached(context, run) for context in contexts)
             ):
                 return True
@@ -649,7 +1311,7 @@ def _employee_supported(
             contexts = _bounded_source_contexts(material.content, sentence)
             if (
                 _employee_range_observation(sentence) == expected_bounds
-                and _tokens(sentence) & _EMPLOYEE_WORDS
+                and any(_employee_assertion_supported(context) for context in contexts)
                 and any(_employee_entity_attached(context, run) for context in contexts)
             ):
                 return True
@@ -669,12 +1331,19 @@ def _employee_as_of_supported(
                 continue
             for sentence in _sentences(ref.excerpt):
                 contexts = _bounded_source_contexts(material.content, sentence)
+                matches_value = (
+                    isinstance(fact.value, ExactEmployees)
+                    and _employee_observation(sentence) == (fact.value.count,)
+                ) or (
+                    isinstance(fact.value, EmployeeRange)
+                    and _employee_range_observation(sentence)
+                    == (fact.value.minimum, fact.value.maximum)
+                )
                 if (
-                    _employee_range_observation(sentence) is not None
-                    and _tokens(sentence) & _EMPLOYEE_WORDS
+                    matches_value
+                    and any(_employee_assertion_supported(context) for context in contexts)
                     and any(_employee_entity_attached(context, run) for context in contexts)
-                    and _date_present(sentence, fact.as_of)
-                    and not _publication_date_present(sentence, fact.as_of)
+                    and _employee_observation_date(sentence) == fact.as_of
                 ):
                     return True
     return False
@@ -710,7 +1379,7 @@ def _event_contexts(event: CompanyEvent, excerpt: str, run: CompanyResearchRun) 
     return [
         window
         for window in _context_windows(excerpt)
-        if all(_ordered_phrase_supported(phrase, window, run) for phrase in phrases)
+        if all(_ordered_phrase_supported(phrase, window, run, mode="event") for phrase in phrases)
     ]
 
 
@@ -925,13 +1594,10 @@ def _append_rejection_reason(reason: str | None, rejection: str) -> str:
 
 def build_profile(run: CompanyResearchRun) -> CompanyProfile:
     """Build a final profile only from exact, eligible, context-bearing retained citations."""
+    validate_source_lineage(run.sources)
     by_id: dict[str, list[RetrievedSource]] = defaultdict(list)
     for material in run.sources:
         by_id[material.source.source_id].append(material)
-    for source_id, materials in by_id.items():
-        hosts = {urlsplit(str(material.source.url)).hostname for material in materials}
-        if len(hosts) > 1:
-            raise ValueError(f"source ID {source_id} has conflicting host metadata")
     known_ids = set(by_id)
 
     identity_facts = (
@@ -996,35 +1662,40 @@ def build_profile(run: CompanyResearchRun) -> CompanyProfile:
             else:
                 assert isinstance(candidate, EmployeeRange)
                 expected = (candidate.minimum, candidate.maximum)
-            observations = {
-                observed
-                for ref, material in eligible
-                if (observed := _employee_range_observation(ref.excerpt)) is not None
-            }
-            alternative_refs: list[EvidenceRef] = []
+            candidate_date = fact.as_of if _employee_as_of_supported(fact, run, by_id) else None
+            conflicts: list[tuple[RetrievedSource, str, tuple[int | None, int | None]]] = []
             for material in run.sources:
                 if material.kind != "full_page":
                     continue
                 for sentence in _sentences(material.content):
                     observed = _employee_range_observation(sentence)
                     contexts = _bounded_source_contexts(material.content, sentence)
+                    observation_date = _employee_observation_date(sentence)
                     if (
-                        observed is not None
-                        and _tokens(sentence) & _EMPLOYEE_WORDS
-                        and any(_employee_entity_attached(context, run) for context in contexts)
+                        observed is None
+                        or not _employee_assertion_supported(sentence)
+                        or not any(_employee_entity_attached(context, run) for context in contexts)
+                        or observed == expected
                     ):
-                        observations.add(observed)
-                        if observed != expected:
-                            alternative_refs.append(
-                                EvidenceRef(source_id=material.source.source_id, excerpt=sentence)
-                            )
-            if any(observed != expected for observed in observations):
+                        continue
+                    if (
+                        candidate_date is not None
+                        and observation_date is not None
+                        and candidate_date != observation_date
+                    ):
+                        continue
+                    conflicts.append((material, sentence, observed))
+            if conflicts:
+                alternative_refs = [
+                    EvidenceRef(source_id=material.source.source_id, excerpt=sentence)
+                    for material, sentence, _ in conflicts
+                ]
                 unique_refs = {
                     (ref.source_id, ref.excerpt): ref for ref in [*fact.evidence, *alternative_refs]
                 }
                 return _downgrade(
                     fact,
-                    "Conflicting employee observations are retained without selecting one",
+                    "Conflicting employee observations for the same or unresolved observation date",
                     clear_value=True,
                     evidence=list(unique_refs.values()),
                 )
@@ -1039,12 +1710,27 @@ def build_profile(run: CompanyResearchRun) -> CompanyProfile:
         reason = (
             "No exact full-page citation verifies the candidate value, entity, and required context"
         )
+        clear_value = False
         if not exact_refs:
             reason = (
                 "Evidence is absent, snippet-only, or not an exact "
                 "NFC/whitespace-normalized excerpt from a retained full page"
             )
-        return _downgrade(fact, reason, clear_value=kind == "employees")
+        elif isinstance(fact, EmployeeFact) and _has_unqualified_employee_assertion(
+            fact, exact_refs, run, by_id
+        ):
+            reason = (
+                "Cited employee count lacks a recognized current assertion or an explicitly "
+                "attached observation date"
+            )
+            clear_value = True
+        elif kind != "employees" and _has_unqualified_text_assertion(fact, exact_refs, run, by_id):
+            reason = (
+                "Cited page contains the candidate wording but not a recognized bounded "
+                "affirmative relation for the resolved company"
+            )
+            clear_value = True
+        return _downgrade(fact, reason, clear_value=kind == "employees" or clear_value)
 
     business = gate(run.draft.business_description, "text")
     products = gate(run.draft.products_services, "text")
@@ -1068,6 +1754,9 @@ def build_profile(run: CompanyResearchRun) -> CompanyProfile:
             continue
         verified_amount = False
         conflicting_amount = False
+        nonactual_assertion = False
+        unsupported_assertion = False
+        candidate_mismatch = False
         nip_conflict = False
         for ref in financial.evidence:
             if not by_id.get(ref.source_id):
@@ -1090,11 +1779,18 @@ def build_profile(run: CompanyResearchRun) -> CompanyProfile:
                 ]
                 if not cited:
                     continue
-                observations = [
-                    observed
-                    for ref in cited
-                    if (observed := _financial_observation(financial, ref.excerpt, run)) is not None
-                ]
+                observations: list[str] = []
+                for ref in cited:
+                    cited_observations = _financial_observations(
+                        financial, ref.excerpt, run, material.content
+                    )
+                    if not cited_observations:
+                        context = "\n".join(_bounded_source_contexts(material.content, ref.excerpt))
+                        kind = _financial_assertion_kind(context or ref.excerpt, financial, run)
+                        nonactual_assertion |= kind == "nonactual"
+                        unsupported_assertion |= kind == "unsupported"
+                    else:
+                        observations.extend(cited_observations)
                 normalized_content = _norm(material.content)
                 ordered_quotes = sorted(
                     {ref.excerpt for ref in cited},
@@ -1106,9 +1802,9 @@ def build_profile(run: CompanyResearchRun) -> CompanyProfile:
                 )
                 if len(ordered_quotes) > 1:
                     combined = " ; ".join(ordered_quotes)
-                    combined_observation = _financial_observation(financial, combined, run)
-                    if combined_observation is not None:
-                        observations.append(combined_observation)
+                    observations.extend(
+                        _financial_observations(financial, combined, run, material.content)
+                    )
                 for observed in observations:
                     if financial.value is not None and _same_precision_amount(
                         observed, financial.value
@@ -1116,6 +1812,7 @@ def build_profile(run: CompanyResearchRun) -> CompanyProfile:
                         verified_amount = True
                     else:
                         conflicting_amount = True
+                        candidate_mismatch = True
         if nip_conflict:
             financials.append(
                 _downgrade(
@@ -1137,14 +1834,26 @@ def build_profile(run: CompanyResearchRun) -> CompanyProfile:
         elif verified_amount:
             financials.append(financial)
         else:
-            financials.append(
-                _downgrade(
-                    financial,
-                    "Exact full-page evidence does not verify metric, amount, precision, "
-                    "currency, unit, entity scope and explicit reporting interval",
-                    clear_value=True,
-                )
+            reason = (
+                "Exact full-page evidence does not verify metric, reporting interval, currency, "
+                "unit, entity scope, and amount"
             )
+            if nonactual_assertion:
+                reason = (
+                    "Cited financial assertion is a target, forecast, denial, or conditional, "
+                    "not an actual reported result"
+                )
+            elif candidate_mismatch:
+                reason = (
+                    "Cited actual financial amount or sign does not match the candidate "
+                    "at the declared precision"
+                )
+            elif unsupported_assertion:
+                reason = (
+                    "Cited financial text does not match the bounded reported-observation "
+                    "or labeled-row contract"
+                )
+            financials.append(_downgrade(financial, reason, clear_value=True))
 
     events: list[CompanyEvent] = []
     for event in run.draft.recent_developments:
@@ -1182,17 +1891,17 @@ def build_profile(run: CompanyResearchRun) -> CompanyProfile:
         if nip_conflict:
             rejections.append("Cited full-page text contains a conflicting explicit NIP")
 
-        reason = event.reason
+        event_reason = event.reason
         for rejection in rejections:
-            reason = _append_rejection_reason(reason, rejection)
+            event_reason = _append_rejection_reason(event_reason, rejection)
         if event.state == "supported" and (clear_event or nip_conflict):
             event = _downgrade(
-                event, reason or "Event evidence was rejected", clear_value=clear_event
+                event, event_reason or "Event evidence was rejected", clear_value=clear_event
             )
             if not clear_event and value is not None:
                 event = event.model_copy(update={"value": value})
         elif rejections:
-            event = event.model_copy(update={"value": retained_value, "reason": reason})
+            event = event.model_copy(update={"value": retained_value, "reason": event_reason})
         events.append(event)
 
     # Preserve all retained IDs cited by immutable identity and draft candidates;

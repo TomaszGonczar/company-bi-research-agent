@@ -235,4 +235,9 @@ def render_markdown(profile: CompanyProfile) -> str:
                 f"{source.published_on.isoformat() if source.published_on else 'Unknown'}",
             ]
         )
+        if source.redirect_chain:
+            lines.append(
+                "  - Validated redirect chain: "
+                + " → ".join(_link(url, str(url)) for url in source.redirect_chain)
+            )
     return "\n".join(lines) + "\n"

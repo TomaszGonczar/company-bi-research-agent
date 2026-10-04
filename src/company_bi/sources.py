@@ -16,6 +16,7 @@ from company_bi.models import (
     RetrievedSource,
     SearchHit,
     Source,
+    validate_source_lineage,
 )
 
 
@@ -175,6 +176,12 @@ class SourceStore:
             raise ValueError("Cannot store a page for an unknown source ID")
         if material.kind != "full_page":
             raise ValueError("Stored page material must have kind='full_page'")
+        validate_source_lineage(
+            [
+                *(snippet for snippet in self._snippets if snippet.source.source_id == source_id),
+                material,
+            ]
+        )
         self._pages[source_id] = material
 
     def known_ids(self) -> set[str]:

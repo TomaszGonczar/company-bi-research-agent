@@ -96,6 +96,7 @@ async def install_full_page(
             url=url,
             published_on=None,
             title="Example Group annual report",
+            redirect_chain=(),
         )
 
     async def controlled_url(url: str, timeout: float = 3.0) -> str:

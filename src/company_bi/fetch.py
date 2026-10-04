@@ -37,6 +37,7 @@ class _PageArtifact:
     url: str
     published_on: date | None
     title: str | None
+    redirect_chain: tuple[str, ...] = ()
 
 
 async def _validate_public_url(value: str, timeout: float = _DNS_TIMEOUT) -> str:
@@ -84,6 +85,14 @@ async def _validate_public_url(value: str, timeout: float = _DNS_TIMEOUT) -> str
         raise
     except (OSError, ValueError, TimeoutError) as error:
         raise _UnsafeTarget("URL host could not be safely resolved") from error
+
+
+def _same_request_url(left: str, right: str) -> bool:
+    def normalized(value: str) -> str:
+        parts = urlsplit(str(HttpUrl(value)))
+        return parts._replace(fragment="").geturl()
+
+    return normalized(left) == normalized(right)
 
 
 def _header(headers: object, key: str) -> str | None:
@@ -252,6 +261,7 @@ def _full_page(
                 "title": artifact.title or known.source.title,
                 "retrieved_at": datetime.now(UTC),
                 "published_on": artifact.published_on,
+                "redirect_chain": [HttpUrl(url) for url in artifact.redirect_chain],
             }
         ),
         kind="full_page",
@@ -289,6 +299,7 @@ def _record_fetch_failure(
 
 async def _static_read(url: str, timeout: float) -> _PageArtifact:
     current = url
+    redirect_chain: list[str] = []
     for redirect_count in range(_MAX_REDIRECTS + 1):
         await _validate_public_url(current, timeout)
         response = await AsyncFetcher.get(
@@ -298,22 +309,31 @@ async def _static_read(url: str, timeout: float) -> _PageArtifact:
             follow_redirects=False,
             max_redirects=0,
         )
+        response_url = getattr(response, "url", current) or current
+        await _validate_public_url(str(response_url), timeout)
+        if not _same_request_url(str(response_url), current):
+            raise _UnsafeTarget("Response URL changed without an observed validated redirect")
         status = getattr(response, "status", 200)
         headers = getattr(response, "headers", {}) or {}
         if status in {301, 302, 303, 307, 308}:
             location = _header(headers, "location")
             if not location or redirect_count >= _MAX_REDIRECTS:
                 raise _UnsafeTarget("Unsafe or excessive redirect")
+            if not redirect_chain:
+                redirect_chain.append(str(HttpUrl(current)))
             current = urljoin(current, location)
             await _validate_public_url(current, timeout)
+            redirect_chain.append(str(HttpUrl(current)))
             continue
         if status < 200 or status >= 300:
             raise RuntimeError("Static page request failed")
-        response_url = getattr(response, "url", current) or current
-        await _validate_public_url(str(response_url), timeout)
         text = _page_text(response)
         return _PageArtifact(
-            text, str(response_url), _publication_date(response), _page_title(response)
+            text,
+            str(response_url),
+            _publication_date(response),
+            _page_title(response),
+            tuple(redirect_chain),
         )
     raise _UnsafeTarget("Excessive redirect")
 
@@ -375,7 +395,7 @@ async def read_page(
             attempt=1,
         )
         return PageReadResult(error=failure.reason, failure=failure)
-
+    redirect_chain: tuple[str, ...] = ()
     try:
         timeout = budget.remaining()
         if timeout <= 0:
@@ -385,6 +405,7 @@ async def read_page(
         if _meaningful(artifact.text):
             return PageReadResult(material=_full_page(store, source_id, artifact, "static"))
         target = artifact.url
+        redirect_chain = artifact.redirect_chain
         _record_fetch_failure(
             budget,
             source_id=source_id,
@@ -454,8 +475,16 @@ async def read_page(
             raise RuntimeError("Dynamic page request failed")
         final_url = str(getattr(response, "url", target) or target)
         await _validate_public_url(final_url, timeout)
+        if not _same_request_url(final_url, target):
+            raise _UnsafeTarget(
+                "Dynamic response URL changed without an observed validated redirect"
+            )
         artifact = _PageArtifact(
-            _page_text(response), final_url, _publication_date(response), _page_title(response)
+            _page_text(response),
+            final_url,
+            _publication_date(response),
+            _page_title(response),
+            redirect_chain,
         )
         if not _meaningful(artifact.text):
             raise ValueError("Dynamic fetch returned no meaningful page text")

@@ -112,6 +112,7 @@ def test_cli_batch_uses_registry_research_gate_and_real_publication(
             url=url,
             published_on=None,
             title="Example Group annual report",
+            redirect_chain=(),
         )
 
     monkeypatch.setattr("tavily.AsyncTavilyClient.search", search)

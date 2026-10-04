@@ -1,8 +1,10 @@
 """Publication schemas, not an identity resolver or an evidence-verification engine."""
 
+from collections import defaultdict
 from datetime import date
 from decimal import Decimal
 from typing import Annotated, Any, Literal, Self
+from urllib.parse import urlsplit
 
 from pydantic import (
     AwareDatetime,
@@ -55,6 +57,13 @@ class Source(Model):
     title: Text
     retrieved_at: AwareDatetime
     published_on: date | None = None
+    redirect_chain: list[HttpUrl] = Field(default_factory=list, max_length=6)
+
+    @model_validator(mode="after")
+    def check_redirect_chain(self) -> Self:
+        if self.redirect_chain and len(self.redirect_chain) < 2:
+            raise ValueError("redirect lineage must contain a start and final HTTP URL")
+        return self
 
 
 class ProfileSource(Source):
@@ -459,6 +468,66 @@ class RetrievedSource(Model):
     fetch_mode: Literal["registry", "tavily", "static", "dynamic"]
 
 
+def _normalized_source_url(url: HttpUrl) -> str:
+    parts = urlsplit(str(url))
+    return f"{parts.scheme.lower()}://{parts.netloc.lower()}{parts.path or '/'}?{parts.query}"
+
+
+def _source_origin(url: HttpUrl) -> tuple[str, str, int | None]:
+    parts = urlsplit(str(url))
+    scheme = parts.scheme.lower()
+    port = parts.port or (443 if scheme == "https" else 80)
+    return scheme, (parts.hostname or "").lower(), port
+
+
+def validate_source_lineage(materials: list[RetrievedSource]) -> None:
+    """Reject unexplained same-ID URL changes while allowing retained redirect chains."""
+    by_id: dict[str, list[RetrievedSource]] = defaultdict(list)
+    for material in materials:
+        by_id[material.source.source_id].append(material)
+
+    for source_id, retained in by_id.items():
+        chained = [material for material in retained if material.source.redirect_chain]
+        if any(material.kind != "full_page" for material in chained):
+            raise ValueError(
+                f"redirect lineage for source ID {source_id} is not full-page provenance"
+            )
+
+        if not chained:
+            origins = {_source_origin(material.source.url) for material in retained}
+            if len(origins) > 1:
+                raise ValueError(f"source ID {source_id} has conflicting host metadata")
+            urls = {_normalized_source_url(material.source.url) for material in retained}
+            if len(urls) > 1:
+                raise ValueError(f"source ID {source_id} has unexplained URL changes")
+            continue
+
+        chains = {
+            tuple(_normalized_source_url(url) for url in material.source.redirect_chain)
+            for material in chained
+        }
+        if len(chains) != 1:
+            raise ValueError(f"source ID {source_id} has conflicting redirect lineages")
+        chain = chained[0].source.redirect_chain
+        start = _normalized_source_url(chain[0])
+        end = _normalized_source_url(chain[-1])
+        discoveries = [material for material in retained if material.kind == "search_snippet"]
+        pages = [material for material in retained if material.kind == "full_page"]
+        if not discoveries or not pages:
+            raise ValueError(f"redirect lineage for source ID {source_id} lacks retained discovery")
+        if any(_normalized_source_url(item.source.url) != start for item in discoveries):
+            raise ValueError(f"redirect lineage for source ID {source_id} has the wrong origin")
+        if any(
+            not item.source.redirect_chain or _normalized_source_url(item.source.url) != end
+            for item in pages
+        ):
+            raise ValueError(f"redirect lineage for source ID {source_id} has the wrong final URL")
+        if any(item.kind not in {"search_snippet", "full_page"} for item in retained):
+            raise ValueError(
+                f"redirect lineage for source ID {source_id} is attached to non-web material"
+            )
+
+
 class PageReadResult(Model):
     material: RetrievedSource | None = None
     error: Text | None = None
@@ -476,6 +545,7 @@ class CompanyResearchRun(Model):
 
     @model_validator(mode="after")
     def check_retrieval_references(self) -> Self:
+        validate_source_lineage(self.sources)
         # One source ID may have multiple retained snippets and a full-page snapshot.
         source_ids = {material.source.source_id for material in self.sources}
         if any(material.source.retrieved_at > self.generated_at for material in self.sources):
