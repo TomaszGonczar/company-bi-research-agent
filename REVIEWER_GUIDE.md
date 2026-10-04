@@ -122,4 +122,6 @@ The operator selected the [MIT License](LICENSE): copyright © 2026 Tomasz Goncz
 
 Publication target: [TomaszGonczar/company-bi-research-agent](https://github.com/TomaszGonczar/company-bi-research-agent). The pre-publication OG-157 audit recorded hosted CI as **NOT VERIFIED** because no remote existed then. Check [Actions → CI](https://github.com/TomaszGonczar/company-bi-research-agent/actions/workflows/ci.yml) for the reviewed commit's actual hosted result; local verification alone is not a hosted pass.
 
+The [first public CI run](https://github.com/TomaszGonczar/company-bi-research-agent/actions/runs/37207583133) failed workflow validation before any job ran: job-level `env` could not reference `runner.temp`. CI now initializes the isolated `CODEX_HOME` in a runner step via `$RUNNER_TEMP` and `$GITHUB_ENV`; the actual shell step was smoke-checked locally. No application, dependency, metric or evidence rule changed.
+
 The `v0.1.0` checkpoint requires a successful public push, a **VERIFIED PASS** hosted run and a fresh public zero-key clone. No GitHub Release or generated marketing copy is required.

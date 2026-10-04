@@ -15,8 +15,9 @@ jobs:
       TAVILY_API_KEY: ""
       OPENAI_API_KEY: ""
       LOGFIRE_TOKEN: ""
-      CODEX_HOME: ${{ runner.temp }}/codex-home
     steps:
+      - name: Isolate Codex state
+        run: echo "CODEX_HOME=$RUNNER_TEMP/codex-home" >> "$GITHUB_ENV"
       - uses: actions/checkout@v7
         with:
           persist-credentials: false
