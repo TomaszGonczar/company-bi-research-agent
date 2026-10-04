@@ -124,4 +124,6 @@ Publication target: [TomaszGonczar/company-bi-research-agent](https://github.com
 
 The [first public CI run](https://github.com/TomaszGonczar/company-bi-research-agent/actions/runs/37207583133) failed workflow validation before any job ran: job-level `env` could not reference `runner.temp`. CI now initializes the isolated `CODEX_HOME` in a runner step via `$RUNNER_TEMP` and `$GITHUB_ENV`; the actual shell step was smoke-checked locally. No application, dependency, metric or evidence rule changed.
 
+The [second run](https://github.com/TomaszGonczar/company-bi-research-agent/actions/runs/37207916159) reached runner setup but could not resolve the existing `setup-uv` commit pin. The pin now matches the actual `astral-sh/setup-uv` `v10.1.0` tag (`bec219d24cd3e171d82865faccec33120bb574f4`), verified against GitHub. The selected action release, uv `0.12.3`, Python version, dependency lock and checks remain unchanged.
+
 The `v0.1.0` checkpoint requires a successful public push, a **VERIFIED PASS** hosted run and a fresh public zero-key clone. No GitHub Release or generated marketing copy is required.
