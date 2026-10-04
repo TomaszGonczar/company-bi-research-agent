@@ -118,4 +118,4 @@ Not production SaaS or multi-tenant; not a complete Polish financial-data platfo
 - `examples/` — input, controlled fixtures and retained public runs; `tests/` — deterministic regressions.
 - `docs/` — [eval methodology](docs/EVAL_SPEC.md), [results](docs/EVAL_RESULTS.md), [recovery](docs/RECALL_RECOVERY.md), [clean-clone audit](docs/CLEAN_CLONE_AUDIT.md), [Scrapling experiment](docs/SCRAPLING_EXPERIMENT.md).
 
-Hosted CI was **NOT VERIFIED** because no repository remote/target was configured in the audit; local checks are not GitHub Actions evidence. No repository `LICENSE` file was found during packaging review, so licensing remains an operator decision; do not infer a license. Further verification context is in the [clean-clone audit](docs/CLEAN_CLONE_AUDIT.md).
+Licensed under the [MIT License](LICENSE), copyright © 2026 Tomasz Gonczar. The [clean-clone audit](docs/CLEAN_CLONE_AUDIT.md) records local verification; check [GitHub Actions CI](https://github.com/TomaszGonczar/company-bi-research-agent/actions/workflows/ci.yml) for the hosted result of the commit being reviewed. Local checks are not GitHub Actions evidence.

@@ -116,17 +116,10 @@ At approved baseline `05dafda`, all eight reachable commits' 120 distinct text b
 
 Package metadata remains `company-bi` 0.1.0, Python `>=3.12`; the tested reviewer environment is Python 3.12. `.env.example` contains placeholders only; dotenv files, caches, `runs/` and `outputs/` remain ignored. No tracked scratch/generated clutter required removal. Historical project and experiment documents remain as evidence, outside the timed path.
 
-### Publication checklist
+### License and publication
 
-**Hosted CI: NOT VERIFIED.** No remote is configured; local checks are not GitHub Actions evidence. **No repository license is selected**; a license decision is required before public release. No license has been chosen on the operator's behalf.
+The operator selected the [MIT License](LICENSE): copyright © 2026 Tomasz Gonczar.
 
-1. Decide and record the license. Create the intended empty GitHub repository under the confirmed owner; avoid an unrelated destination or pre-generated conflicting history. Set its description to “Polish NIP company profiles with bounded research and deterministic evidence-gated publication.”
-2. Set `CONFIRMED_REPO_URL` to that repository's verified clone URL, then run:
+Publication target: [TomaszGonczar/company-bi-research-agent](https://github.com/TomaszGonczar/company-bi-research-agent). The pre-publication OG-157 audit recorded hosted CI as **NOT VERIFIED** because no remote existed then. Check [Actions → CI](https://github.com/TomaszGonczar/company-bi-research-agent/actions/workflows/ci.yml) for the reviewed commit's actual hosted result; local verification alone is not a hosted pass.
 
-   ```sh
-   git remote add origin "$CONFIRMED_REPO_URL"
-   git remote -v
-   git push -u origin main
-   ```
-
-3. Open that repository's **Actions → CI**, verify the pushed commit, and record **VERIFIED PASS** or **VERIFIED FAIL** from the completed hosted run. Until observed, retain **NOT VERIFIED**; do not add a green badge.
+The `v0.1.0` checkpoint requires a successful public push, a **VERIFIED PASS** hosted run and a fresh public zero-key clone. No GitHub Release or generated marketing copy is required.
