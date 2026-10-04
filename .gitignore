@@ -10,5 +10,6 @@ build/
 dist/
 .env
 .env.*
+!.env.example
 outputs/
 runs/

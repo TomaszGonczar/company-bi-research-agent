@@ -1,5 +1,7 @@
 # OG-154 — reproducible v0.1 evaluation results
 
+**Current frozen result (OG-154A onward):** supported precision **47/47**, researched precision **5/5**, eligible recall **5/19**, false-supported **0**; retained-real researched yield **0/7**. See the [targeted-recovery result](#og-154a--targeted-recovery-separate-from-the-frozen-baseline) below. The OG-154 sections preserve the earlier **44/44, 2/2, 2/19** baseline; they are history, not the current headline.
+
 ## Conclusion
 
 The approved production implementation at `59e76de` was measured without changing NIP/identity, research, retrieval, evidence-gate or renderer behavior.

@@ -1,75 +1,121 @@
-# Company BI — operational guide
+# Company BI
 
-A deterministic Polish NIP ingestion and identity workflow followed by bounded, evidence-gated company research. The publication gate preserves uncertainty rather than filling gaps. Start with the credential-free offline review; live research is a separate, explicitly networked operation.
+Company BI converts Polish NIPs into evidence-backed company intelligence profiles. One bounded **PydanticAI research agent proposes candidate knowledge; deterministic code decides what may be published**.
 
-## Prerequisites and setup
+The engineering problem is not generating plausible JSON. It is preserving legal identity, provenance and uncertainty when web evidence is incomplete or model output is wrong. This small v0.1 makes that boundary inspectable rather than claiming production readiness. Follow the [10-minute reviewer guide](REVIEWER_GUIDE.md).
 
-- `uv`
-- Python 3.12
+## Quick deterministic verification
+
+Requires `uv`; setup selects Python 3.12 and may download it and dependencies. **No Tavily key or model credentials are required.** Tests, evaluation and offline review need no login, browser installation or prior run state.
 
 ```sh
 uv sync --frozen --python 3.12
-```
-
-The frozen sync installs locked runtime and development dependencies. Offline checks and examples below need no API keys, dotenv file, Codex login, or live requests.
-
-## Credential-free checks and evaluation
-
-```sh
-uv run --frozen pytest
-uv run --frozen ruff check .
-uv run --frozen ruff format --check .
-uv run --frozen mypy src/company_bi
+uv run --frozen pytest -q
 uv run --frozen company-bi eval --dataset examples/evals/dataset.json --output-dir outputs/evals
-```
-The frozen evaluation counts are reported in [`docs/EVAL_RESULTS.md`](docs/EVAL_RESULTS.md); the three retained replay outcomes are partial.
-Evaluation writes `outputs/evals/results.json` and `outputs/evals/results.md`. It replays deterministic controlled cases and committed retained-real snapshots; no live calls are made. The dataset is small and diagnostic, not a population-level accuracy estimate.
-
-## Offline end-to-end review
-
-```sh
 uv run --frozen python scripts/review_offline.py --output-dir outputs/review
 ```
 
-This command makes no external network or paid/live provider calls. It runs one local controlled `FunctionModel` interruption to show the actual failed-research path; it reads no credentials or prior run state and writes a provenance manifest plus inspectable outputs:
+Evaluation prints the frozen counts and writes `outputs/evals/results.md` plus JSON. The helper writes provenance-labeled examples below. Setup download time is separate from the short offline checks.
 
-- `outputs/review/review-manifest.json` records input provenance and outcome labels.
-- `outputs/review/retained/{asseco-poland,lpp,orlen}.json` and `.md` replay the three committed research snapshots through the real evidence gate (`build_profile`) and JSON/Markdown renderers. These are **retained real partial reports**, not demonstrations of complete real-company yield.
-- `outputs/review/controlled/synthetic-complete.json` and `.md` render `examples/profiles/complete.json`. This is a **controlled synthetic COMPLETE** example, not real-company evidence or yield.
-- `outputs/review/controlled/provider-interruption-research.json` records diagnostics from the actual research path with a guarded local `FunctionModel` interruption. This is one controlled in-process model invocation, not a live or paid provider call; it contains no fabricated `CompanyProfile` or final report paths.
+## Architecture
 
-The console and manifest identify each provenance class. Re-running replaces the same named files; retained profile replay is stable, while the controlled failed-research artifact preserves the actual invocation time and duration. The sample `examples/nips.csv` has header `nip` and rows `5220003782`, `123`, and `1234563218`: the existing NIP validator accepts checksum-valid input and rejects invalid input; it does not infer or repair identifiers.
-
-## Input → evidence → publication
-
-For normal operation, CSV/XLSX input passes through deterministic ingestion and checksum validation, then identity resolution. Research candidates must cite retained sources. The evidence gate checks the validated research run and creates a `CompanyProfile` only when its publication rules allow; the unchanged renderers then produce final JSON and Markdown. The single-company `research` command writes research JSON; the `batch` command applies the gate and writes final JSON/Markdown reports as well as research artifacts. Failed research has diagnostics/research data, not a made-up report. Offline examples exercise this path using committed data rather than reaching the MF registry or research providers.
-
-Committed evidence and fixtures:
-
-- `examples/nips.csv` — sample NIP input.
-- `examples/profiles/` — controlled final-profile examples; `complete.json` is synthetic.
-- `examples/evals/dataset.json` and `examples/evals/controlled/` — active evaluation index and controlled inputs.
-- `examples/evals/retained/` — three retained public Asseco Poland, LPP, and ORLEN research snapshots; the offline review republishes their current gate outcomes.
-- `docs/EVAL_RESULTS.md` — detailed frozen evaluation findings and limitations.
-
-Expected frozen OG-154A diagnostic metrics: overall supported precision **47/47**, researched supported precision **5/5**, researched eligible recall **5/19**, unsupported-as-supported **0**, and retained real yield **0 complete / 3 partial / 0 failed** (retained eligible researched gold supported: **0/7**). The `5/5` researched precision denominator is very small; it does not imply reliable coverage. Low real yield must remain visible, not be optimized away by weakening evidence rules.
-
-OG-156 evidence: [clean-clone audit and final live smoke](docs/CLEAN_CLONE_AUDIT.md), [paired Scrapling experiment](docs/SCRAPLING_EXPERIMENT.md).
-
-## LIVE RESEARCH — explicit network use
-
-Live research is distinct from the offline review and may contact the Polish Ministry of Finance VAT registry and external search/retrieval services. For the default native Codex model, use standard Codex CLI sign-in (`codex login`) and its normal authentication management; an OpenAI API key is **not required** for native Codex authentication. The research and batch CLI paths do require `TAVILY_API_KEY` for search. Alternatively, when explicitly selecting an OpenAI API model, provide `OPENAI_API_KEY` through your usual secret-management method. Never commit credentials.
-
-A single-company research call is explicitly live and writes a research artifact, not a final profile report:
-
-```sh
-uv run --frozen company-bi research 5220003782 --model openai-codex:gpt-6-luna --output outputs/research/5220003782.json
+```mermaid
+flowchart TD
+  subgraph I["Deterministic identity"]
+    CSV["CSV / XLSX"] --> NIP["Validate Polish NIP"]
+    NIP --> MF["MF public registry"]
+    MF --> Identity["Trusted CompanyIdentity"]
+  end
+  subgraph A["Probabilistic research"]
+    Agent["One bounded PydanticAI agent"] --> Draft["CompanyResearchDraft"]
+  end
+  subgraph H["Host-owned tools"]
+    Search["Tavily discovery"] --> Sources["Source IDs, URLs, timestamps, retained text"]
+    Read["Guarded Scrapling page read"] --> Sources
+  end
+  Identity --> Agent
+  Agent --> Search
+  Agent --> Read
+  Sources --> Agent
+  subgraph P["Deterministic publication"]
+    Gate["Evidence gate"] --> Profile["CompanyProfile"]
+    Profile --> Reports["JSON / Markdown"]
+    Reports --> Summary["batch_summary.csv"]
+  end
+  Draft --> Gate
+  Sources --> Gate
 ```
 
-For an input batch, use the live batch path (final profiles are written under the output directory and research artifacts under the runs directory):
+The model chooses searches, sources and candidate interpretations—not which legal entity the user meant. Host tools assign source IDs and retain metadata/text. Research citations must reference that ledger; supported research requires exact retained full-page excerpts and claim-specific entity/context checks. **Pydantic structured output validates shape, not truth.** Gate and renderers make no model calls. Batch isolates failures and checkpoints on the filesystem.
+
+Per-company ceilings: 180 seconds, 6 searches, 10 page reads, 2 browser attempts, 12 model requests, 24 tool calls and one output repair. [Architecture decisions](docs/ARCHITECTURE_DECISIONS.md#og-152-bounded-research-implementation) record the bounds and trust tradeoffs.
+
+## Example output
+
+Run the helper above, then open `outputs/review/review-manifest.json` and:
+
+| Example | Generated artifact | Provenance |
+| --- | --- | --- |
+| COMPLETE | `outputs/review/controlled/synthetic-complete.md` and `.json` | **CONTROLLED FIXTURE** from `examples/profiles/complete.json`; not real yield |
+| PARTIAL | `outputs/review/retained/asseco-poland.md` and `.json` | **REAL RETAINED RUN**, republished through the current gate |
+| FAILED | `outputs/review/controlled/provider-interruption-research.json` | **CONTROLLED FAILURE**, one guarded local FunctionModel interruption; no final profile/report |
+
+The real Asseco replay lacks sufficient legal-entity/context evidence; financial values stay null. PARTIAL is intentional, not a crash. The helper also renders LPP/ORLEN. No live calls or generated artifacts need committing.
+
+Sample input: [`examples/research_batch.csv`](examples/research_batch.csv) contains public Asseco, LPP and ORLEN NIPs for optional live batches. [`examples/nips.csv`](examples/nips.csv) is the helper's validation demonstration: public Asseco NIP, invalid `123`, and a synthetic fixture identifier. Checksum validity alone is not identity resolution.
+
+## Evidence semantics
+
+`supported`: eligible retained evidence verifies the claim and context. `uncertain`: evidence/candidate exists but cannot justify support. `unknown`: insufficient evidence; value is null, never a guessed zero/false.
+
+`COMPLETE` means core coverage has no gap or limitation; `PARTIAL` is valid with gaps/uncertainties/unknowns; `FAILED` means no safe final profile. Unresolved/invalid identity outcomes are distinct. A research diagnostic of `completed` is not a COMPLETE profile.
+
+## Evaluation results
+
+The selected diagnostic set has **12 cases** (9 controlled, 3 retained-real), not a representative sample. Frozen OG-154A results:
+
+| Measure | Result |
+| --- | ---: |
+| Overall supported precision | 47/47 |
+| Registry supported precision | 42/42 |
+| Researched supported precision | 5/5 |
+| Eligible researched recall | 5/19 |
+| Unsupported facts published as supported | 0 |
+| Identity correctness | 10/10 |
+| Correct uncertainty handling | 28/28 |
+| Correct strict unknown handling | 40/41 |
+| Retained-real eligible researched yield | **0/7** |
+| Retained real profiles | **0 COMPLETE / 3 PARTIAL / 0 FAILED** |
+
+**5/5 does not establish production precision; 5/19 is low coverage.** This deliberately small evaluation set does not establish population-level production accuracy.
+
+## What the evaluation changed
+
+**Measure → classify retrieval/extraction/gate/unavailable-context losses → regression-first corrections → rerun the frozen benchmark.** Eligible recall moved **2/19 (10.5%) → 5/19 (26.3%)**, with false-supported **0 → 0**. All three recoveries were controlled; real yield stayed **0/7**. Exact-excerpt admission and narrow entity attachment improved without weakening financial/date/source rules. The eligible-miss and broader retrieval-loss populations are separate. [Results](docs/EVAL_RESULTS.md) · [failure analysis and corrections](docs/RECALL_RECOVERY.md).
+
+A historical live LPP run failed at the single repair ceiling; its exact cause is unrecoverable. The [paired Scrapling experiment](docs/SCRAPLING_EXPERIMENT.md) found **no additional published supported facts**; only one pair exercised retrieval. Scrapling remains the full-page mechanism, but its supported-fact advantage was **not demonstrated**.
+
+## Optional live research
+
+Export `TAVILY_API_KEY` through your usual secret-management method, then use standard `codex login`. The tested path is **`openai-codex:gpt-6-luna`**, with SDK-managed authentication and no required `OPENAI_API_KEY`. An explicitly selected `openai:` model requires `OPENAI_API_KEY`; this is not a provider-agnostic validation claim. Optional [`.env.example`](.env.example) contains placeholders only: create an ignored `.env` without overwriting existing configuration, then explicitly add `--env-file .env` to `uv run` if using it. Never commit keys or auth caches.
+
+Using the existing public three-NIP batch example:
 
 ```sh
 uv run --frozen company-bi batch examples/research_batch.csv --output-dir outputs --runs-dir runs --model openai-codex:gpt-6-luna
 ```
 
-Check the CLI before using retry/force options; retries can incur additional provider and retrieval activity. Offline review is not a live-service smoke test. Residual limitations include DNS-rebinding risk in outbound URL retrieval, unsupported PDF/XML/archive content, and weak real researched yield in the retained corpus. During the OG-156 audit no remote was configured, so hosted CI was **NOT VERIFIED**.
+Live mode contacts MF, Tavily, websites and the model; costs, availability and results vary. The [post-hardening Asseco smoke](docs/CLEAN_CLONE_AUDIT.md#single-final-live-smoke) exercised the full path and produced valid PARTIAL JSON/Markdown with zero supported researched facts. It was not rerun for packaging. `research` emits a draft/run; `batch` emits final reports and `batch_summary.csv`, with retained research under `runs/`.
+
+## What this project does not claim
+
+Not production SaaS or multi-tenant; not a complete Polish financial-data platform, universal web extraction, population-level precision proof, multi-agent orchestration, universal Scrapling improvement, or resolution of every fact. Real-company researched yield remains weak/unproven. Retrieved **PDF/XML/archive/Office financial parsing is unsupported** (CSV/XLSX NIP input works). Provider/web variability remains. URL/DNS checks do **not** eliminate SSRF: DNS rebinding/TOCTOU is residual risk.
+
+## Repository map
+
+- `src/company_bi/agent.py` — bounded research; `search.py` / `fetch.py` — Tavily / guarded retrieval.
+- `src/company_bi/sources.py` — host ledger; `evidence.py` — publication gate; `renderer.py` — JSON/Markdown; `batch.py` — failure-isolated, resumable batches.
+- `examples/` — input, controlled fixtures and retained public runs; `tests/` — deterministic regressions.
+- `docs/` — [eval methodology](docs/EVAL_SPEC.md), [results](docs/EVAL_RESULTS.md), [recovery](docs/RECALL_RECOVERY.md), [clean-clone audit](docs/CLEAN_CLONE_AUDIT.md), [Scrapling experiment](docs/SCRAPLING_EXPERIMENT.md).
+
+Hosted CI was **NOT VERIFIED** because no repository remote/target was configured in the audit; local checks are not GitHub Actions evidence. No repository `LICENSE` file was found during packaging review, so licensing remains an operator decision; do not infer a license. Further verification context is in the [clean-clone audit](docs/CLEAN_CLONE_AUDIT.md).
