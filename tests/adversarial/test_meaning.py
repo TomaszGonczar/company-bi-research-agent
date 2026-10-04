@@ -85,6 +85,62 @@ def test_clipped_quote_cannot_omit_a_source_conditional(make_run: Any, publish: 
 
 
 @pytest.mark.parametrize(
+    ("quote", "phrase", "state"),
+    [
+        pytest.param(
+            "Example sp. z o.o. sells machinery to retailers of cloud services.",
+            "cloud services",
+            "uncertain",
+            id="negative_customer-activity-complement",
+        ),
+        pytest.param(
+            "Example sp. z o.o. sells machinery to retailers of cloud services.",
+            "machinery",
+            "supported",
+            id="positive_direct-object-before-customer-complement",
+        ),
+        pytest.param(
+            "Example sp. z o.o. sells machinery to retailers who provide cloud services.",
+            "cloud services",
+            "uncertain",
+            id="negative_embedded-customer-subject",
+        ),
+        pytest.param(
+            "Retailers of cloud services are provided by Example sp. z o.o.",
+            "cloud services",
+            "uncertain",
+            id="negative-passive-complement",
+        ),
+        pytest.param(
+            "Machines for cloud services are sold by Example sp. z o.o.",
+            "Machines",
+            "supported",
+            id="positive-passive-subject-head-before-purpose-complement",
+        ),
+        pytest.param(
+            "Machines for cloud services are sold by Example sp. z o.o.",
+            "cloud services",
+            "uncertain",
+            id="negative-passive-purpose-complement",
+        ),
+    ],
+)
+def test_customer_activity_complements_do_not_attach_to_company(
+    make_run: Any, publish: Any, quote: str, phrase: str, state: str
+) -> None:
+    result = publish(make_run(quote, products_services=product_candidate(phrase, quote)))
+    assert result["products_services"]["state"] == state
+    assert result["products_services"]["value"] == ([phrase] if state == "supported" else None)
+
+
+def test_current_passive_offering_remains_publishable(make_run: Any, publish: Any) -> None:
+    quote = "Cloud services are currently provided by Example sp. z o.o."
+    result = publish(make_run(quote, products_services=product_candidate("cloud services", quote)))
+    assert result["products_services"]["state"] == "supported"
+    assert result["products_services"]["value"] == ["cloud services"]
+
+
+@pytest.mark.parametrize(
     ("quote", "phrase"),
     [
         pytest.param(

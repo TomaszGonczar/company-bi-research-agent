@@ -728,15 +728,16 @@ def _positive_assertion_qualifies(
             tokens = [token.casefold() for token in _WORD.findall(clause)]
             if not tokens:
                 continue
+            has_company_subject = bool(set(tokens) & company_subjects)
             if conditional_scope:
-                prior_company_subject |= bool(set(tokens) & company_subjects)
+                prior_company_subject |= has_company_subject
                 continue
             if set(tokens) & {"if", "whether", "unless"}:
                 conditional_scope = True
-                prior_company_subject |= bool(set(tokens) & company_subjects)
+                prior_company_subject |= has_company_subject
                 continue
             if set(tokens) & (_ASSERTION_NEGATION | _ASSERTION_MODALITY):
-                prior_company_subject |= bool(set(tokens) & company_subjects)
+                prior_company_subject |= has_company_subject
                 continue
             for start in range(len(tokens) - len(phrase_tokens) + 1):
                 end = start + len(phrase_tokens)
@@ -746,14 +747,89 @@ def _positive_assertion_qualifies(
                     if token not in relations or abs(index - start) > 10:
                         continue
                     preceding = tokens[max(0, index - 8) : index]
-                    subject = bool(set(preceding) & company_subjects) or prior_company_subject
+                    subject_positions = [
+                        position
+                        for position in range(max(0, index - 12), index)
+                        if tokens[position] in company_subjects
+                    ]
+                    subject_prefix_words = {
+                        "in",
+                        "during",
+                        "on",
+                        "at",
+                        "the",
+                        "this",
+                        "year",
+                        "published",
+                        "january",
+                        "february",
+                        "march",
+                        "april",
+                        "may",
+                        "june",
+                        "july",
+                        "august",
+                        "september",
+                        "october",
+                        "november",
+                        "december",
+                    }
+                    subject_continuations = {
+                        "a",
+                        "an",
+                        "the",
+                        "currently",
+                        "also",
+                        "actively",
+                        "primarily",
+                        "mainly",
+                        "products",
+                        "services",
+                        "offerings",
+                        "business",
+                        "group",
+                    } | set(_company_name_tokens(run))
+                    if subject_positions:
+                        subject_position = subject_positions[-1]
+                        subject = all(
+                            word in subject_prefix_words
+                            or word in company_subjects
+                            or word.isdigit()
+                            for word in tokens[:subject_position]
+                        ) and all(
+                            word in subject_continuations
+                            for word in tokens[subject_position + 1 : index]
+                        )
+                    else:
+                        subject = (
+                            prior_company_subject
+                            and not has_company_subject
+                            and all(
+                                word in {"currently", "also", "actively", "primarily", "mainly"}
+                                for word in tokens[:index]
+                            )
+                        )
+                    passive_auxiliary = index - 1
+                    if (
+                        passive_auxiliary >= 0
+                        and tokens[passive_auxiliary] not in {"is", "are", "was", "were"}
+                        and passive_auxiliary > 0
+                        and tokens[passive_auxiliary - 1] in {"is", "are", "was", "were"}
+                        and tokens[passive_auxiliary] in {"currently", "also", "actively"}
+                    ):
+                        passive_auxiliary -= 1
+                    passive_subject = tokens[index + 2 : index + 3]
+                    passive_subject_is_company = (
+                        bool(passive_subject) and passive_subject[0] in company_subjects
+                    ) or tokens[index + 2 : index + 4] == ["the", "company"]
                     passive = (
                         token in _PASSIVE_RELATIONS
                         and index > start
-                        and index > 0
-                        and tokens[index - 1] in {"is", "are"}
+                        and passive_auxiliary >= 0
+                        and tokens[passive_auxiliary] in {"is", "are", "was", "were"}
                         and tokens[index + 1 : index + 2] == ["by"]
-                        and bool(set(tokens[index + 2 : index + 10]) & company_subjects)
+                        and passive_subject_is_company
+                        and not tokens[:start]
                     )
                     if token in _PASSIVE_RELATIONS and not passive:
                         continue
@@ -787,12 +863,16 @@ def _positive_assertion_qualifies(
                         )
                         if not simple_copula and not product_list:
                             continue
-                    elif token in {"has", "have"} and index < start:
-                        if tokens[index + 1 : start] and tokens[index + 1] not in {
-                            "a",
-                            "an",
-                            "the",
-                        }:
+                    elif index < start and not passive:
+                        between = tokens[index + 1 : start]
+                        determiners = {"a", "an", "the", "this", "these", "its", "their"}
+                        direct_object = all(word in determiners for word in between)
+                        industry_bridge = (
+                            token in {"operate", "operates", "specialize", "specializes"}
+                            and between[:1] in (["in"], ["within"])
+                            and all(word in determiners for word in between[1:])
+                        )
+                        if not direct_object and not industry_bridge:
                             continue
                     elif (
                         index > start
@@ -801,7 +881,7 @@ def _positive_assertion_qualifies(
                     ):
                         continue
                     return True
-            prior_company_subject |= bool(set(tokens) & company_subjects)
+            prior_company_subject |= has_company_subject
     return False
 
 

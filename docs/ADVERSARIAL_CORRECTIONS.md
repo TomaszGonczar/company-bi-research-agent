@@ -4,6 +4,8 @@ Local corrective package for possible v0.1.1; not a release or a claim of green 
 
 The bounded publication contracts are in [EVIDENCE_MODEL.md](EVIDENCE_MODEL.md#assertion-qualification). No new model/provider, dependencies, research instructions, budgets or financial-document parser were introduced.
 
+The original A1–A4 measurements below were recorded for corrective commit `17fdc9d9cfc4e4a3dccf8f5e77e5ca5ecc9f4ffd`. The independently measured attachment correction at the end extends that package; it does not overwrite the earlier measurements.
+
 ## Evidence populations and preservation
 
 These measurements are deliberately separate:
@@ -94,3 +96,29 @@ There are no remaining false-supported outcomes in the exercised corrected adver
 Redirect lineage is host-recorded metadata, not authentication of arbitrary edited JSON. Unobserved browser URL changes and inconsistent legacy source ledgers are rejected. Missing historical HTTP lineage cannot be recovered from the frozen artifacts without new evidence.
 
 This package is local and reviewable. It does not authorize a push, merge, new tag, v0.1.1 release, paid/live research, presentation work or outreach. The original `main` and `v0.1.0` reference are preserved.
+
+## Independent predicate-attachment correction
+
+A later read-only review identified a residual risk outside the original measured populations. Actual offline publication at `17fdc9d` confirmed it:
+
+```text
+Example sp. z o.o. sells machinery to retailers of cloud services.
+```
+
+Both `machinery` and `cloud services` were published as company products. Only the former follows from that assertion. This establishes a residual defect; the commit that originally introduced it was not determined.
+
+The text gate now requires bounded positive subject/predicate/argument attachment instead of accepting any candidate phrase near a recognized verb. Restricted direct-object determiners, industry bridges, business/product copulas and direct passive-subject forms remain recognized. A nested customer activity or product-purpose phrase does not inherit the company predicate. No new forbidden-topic word, dependency, model, financial rule or provenance policy was added.
+
+Seven publication-path regressions cover the observed customer complement, direct-product retention, an embedded customer subject, direct passive offerings and passive subject/purpose separation. An initial integration lost six existing/new positive controls; those failures were preserved, and the forms were corrected without changing their expectations. In particular, month-only/publication-led event dates are still not promoted to invented occurrence dates.
+
+Final independent verification:
+
+- Full suite: **325 passed**.
+- Separate adversarial suite: **60 passed**.
+- Original attachment reproduction and positive control: **2/2** matched through JSON/Markdown publication.
+- Six predeclared supplemental attachment boundaries: **6/6**, including three negative and three positive cases. The passive subject/purpose pair subsequently became a permanent regression; this final rerun is not an untouched holdout estimate.
+- Ruff, formatting and mypy passed.
+- Frozen replay: still exits **1**, with every metric unchanged from `17fdc9d`; the Asseco lineage incompatibility above remains unresolved.
+- The same 26 protected input/config/instruction files remain byte-identical to `d4423da`. No live calls were made.
+
+The separate evidence bundle is `overnight-quality-20261004T211518Z`: `complement-scope/` preserves the failing-before result, `after/` the first integration, and `iteration-2/` the final corrected measurements. Source-hash manifests and the local commit record identify the tested revision. The bounded-language and release limitations above still apply.
