@@ -1,0 +1,356 @@
+{
+  "identity": {
+    "nip": "5220003782",
+    "legal_name": {
+      "state": "supported",
+      "value": "\"ASSECO POLAND\" SPÓŁKA AKCYJNA",
+      "evidence": [
+        {
+          "source_id": "mf-vat-5220003782-20261005T082944526457Z",
+          "excerpt": "\"\\\"ASSECO POLAND\\\" SPÓŁKA AKCYJNA\""
+        }
+      ],
+      "reason": null
+    },
+    "krs": {
+      "state": "supported",
+      "value": "0000033391",
+      "evidence": [
+        {
+          "source_id": "mf-vat-5220003782-20261005T082944526457Z",
+          "excerpt": "\"0000033391\""
+        }
+      ],
+      "reason": null
+    },
+    "regon": {
+      "state": "supported",
+      "value": "010334578",
+      "evidence": [
+        {
+          "source_id": "mf-vat-5220003782-20261005T082944526457Z",
+          "excerpt": "\"010334578\""
+        }
+      ],
+      "reason": null
+    },
+    "registered_city": {
+      "state": "unknown",
+      "value": null,
+      "evidence": [],
+      "reason": "Registry provides no separate city field; no city inferred from address"
+    },
+    "registered_address": {
+      "state": "supported",
+      "value": "OLCHOWA 14, 35-322 RZESZÓW",
+      "evidence": [
+        {
+          "source_id": "mf-vat-5220003782-20261005T082944526457Z",
+          "excerpt": "\"OLCHOWA 14, 35-322 RZESZÓW\""
+        }
+      ],
+      "reason": null
+    },
+    "website": {
+      "state": "unknown",
+      "value": null,
+      "evidence": [],
+      "reason": "This registry supplies no website; no website verification performed"
+    },
+    "resolved_at": "2026-10-05T08:29:44.533097Z"
+  },
+  "draft": {
+    "business_description": {
+      "state": "supported",
+      "value": "The activities of the Asseco Poland S.A focus on providing a wide range of proprietary IT solutions and services.",
+      "evidence": [
+        {
+          "source_id": "S001",
+          "excerpt": "The activities of the Asseco Poland S.A focus on providing a wide range of proprietary IT solutions and services."
+        }
+      ],
+      "reason": null
+    },
+    "products_services": {
+      "state": "supported",
+      "value": [
+        "proprietary IT software and services",
+        "software-based solutions",
+        "SaaS-based solutions based on proprietary software"
+      ],
+      "evidence": [
+        {
+          "source_id": "S001",
+          "excerpt": "The strategy of organic growth of Asseco Poland S.A. is based on providing proprietary IT software and services to clients in Poland and abroad."
+        },
+        {
+          "source_id": "S001",
+          "excerpt": "building and delivering software-based solutions in the Company customers' business-critical areas"
+        },
+        {
+          "source_id": "S001",
+          "excerpt": "providing SaaS-based solutions based on proprietary software."
+        }
+      ],
+      "reason": null
+    },
+    "industries": {
+      "state": "supported",
+      "value": [
+        "financial",
+        "health",
+        "corporate",
+        "government"
+      ],
+      "evidence": [
+        {
+          "source_id": "S001",
+          "excerpt": "targeting the financial, health, corporate and government sectors, at home and abroad,"
+        }
+      ],
+      "reason": null
+    },
+    "markets": {
+      "state": "supported",
+      "value": [
+        "Poland",
+        "abroad"
+      ],
+      "evidence": [
+        {
+          "source_id": "S001",
+          "excerpt": "The strategy of organic growth of Asseco Poland S.A. is based on providing proprietary IT software and services to clients in Poland and abroad."
+        }
+      ],
+      "reason": null
+    },
+    "employees": {
+      "state": "unknown",
+      "value": null,
+      "evidence": [],
+      "reason": "No standalone employee count was established from the sources retrieved. Group headcount is not substituted for the legal entity.",
+      "as_of": null
+    },
+    "financials": [
+      {
+        "state": "unknown",
+        "value": null,
+        "evidence": [],
+        "reason": "No usable official HTML/text or linked CSV source with standalone-company revenue and explicit fiscal dates was retrieved.",
+        "metric": "revenue",
+        "period": null,
+        "currency": null,
+        "unit": null,
+        "scope": null,
+        "group_name": null
+      },
+      {
+        "state": "unknown",
+        "value": null,
+        "evidence": [],
+        "reason": "No usable official HTML/text or linked CSV source with standalone-company total net result and explicit fiscal dates was retrieved; Group or other profit measures are not substituted.",
+        "metric": "net_result",
+        "period": null,
+        "currency": null,
+        "unit": null,
+        "scope": null,
+        "group_name": null
+      }
+    ],
+    "recent_developments": [],
+    "limitations": [
+      "Search results did not provide usable primary-source pages on employees, standalone financials, or recent developments. No developments are listed because none could be verified with full-page evidence and publication dates."
+    ]
+  },
+  "sources": [
+    {
+      "source": {
+        "source_id": "mf-vat-5220003782-20261005T082944526457Z",
+        "url": "https://wl-api.mf.gov.pl/api/search/nip/5220003782?date=2026-10-05",
+        "title": "Ministerstwo Finansów — Wykaz podatników VAT",
+        "retrieved_at": "2026-10-05T08:29:44.526457Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null
+      },
+      "kind": "registry",
+      "content": "MF VAT register identity material (not a raw registry response):\nlegal_name: \"ASSECO POLAND\" SPÓŁKA AKCYJNA\nlegal_name evidence from mf-vat-5220003782-20261005T082944526457Z: \"\\\"ASSECO POLAND\\\" SPÓŁKA AKCYJNA\"\nkrs: 0000033391\nkrs evidence from mf-vat-5220003782-20261005T082944526457Z: \"0000033391\"\nregon: 010334578\nregon evidence from mf-vat-5220003782-20261005T082944526457Z: \"010334578\"\nregistered_city: unknown; Registry provides no separate city field; no city inferred from address\nregistered_address: OLCHOWA 14, 35-322 RZESZÓW\nregistered_address evidence from mf-vat-5220003782-20261005T082944526457Z: \"OLCHOWA 14, 35-322 RZESZÓW\"\nwebsite: unknown; This registry supplies no website; no website verification performed\nNIP: 5220003782",
+      "fetch_mode": "registry"
+    },
+    {
+      "source": {
+        "source_id": "S001",
+        "url": "https://inwestor.asseco.com/en/about-asseco/strategy",
+        "title": "Strategy - Asseco Poland S.A. - Centrum Relacji Inwestorskich",
+        "retrieved_at": "2026-10-05T08:52:43.228981Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null
+      },
+      "kind": "search_snippet",
+      "content": "targeting the financial, health, corporate and government sectors, at home and abroad,\n building and delivering software-based solutions in the Company customers' business-critical areas,\n aiming to build repeatable solutions for adequate margins while maintaining a competitive price level, [...] The activities of the Asseco Poland S.A focus on providing a wide range of proprietary IT solutions and services. The company specializes in implementing the largest and most complex IT projects ordered by various clients, offering comprehensive solutions to all sectors of the economy, and also selling standardized products to smaller entities. The company builds long-term trust-based relationships with customers, becoming their strategic business partner. [...] Organic growth\n\nThe strategy of organic growth of Asseco Poland S.A. is based on providing proprietary IT software and services to clients in Poland and abroad. The company's strategy relies on sector-specific business expertise, which is supported by technological competence. In addition, Asseco leverages on the vast experience of its international affiliated companies to create a comprehensive portfolio of products satisfying the highest needs of its customers.",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S002",
+        "url": "https://pl.asseco.com/",
+        "title": "Asseco Poland - Technologia dla biznesu, rozwiązania dla ludzi.",
+        "retrieved_at": "2026-10-05T08:27:47.744790Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null
+      },
+      "kind": "search_snippet",
+      "content": "Asseco Poland S.A. z siedzibą w Rzeszowie, ul. Olchowa 14, 35-322 Rzeszów, NIP: 522-000-37-82, REGON: 010334578, PKD 6210B. Sąd Rejonowy w Rzeszowie, XII Wydział Gospodarczy Krajowego Rejestru Sądowego, KRS: 0000033391. Kapitał zakładowy w wysokości 83 000 303,00 PLN jest opłacony w całości. Nr BDO: 000004848\n\n[](\n\n### Centrum ustawień prywatności",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S001",
+        "url": "https://inwestor.asseco.com/en/about-asseco/strategy",
+        "title": "Strategy - Asseco Poland S.A. - Centrum Relacji Inwestorskich",
+        "retrieved_at": "2026-10-05T08:52:43.228981Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null
+      },
+      "kind": "search_snippet",
+      "content": "targeting the financial, health, corporate and government sectors, at home and abroad,\n building and delivering software-based solutions in the Company customers' business-critical areas,\n aiming to build repeatable solutions for adequate margins while maintaining a competitive price level, [...] The activities of the Asseco Poland S.A focus on providing a wide range of proprietary IT solutions and services. The company specializes in implementing the largest and most complex IT projects ordered by various clients, offering comprehensive solutions to all sectors of the economy, and also selling standardized products to smaller entities. The company builds long-term trust-based relationships with customers, becoming their strategic business partner. [...] Organic growth\n\nThe strategy of organic growth of Asseco Poland S.A. is based on providing proprietary IT software and services to clients in Poland and abroad. The company's strategy relies on sector-specific business expertise, which is supported by technological competence. In addition, Asseco leverages on the vast experience of its international affiliated companies to create a comprehensive portfolio of products satisfying the highest needs of its customers.",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S002",
+        "url": "https://pl.asseco.com/",
+        "title": "Asseco Poland - Technologia dla biznesu, rozwiązania dla ludzi.",
+        "retrieved_at": "2026-10-05T08:27:47.744790Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null
+      },
+      "kind": "search_snippet",
+      "content": "Asseco Poland S.A. z siedzibą w Rzeszowie, ul. Olchowa 14, 35-322 Rzeszów, NIP: 522-000-37-82, REGON: 010334578, PKD 6210B. Sąd Rejonowy w Rzeszowie, XII Wydział Gospodarczy Krajowego Rejestru Sądowego, KRS: 0000033391. Kapitał zakładowy w wysokości 83 000 303,00 PLN jest opłacony w całości. Nr BDO: 000004848\n\n[](\n\n### Centrum ustawień prywatności",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S001",
+        "url": "https://inwestor.asseco.com/en/about-asseco/strategy",
+        "title": "Strategy - Asseco Poland S.A. - Centrum Relacji Inwestorskich",
+        "retrieved_at": "2026-10-05T08:52:43.228981Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null
+      },
+      "kind": "search_snippet",
+      "content": "targeting the financial, health, corporate and government sectors, at home and abroad,\n building and delivering software-based solutions in the Company customers' business-critical areas,\n aiming to build repeatable solutions for adequate margins while maintaining a competitive price level, [...] The activities of the Asseco Poland S.A focus on providing a wide range of proprietary IT solutions and services. The company specializes in implementing the largest and most complex IT projects ordered by various clients, offering comprehensive solutions to all sectors of the economy, and also selling standardized products to smaller entities. The company builds long-term trust-based relationships with customers, becoming their strategic business partner. [...] Organic growth\n\nThe strategy of organic growth of Asseco Poland S.A. is based on providing proprietary IT software and services to clients in Poland and abroad. The company's strategy relies on sector-specific business expertise, which is supported by technological competence. In addition, Asseco leverages on the vast experience of its international affiliated companies to create a comprehensive portfolio of products satisfying the highest needs of its customers.",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S002",
+        "url": "https://pl.asseco.com/",
+        "title": "Asseco Poland - Technologia dla biznesu, rozwiązania dla ludzi.",
+        "retrieved_at": "2026-10-05T08:27:47.744790Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null
+      },
+      "kind": "search_snippet",
+      "content": "Asseco Poland S.A. z siedzibą w Rzeszowie, ul. Olchowa 14, 35-322 Rzeszów, NIP: 522-000-37-82, REGON: 010334578, PKD 6210B. Sąd Rejonowy w Rzeszowie, XII Wydział Gospodarczy Krajowego Rejestru Sądowego, KRS: 0000033391. Kapitał zakładowy w wysokości 83 000 303,00 PLN jest opłacony w całości. Nr BDO: 000004848\n\n[](\n\n### Centrum ustawień prywatności",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S001",
+        "url": "https://inwestor.asseco.com/en/about-asseco/strategy",
+        "title": "Strategy - Asseco Poland S.A. - Centrum Relacji Inwestorskich",
+        "retrieved_at": "2026-10-05T08:52:43.228981Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null
+      },
+      "kind": "search_snippet",
+      "content": "targeting the financial, health, corporate and government sectors, at home and abroad,\n building and delivering software-based solutions in the Company customers' business-critical areas,\n aiming to build repeatable solutions for adequate margins while maintaining a competitive price level, [...] The activities of the Asseco Poland S.A focus on providing a wide range of proprietary IT solutions and services. The company specializes in implementing the largest and most complex IT projects ordered by various clients, offering comprehensive solutions to all sectors of the economy, and also selling standardized products to smaller entities. The company builds long-term trust-based relationships with customers, becoming their strategic business partner. [...] Organic growth\n\nThe strategy of organic growth of Asseco Poland S.A. is based on providing proprietary IT software and services to clients in Poland and abroad. The company's strategy relies on sector-specific business expertise, which is supported by technological competence. In addition, Asseco leverages on the vast experience of its international affiliated companies to create a comprehensive portfolio of products satisfying the highest needs of its customers.",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S002",
+        "url": "https://pl.asseco.com/",
+        "title": "Asseco Poland - Technologia dla biznesu, rozwiązania dla ludzi.",
+        "retrieved_at": "2026-10-05T08:27:47.744790Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null
+      },
+      "kind": "search_snippet",
+      "content": "Asseco Poland S.A. z siedzibą w Rzeszowie, ul. Olchowa 14, 35-322 Rzeszów, NIP: 522-000-37-82, REGON: 010334578, PKD 6210B. Sąd Rejonowy w Rzeszowie, XII Wydział Gospodarczy Krajowego Rejestru Sądowego, KRS: 0000033391. Kapitał zakładowy w wysokości 83 000 303,00 PLN jest opłacony w całości. Nr BDO: 000004848\n\n[](\n\n### Centrum ustawień prywatności",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S001",
+        "url": "https://inwestor.asseco.com/en/about-asseco/strategy",
+        "title": "Strategy - Asseco Poland S.A. - Centrum Relacji Inwestorskich",
+        "retrieved_at": "2026-10-05T08:52:43.228981Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null
+      },
+      "kind": "search_snippet",
+      "content": "targeting the financial, health, corporate and government sectors, at home and abroad,\n building and delivering software-based solutions in the Company customers' business-critical areas,\n aiming to build repeatable solutions for adequate margins while maintaining a competitive price level, [...] The activities of the Asseco Poland S.A focus on providing a wide range of proprietary IT solutions and services. The company specializes in implementing the largest and most complex IT projects ordered by various clients, offering comprehensive solutions to all sectors of the economy, and also selling standardized products to smaller entities. The company builds long-term trust-based relationships with customers, becoming their strategic business partner. [...] Organic growth\n\nThe strategy of organic growth of Asseco Poland S.A. is based on providing proprietary IT software and services to clients in Poland and abroad. The company's strategy relies on sector-specific business expertise, which is supported by technological competence. In addition, Asseco leverages on the vast experience of its international affiliated companies to create a comprehensive portfolio of products satisfying the highest needs of its customers.",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S002",
+        "url": "https://pl.asseco.com/",
+        "title": "Asseco Poland - Technologia dla biznesu, rozwiązania dla ludzi.",
+        "retrieved_at": "2026-10-05T08:27:47.744790Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null
+      },
+      "kind": "search_snippet",
+      "content": "Asseco Poland S.A. z siedzibą w Rzeszowie, ul. Olchowa 14, 35-322 Rzeszów, NIP: 522-000-37-82, REGON: 010334578, PKD 6210B. Sąd Rejonowy w Rzeszowie, XII Wydział Gospodarczy Krajowego Rejestru Sądowego, KRS: 0000033391. Kapitał zakładowy w wysokości 83 000 303,00 PLN jest opłacony w całości. Nr BDO: 000004848\n\n[](\n\n### Centrum ustawień prywatności",
+      "fetch_mode": "tavily"
+    },
+    {
+      "source": {
+        "source_id": "S001",
+        "url": "https://inwestor.asseco.com/en/about-asseco/strategy/",
+        "title": "Strategy - Asseco Poland S.A. - Centrum Relacji Inwestorskich",
+        "retrieved_at": "2026-10-05T08:52:47.874936Z",
+        "published_on": null,
+        "redirect_chain": [
+          "https://inwestor.asseco.com/en/about-asseco/strategy",
+          "https://inwestor.asseco.com/en/about-asseco/strategy/"
+        ],
+        "publication_blocked_reason": null
+      },
+      "kind": "full_page",
+      "content": "Strategy - Asseco Poland S.A. - Centrum Relacji Inwestorskich\nFind us on social media:\n+48 667 662 161\n[email protected]\nSubscribe to the newsletter\nContact us\nAsseco Poland\nen\nPL\nEN\nAbout Asseco\nclose\nPress Releases\nGeneral information\nGoverning bodies\nShareholders\nGroup structure\nStrategy\nMarket environment\nCorporate Governance\nReports\nclose\nRegulatory Filings\nFinancial Reports\nClosed periods\nFinancial information\nclose\nAsseco in numbers\nFinancial highlights\nFinancial ratios – consolidated\nDividend\nAsseco on the WSE\nclose\nStock information\nStock quotes\nAnalysts covering Asseco\nIssuance prospectuses\nEvent calendar\nInformational materials\nclose\nPresentations\nFact sheet\nVideos\nESG\nYou are here:\nMain page\nAbout Asseco\nStrategy\nAbout Asseco\nPress Releases\nGeneral information\nGoverning bodies\nShareholders\nGroup structure\nStrategy\nMarket environment\nCorporate Governance\nCode of Business Ethics and Conduct\nBest Practices\nCorporate regulations\nRemuneration Policy\nArticles of Association of Asseco Poland S.A\nAGM\nEGM\nStrategy\nThe\nmission\nof Asseco Poland and the Asseco Group is to improve the quality of life by providing solutions for people and technologies for business.\nDriven by the\nvision:\nAsseco Poland is willing to be reliable and fast and offer the best products and services to support customers around the world in achieving their goals. Its employees form a competent and passionate team combining traditional values with modern approach,\nThe company builds an international group of technology companies, whose federal model allows for the use of local entrepreneurship and market knowledge. When a company joins the group, it increases its implementation capabilities and credibility towards demanding customers.\nThe strategy of Asseco Poland is focused on building long-term value for its stakeholders. It is based on two key pillars: development of proprietary software and services and increasing the scale of operations through acquisitions.\nOrganic growth\nThe strategy of organic growth of Asseco Poland S.A. is based on providing proprietary IT software and services to clients in Poland and abroad. The company's strategy relies on sector-specific business expertise, which is supported by technological competence. In addition, Asseco leverages on the vast experience of its international affiliated companies to create a comprehensive portfolio of products satisfying the highest needs of its customers.\nThe activities of the Asseco Poland S.A focus on providing a wide range of proprietary IT solutions and services. The company specializes in implementing the largest and most complex IT projects ordered by various clients, offering comprehensive solutions to all sectors of the economy, and also selling standardized products to smaller entities. The company builds long-term trust-based relationships with customers, becoming their strategic business partner.\nApart from its operating activities, as the owner controlling other companies of the Asseco Group, Asseco Poland S.A. plays a key role in the Group. Asseco Poland sets strategic directions for the Group's development, monitors and supervises their implementation, sets forth internal rules of operation, and regulates mutual relations among the companies within the federation.\nDevelopment through acquisitions\nFor many years, Asseco has pursued an effective acquisition policy at home and abroad. Since 2004, it has successfully completed over 170 acquisitions, increasing its business scale and geographic reach many times over. The Group is primarily interested in profitable entities with specialized and committed staff, willing to further develop themselves by joining a unique federation model or by integrating with Asseco. The acquisitions are intended to enhance our competence in the key sectors of business, to enter new geographical markets, or to reinforce the Asseco Group's position in the countries where it is already present.\nStrategic objectives in key areas\nMarket:\ntargeting the financial, health, corporate and government sectors, at home and abroad,\nbuilding and delivering software-based solutions in the Company customers' business-critical areas,\naiming to build repeatable solutions for adequate margins while maintaining a competitive price level,\nstriving for a stable source of revenues derived from maintenance and development services for the software provided, by retaining within the Company and protecting copyrights to the solutions it develops,\nproviding SaaS-based solutions based on proprietary software.\nOrganization:\nbusiness areas dedicated to serving various market sectors,\ngreat diversity, a consequence of the different needs, specifics and development phases of each sector,\nsupporting all initiatives to exchange knowledge and experience between areas,\na catalog of shared values and a vision, mission and strategy that can be detailed by business areas,\nback office processes common to all areas to support business objectives,\ninvestments in research and development (R&D).\nPeople:\nseeing people as the organization's greatest value,\nhigh expert knowledge and use of team potential,\ninvestments in the development of high-level expert and sectoral competencies,\ngathering knowledge and experience by maintaining a stable team,\npromoting initiatives and innovative approaches.\nCorporate social responsibility:\ntaking care of important social interests,\nsupporting Polish sport,\nhelping those in need,\nenvironmental protection activities.\nUp\nReports\nFinancial information\nAsseco on the WSE\nEvent calendar\nContact IR\nReport a violation\nPrivacy Policy\nAll rights reserved to Asseco Poland S.A. - 2026",
+      "fetch_mode": "static"
+    }
+  ],
+  "diagnostics": {
+    "model": "openai-codex:gpt-6-luna",
+    "status": "completed",
+    "stop_reason": null,
+    "failure_code": null,
+    "failures": [],
+    "validated_progress_retained": false,
+    "model_requests": 5,
+    "searches": 5,
+    "page_reads": 1,
+    "dynamic_reads": 0,
+    "output_retries": 0,
+    "input_tokens": 23895,
+    "output_tokens": 1111,
+    "duration_seconds": 40.1280493340455,
+    "cost_usd": null
+  },
+  "generated_at": "2026-10-05T11:40:04.439573Z"
+}
