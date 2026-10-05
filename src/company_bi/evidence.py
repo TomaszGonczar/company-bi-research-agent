@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import calendar
 import re
 import unicodedata
 from collections import defaultdict
@@ -237,6 +238,9 @@ _FINANCIAL_NONACTUAL = {
     "planned",
     "plan",
     "plans",
+    "guidance",
+    "outlook",
+    "projection",
     "budget",
     "budgets",
     "aim",
@@ -861,6 +865,143 @@ def _phrase_outside_company_name(phrase: list[str], text: str, run: CompanyResea
     )
 
 
+_MONTHS = {
+    "january": 1,
+    "jan": 1,
+    "styczeń": 1,
+    "stycznia": 1,
+    "february": 2,
+    "feb": 2,
+    "luty": 2,
+    "lutego": 2,
+    "march": 3,
+    "mar": 3,
+    "marzec": 3,
+    "marca": 3,
+    "april": 4,
+    "apr": 4,
+    "kwiecień": 4,
+    "kwietnia": 4,
+    "may": 5,
+    "maj": 5,
+    "maja": 5,
+    "june": 6,
+    "jun": 6,
+    "czerwiec": 6,
+    "czerwca": 6,
+    "july": 7,
+    "jul": 7,
+    "lipiec": 7,
+    "lipca": 7,
+    "august": 8,
+    "aug": 8,
+    "sierpień": 8,
+    "sierpnia": 8,
+    "september": 9,
+    "sep": 9,
+    "wrzesień": 9,
+    "września": 9,
+    "october": 10,
+    "oct": 10,
+    "październik": 10,
+    "października": 10,
+    "november": 11,
+    "nov": 11,
+    "listopad": 11,
+    "listopada": 11,
+    "december": 12,
+    "dec": 12,
+    "grudzień": 12,
+    "grudnia": 12,
+}
+
+
+def _assertion_qualified(text: str, run: CompanyResearchRun, *, mode: str = "current") -> bool:
+    """Fail closed on denial, modality, conditions, and bounded temporal qualifiers."""
+    normalized = _norm(text).casefold()
+    tokens = _tokens(normalized)
+    if re.search(
+        r"\b(?:deny|denies|denied|denial|untrue|false|rumou?r|nieprawda|zaprzeczył)\b",
+        normalized,
+    ):
+        return False
+    if tokens & (_ASSERTION_NEGATION | _ASSERTION_MODALITY) or "?" in text:
+        return False
+    if re.search(
+        r"\b(?:subject\s+to|once|provided\s+that|pending|if|unless|"
+        r"pod\s+warunkiem|po\s+uzyskaniu|w\s+razie)\b",
+        normalized,
+    ):
+        return False
+    if mode in {"event", "financial"}:
+        return True
+
+    generated = run.generated_at.date()
+    temporal = False
+    dates: list[tuple[date, date]] = []
+    for match in _DATE_PATTERN.finditer(text):
+        try:
+            raw = match.group()
+            value = (
+                date.fromisoformat(raw)
+                if "-" in raw
+                else date(int(raw[6:]), int(raw[3:5]), int(raw[:2]))
+            )
+        except ValueError:
+            continue
+        dates.append((value, value))
+    for match in re.finditer(
+        r"\b("
+        + "|".join(sorted(map(re.escape, _MONTHS), key=len, reverse=True))
+        + r")\s+(?:of\s+)?(\d{4})\b",
+        normalized,
+    ):
+        temporal = True
+        month, year = _MONTHS[match.group(1)], int(match.group(2))
+        dates.append((date(year, month, 1), date(year, month, calendar.monthrange(year, month)[1])))
+    quarter_pattern = re.compile(
+        r"\b(?:(?:q|quarter)\s*([1-4])\s*(?:of\s+)?(\d{4})|"
+        r"(i{1,3}|iv|[1-4])\s*\.?\s*kwarta(?:ł|łu)\s*(\d{4}))\b"
+    )
+    for match in quarter_pattern.finditer(normalized):
+        temporal = True
+        quarter = int(
+            match.group(1)
+            or {"i": "1", "ii": "2", "iii": "3", "iv": "4"}.get(match.group(3), match.group(3))
+        )
+        year = int(match.group(2) or match.group(4))
+        month = (quarter - 1) * 3 + 1
+        last_month = month + 2
+        dates.append(
+            (date(year, month, 1), date(year, last_month, calendar.monthrange(year, last_month)[1]))
+        )
+
+    future_cue = bool(re.search(r"\b(?:starting|beginning|from|since|od|począwszy)\b", normalized))
+    month_names = "|".join(sorted(map(re.escape, _MONTHS), key=len, reverse=True))
+    polish_expiry = re.search(
+        r"\b(?:aż\s+)?do\s+(?:\d{4}-\d{2}-\d{2}|\d{2}[./]\d{2}[./]\d{4}|"
+        r"(?:q|quarter)\s*[1-4]\s*\d{4}|(?:i{1,3}|iv|[1-4])\s*\.?\s*kwarta(?:ł|łu)\s*\d{4}|"
+        + month_names
+        + r"\s+\d{4})\b",
+        normalized,
+    )
+    expiry_cue = bool(re.search(r"\b(?:until|through|thru)\b", normalized) or polish_expiry)
+    status_cue = bool(
+        re.search(r"\b(?:as\s+(?:of|at|on)|na\s+dzień|według\s+stanu\s+na)\b", normalized)
+    )
+    if future_cue or expiry_cue or status_cue:
+        temporal = True
+    if not temporal:
+        return True
+    if not dates:
+        return False
+    if (future_cue or status_cue) and any(start > generated for start, _ in dates):
+        return False
+    if expiry_cue and all(end < generated for _, end in dates):
+        return False
+    return True
+
+
 def _positive_assertion_qualifies(
     context: str,
     phrase_tokens: list[str],
@@ -889,7 +1030,9 @@ def _positive_assertion_qualifies(
     for sentence in _sentences(context):
         sentence_tokens = [token.casefold() for token in _WORD.findall(sentence)]
         explicitly_named = any(
-            set(sentence_tokens[:start]).issubset({"the", "currently", "separately"})
+            set(sentence_tokens[:start]).issubset(
+                {"the", "currently", "separately", "obecnie", "aktualnie"}
+            )
             for start, _ in _legal_name_occurrences(sentence_tokens, run)
         )
         sentence_conditional = bool(set(sentence_tokens) & {"if", "whether", "unless"})
@@ -905,6 +1048,8 @@ def _positive_assertion_qualifies(
         for clause in clauses:
             tokens = [token.casefold() for token in _WORD.findall(clause)]
             if not tokens:
+                continue
+            if not _assertion_qualified(clause, run, mode=mode):
                 continue
             has_company_subject = bool(set(tokens) & company_subjects)
             if conditional_scope:
@@ -968,6 +1113,8 @@ def _positive_assertion_qualifies(
                             "the",
                             "currently",
                             "also",
+                            "obecnie",
+                            "aktualnie",
                             "actively",
                             "primarily",
                             "mainly",
@@ -1178,11 +1325,15 @@ def _ordered_phrase_supported(
         if not matched_tokens:
             continue
         for context in contexts:
-            if not attachment(context, anchors, run):
-                continue
             for claim_sentence in _sentences(context):
                 claim_words = [token.casefold() for token in _WORD.findall(claim_sentence)]
                 if not _contains_sequence(claim_words, matched_tokens):
+                    continue
+                if not attachment(context, anchors, run) and not (
+                    mode == "event"
+                    and _legal_name_occurrences(claim_words, run)
+                    and _entity_attached(claim_sentence, anchors, run)
+                ):
                     continue
                 if not phrase_is_negative and _nearby_negation(claim_sentence, anchors):
                     continue
@@ -1255,7 +1406,10 @@ _LEADING_FINANCIAL_PERIOD = re.compile(
     r"^\s*for\s+\d{4}-\d{2}-\d{2}\s+to\s+\d{4}-\d{2}-\d{2}\s*,?\s*",
     re.IGNORECASE,
 )
-_AMOUNT_PATTERN = re.compile(r"(?<![\w])[+-]?\d+(?:[ ,.]\d{3})*(?:[.,]\d+)?(?![\w])")
+_AMOUNT_PATTERN = re.compile(
+    r"(?<![\w])(?:\(\s*\d+(?:[ ,.]\d{3})*(?:[.,]\d+)?\s*\)|"
+    r"[+\-−]?\s*\d+(?:[ ,.]\d{3})*(?:[.,]\d+)?)(?![\w])"
+)
 
 
 def _phrase_spans(tokens: list[str], phrases: set[str]) -> list[tuple[int, int]]:
@@ -1289,23 +1443,29 @@ def _unit_spans(tokens: list[str], unit: str) -> list[tuple[int, int]]:
 
 
 def _numeric_values(raw: str) -> set[Decimal]:
-    compact = raw.replace(" ", "").replace("'", "")
+    compact = raw.replace(" ", "").replace("'", "").replace("−", "-")
+    negative = compact.startswith("(") and compact.endswith(")")
+    compact = compact.strip("()")
+    sign = Decimal("-1") if negative else Decimal("1")
+    if compact.startswith(("+", "-")):
+        sign *= Decimal("-1") if compact[0] == "-" else Decimal("1")
+        compact = compact[1:]
     values: set[Decimal] = set()
     try:
         if "," in compact and "." in compact:
             decimal_sep = "," if compact.rfind(",") > compact.rfind(".") else "."
             grouping_sep = "." if decimal_sep == "," else ","
-            values.add(Decimal(compact.replace(grouping_sep, "").replace(decimal_sep, ".")))
+            values.add(sign * Decimal(compact.replace(grouping_sep, "").replace(decimal_sep, ".")))
         elif "," in compact:
-            values.add(Decimal(compact.replace(",", ".")))
+            values.add(sign * Decimal(compact.replace(",", ".")))
             if len(compact.rsplit(",", 1)[1]) == 3:
-                values.add(Decimal(compact.replace(",", "")))
+                values.add(sign * Decimal(compact.replace(",", "")))
         elif "." in compact:
-            values.add(Decimal(compact))
+            values.add(sign * Decimal(compact))
             if len(compact.rsplit(".", 1)[1]) == 3:
-                values.add(Decimal(compact.replace(".", "")))
+                values.add(sign * Decimal(compact.replace(".", "")))
         else:
-            values.add(Decimal(compact))
+            values.add(sign * Decimal(compact))
     except Exception:
         return set()
     return values
@@ -1318,18 +1478,48 @@ def _same_precision_amount(raw: str, value: Decimal) -> bool:
     )
 
 
+def _normalize_amount(raw: str, text: str, start: int) -> str:
+    normalized = raw.strip()
+    if normalized.startswith("(") and normalized.endswith(")"):
+        return "-" + normalized[1:-1].strip()
+    normalized = normalized.replace("−", "-").replace(" ", "")
+    if re.search(r"\bminus\s*$", text[max(0, start - 24) : start].casefold()):
+        normalized = "-" + normalized.lstrip("+")
+    return normalized
+
+
 def _observed_metric_amount(text: str, fact: FinancialFact) -> str | None:
-    without_dates = _DATE_PATTERN.sub(" ", text)
+    """Return a single amount tied to the requested financial metric."""
+
+    if fact.period is None:
+        return None
+    without_dates = _DATE_PATTERN.sub(lambda match: " " * len(match.group()), text)
     tokens = [token.casefold() for token in _WORD.findall(without_dates)]
     metrics = _metric_spans(tokens, fact.metric)
     currencies = _currency_spans(tokens, fact.currency or "")
     units = _unit_spans(tokens, fact.unit or "")
     if not metrics or not currencies or not units:
         return None
+    date_matches = list(_DATE_PATTERN.finditer(text))
+    period_pairs = [
+        (date_matches[index], date_matches[index + 1])
+        for index in range(0, len(date_matches) - 1, 2)
+    ]
 
     amounts: list[tuple[int, str]] = []
     for match in _AMOUNT_PATTERN.finditer(without_dates):
         token_index = len(_WORD.findall(without_dates[: match.start()]))
+        if len(period_pairs) > 1:
+            following_pairs = [pair for pair in period_pairs if match.start() <= pair[0].start()]
+            if following_pairs:
+                period_pair = min(following_pairs, key=lambda pair: pair[0].start() - match.start())
+            else:
+                period_pair = max(period_pairs, key=lambda pair: pair[1].end())
+            if not (
+                _date_present(period_pair[0].group(), fact.period.start)
+                and _date_present(period_pair[1].group(), fact.period.end)
+            ):
+                continue
         near_currency = any(
             abs(token_index - min(max(token_index, start), end - 1)) <= 12
             for start, end in currencies
@@ -1337,11 +1527,16 @@ def _observed_metric_amount(text: str, fact: FinancialFact) -> str | None:
         near_unit = any(
             abs(token_index - min(max(token_index, start), end - 1)) <= 12 for start, end in units
         )
-        if near_currency and near_unit:
-            amounts.append((token_index, match.group()))
+        normalized = _normalize_amount(match.group(), without_dates, match.start())
+        prior = tokens[max(0, token_index - 5) : token_index]
+        is_delta = "by" in prior[-4:] and bool(
+            set(prior[-4:]) & {"up", "down", "increase", "increased", "decrease", "decreased"}
+        )
+        if near_currency and near_unit and not is_delta:
+            amounts.append((token_index, normalized))
+
     if not amounts:
         return None
-
     nearest_amounts: list[str] = []
     for start, end in metrics:
         distances = [
@@ -1363,6 +1558,20 @@ def _observed_metric_amount(text: str, fact: FinancialFact) -> str | None:
 
 def _financial_assertion_kind(text: str, fact: FinancialFact, run: CompanyResearchRun) -> str:
     """Recognize direct report clauses or a literal, fully labeled financial row."""
+    if ";" in text:
+        table_kind = _financial_assertion_kind(text.replace(";", " "), fact, run)
+        if table_kind == "table":
+            return table_kind
+    clauses = _ASSERTION_CLAUSE_BREAK.split(text)
+    if len(clauses) > 1:
+        kinds = [_financial_assertion_kind(clause, fact, run) for clause in clauses]
+        if "reported" in kinds:
+            return "reported"
+        if "table" in kinds:
+            return "table"
+        return "nonactual" if "nonactual" in kinds else "unsupported"
+    if not _assertion_qualified(text, run, mode="financial"):
+        return "nonactual"
     assertion_text = _LEADING_FINANCIAL_PERIOD.sub("", text, count=1)
     without_dates = _DATE_PATTERN.sub(" ", assertion_text)
     tokens = [token.casefold() for token in _WORD.findall(without_dates)]
@@ -1442,6 +1651,22 @@ def _financial_assertion_kind(text: str, fact: FinancialFact, run: CompanyResear
                 and set(tokens[:start]).issubset(core | subject_bridges)
             ):
                 return "reported"
+            if (
+                token in _FINANCIAL_REPORT_VERBS
+                and end <= index <= end + 8
+                and any(
+                    scope_end <= start and start - scope_end <= 2
+                    for _, scope_end in _phrase_spans(tokens, scope_words)
+                )
+                and any(
+                    end <= name_start
+                    and name_end <= index
+                    and index - name_end <= 2
+                    and set(tokens[end:name_start]).issubset({"spółki", "spółka", "of"})
+                    for name_start, name_end in _legal_name_occurrences(tokens, run)
+                )
+            ):
+                return "reported"
 
         currencies = _currency_spans(tokens, fact.currency or "")
         units = _unit_spans(tokens, fact.unit or "")
@@ -1479,22 +1704,17 @@ def _financial_assertion_amount(
     if fact.metric != "net_result":
         return observed
     tokens = [token.casefold() for token in _WORD.findall(_DATE_PATTERN.sub(" ", text))]
-    combined = ("profit" in tokens and "loss" in tokens) or (
-        "zysk" in tokens and "strata" in tokens
+    metrics = _metric_spans(tokens, fact.metric)
+    selected_loss = any(
+        tokens[start:end] in (["net", "loss"], ["strata", "netto"]) for start, end in metrics
     )
-    if combined:
-        return observed
-    net_loss = any(
-        tokens[index : index + 2] == ["net", "loss"]
-        or tokens[index : index + 2] == ["strata", "netto"]
-        for index in range(len(tokens) - 1)
-    )
-    explicitly_signed = observed.startswith(("+", "-"))
-    if not net_loss:
+    if not selected_loss:
         return observed
     if observed.startswith("+"):
         return None
-    return observed if explicitly_signed else f"-{observed}"
+    if any(number < 0 for number in _numeric_values(observed)):
+        return observed
+    return f"-{observed}"
 
 
 def _date_present(text: str, value: date) -> bool:
@@ -1519,17 +1739,15 @@ def _financial_observations(
         _bounded_source_contexts(source_content, excerpt) if source_content is not None else []
     ) or [excerpt]
     observations: list[str] = []
-    normalized_excerpt = _norm(excerpt)
+    if fact.period.end > run.generated_at.date():
+        return []
     for context in contexts:
-        windows = _context_windows(context)
-        windows.sort(
-            key=lambda window: (
-                normalized_excerpt not in _norm(window),
-                len(_sentences(window)),
-                len(window),
-            )
-        )
-        for window in windows:
+        for window in _context_windows(context):
+            if (
+                len(_sentences(window)) > 1
+                and _financial_assertion_kind(window, fact, run) != "table"
+            ):
+                continue
             tokens = _tokens(window)
             if not _date_present(window, fact.period.start) or not _date_present(
                 window, fact.period.end
@@ -1604,13 +1822,133 @@ def _employee_observation_date(text: str) -> date | None:
     return next(iter(dates)) if len(dates) == 1 else None
 
 
-def _employee_assertion_supported(context: str) -> bool:
+def _employee_subject_bound(
+    clause: str, run: CompanyResearchRun, context: str | None = None
+) -> bool:
+    tokens = [token.casefold() for token in _WORD.findall(clause)]
+    employment = {
+        "employs",
+        "employ",
+        "employed",
+        "employing",
+        "has",
+        "have",
+        "zatrudnia",
+        "zatrudniają",
+        "zatrudniał",
+        "zatrudnienie",
+    }
+    modifiers = {
+        "currently",
+        "also",
+        "actively",
+        "primarily",
+        "mainly",
+        "obecnie",
+        "aktualnie",
+        "separately",
+        "is",
+        "are",
+        "was",
+        "were",
+    }
+    owner_blockers = _EMPLOYEE_RELATION_BLOCKERS | {
+        "partner",
+        "partnera",
+        "subsidiary",
+        "affiliate",
+        "dostawca",
+        "klient",
+    }
+    spans = set(_legal_name_occurrences(tokens, run))
+    name = _company_name_tokens(run)
+    spans.update(
+        (start, start + len(name))
+        for start in range(len(tokens) - len(name) + 1)
+        if tokens[start : start + len(name)] == name
+    )
+    core = _legal_name_core_tokens(run)
+    spans.update(
+        (start, start + len(core))
+        for start in range(len(tokens) - len(core) + 1)
+        if core and tokens[start : start + len(core)] == core
+    )
+    for start, end in spans:
+        prefix = tokens[:start]
+        if set(prefix) & owner_blockers:
+            continue
+        if any(
+            word
+            not in {
+                "the",
+                "company",
+                "currently",
+                "obecnie",
+                "aktualnie",
+                "as",
+                "of",
+                "in",
+                "on",
+                "at",
+                "during",
+                "nip",
+                "issuer",
+            }
+            and not word.isdigit()
+            for word in prefix
+        ):
+            continue
+        following = tokens[end:]
+        if following[:1] == ["s"] or set(following[:4]) & owner_blockers:
+            continue
+        relation = next(
+            (index for index, token in enumerate(following[:5]) if token in employment), None
+        )
+        if relation is not None and relation <= 3 and set(following[:relation]).issubset(modifiers):
+            return True
+    if spans:
+        return False
+
+    relation = next((index for index, token in enumerate(tokens[:6]) if token in employment), None)
+    if relation is None or not set(tokens[:relation]).issubset(
+        {
+            "it",
+            "its",
+            "they",
+            "their",
+            "we",
+            "our",
+            "the",
+            "company",
+            "currently",
+            "obecnie",
+            "aktualnie",
+        }
+    ):
+        return False
+    if set(tokens) & owner_blockers or "s" in tokens[:relation]:
+        return False
+    return _employee_entity_attached(context or clause, run)
+
+
+def _employee_assertion_supported(
+    context: str,
+    run: CompanyResearchRun,
+    expected: tuple[int | None, int | None] | None = None,
+    expected_date: date | None = None,
+) -> bool:
     for sentence in _sentences(context):
         for clause in _ASSERTION_CLAUSE_BREAK.split(sentence):
             tokens = _tokens(clause)
-            if tokens & (_ASSERTION_NEGATION | _ASSERTION_MODALITY):
+            if (
+                _employee_range_observation(clause) is None
+                or not _assertion_qualified(clause, run)
+                or not _employee_subject_bound(clause, run, context)
+            ):
                 continue
-            if _employee_range_observation(clause) is None:
+            if expected is not None and _employee_range_observation(clause) != expected:
+                continue
+            if expected_date is not None and _employee_observation_date(clause) != expected_date:
                 continue
             if (
                 tokens & {"employed", "had", "was", "were"}
@@ -1618,11 +1956,37 @@ def _employee_assertion_supported(context: str) -> bool:
             ):
                 continue
             words = [token.casefold() for token in _WORD.findall(clause)]
-            for index, token in enumerate(words):
-                if token in _EMPLOYEE_WORDS:
-                    nearby = words[max(0, index - 8) : index + 4]
-                    if set(nearby) & _ASSERTION_PREDICATES:
-                        return True
+            employment_verbs = {
+                "employs",
+                "employ",
+                "employed",
+                "employing",
+                "zatrudnia",
+                "zatrudniają",
+                "zatrudniał",
+            }
+            employee_terms = {
+                "employees",
+                "employee",
+                "staff",
+                "personnel",
+                "people",
+                "persons",
+                "person",
+                "pracowników",
+                "pracownicy",
+                "zatrudnionych",
+            }
+            if not set(words) & employee_terms:
+                continue
+            if not set(words) & employment_verbs and not (
+                set(words) & {"has", "have"}
+                and set(words) & {"employees", "employee", "staff", "personnel", "pracowników"}
+            ):
+                continue
+            if set(words) & {"served", "serves", "trained", "train"}:
+                continue
+            return True
     return False
 
 
@@ -1649,7 +2013,7 @@ def _has_unqualified_employee_assertion(
                 contexts = _bounded_source_contexts(material.content, sentence)
                 if any(
                     _employee_entity_attached(context, run)
-                    and not _employee_assertion_supported(context)
+                    and not _employee_assertion_supported(context, run, expected)
                     for context in contexts
                 ):
                     return True
@@ -1664,20 +2028,20 @@ def _employee_supported(
         expected = (value.count,)
         for sentence in _sentences(excerpt):
             contexts = _bounded_source_contexts(material.content, sentence)
-            if (
-                _employee_observation(sentence) == expected
-                and any(_employee_assertion_supported(context) for context in contexts)
-                and any(_employee_entity_attached(context, run) for context in contexts)
+            if _employee_observation(sentence) == expected and any(
+                _employee_assertion_supported(context, run, (value.count, value.count))
+                and _employee_entity_attached(context, run)
+                for context in contexts
             ):
                 return True
     if isinstance(value, EmployeeRange):
         expected_bounds = (value.minimum, value.maximum)
         for sentence in _sentences(excerpt):
             contexts = _bounded_source_contexts(material.content, sentence)
-            if (
-                _employee_range_observation(sentence) == expected_bounds
-                and any(_employee_assertion_supported(context) for context in contexts)
-                and any(_employee_entity_attached(context, run) for context in contexts)
+            if _employee_range_observation(sentence) == expected_bounds and any(
+                _employee_assertion_supported(context, run, expected_bounds)
+                and _employee_entity_attached(context, run)
+                for context in contexts
             ):
                 return True
     return False
@@ -1690,6 +2054,8 @@ def _employee_as_of_supported(
 ) -> bool:
     if fact.as_of is None:
         return True
+    if fact.value is None:
+        return False
     for ref in fact.evidence:
         for material in by_id.get(ref.source_id, []):
             if material.kind != "full_page" or not _exact_excerpt(material, ref.excerpt):
@@ -1704,11 +2070,15 @@ def _employee_as_of_supported(
                     and _employee_range_observation(sentence)
                     == (fact.value.minimum, fact.value.maximum)
                 )
-                if (
-                    matches_value
-                    and any(_employee_assertion_supported(context) for context in contexts)
-                    and any(_employee_entity_attached(context, run) for context in contexts)
-                    and _employee_observation_date(sentence) == fact.as_of
+                expected = (
+                    (fact.value.count, fact.value.count)
+                    if isinstance(fact.value, ExactEmployees)
+                    else (fact.value.minimum, fact.value.maximum)
+                )
+                if matches_value and any(
+                    _employee_assertion_supported(context, run, expected, fact.as_of)
+                    and _employee_entity_attached(context, run)
+                    for context in contexts
                 ):
                     return True
     return False
@@ -1736,15 +2106,28 @@ def _publication_date_present(text: str, value: date) -> bool:
     return False
 
 
-def _event_contexts(event: CompanyEvent, excerpt: str, run: CompanyResearchRun) -> list[str]:
+def _event_contexts(
+    event: CompanyEvent,
+    excerpt: str,
+    run: CompanyResearchRun,
+    source_content: str | None = None,
+) -> list[str]:
     value = event.value
     if value is None:
         return []
     phrases = [phrase for phrase in (value.title, value.summary) if phrase]
     return [
-        window
-        for window in _context_windows(excerpt)
-        if all(_ordered_phrase_supported(phrase, window, run, mode="event") for phrase in phrases)
+        context
+        for sentence in _sentences(excerpt)
+        for context in (
+            _bounded_source_contexts(source_content, sentence, prefer_source_lines=True)
+            if source_content is not None
+            else [sentence]
+        )
+        if all(
+            _ordered_phrase_supported(phrase, sentence, run, source_content, mode="event")
+            for phrase in phrases
+        )
     ]
 
 
@@ -1752,7 +2135,7 @@ def _event_publication_supported(
     event: CompanyEvent, excerpt: str, run: CompanyResearchRun, material: RetrievedSource
 ) -> bool:
     value = event.value
-    contexts = _event_contexts(event, excerpt, run)
+    contexts = _event_contexts(event, excerpt, run, material.content)
     if value is None or not contexts:
         return False
     if material.source.published_on is not None:
@@ -1760,17 +2143,67 @@ def _event_publication_supported(
     return any(_publication_date_present(window, value.published_on) for window in contexts)
 
 
-def _event_occurrence_supported(event: CompanyEvent, excerpt: str, run: CompanyResearchRun) -> bool:
+def _event_date_owned(clause: str, value: EventDetails, occurred_on: date) -> bool:
+    tokens = [token.casefold() for token in _WORD.findall(clause)]
+    date_index = next(
+        (
+            len(_WORD.findall(clause[: match.start()]))
+            for match in _DATE_PATTERN.finditer(clause)
+            if _date_present(match.group(), occurred_on)
+        ),
+        None,
+    )
+    if date_index is None:
+        return False
+    relations = [index for index, token in enumerate(tokens) if token in _EVENT_RELATIONS]
+    for phrase in (value.title, value.summary):
+        phrase_tokens = [token.casefold() for token in _WORD.findall(_norm(phrase))]
+        if not phrase_tokens:
+            continue
+        for start in range(len(tokens) - len(phrase_tokens) + 1):
+            if tokens[start : start + len(phrase_tokens)] != phrase_tokens:
+                continue
+            end = start + len(phrase_tokens)
+            if any(
+                min(abs(relation - start), abs(relation - (end - 1))) <= 8
+                and abs(date_index - relation) <= 12
+                for relation in relations
+            ):
+                return True
+    return False
+
+
+def _event_occurrence_supported(
+    event: CompanyEvent, excerpt: str, run: CompanyResearchRun, source_content: str | None = None
+) -> bool:
     value = event.value
     if value is None or value.occurred_on is None:
         return value is not None
+    if value.occurred_on > run.generated_at.date():
+        return False
     phrases = [phrase for phrase in (value.title, value.summary) if phrase]
-    return any(
-        _date_present(sentence, value.occurred_on)
-        and not _publication_date_present(sentence, value.occurred_on)
-        and any(_ordered_phrase_supported(phrase, sentence, run) for phrase in phrases)
-        for sentence in _sentences(excerpt)
-    )
+    for sentence in _sentences(excerpt):
+        contexts = (
+            _bounded_source_contexts(source_content, sentence, prefer_source_lines=True)
+            if source_content is not None
+            else [sentence]
+        )
+        for context in contexts:
+            for assertion in _sentences(context):
+                clauses = re.split(r"\band\s+(?=(?:a|an|the)\b)", assertion, flags=re.I)
+                for clause in clauses:
+                    if (
+                        _date_present(clause, value.occurred_on)
+                        and _event_date_owned(clause, value, value.occurred_on)
+                        and not _publication_date_present(clause, value.occurred_on)
+                        and _assertion_qualified(clause, run, mode="event")
+                        and all(
+                            _ordered_phrase_supported(phrase, clause, run, mode="event")
+                            for phrase in phrases
+                        )
+                    ):
+                        return True
+    return False
 
 
 def _event_supported(
@@ -2047,8 +2480,11 @@ def build_profile(run: CompanyResearchRun) -> CompanyProfile:
                     observation_date = _employee_observation_date(sentence)
                     if (
                         observed is None
-                        or not _employee_assertion_supported(sentence)
-                        or not any(_employee_entity_attached(context, run) for context in contexts)
+                        or not any(
+                            _employee_assertion_supported(context, run, observed)
+                            and _employee_entity_attached(context, run)
+                            for context in contexts
+                        )
                         or observed == expected
                     ):
                         continue
@@ -2270,7 +2706,9 @@ def build_profile(run: CompanyResearchRun) -> CompanyProfile:
                 if _conflicting_nip(ref.excerpt, run.identity.nip):
                     nip_conflict = True
                 supports_event = _event_publication_supported(event, ref.excerpt, run, material)
-                supports_occurrence = _event_occurrence_supported(event, ref.excerpt, run)
+                supports_occurrence = _event_occurrence_supported(
+                    event, ref.excerpt, run, material.content
+                )
                 publication_verified |= supports_event
                 occurrence_verified |= supports_occurrence
                 if supports_event or supports_occurrence:

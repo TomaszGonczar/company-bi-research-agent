@@ -678,7 +678,7 @@ def _validate_registry_identity(
     registry_records = [
         _registry_identity_declarations(material.content) for material in registry_materials
     ]
-    for material, (_, structured_nips) in zip(registry_materials, registry_records):
+    for material, (_, structured_nips) in zip(registry_materials, registry_records, strict=True):
         found_nips = [*nip_pattern.findall(material.content), *structured_nips]
         for declared_nip in found_nips:
             if re.sub(r"\D", "", declared_nip) != identity.nip:
@@ -711,11 +711,13 @@ def _validate_registry_identity(
                     value, ref.excerpt, field_name, is_url=is_url
                 ):
                     raise ValueError(
-                        f"supported identity field {field_name} is not bound to its registry evidence"
+                        f"supported identity field {field_name} is not bound to "
+                        "its registry evidence"
                     )
                 if not any(ref.excerpt in material.content for material in matching_materials):
                     raise ValueError(
-                        f"identity evidence for {field_name} is absent from retained registry material"
+                        f"identity evidence for {field_name} is absent from "
+                        "retained registry material"
                     )
                 cited_matches = True
             if not cited_matches:
