@@ -1,0 +1,193 @@
+{
+  "predeclared_at": "2026-10-05T13:00:40.963Z",
+  "model": "openai-codex:gpt-6-luna",
+  "research_commit": "5c36e045a1f32336c403b0b254f1c6faa7cfe641",
+  "final_publication_commit": "7f781a035915a9372b306e82625611cd641b0e1b",
+  "rerolls": 0,
+  "companies": [
+    {
+      "id": "asseco-poland",
+      "nip": "5220003782",
+      "reason": "Previously selected software company; compare frozen-source improvement with independent fresh retrieval, preserving the failed fixed-source capture separately.",
+      "research_status": "failed",
+      "profile_status": null,
+      "researched_supported": 0,
+      "useful_sections": [],
+      "diagnostics": {
+        "model": "openai-codex:gpt-6-luna",
+        "status": "failed",
+        "stop_reason": "Output remained invalid after the allowed repair",
+        "failure_code": "MODEL_OUTPUT_INVALID",
+        "failures": [
+          {
+            "code": "EVIDENCE_VALIDATION_FAILURE",
+            "stage": "evidence_validation",
+            "reason": "Supported claims require exact excerpts from retrieved full-page content",
+            "error_type": "_DraftValidationFailure",
+            "field_path": "recent_developments.0.evidence.0.excerpt",
+            "attempt": null,
+            "source_id": null,
+            "validated_progress_available": false
+          },
+          {
+            "code": "EVIDENCE_VALIDATION_FAILURE",
+            "stage": "evidence_validation",
+            "reason": "Supported claims require exact excerpts from retrieved full-page content",
+            "error_type": "_DraftValidationFailure",
+            "field_path": "recent_developments.0.evidence.0.excerpt",
+            "attempt": 1,
+            "source_id": null,
+            "validated_progress_available": false
+          },
+          {
+            "code": "EVIDENCE_VALIDATION_FAILURE",
+            "stage": "evidence_validation",
+            "reason": "Supported claims require exact excerpts from retrieved full-page content",
+            "error_type": "_DraftValidationFailure",
+            "field_path": "recent_developments.0.evidence.0.excerpt",
+            "attempt": 2,
+            "source_id": null,
+            "validated_progress_available": false
+          }
+        ],
+        "validated_progress_retained": false,
+        "model_requests": 6,
+        "searches": 2,
+        "page_reads": 1,
+        "dynamic_reads": 0,
+        "output_retries": 1,
+        "input_tokens": 47277,
+        "output_tokens": 2122,
+        "duration_seconds": 64.25531599996611,
+        "cost_usd": null
+      },
+      "duration_seconds": 64.59824095806107,
+      "read_tool_attempts": 1,
+      "final_regate": {
+        "company": "asseco-poland",
+        "research_commit": "5c36e045a1f32336c403b0b254f1c6faa7cfe641",
+        "publication_commit": "7f781a035915a9372b306e82625611cd641b0e1b",
+        "research_status": "failed",
+        "profile_status": null,
+        "supported_observations": [],
+        "reason": "Failed research; no profile fabricated"
+      },
+      "research_sha256": "8ea9e0fef480999f90208120f2f28978c5c5c52c90aa3ed208d573d56f661f3f"
+    },
+    {
+      "id": "sonel",
+      "nip": "8840033448",
+      "reason": "Previously selected manufacturer; test whether real retrieval and current exact-value instructions yield useful publication.",
+      "research_status": "completed",
+      "profile_status": "partial",
+      "researched_supported": 0,
+      "useful_sections": [],
+      "diagnostics": {
+        "model": "openai-codex:gpt-6-luna",
+        "status": "completed",
+        "stop_reason": null,
+        "failure_code": null,
+        "failures": [],
+        "validated_progress_retained": false,
+        "model_requests": 10,
+        "searches": 6,
+        "page_reads": 2,
+        "dynamic_reads": 0,
+        "output_retries": 0,
+        "input_tokens": 112004,
+        "output_tokens": 2376,
+        "duration_seconds": 80.98539537517354,
+        "cost_usd": null
+      },
+      "duration_seconds": 81.32716241572052,
+      "read_tool_attempts": 2,
+      "final_regate": {
+        "company": "sonel",
+        "research_commit": "5c36e045a1f32336c403b0b254f1c6faa7cfe641",
+        "publication_commit": "7f781a035915a9372b306e82625611cd641b0e1b",
+        "research_status": "completed",
+        "profile_status": "partial",
+        "supported_observations": []
+      },
+      "research_sha256": "c16a68bd631c7fb3a037b8cb36b2512e40153c3a53e06e8983233be4b5475837"
+    },
+    {
+      "id": "apator",
+      "nip": "8790166896",
+      "reason": "Previously selected held-out manufacturer; not used for current utility gold or tuning; retain any failure rather than select an easier replacement.",
+      "research_status": "completed",
+      "profile_status": "partial",
+      "researched_supported": 0,
+      "useful_sections": [],
+      "diagnostics": {
+        "model": "openai-codex:gpt-6-luna",
+        "status": "completed",
+        "stop_reason": "Static page fetch failed; Dynamic fetch returned unsupported page content",
+        "failure_code": "MODEL_OUTPUT_INVALID",
+        "failures": [
+          {
+            "code": "MODEL_OUTPUT_INVALID",
+            "stage": "structured_output_validation",
+            "reason": "Structured output schema validation failed (value_error)",
+            "error_type": "ValidationError",
+            "field_path": "industries",
+            "attempt": 1,
+            "source_id": null,
+            "validated_progress_available": true
+          },
+          {
+            "code": "FETCH_FAILURE",
+            "stage": "static_fetch",
+            "reason": "Static page fetch failed",
+            "error_type": "CertificateVerifyError",
+            "field_path": null,
+            "attempt": 1,
+            "source_id": "S010",
+            "validated_progress_available": false
+          },
+          {
+            "code": "FETCH_FAILURE",
+            "stage": "static_fetch",
+            "reason": "Static page fetch failed",
+            "error_type": "CertificateVerifyError",
+            "field_path": null,
+            "attempt": 1,
+            "source_id": "S001",
+            "validated_progress_available": false
+          },
+          {
+            "code": "FETCH_FAILURE",
+            "stage": "dynamic_fetch",
+            "reason": "Dynamic fetch returned unsupported page content",
+            "error_type": "_UnsupportedContent",
+            "field_path": null,
+            "attempt": 2,
+            "source_id": "S001",
+            "validated_progress_available": false
+          }
+        ],
+        "validated_progress_retained": false,
+        "model_requests": 8,
+        "searches": 3,
+        "page_reads": 2,
+        "dynamic_reads": 2,
+        "output_retries": 1,
+        "input_tokens": 77443,
+        "output_tokens": 1496,
+        "duration_seconds": 65.86601516697556,
+        "cost_usd": null
+      },
+      "duration_seconds": 66.45007545873523,
+      "read_tool_attempts": 2,
+      "final_regate": {
+        "company": "apator",
+        "research_commit": "5c36e045a1f32336c403b0b254f1c6faa7cfe641",
+        "publication_commit": "7f781a035915a9372b306e82625611cd641b0e1b",
+        "research_status": "completed",
+        "profile_status": "partial",
+        "supported_observations": []
+      },
+      "research_sha256": "9c17618f1274ba0a8ffb8ec491c7477efda36522d44c9193d0f4063063cfef1f"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "company": "asseco-poland",
+  "producing_commit": "5c36e045a1f32336c403b0b254f1c6faa7cfe641",
+  "status": "audit_capture_failure",
+  "error": "NameError: started undefined in finally after research invocation",
+  "research_outcome": "unobservable: in-memory run/drafts were not persisted",
+  "model_requests": null,
+  "token_usage": null,
+  "researched_supported": null,
+  "rerun": false,
+  "duration_seconds": 32.83,
+  "note": "Infrastructure failure, not evidence of zero product support. Attempt retained and not repeated."
+}

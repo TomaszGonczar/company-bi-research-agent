@@ -1,0 +1,24 @@
+{
+  "reviewer": "Independent UtilitySupportReviewer context; no implementation or gold rationale supplied",
+  "runs": {
+    "asseco-poland": {
+      "run_sha256": "ad1a1487cab80ee3acb1fd6478eef62e51d11fd275ad5684d90e0aea35d5d1af",
+      "company": "asseco-poland",
+      "assessments": [
+        {
+          "field": "business_description",
+          "value": "The activities of the Asseco Poland S.A focus on providing a wide range of proprietary IT solutions and services.",
+          "judgment": "supported",
+          "source_ids": [
+            "S001"
+          ],
+          "reason": "The cited full-page strategy source contains this exact statement in the Organic growth section. Its surrounding context identifies Asseco Poland S.A. by name and describes the company’s current operating activities (including project implementation, sector-wide solutions, and standardized products); the claim is not merely a group-level or conditional acquisition/strategy aspiration. “Wide range” is directly stated, and the citation is eligible full-page evidence."
+        }
+      ],
+      "limitations": [
+        "Only business_description is marked supported among the profile’s non-registry researched fields; products_services, industries, and markets are uncertain, while employees and financials are unknown, so those values were not assessed as supported claims.",
+        "The SHA256 binds this assessment to the actual baseline run file; the evaluated researched profile and canonical full-page source text were separately read from the specified audit output/source-only paths."
+      ]
+    }
+  }
+}

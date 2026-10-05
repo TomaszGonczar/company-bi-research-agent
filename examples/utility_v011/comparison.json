@@ -1,0 +1,275 @@
+{
+  "baseline_gate_commit": "a99b959c8eb510fd0526a301a23466a30067c9ec",
+  "model_candidate_and_live_commit": "5c36e045a1f32336c403b0b254f1c6faa7cfe641",
+  "final_publication_commit": "7f781a035915a9372b306e82625611cd641b0e1b",
+  "model": "openai-codex:gpt-6-luna",
+  "gold_sha256": "9760e445e38f375b237c1c3c0df07108618cd3e75126a60bc69e08a847e74dfa",
+  "baseline": {
+    "companies": [
+      {
+        "company": "asseco-poland",
+        "run_status": "published",
+        "run_sha256": "ad1a1487cab80ee3acb1fd6478eef62e51d11fd275ad5684d90e0aea35d5d1af",
+        "counts": {
+          "gold": {
+            "supported": 0,
+            "uncertain": 1,
+            "unknown": 0,
+            "missing": 5
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 6,
+            "rate": 0
+          },
+          "supported_observations": 0,
+          "gold_backed_support": 0,
+          "externally_assessed_support": 0,
+          "externally_assessed_unsupported": 0,
+          "unassessed_support": 0,
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "rate": null
+          }
+        }
+      },
+      {
+        "company": "sonel",
+        "run_status": "published",
+        "run_sha256": "260c3807165cd1468bdeb1dcdbd0db6833f8c05112b37f2858c828102b262806",
+        "counts": {
+          "gold": {
+            "supported": 0,
+            "uncertain": 7,
+            "unknown": 0,
+            "missing": 0
+          },
+          "recall": {
+            "numerator": 0,
+            "denominator": 7,
+            "rate": 0
+          },
+          "supported_observations": 0,
+          "gold_backed_support": 0,
+          "externally_assessed_support": 0,
+          "externally_assessed_unsupported": 0,
+          "unassessed_support": 0,
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "rate": null
+          }
+        }
+      }
+    ],
+    "aggregate": {
+      "gold": {
+        "supported": 0,
+        "uncertain": 8,
+        "unknown": 0,
+        "missing": 5
+      },
+      "recall": {
+        "numerator": 0,
+        "denominator": 13,
+        "rate": 0
+      },
+      "supported_observations": 0,
+      "gold_backed_support": 0,
+      "externally_assessed_support": 0,
+      "externally_assessed_unsupported": 0,
+      "unassessed_support": 0,
+      "precision": {
+        "numerator": 0,
+        "denominator": 0,
+        "rate": null
+      }
+    }
+  },
+  "locked_candidates_on_final_gate": {
+    "companies": [
+      {
+        "company": "asseco-poland",
+        "run_status": "published",
+        "run_sha256": "ad1a1487cab80ee3acb1fd6478eef62e51d11fd275ad5684d90e0aea35d5d1af",
+        "counts": {
+          "gold": {
+            "supported": 1,
+            "uncertain": 0,
+            "unknown": 0,
+            "missing": 5
+          },
+          "correct_supported_gold_claims": 1,
+          "recall": {
+            "numerator": 1,
+            "denominator": 6,
+            "rate": 0.16666666666666666
+          },
+          "supported_observations": 1,
+          "gold_backed_support": 0,
+          "externally_assessed_support": 1,
+          "externally_assessed_unsupported": 0,
+          "unassessed_support": 0,
+          "precision": {
+            "numerator": 1,
+            "denominator": 1,
+            "rate": 1
+          }
+        }
+      },
+      {
+        "company": "sonel",
+        "run_status": "published",
+        "run_sha256": "260c3807165cd1468bdeb1dcdbd0db6833f8c05112b37f2858c828102b262806",
+        "counts": {
+          "gold": {
+            "supported": 0,
+            "uncertain": 4,
+            "unknown": 0,
+            "missing": 3
+          },
+          "correct_supported_gold_claims": 0,
+          "recall": {
+            "numerator": 0,
+            "denominator": 7,
+            "rate": 0
+          },
+          "supported_observations": 0,
+          "gold_backed_support": 0,
+          "externally_assessed_support": 0,
+          "externally_assessed_unsupported": 0,
+          "unassessed_support": 0,
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "rate": null
+          }
+        }
+      }
+    ],
+    "aggregate": {
+      "gold": {
+        "supported": 1,
+        "uncertain": 4,
+        "unknown": 0,
+        "missing": 8
+      },
+      "correct_supported_gold_claims": 1,
+      "recall": {
+        "numerator": 1,
+        "denominator": 13,
+        "rate": 0.07692307692307693
+      },
+      "supported_observations": 1,
+      "gold_backed_support": 0,
+      "externally_assessed_support": 1,
+      "externally_assessed_unsupported": 0,
+      "unassessed_support": 0,
+      "precision": {
+        "numerator": 1,
+        "denominator": 1,
+        "rate": 1
+      }
+    }
+  },
+  "fresh_candidate_extraction": {
+    "companies": [
+      {
+        "company": "asseco-poland",
+        "run_status": "missing",
+        "run_sha256": null,
+        "counts": {
+          "gold": {
+            "supported": 0,
+            "uncertain": 0,
+            "unknown": 0,
+            "missing": 6
+          },
+          "correct_supported_gold_claims": 0,
+          "recall": {
+            "numerator": 0,
+            "denominator": 6,
+            "rate": 0
+          },
+          "supported_observations": 0,
+          "gold_backed_support": 0,
+          "externally_assessed_support": 0,
+          "externally_assessed_unsupported": 0,
+          "unassessed_support": 0,
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "rate": null
+          }
+        }
+      },
+      {
+        "company": "sonel",
+        "run_status": "published",
+        "run_sha256": "d00b60b5d2bb30203e4a1cb89e1217f4686320de579308217ebc7a7e1fe7e2e4",
+        "counts": {
+          "gold": {
+            "supported": 0,
+            "uncertain": 4,
+            "unknown": 0,
+            "missing": 3
+          },
+          "correct_supported_gold_claims": 0,
+          "recall": {
+            "numerator": 0,
+            "denominator": 7,
+            "rate": 0
+          },
+          "supported_observations": 0,
+          "gold_backed_support": 0,
+          "externally_assessed_support": 0,
+          "externally_assessed_unsupported": 0,
+          "unassessed_support": 0,
+          "precision": {
+            "numerator": 0,
+            "denominator": 0,
+            "rate": null
+          }
+        }
+      }
+    ],
+    "aggregate": {
+      "gold": {
+        "supported": 0,
+        "uncertain": 4,
+        "unknown": 0,
+        "missing": 9
+      },
+      "correct_supported_gold_claims": 0,
+      "recall": {
+        "numerator": 0,
+        "denominator": 13,
+        "rate": 0
+      },
+      "supported_observations": 0,
+      "gold_backed_support": 0,
+      "externally_assessed_support": 0,
+      "externally_assessed_unsupported": 0,
+      "unassessed_support": 0,
+      "precision": {
+        "numerator": 0,
+        "denominator": 0,
+        "rate": null
+      }
+    }
+  },
+  "fresh_extraction_caveat": "Asseco capture failed after research invocation; six gold outcomes and model usage are unobservable. The 0/13 aggregate is retained-output coverage including missing artifacts, not a complete estimate of fresh model/gate recall. SONEL is observed 0/7; no Asseco reroll.",
+  "all_sprint_native_attempts": {
+    "fixed_source": 4,
+    "live": 3,
+    "known_usage": {
+      "model_requests": 39,
+      "input_tokens": 311079,
+      "output_tokens": 8962
+    },
+    "attempts_with_unmeasured_usage": 1,
+    "cost_usd": null
+  },
+  "product_proof": "PRODUCT UTILITY STILL NOT DEMONSTRATED"
+}
