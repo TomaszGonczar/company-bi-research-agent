@@ -363,32 +363,64 @@ def _company_name_tokens(run: CompanyResearchRun) -> list[str]:
 _SOURCE_SENTENCE_BREAK = re.compile(r"(?<=[!?])\s+|(?<=\.)\s+(?=[A-ZĄĆĘŁŃÓŚŹŻ0-9])|;")
 
 
-def _bounded_source_contexts(content: str, excerpt: str) -> list[str]:
-    """Return bounded source spans through each exact quote's enclosing sentence."""
-    normalized = _norm(content)
+def _bounded_source_contexts(
+    content: str, excerpt: str, *, prefer_source_lines: bool = False
+) -> list[str]:
+    """Return canonical contexts, optionally bounded by retained source lines."""
     quote = _norm(excerpt)
     if not quote:
         return []
-    sentence_starts = [0]
-    sentence_starts.extend(match.end() for match in _SOURCE_SENTENCE_BREAK.finditer(normalized))
-    contexts: list[str] = []
-    offset = 0
-    while (offset := normalized.find(quote, offset)) >= 0:
-        sentence_index = max(
-            index for index, start in enumerate(sentence_starts) if start <= offset
-        )
-        start = sentence_starts[max(0, sentence_index - 2)]
-        quote_end = offset + len(quote)
-        end = next(
-            (boundary for boundary in sentence_starts if boundary > quote_end), len(normalized)
-        )
-        if end < len(normalized) and normalized[end - 1 : end] == ";":
-            end = next(
-                (boundary for boundary in sentence_starts if boundary > end), len(normalized)
+
+    def enclosing_sentences(text: str) -> list[str]:
+        sentence_starts = [0]
+        sentence_starts.extend(match.end() for match in _SOURCE_SENTENCE_BREAK.finditer(text))
+        contexts: list[str] = []
+        offset = 0
+        while (offset := text.find(quote, offset)) >= 0:
+            sentence_index = max(
+                index for index, start in enumerate(sentence_starts) if start <= offset
             )
-        contexts.append(normalized[start:end])
-        offset += 1
-    return contexts
+            start = sentence_starts[max(0, sentence_index - 2)]
+            quote_end = offset + len(quote)
+            end = next(
+                (boundary for boundary in sentence_starts if boundary > quote_end), len(text)
+            )
+            if end < len(text) and text[end - 1 : end] == ";":
+                end = next((boundary for boundary in sentence_starts if boundary > end), len(text))
+            contexts.append(text[start:end])
+            offset += 1
+        return contexts
+
+    if not prefer_source_lines:
+        return enclosing_sentences(_norm(content))
+    source_lines = unicodedata.normalize("NFC", content).splitlines()
+    line_contexts = [
+        context
+        for index, line in enumerate(source_lines)
+        if (normalized_line := _norm(line)) and quote in normalized_line
+        for window in [_norm(" ".join(source_lines[max(0, index - 2) : index + 3]))]
+        for context in enclosing_sentences(window)
+    ]
+    if line_contexts:
+        return line_contexts
+
+    paragraphs: list[str] = []
+    lines: list[str] = []
+    for line in unicodedata.normalize("NFC", content).splitlines():
+        if line.strip():
+            lines.append(line)
+        elif lines:
+            paragraphs.append(_norm(" ".join(lines)))
+            lines.clear()
+    if lines:
+        paragraphs.append(_norm(" ".join(lines)))
+    paragraph_contexts = [
+        context
+        for paragraph in paragraphs
+        if quote in paragraph
+        for context in enclosing_sentences(paragraph)
+    ]
+    return paragraph_contexts
 
 
 _LEGAL_FORM_SUFFIXES = (
@@ -439,18 +471,116 @@ def _legal_name_core_tokens(run: CompanyResearchRun) -> list[str]:
     return tokens
 
 
-def _has_company_antecedent(context: str, run: CompanyResearchRun) -> bool:
-    sentences = _sentences(context)
+def _legal_name_occurrences(tokens: list[str], run: CompanyResearchRun) -> list[tuple[int, int]]:
+    """Find the full legal-name core with its registered form or a same-form abbreviation."""
     name = _company_name_tokens(run)
-    if not name or len(sentences) < 2:
+    core = _legal_name_core_tokens(run)
+    if not core:
+        return []
+    registered_suffix = tuple(name[len(core) :])
+    equivalent_forms = {
+        ("spółka", "z", "ograniczoną", "odpowiedzialnością"): (
+            ("spółka", "z", "ograniczoną", "odpowiedzialnością"),
+            ("sp", "z", "o", "o"),
+        ),
+        ("spółka", "komandytowo", "akcyjna"): (
+            ("spółka", "komandytowo", "akcyjna"),
+            ("sp", "k", "a"),
+        ),
+        ("spółka", "komandytowa"): (("spółka", "komandytowa"), ("sp", "k")),
+        ("spółka", "partnerska"): (("spółka", "partnerska"), ("sp", "p")),
+        ("spółka", "jawna"): (("spółka", "jawna"), ("sp", "j")),
+        ("spółka", "akcyjna"): (("spółka", "akcyjna"), ("s", "a"), ("sa",)),
+        ("sp", "z", "o", "o"): (
+            ("spółka", "z", "ograniczoną", "odpowiedzialnością"),
+            ("sp", "z", "o", "o"),
+        ),
+        ("sp", "k", "a"): (("spółka", "komandytowo", "akcyjna"), ("sp", "k", "a")),
+        ("sp", "k"): (("spółka", "komandytowa"), ("sp", "k")),
+        ("sp", "p"): (("spółka", "partnerska"), ("sp", "p")),
+        ("sp", "j"): (("spółka", "jawna"), ("sp", "j")),
+        ("s", "a"): (("spółka", "akcyjna"), ("s", "a"), ("sa",)),
+        ("sa",): (("spółka", "akcyjna"), ("s", "a"), ("sa",)),
+    }
+    suffixes = set(equivalent_forms.get(registered_suffix, (registered_suffix,)))
+    recognized_suffixes = sorted(_LEGAL_FORM_SUFFIXES, key=len, reverse=True)
+    occurrences: list[tuple[int, int]] = []
+    for start in range(len(tokens) - len(core) + 1):
+        if tokens[start : start + len(core)] != core:
+            continue
+        suffix_start = start + len(core)
+        source_form = next(
+            (
+                suffix
+                for suffix in recognized_suffixes
+                if tuple(tokens[suffix_start : suffix_start + len(suffix)]) == suffix
+            ),
+            (),
+        )
+        if source_form in suffixes:
+            occurrences.append((start, suffix_start + len(source_form)))
+    return occurrences
+
+
+def _legal_form_tokens(run: CompanyResearchRun) -> set[str]:
+    name = _company_name_tokens(run)
+    suffix = tuple(name[len(_legal_name_core_tokens(run)) :])
+    aliases = {
+        ("spółka", "z", "ograniczoną", "odpowiedzialnością"): {"sp", "z", "o", "oo"},
+        ("spółka", "komandytowo", "akcyjna"): {"sp", "k", "a"},
+        ("spółka", "komandytowa"): {"sp", "k"},
+        ("spółka", "partnerska"): {"sp", "p"},
+        ("spółka", "jawna"): {"sp", "j"},
+        ("spółka", "akcyjna"): {"s", "a", "sa"},
+    }
+    return set(suffix) | aliases.get(suffix, set())
+
+
+def _has_company_antecedent(
+    context: str, run: CompanyResearchRun, *, equivalent_legal_form: bool = False
+) -> bool:
+    sentences = _sentences(context)
+    if len(sentences) < 2:
         return False
+    if not equivalent_legal_form:
+        name = _company_name_tokens(run)
+        if not name:
+            return False
+        for index in range(len(sentences) - 2, -1, -1):
+            words = _WORD.findall(sentences[index])
+            tokens = [word.casefold() for word in words]
+            subject = tokens[1:] if tokens[:1] == ["the"] else tokens
+            if subject[: len(name)] != name:
+                continue
+            if any(word[:1].isupper() and word.casefold() not in set(name) for word in words):
+                return False
+            for sentence in sentences[index + 1 :]:
+                following = [word.casefold() for word in _WORD.findall(sentence)]
+                if following[:1] not in (["it"], ["its"]) and following[:2] not in (
+                    ["the", "company"],
+                    ["this", "company"],
+                ):
+                    return False
+            return True
+        return False
+    company_tokens = set(_company_name_tokens(run))
     for index in range(len(sentences) - 2, -1, -1):
         words = _WORD.findall(sentences[index])
         tokens = [word.casefold() for word in words]
-        subject = tokens[1:] if tokens[:1] == ["the"] else tokens
-        if subject[: len(name)] != name:
+        name_occurrences = _legal_name_occurrences(tokens, run)
+        if not any(
+            start == 0 or start == 1 and tokens[:1] == ["the"] for start, _ in name_occurrences
+        ):
             continue
-        if any(word[:1].isupper() and word.casefold() not in set(name) for word in words):
+        named_positions = {
+            position for start, end in name_occurrences for position in range(start, end)
+        }
+        if any(
+            word[:1].isupper()
+            and word.casefold() not in company_tokens
+            and position not in named_positions
+            for position, word in enumerate(words[1:], start=1)
+        ):
             return False
         for sentence in sentences[index + 1 :]:
             following = [word.casefold() for word in _WORD.findall(sentence)]
@@ -541,22 +671,48 @@ def _entity_attached(text: str, anchors: set[str], run: CompanyResearchRun) -> b
     token_lists = [
         [token.casefold() for token in _WORD.findall(sentence)] for sentence in sentences
     ]
-    for tokens in token_lists:
+    for sentence, tokens in zip(sentences, token_lists, strict=True):
         if name_tokens.issubset(set(tokens)):
             entities = [index for index, token in enumerate(tokens) if token in name_tokens]
             claims = [index for index, token in enumerate(tokens) if token in anchors]
             if claims and min(abs(entity - claim) for entity in entities for claim in claims) <= 8:
                 return True
+        # Longer named predicates are admitted only within one assertion clause and
+        # only when the quote contains the registered legal form (or its equivalent).
+        for clause in _ASSERTION_CLAUSE_BREAK.split(sentence):
+            clause_tokens = [token.casefold() for token in _WORD.findall(clause)]
+            clause_occurrences = _legal_name_occurrences(clause_tokens, run)
+            claim_positions = [
+                index for index, token in enumerate(clause_tokens) if token in anchors
+            ]
+            if (
+                clause_occurrences
+                and claim_positions
+                and set(clause_tokens) & (_CURRENT_RELATIONS | {"focus", "focuses"})
+                and min(
+                    abs(entity - claim)
+                    for start, end in clause_occurrences
+                    for entity in range(start, end)
+                    for claim in claim_positions
+                )
+                <= 24
+            ):
+                return True
     if len(sentences) < 2 or len(sentences) > 3:
         return False
     for entity_index, tokens in enumerate(token_lists):
-        if not name_tokens.issubset(set(tokens)):
+        legal_occurrences = _legal_name_occurrences(tokens, run)
+        if not name_tokens.issubset(set(tokens)) and not legal_occurrences:
             continue
         entity_positions = [
             index + sum(len(item) for item in token_lists[:entity_index])
             for index, token in enumerate(tokens)
             if token in name_tokens
         ]
+        entity_positions.extend(
+            start + sum(len(item) for item in token_lists[:entity_index])
+            for start, _ in legal_occurrences
+        )
         for claim_index, claim_tokens in enumerate(token_lists):
             if abs(claim_index - entity_index) > 2 or not any(
                 token in anchors for token in claim_tokens
@@ -637,16 +793,21 @@ def _shared_contrast_entity_attached(
 
 
 def _source_entity_attached(text: str, anchors: set[str], run: CompanyResearchRun) -> bool:
-    if _tokens(text) & {"group"}:
+    if _conflicting_nip(text, run.identity.nip) or _tokens(text) & (
+        _OTHER_ENTITY_MARKERS | {"group"}
+    ):
         return False
     sentences = _sentences(text)
     if not sentences:
         return False
     if _entity_attached(sentences[-1], anchors, run):
         return True
-    return (
-        _has_company_antecedent(text, run) and _entity_attached(text, anchors, run)
-    ) or _shared_contrast_entity_attached(text, anchors, run)
+    if _has_company_antecedent(text, run, equivalent_legal_form=True):
+        return any(
+            set(token.casefold() for token in _WORD.findall(sentence)) & anchors
+            for sentence in sentences[1:]
+        )
+    return _shared_contrast_entity_attached(text, anchors, run)
 
 
 def _nearby_negation(text: str, anchors: set[str]) -> bool:
@@ -705,8 +866,11 @@ def _positive_assertion_qualifies(
     run: CompanyResearchRun,
     *,
     mode: str = "current",
+    claim_sentence: str | None = None,
 ) -> bool:
-    """Match a bounded company-subject assertion, not an unqualified lexical mention."""
+    """Match a bounded company-subject assertion, optionally at one canonical sentence."""
+    if set(phrase_tokens) & {"leader", "leaders", "leadership", "leading"}:
+        return False
     company_subjects = set(_legal_name_core_tokens(run)) | {
         "it",
         "its",
@@ -720,10 +884,16 @@ def _positive_assertion_qualifies(
     relations = _CURRENT_RELATIONS | _PASSIVE_RELATIONS
     if mode == "event":
         relations |= _EVENT_RELATIONS
+    conditional_scope = False
     for sentence in _sentences(context):
+        if claim_sentence is not None and sentence != claim_sentence:
+            previous_tokens = {token.casefold() for token in _WORD.findall(sentence)}
+            conditional_scope |= bool(previous_tokens & {"if", "whether", "unless"})
+            continue
+        if claim_sentence is None:
+            conditional_scope = False
         clauses = _ASSERTION_CLAUSE_BREAK.split(sentence)
         prior_company_subject = False
-        conditional_scope = False
         for clause in clauses:
             tokens = [token.casefold() for token in _WORD.findall(clause)]
             if not tokens:
@@ -743,8 +913,16 @@ def _positive_assertion_qualifies(
                 end = start + len(phrase_tokens)
                 if tokens[start:end] != phrase_tokens:
                     continue
+                application_sector = any(
+                    tokens[marker : marker + 2] == ["for", "the"]
+                    and "production" in tokens[:marker]
+                    and 0 < start - marker <= 16
+                    for marker in range(start)
+                )
                 for index, token in enumerate(tokens):
-                    if token not in relations or abs(index - start) > 10:
+                    if token not in relations | {"focus", "focuses"} or abs(index - start) > (
+                        24 if application_sector else 16
+                    ):
                         continue
                     preceding = tokens[max(0, index - 8) : index]
                     subject_positions = [
@@ -774,32 +952,45 @@ def _positive_assertion_qualifies(
                         "november",
                         "december",
                     }
-                    subject_continuations = {
-                        "a",
-                        "an",
-                        "the",
-                        "currently",
-                        "also",
-                        "actively",
-                        "primarily",
-                        "mainly",
-                        "products",
-                        "services",
-                        "offerings",
-                        "business",
-                        "group",
-                    } | set(_company_name_tokens(run))
+                    subject_continuations = (
+                        {
+                            "a",
+                            "an",
+                            "the",
+                            "currently",
+                            "also",
+                            "actively",
+                            "primarily",
+                            "mainly",
+                            "products",
+                            "services",
+                            "offerings",
+                            "business",
+                            "group",
+                        }
+                        | set(_company_name_tokens(run))
+                        | _legal_form_tokens(run)
+                    )
+                    activity_focus_subject = (
+                        token in {"focus", "focuses"}
+                        and subject_positions
+                        and tokens[: subject_positions[0]]
+                        in (["the", "activities", "of"], ["the", "activities", "of", "the"])
+                    )
                     if subject_positions:
                         subject_position = subject_positions[-1]
-                        subject = all(
-                            word in subject_prefix_words
-                            or word in company_subjects
-                            or word.isdigit()
-                            for word in tokens[:subject_position]
-                        ) and all(
-                            word in subject_continuations
-                            for word in tokens[subject_position + 1 : index]
-                        )
+                        subject = (
+                            all(
+                                word in subject_prefix_words
+                                or word in company_subjects
+                                or word.isdigit()
+                                for word in tokens[:subject_position]
+                            )
+                            and all(
+                                word in subject_continuations
+                                for word in tokens[subject_position + 1 : index]
+                            )
+                        ) or activity_focus_subject
                     else:
                         subject = (
                             prior_company_subject
@@ -852,6 +1043,20 @@ def _positive_assertion_qualifies(
                                 "major",
                             }
                         )
+                        production_bridge = token == "is" and between == ["in", "production", "of"]
+                        leader_production_bridge = token == "is" and between == [
+                            "a",
+                            "leader",
+                            "in",
+                            "the",
+                            "production",
+                            "of",
+                        ]
+                        leader_production_phrase_bridge = (
+                            token == "is"
+                            and between == ["a", "leader", "in", "the"]
+                            and tokens[start : start + 2] == ["production", "of"]
+                        )
                         product_list = (
                             token == "are"
                             and bool(set(preceding) & {"products", "services", "offerings"})
@@ -861,7 +1066,24 @@ def _positive_assertion_qualifies(
                             and len(between) <= 8
                             and not any(word.endswith("ing") for word in between)
                         )
-                        if not simple_copula and not product_list:
+                        application_sector_bridge = (
+                            token == "is"
+                            and application_sector
+                            and "leader" in between
+                            and "production" in between
+                            and any(
+                                between[marker : marker + 2] == ["for", "the"]
+                                for marker in range(len(between))
+                            )
+                        )
+                        if (
+                            not simple_copula
+                            and not production_bridge
+                            and not leader_production_bridge
+                            and not leader_production_phrase_bridge
+                            and not application_sector_bridge
+                            and not product_list
+                        ):
                             continue
                     elif index < start and not passive:
                         between = tokens[index + 1 : start]
@@ -872,12 +1094,44 @@ def _positive_assertion_qualifies(
                             and between[:1] in (["in"], ["within"])
                             and all(word in determiners for word in between[1:])
                         )
-                        if not direct_object and not industry_bridge:
+                        activity_bridge = token in {"focus", "focuses"} and between[:1] == ["on"]
+                        catalog_header = [
+                            "a",
+                            "wide",
+                            "range",
+                            "of",
+                            "products",
+                            "including",
+                        ]
+                        catalog_tail = between[len(catalog_header) :]
+                        catalog_bridge = (
+                            token in {"offer", "offers"}
+                            and between[: len(catalog_header)] == catalog_header
+                            and not set(catalog_tail + phrase_tokens) & _ASSERTION_PREDICATES
+                            and (
+                                not catalog_tail
+                                or len(catalog_tail) <= 8
+                                and (
+                                    catalog_tail[-1] == "and"
+                                    or clause[: list(_WORD.finditer(clause))[start].start()]
+                                    .rstrip()
+                                    .endswith(",")
+                                )
+                            )
+                        )
+                        if not (
+                            direct_object or industry_bridge or activity_bridge or catalog_bridge
+                        ):
                             continue
                     elif (
                         index > start
                         and not passive
                         and not (mode == "event" and start <= index < end)
+                        and not (
+                            token in {"focus", "focuses"}
+                            and activity_focus_subject
+                            and "providing" in tokens[index + 1 :]
+                        )
                     ):
                         continue
                     return True
@@ -903,39 +1157,49 @@ def _ordered_phrase_supported(
     phrase_is_negative = bool(set(phrase_tokens) & negative_markers)
     for sentence in _sentences(excerpt):
         sentence_tokens = [token.casefold() for token in _WORD.findall(sentence)]
-        exact_claim = (
-            _contains_sequence(sentence_tokens, claim_tokens)
-            if claim_tokens
-            else _phrase_outside_company_name(phrase_tokens, sentence, run)
-        )
+        exact_claim = bool(claim_tokens) and _contains_sequence(sentence_tokens, claim_tokens)
+        exact_phrase = _contains_sequence(sentence_tokens, phrase_tokens)
+        matched_tokens = claim_tokens if exact_claim else phrase_tokens if exact_phrase else []
         contexts = (
-            _bounded_source_contexts(source_content, sentence)
+            _bounded_source_contexts(source_content, sentence, prefer_source_lines=True)
             if source_content is not None
             else [sentence]
         )
         attachment = _source_entity_attached if source_content is not None else _entity_attached
-        if (
-            exact_claim
-            and any(attachment(context, anchors, run) for context in contexts)
-            and (phrase_is_negative or not _nearby_negation(sentence, anchors))
-            and any(
-                _positive_assertion_qualifies(
-                    context, claim_tokens or phrase_tokens, run, mode=mode
-                )
-                for context in contexts
-            )
-        ):
-            return True
+        if not matched_tokens:
+            continue
+        for context in contexts:
+            if not attachment(context, anchors, run):
+                continue
+            for claim_sentence in _sentences(context):
+                claim_words = [token.casefold() for token in _WORD.findall(claim_sentence)]
+                if not _contains_sequence(claim_words, matched_tokens):
+                    continue
+                if not phrase_is_negative and _nearby_negation(claim_sentence, anchors):
+                    continue
+                if _positive_assertion_qualifies(
+                    context,
+                    matched_tokens,
+                    run,
+                    mode=mode,
+                    claim_sentence=claim_sentence,
+                ):
+                    return True
     return False
 
 
 def _lexical_support(
-    fact: Fact[Any], excerpt: str, run: CompanyResearchRun, material: RetrievedSource
+    fact: Fact[Any],
+    evidence: list[tuple[EvidenceRef, RetrievedSource]],
+    run: CompanyResearchRun,
 ) -> bool:
     phrases = _candidate_terms(fact.value)
-
     return bool(phrases) and all(
-        _ordered_phrase_supported(phrase, excerpt, run, material.content) for phrase in phrases
+        any(
+            _ordered_phrase_supported(phrase, ref.excerpt, run, material.content)
+            for ref, material in evidence
+        )
+        for phrase in phrases
     )
 
 
@@ -1744,11 +2008,7 @@ def build_profile(run: CompanyResearchRun) -> CompanyProfile:
                 if _employee_supported(fact, ref.excerpt, run, material)
             ]
         else:
-            valid_pairs = [
-                (ref, material)
-                for ref, material in eligible
-                if _lexical_support(fact, ref.excerpt, run, material)
-            ]
+            valid_pairs = eligible if _lexical_support(fact, eligible, run) else []
         if kind == "employees" and isinstance(fact, EmployeeFact) and valid_pairs:
             expected: tuple[int | None, int | None]
             candidate = fact.value
