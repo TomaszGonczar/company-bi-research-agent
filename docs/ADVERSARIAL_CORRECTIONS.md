@@ -2,11 +2,13 @@
 
 Local corrective package for possible v0.1.1; not a release or a claim of green CI. Reference commit: `d4423da54ed84cfa20104dee5cb8cc5decde19bd`. Branch: `fix/v0.1.1-adversarial-corrections`.
 
-The bounded publication contracts are in [EVIDENCE_MODEL.md](EVIDENCE_MODEL.md#assertion-qualification). No new model/provider, dependencies, research instructions, budgets or financial-document parser were introduced.
+The bounded publication contracts are in [EVIDENCE_MODEL.md](EVIDENCE_MODEL.md#assertion-qualification). The original corrections introduced no new model/provider, dependencies, research instructions, budgets or financial-document parser. Extended Stage C later measured exactly two instruction-only changes, documented separately below; provider, dependencies, budgets and publication rules stayed unchanged.
 
-The original A1–A4 measurements below were recorded for corrective commit `17fdc9d9cfc4e4a3dccf8f5e77e5ca5ecc9f4ffd`. The independently measured attachment correction at the end extends that package; it does not overwrite the earlier measurements.
+The original A1–A4 measurements below were recorded for corrective commit `17fdc9d9cfc4e4a3dccf8f5e77e5ca5ecc9f4ffd`. Later sections extend that history with the attachment, legacy compatibility, fresh-context review and usefulness measurements; they do not overwrite the earlier measurements.
 
 **Latest compatibility result:** the subsequent legacy-read correction below restores local replay and the offline reviewer helper without trusting unproven legacy material. The earlier exit-1 measurements remain historical evidence, not the current result. No remote CI or release is claimed.
+
+**Latest product result:** four fixed-source extraction attempts and five live attempts published zero supported researched observations. The practical usefulness target was not met. The [actual live PARTIAL example](../examples/review/sonel-20261005.md) is evidence of that limitation, not a successful BI demonstration.
 
 ## Evidence populations and preservation
 
@@ -157,3 +159,44 @@ The correction admits only that bounded English ISO-interval prefix before the e
 The unchanged 19-case harness then matched **19/19** through the real models, gate and JSON/Markdown renderers, including dated employees, current redirect validation, source ownership and retained-run re-gating/isolation. Those exposed cases are now regressions, not an untouched holdout. A separate test-helper identity-evidence omission caused an intermediate full-suite failure; the fixture was repaired without removing identity validation. Final integration: **340 tests passed**, Ruff/format/mypy passed, frozen replay **exit 0** with unchanged historical metrics.
 
 Raw inventory versions, the excluded crash, all before/after outputs and source hashes are retained under `extended-20261005T070952Z/stage-b/`. These are synthetic adversarial publication measurements, not fresh extraction or live usefulness.
+
+## Measured usefulness — extended Stage C
+
+The predeclared purposive sample was **Asseco Poland** (`5220003782`, previously examined), **SONEL** (`8840033448`, a smaller focused manufacturer), and **APATOR** (`8790166896`, held out until tuning ended). Official discovery and fresh MF lookups independently established the NIPs/legal identities before predictions. No company was replaced after seeing results.
+
+Reference collection used **6 searches, 5 official page reads and 3 MF requests**: conservatively 8 of the 9 reference-read allowance. Five real page snapshots were frozen. A separate checker checked all **9 provisional atomic references** before seeing predictions: four Asseco observations and five Sonel observations, with entity, marketing, industry, laboratory and date limitations. These are selected self-description observations, not representative gold or proof of the publishers' truthfulness.
+
+Baseline code was `9bd835c`; candidate code was frozen as `9f7c2d2`. Exactly two prompt-only interventions followed observed losses: source-language atomic values instead of translated/synthesized support, and a legal-entity about/offer read plus early minimal progress before broader research. No gate, identity rule, provider/model, dependency or per-run budget changed. No failed attempt was rerolled.
+
+### Fresh extraction from fixed real sources
+
+This used the normal configured agent/model, output validation and publication gate with local retrieval of the frozen real corpus. The model did not receive the reference inventory. Run-local source-ID rebinding is recorded; URLs, text, timestamps and existing redirect evidence were preserved. Tool search/read counts below are **local controlled retrieval**, not external web calls.
+
+| Company / phase | Research result | Researched support | Model requests | Local searches / reads | Input / output tokens | Research seconds |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| Asseco baseline | FAILED, ModelAPIError; no profile | 0 | 2 | 4 / 0 | 2,858 / 138 | 12.30 |
+| Sonel baseline | PARTIAL | 0 | 3 | 4 / 1 | 20,983 / 705 | 34.04 |
+| Asseco candidate | PARTIAL | 0 | 5 | 5 / 1 | 35,537 / 1,129 | 42.91 |
+| Sonel candidate | FAILED, ModelAPIError; no profile | 0 | 3 | 1 / 1 | 7,364 / 53 | 7.26 |
+
+Sonel baseline proposed all five reference concepts but translated Polish source assertions into English values; none passed publication. The candidate Asseco draft retained source-language spans but still lost all four reference obligations through unread specific offerings and finite relation/entity/context checks. Failed runs have no assessable final-profile recall/precision denominator; no replacement profile was fabricated. **Controlled extraction did not demonstrate useful supported output.**
+
+### Live end-to-end research
+
+Each attempt used the actual CSV batch path, fresh registry lookup, Tavily, guarded retrieval, configured `openai-codex:gpt-6-luna`, gate and renderer.
+
+| Company / phase | Final outcome | Researched support | Model requests | Searches / page reads | Input / output tokens | Research seconds |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| Asseco baseline | PARTIAL | 0 | 4 | 5 / 5 | 47,783 / 1,716 | 82.09 |
+| Sonel baseline | FAILED, invalid excerpts after allowed repair | 0 | 5 | 6 / 3 | 93,676 / 5,113 | 123.44 |
+| Asseco candidate | PARTIAL | 0 | 9 | 5 / 6 | 110,414 / 1,556 | 78.30 |
+| Sonel candidate | PARTIAL | 0 | 8 | 3 / 2 | 73,499 / 1,385 | 66.00 |
+| APATOR final held-out | FAILED, invalid excerpts after allowed repair | 0 | 9 | 3 / 3 | 78,323 / 1,905 | 71.88 |
+
+The two development candidate profiles cover **0/4 Asseco and 0/5 Sonel references as supported**. Correctly retained unknown financial/employee/geography/date gaps are not useful-research successes. APATOR additionally encountered static TLS certificate failures, unsupported document content and the existing two-browser-attempt ceiling. No certificate policy was relaxed, no failed company was rerun, and no change was tuned on the held-out result. There is no APATOR gold denominator.
+
+Every published researched support was checked against the retained evidence; there were **none**, so zero incorrect supports is vacuous and not a precision claim. Across both fresh populations: **48 model-request attempts, 470,437 reported input tokens and 13,700 reported output tokens**. Live research used 22 searches, 19 page-read operations, 2 browser attempts and 5 MF lookups; reference collection is counted separately above. Counts are application operations, not independently captured redirect/subresource HTTP traffic. Reported usage may omit failed-request billing. **Actual cost was unavailable, not assumed zero.**
+
+**PRODUCT UTILITY NOT YET DEMONSTRATED.** The target of two companies with three correct non-registry observations across two sections each was not met. The remaining concrete bottleneck is the fit between useful source prose and the finite publication relation/entity contract, compounded by provider failures and nonliteral evidence proposals. Another synonym list, relaxed evidence permission or retry-until-success is not justified by this pass.
+
+The [curated live Sonel JSON](../examples/review/sonel-20261005.json), [Markdown](../examples/review/sonel-20261005.md) and [provenance](../examples/review/sonel-20261005.provenance.json) preserve the actual PARTIAL output and dates from `9f7c2d2`, with no provider payloads or full source dumps. Raw protocol, hashes, reference reviews, every attempt and independent assessments remain in `extended-20261005T070952Z/stage-c/`. Historical replay, synthetic adversarial checks, fixed-source extraction and live research remain separate populations.
