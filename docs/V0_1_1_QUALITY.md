@@ -125,3 +125,44 @@ README now leads with the verification boundary and separates demonstrated engin
 - A read-only interface review caught a missing gate import before the first recorded successful demos. Initial static checks then caught line-length and tuple-typing defects; they were corrected without changing the gate. Those findings and command outputs remain in the external productization audit.
 
 The exact final local commit's isolated README/reviewer-guide replay is recorded separately after this documentation is committed; this section does not claim a future run passed. The earlier utility failures, unobservable Asseco capture, small denominators, finite-language limits, and unresolved retrieval/security limitations remain part of the engineering record.
+
+## 9. Final independent quality audit
+
+The final audit started from `d9a8ababaa37a4073f5c3bca49b9e3a42df80c71`, with a clean corrective branch and byte hashes for all 105 tracked files. Baseline verification passed: 390 tests, including the 120-test adversarial subset; Ruff, mypy and formatting; historical replay; both utility modes; and all four verifier demonstrations. Repeating the demonstrations produced identical bytes for all 16 output-file comparisons.
+
+**The new paired corpus is not green.** Independent authors worked from the public contract, exported schema and synthetic template, without inspecting gate branches or existing tests. The corpus contains 57 negative cases, 57 affirmative controls and six separately counted interface-integrity cases.
+
+| New paired population | Observed result |
+| --- | ---: |
+| Negative unsafe assertions withheld | **57/57** |
+| Negative cases meeting every expectation, including preservation of valid event content | **51/57** |
+| False-supported negative cases | **0** |
+| Positive controls accepted with their complete value/context | **15/57** |
+| False-rejected positive controls | **42/57** |
+| Separate interface-integrity cases | **6/6** |
+| Candidate-to-final report inconsistencies | **0** |
+
+The six additional negative-case failures are collateral losses: the gate removes an invalid occurrence date but also clears otherwise valid event content. They are not false supports and are not hidden inside the 57/57 safety count. Positive acceptance by family is Polish language 0/8, English language 0/8, entity attachment 6/10, financial observations 0/14, events 0/8, and provenance 9/9. There is no combined accuracy score. These controls show that the gate is not simply rejecting everything, but they also expose substantial fail-closed undercoverage.
+
+### Corpus integrity and limits of blinding
+
+An initial pre-result review found a missing group-affiliation premise; it was added to both financial pair members before execution. Two revenue pairs were also added before execution to cover the explicitly requested revenue/forecast boundary. Original generators and inputs were archived.
+
+The first full execution then prompted a stricter, outcome-blind fixture review. That reviewer found that all 16 language pairs used generic actors without connecting their retained page to the resolved company. The original independent author added only a shared publisher/NIP/own-activities header. Every assertion sentence, candidate value, quoted excerpt, ID and expected state remained unchanged; a second independent review confirmed the attribution premise. The original corpus and failures remain immutable, and the attributed version was separately hashed before execution. **This repaired population is not an untouched holdout.** Both versions produced the same counts; the attributed version above has valid target-company premises. Missing attribution was a fixture defect, not a reason to weaken the production identity gate.
+
+The actual CLI retained every input, exit status and output. Its 113 published profiles, one failed-input diagnostic report and six input rejections were compared with normalized candidates and final JSON. The checker parsed actual verification Markdown roles and JSON value/context blocks, rather than treating candidate text anywhere in the document as final support. Additional, explicitly non-blind CLI probes exercised a supported event losing only its occurrence date and a mixed product list losing an unsupported member; both passed. All four decisions were exercised.
+
+### Findings and bounded disposition
+
+- **P2 — language/entity undercoverage:** ordinary affirmative wording, pronoun attribution, Polish inflection and unrecognized relations lose valid observations. The attributed controls remain failures; no synonym list, relaxed identity rule or general semantic engine was added.
+- **P2 — financial undercoverage:** natural-language reporting intervals and financial prose fall outside the current numeric-date, explicit-scope and bounded reporting grammar. The legitimate zero, signed-loss and decimal controls remain visible failures of the complete observation path; they are not relabeled invalid or fixed by broadening parsing.
+- **P2 — event undercoverage and collateral clearing:** valid event summaries/date relationships are lost, including the six date-negative cases whose remaining event content should survive. Broader event/coreference interpretation is explicitly deferred.
+- A proposed adjacent-forecast financial fix was **not justified**. A diagnostic pair using the existing numeric-date and explicit-standalone contract accepted the actual EUR 31 million and blocked the adjacent EUR 34 million expectation. The original cases had already failed date/context checks; a fallback rejection reason mentioning forecasts did not establish that forecasts caused their publication loss. No speculative qualifier change was made.
+
+No production, dependency, schema, historical gold, retained utility input, or existing test was changed by this audit. No corrective implementation cycle was attempted: the reproduced remaining losses require a separately bounded semantic/coverage contract rather than an evidenced small safety repair. This is an explicit deferral, not a green blind-suite result.
+
+The valid fresh public-only reviewer answered all ten understanding questions without material misunderstanding; no README expansion was warranted. Supply-chain review found mutable first-party `actions/checkout@v7` and `actions/setup-python@v7` tags, but no inspected policy requiring their SHA pinning or reproduced reproducibility break. `setup-uv` is SHA-pinned, Actions permissions are `contents: read`, checkout credentials are not persisted, Python 3.12 selections agree, and offline lock validation passed. No dependency upgrade or new pinning policy was introduced; remote CI was not run.
+
+Final working-tree verification repeated **390 repository passes**, including **120 adversarial subset passes**; Ruff, mypy (15 source files) and formatting (38 files) passed. Historical replay, both utility modes, the offline reviewer helper, all four demos and the two additional interface CLI probes exited 0. Historical metrics and both utility count objects remained unchanged. The attributed blind CLI again had 72 passing cases and 48 failures; its independent pytest driver had 74 passes and 48 failures, including two corpus checks. All **454 emitted blind output files** were byte-identical to the preceding attributed-corpus run. The offline helper reported zero external/provider calls and one deliberately local `FunctionModel` interruption.
+
+The external `company-bi-v011-external-review.zip` contains the actual tracked checkout, v0.1.0-to-final patch, complete blind generators/corpora/driver, original failures, repaired-corpus results, independent reviews, command logs and file hashes. Final checks and the one exact-final-commit clean-clone run are recorded there after commit creation. The blind driver has **74 passes and 48 failures** (120 cases plus two corpus checks), separate from the repository suite; the failures are retained, not skipped or converted to expected passes. No new live research, model/provider, Tavily or MF calls were made. **External review is warranted; release is not recommended.**
