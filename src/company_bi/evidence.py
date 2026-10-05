@@ -22,6 +22,7 @@ from company_bi.models import (
     FinancialFact,
     ProfileSource,
     RetrievedSource,
+    _validate_registry_identity,
     profile_has_gaps,
     validate_source_lineage,
 )
@@ -1959,6 +1960,7 @@ def _append_rejection_reason(reason: str | None, rejection: str) -> str:
 def build_profile(run: CompanyResearchRun) -> CompanyProfile:
     """Build a final profile only from exact, eligible, context-bearing retained citations."""
     validate_source_lineage(run.sources)
+    _validate_registry_identity(run.identity, run.sources)
     by_id: dict[str, list[RetrievedSource]] = defaultdict(list)
     for material in run.sources:
         by_id[material.source.source_id].append(material)

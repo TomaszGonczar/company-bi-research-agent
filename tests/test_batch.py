@@ -23,7 +23,13 @@ NIPS = ["5220003782", "5831014898", "1234563218"]
 def _profile(status: str = "complete", nip: str = NIPS[0]) -> CompanyProfile:
     fixture = "partial.json" if status == "partial" else "complete.json"
     data = json.loads(Path(f"examples/profiles/{fixture}").read_text(encoding="utf-8"))
-    data["identity"]["nip"] = nip
+    identity = data["identity"]
+    identity["nip"] = nip
+    for fact in identity.values():
+        if isinstance(fact, dict):
+            for evidence in fact.get("evidence", []):
+                evidence["source_id"] = "registry"
+                evidence["excerpt"] = json.dumps(fact["value"], ensure_ascii=False)
     return CompanyProfile.model_validate(data)
 
 
@@ -56,19 +62,35 @@ def _run(profile: CompanyProfile, state: str = "completed") -> Any:
             "limitations": ["Fixture research contains no findings"],
         }
     )
-    sources = [
-        RetrievedSource(
-            source=source,
-            kind=source.kind,
-            content="Fixture retained material",
-            fetch_mode={
-                "registry": "registry",
-                "full_page": "static",
-                "search_snippet": "tavily",
-            }[source.kind],
+    sources = []
+    for source in profile.sources:
+        if source.kind == "registry":
+            identity = profile.identity
+            lines = [f"NIP: {identity.nip}"]
+            for field, fact in identity.model_dump(mode="json").items():
+                if not isinstance(fact, dict) or fact.get("state") != "supported":
+                    continue
+                lines.append(f"{field}: {json.dumps(fact['value'], ensure_ascii=False)}")
+                lines.extend(
+                    f"{field} evidence: {ref['excerpt']}"
+                    for ref in fact["evidence"]
+                    if ref["source_id"] == source.source_id
+                )
+            content = "\n".join(lines)
+        else:
+            content = "Fixture retained material"
+        sources.append(
+            RetrievedSource(
+                source=source,
+                kind=source.kind,
+                content=content,
+                fetch_mode={
+                    "registry": "registry",
+                    "full_page": "static",
+                    "search_snippet": "tavily",
+                }[source.kind],
+            )
         )
-        for source in profile.sources
-    ]
     return CompanyResearchRun(
         identity=profile.identity,
         draft=draft,

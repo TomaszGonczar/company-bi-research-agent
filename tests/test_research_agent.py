@@ -25,7 +25,7 @@ from company_bi.sources import ResearchBudget
 
 @pytest.fixture
 def identity() -> CompanyIdentity:
-    evidence = [{"source_id": "identity-record", "excerpt": "Verified registry identity"}]
+    evidence = [{"source_id": "identity-record", "excerpt": "Example sp. z o.o."}]
     return CompanyIdentity.model_validate(
         {
             "nip": "1234567890",

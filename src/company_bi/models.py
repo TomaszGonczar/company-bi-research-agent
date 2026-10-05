@@ -1,5 +1,8 @@
 """Publication schemas, not an identity resolver or an evidence-verification engine."""
 
+import json
+import re
+import unicodedata
 from collections import defaultdict
 from datetime import date
 from decimal import Decimal
@@ -545,6 +548,187 @@ def validate_source_lineage(materials: list[RetrievedSource]) -> None:
             )
 
 
+def _identity_text(value: Any) -> str:
+    text = unicodedata.normalize("NFC", str(value))
+    return " ".join(text.split())
+
+
+def _identity_value_matches(value: Any, cited: str, *, is_url: bool = False) -> bool:
+    """Match a field value to its plain or JSON-string registry citation."""
+    candidate = cited
+    try:
+        decoded = json.loads(cited)
+    except (json.JSONDecodeError, TypeError):
+        pass
+    else:
+        if isinstance(decoded, str):
+            candidate = decoded
+    if is_url:
+        return _normalized_source_url(str(value)) == _normalized_source_url(candidate)
+    return _identity_text(value) == _identity_text(candidate)
+
+
+def _identity_citation_matches(
+    value: Any, excerpt: str, field_name: str, *, is_url: bool = False
+) -> bool:
+    if _identity_value_matches(value, excerpt, is_url=is_url):
+        return True
+    candidate = excerpt
+    try:
+        decoded = json.loads(excerpt)
+    except (json.JSONDecodeError, TypeError):
+        pass
+    else:
+        if isinstance(decoded, str):
+            candidate = decoded
+    if field_name == "legal_name":
+        normalized_candidate = _identity_text(candidate)
+        normalized_candidate = re.sub(
+            r"^legal[\s_]name\s*[:=]\s*", "", normalized_candidate, flags=re.IGNORECASE
+        )
+        if (
+            len(normalized_candidate) >= 2
+            and normalized_candidate[0] == normalized_candidate[-1]
+            and normalized_candidate[0] in {"'", '"'}
+        ):
+            normalized_candidate = normalized_candidate[1:-1]
+        return _identity_text(value) == normalized_candidate
+    if is_url:
+        return False
+    labels = {
+        "krs": r"\bKRS\b",
+        "regon": r"\bREGON\b",
+        "registered_city": r"\bregistered\s+(?:city|address)\b",
+        "registered_address": r"\bregistered\s+address\b",
+        "website": r"\bwebsite\b",
+    }
+    label = labels.get(field_name)
+    if label is None or re.search(label, candidate, re.IGNORECASE) is None:
+        return False
+    normalized_value = _identity_text(value)
+    normalized_excerpt = _identity_text(candidate)
+    return (
+        re.search(
+            rf"(?<!\w){re.escape(normalized_value)}(?!\w)",
+            normalized_excerpt,
+            re.IGNORECASE,
+        )
+        is not None
+    )
+
+
+def _registry_identity_declarations(content: str) -> tuple[dict[str, list[str]], list[str]]:
+    declarations: dict[str, list[str]] = defaultdict(list)
+    nip_values: list[str] = []
+
+    def add_fields(record: Any, *, subject_record: bool = False) -> None:
+        if not isinstance(record, dict):
+            return
+        for field_name in (
+            "legal_name",
+            "krs",
+            "regon",
+            "registered_city",
+            "registered_address",
+            "website",
+        ):
+            value = record.get(field_name)
+            if isinstance(value, str):
+                declarations[field_name].append(value)
+        if subject_record and isinstance(record.get("name"), str):
+            declarations["legal_name"].append(record["name"])
+        nip = record.get("nip")
+        if isinstance(nip, str):
+            nip_values.append(nip)
+
+    for line in content.splitlines():
+        match = re.match(
+            r"^\s*(legal_name|krs|regon|registered_city|registered_address|website)\s*:\s*(.*?)\s*$",
+            line,
+            re.IGNORECASE,
+        )
+        if match is not None:
+            field_name, value = match.groups()
+            if not value.casefold().startswith(("unknown;", "uncertain;")):
+                declarations[field_name.casefold()].append(value)
+    try:
+        root = json.loads(content)
+    except (json.JSONDecodeError, TypeError):
+        return declarations, nip_values
+    if not isinstance(root, dict):
+        return declarations, nip_values
+
+    add_fields(root)
+    add_fields(root.get("identity"))
+    result = root.get("result")
+    subject = result.get("subject") if isinstance(result, dict) else None
+    add_fields(subject, subject_record=True)
+    return declarations, nip_values
+
+
+def _validate_registry_identity(
+    identity: CompanyIdentity, materials: list[RetrievedSource]
+) -> None:
+    """Reject detectable contradictions between identity facts and retained registry records."""
+    registry_materials = [material for material in materials if material.kind == "registry"]
+    nip_pattern = re.compile(
+        r"""["']?\bNIP\b["']?\s*[:#=]?\s*["']?(\d{10}|\d{3}[- ]\d{3}[- ]\d{2}[- ]\d{2})["']?""",
+        re.IGNORECASE,
+    )
+    registry_records = [
+        _registry_identity_declarations(material.content) for material in registry_materials
+    ]
+    for material, (_, structured_nips) in zip(registry_materials, registry_records):
+        found_nips = [*nip_pattern.findall(material.content), *structured_nips]
+        for declared_nip in found_nips:
+            if re.sub(r"\D", "", declared_nip) != identity.nip:
+                raise ValueError("retained registry material contains a conflicting NIP")
+
+    fields = (
+        ("legal_name", identity.legal_name, False),
+        ("krs", identity.krs, False),
+        ("regon", identity.regon, False),
+        ("registered_city", identity.registered_city, False),
+        ("registered_address", identity.registered_address, False),
+        ("website", identity.website, True),
+    )
+    for field_name, fact, is_url in fields:
+        value = fact.value
+        records = [
+            record
+            for declared_fields, _ in registry_records
+            for record in declared_fields.get(field_name, [])
+        ]
+        if fact.state == "supported":
+            cited_matches = False
+            for ref in fact.evidence:
+                matching_materials = [
+                    material
+                    for material in registry_materials
+                    if material.source.source_id == ref.source_id
+                ]
+                if not matching_materials or not _identity_citation_matches(
+                    value, ref.excerpt, field_name, is_url=is_url
+                ):
+                    raise ValueError(
+                        f"supported identity field {field_name} is not bound to its registry evidence"
+                    )
+                if not any(ref.excerpt in material.content for material in matching_materials):
+                    raise ValueError(
+                        f"identity evidence for {field_name} is absent from retained registry material"
+                    )
+                cited_matches = True
+            if not cited_matches:
+                raise ValueError(
+                    f"supported identity field {field_name} requires registry evidence"
+                )
+            for record in records:
+                if not _identity_value_matches(value, record, is_url=is_url):
+                    raise ValueError(
+                        f"retained registry material declares a conflicting {field_name}"
+                    )
+
+
 class PageReadResult(Model):
     material: RetrievedSource | None = None
     error: Text | None = None
@@ -647,4 +831,5 @@ class CompanyResearchRun(Model):
                 or any(ref.source_id not in full_page_ids for ref in financial.evidence)
             ):
                 raise ValueError("financial amounts require retained full-page evidence")
+        _validate_registry_identity(self.identity, self.sources)
         return self

@@ -206,3 +206,25 @@ The [curated live Sonel JSON](../examples/review/sonel-20261005.json), [Markdown
 The subsequent audit of `d9a8ababaa37a4073f5c3bca49b9e3a42df80c71` is recorded in [the quality report](V0_1_1_QUALITY.md#9-final-independent-quality-audit). It adds no production correction and does not overwrite any population above. In the independently authored, attribution-repaired paired corpus, all **57/57** unsafe negative assertions were withheld, but only **15/57** affirmative controls survived. There were **42 false-rejected positive controls**, plus six negative event cases with collateral loss of valid content; zero false-supported negatives and zero candidate-to-final report inconsistencies were observed.
 
 The remaining language/entity, financial-format and event-content losses are explicitly deferred rather than addressed with an open-ended semantic engine. Original inputs, the attribution-only fixture repair, all failed assertions and a withdrawn financial-fix hypothesis are retained in the external review bundle. The separate blind driver remains **74 passed / 48 failed**; the repository's 390-test suite, including its 120-test adversarial subset, is a different population. No new live research, dependency change or release is part of this audit.
+
+## Overnight blocker remediation — registry identity
+
+The external review of `aac9c9f` supersedes the earlier exercised-population
+safety conclusions: the new minimal CLI population reproduced 27 unsafe
+researched facts and four accepted identity contradictions. Those failures and
+the original external populations remain separate, preserved evidence.
+
+Registry consistency is now checked both when reading a research run and at
+publication, including callers that bypass model validation with `model_copy`.
+Supported identity values must bind to retained registry citations; explicit
+retained NIP and field declarations cannot contradict them. Genuine legacy
+field labels and quoted legal names remain readable, without token-subset
+legal-name matching or a company-specific exception.
+
+Identity cycle 2 rejects all four synthetic/retained-Asseco mutations while
+preserving both affirmative CLI controls. The existing repository population
+passes all 390 tests after replacing invalid batch/research-agent mock
+citations with coherent registry material. No historical inputs or gold were
+changed. This proves detectable internal consistency, not authenticity of a
+coherently forged ledger. Other semantic blocker families remain under repair;
+this intermediate result does not clear the release.
