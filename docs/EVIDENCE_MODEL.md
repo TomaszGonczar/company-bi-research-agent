@@ -137,3 +137,11 @@ That marker only removes permission. The group remains visible in JSON, Markdown
 
 The chain and denial marker are application metadata, **not cryptographic proof for arbitrary edited JSON**. Structural consistency cannot authenticate a fabricated ledger or establish that a remote publisher's assertions are true. Historical redirects still cannot be reconstructed from URL similarity; compatibility does not make affected legacy material eligible.
 
+## Finite contract, identity consistency, and limits
+
+The deterministic verifier applies a finite publication contract to candidate facts proposed by research. It checks retained-source consistency, citation text, target identity consistency, and bounded claim/context rules; it does not infer arbitrary semantic entailment. Adversarial evaluation must report unsafe acceptance and conservative rejection separately. Passing selected negatives alone is not a safety certification, and declining positives is not proof of invalidity.
+
+Identity coherence is an internal consistency check: retained registry evidence and supported identity fields must agree with the resolved NIP/legal entity, including paths that bypass ordinary model validation. This can reject detectable contradictory mutation, but it is not cryptographic ledger authenticity. A coherently forged or edited source ledger is not authenticated, and consistent retained evidence does not establish that a publisher tells the truth.
+
+The current frozen candidate still has an observed financial target qualifier defect: a negative post-amount target assertion that was withheld at baseline is now accepted as supported, while its positive actual-revenue control still passes (baseline 2/2, current 1/2). The contract description above is therefore not a claim that every described boundary is correctly enforced. Release status and complete current blocker evidence are in [the v0.1.1 quality report](V0_1_1_QUALITY.md#11-frozen-remediation-candidate-blocked).
+

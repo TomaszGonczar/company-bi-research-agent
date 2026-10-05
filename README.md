@@ -10,7 +10,7 @@
 
 **Utility remains weak and experimental.** In the fixed two-company real-source utility set (Asseco Poland: 6 eligible observations; SONEL: 7), the locked baseline candidates re-gated by the current verifier yielded **1/13 supported researched observations, with 0 incorrect observed**. The Asseco report alone is **1/6**. This is not 1/1 production precision. Three fresh live end-to-end runs published **zero supported researched observations**. Historical frozen replay results are a separate population: **47/47 overall supported precision, 5/19 eligible researched recall**, with historical retained-real researched yield **0/7**. The earlier failed pass and its limitations remain historical evidence; this interface does not claim to fix them.
 
-**Current bottleneck: research coverage, not publication safety in the exercised regression sets.** This is a bounded conclusion about the tested populations, not a general semantic-safety claim.
+**Release status: v0.1.1 is BLOCKED.** The finite deterministic verifier applies a publication contract to facts proposed by research; adversarial evaluation measures both unsafe acceptance and conservative rejection. Autonomous coverage remains experimental. The frozen candidate has a known unsafe financial-qualifier regression and three full-suite failures. See [the latest quality report](docs/V0_1_1_QUALITY.md#11-frozen-remediation-candidate-blocked) for separate populations and remaining limits.
 
 Not demonstrated: production autonomous coverage or population-level precision; universal semantic verification; comprehensive financial extraction; reliable real-company researched yield; or general superiority of a retrieval approach. Zero incorrect observations in a small population is not precision proof.
 
@@ -41,7 +41,7 @@ flowchart TD
   subgraph I["Deterministic identity"]
     CSV["CSV / XLSX"] --> NIP["Validate Polish NIP"]
     NIP --> MF["MF public registry"]
-    MF --> Identity["Trusted CompanyIdentity"]
+    MF --> Identity["MF-anchored CompanyIdentity"]
   end
   subgraph A["Probabilistic research"]
     Agent["One bounded PydanticAI agent"] --> Draft["CompanyResearchDraft"]
@@ -92,7 +92,7 @@ Historical frozen replay/contract metrics are retained as historical results, no
 | Asseco retained verification report | **1/6 supported** |
 | Three fresh live end-to-end runs | **zero supported researched observations** |
 
-The historical 47/47 overall count includes registry supports and does not establish autonomous research precision. The two-company 1/13 and Asseco-only 1/6 are distinct scopes; the fresh-live zero-support results are a separate population. None establishes population-level accuracy or useful coverage. The old historical LPP run failed at its single repair ceiling; its exact cause is unrecoverable, and this verifier interface does not claim that failure is fixed. **Current bottleneck: research coverage, not publication safety in the exercised regression sets.**
+The historical 47/47 overall count includes registry supports and does not establish autonomous research precision. The two-company 1/13 and Asseco-only 1/6 are distinct scopes; fresh-live zero-support results are another population. None establishes population-level accuracy or useful coverage. The historical replay's changed 4/19 researched recall and 15/19 over-downgrade are reported separately in the [latest quality report](docs/V0_1_1_QUALITY.md#11-frozen-remediation-candidate-blocked). The old historical LPP run failed at its single repair ceiling; its exact cause is unrecoverable. The verifier is a finite publication contract, not a general semantic-safety guarantee.
 
 The historical frozen set selected 12 cases (9 controlled, 3 retained-real); original drafts, gold, and source snapshots remain frozen. Historical researched support precision was 5/5 and eligible recall 5/19; 5/5 is not production precision. A later adversarial review exposed finite counterexamples and corrections; those cases are regression evidence, not an untouched holdout. [Evaluation methodology](docs/EVAL_SPEC.md) · [historical results](docs/EVAL_RESULTS.md) · [adversarial corrections and current measurements](docs/ADVERSARIAL_CORRECTIONS.md) · [quality and scoped utility evidence](docs/V0_1_1_QUALITY.md).
 

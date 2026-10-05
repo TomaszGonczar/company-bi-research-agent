@@ -113,7 +113,7 @@ Exit 0 means verification completed, not that every claim was accepted. A valid 
 
 The [real retained verification report](../examples/review/asseco-poland-verification.md) is generated from the committed [Asseco input](../examples/utility_v011/runs/baseline/asseco-poland.json), not manually authored and not successful BI. Report decisions count fields/financial observations; they are not the atomic gold-claim denominator. The two-company fixed-source utility result remains **1/13**, with zero observed incorrect supports, and the three fresh live results remain zero. No new companies, model/Tavily/MF research, rerolls, or recall tuning occurred.
 
-README now leads with the verification boundary and separates demonstrated engineering from unproven autonomous coverage. The reviewer guide starts with accepted/rejected output inspection before large metric tables, then adversarial boundaries, replay/tests, and the real retained example. Current bottleneck: research coverage, not publication safety in the exercised regression sets. This is not a general semantic-safety claim.
+At the productization stage, README led with the verification boundary and the reviewer guide put accepted/rejected output inspection before large metric tables. That stage's conclusion that coverage was the current bottleneck applied only to then-exercised regression sets; subsequent independent blockers supersede it. The present candidate has both unsafe acceptance and conservative rejection, as documented in section 11.
 
 ### Executed productization checks
 
@@ -166,3 +166,89 @@ The valid fresh public-only reviewer answered all ten understanding questions wi
 Final working-tree verification repeated **390 repository passes**, including **120 adversarial subset passes**; Ruff, mypy (15 source files) and formatting (38 files) passed. Historical replay, both utility modes, the offline reviewer helper, all four demos and the two additional interface CLI probes exited 0. Historical metrics and both utility count objects remained unchanged. The attributed blind CLI again had 72 passing cases and 48 failures; its independent pytest driver had 74 passes and 48 failures, including two corpus checks. All **454 emitted blind output files** were byte-identical to the preceding attributed-corpus run. The offline helper reported zero external/provider calls and one deliberately local `FunctionModel` interruption.
 
 The external `company-bi-v011-external-review.zip` contains the actual tracked checkout, v0.1.0-to-final patch, complete blind generators/corpora/driver, original failures, repaired-corpus results, independent reviews, command logs and file hashes. Final checks and the one exact-final-commit clean-clone run are recorded there after commit creation. The blind driver has **74 passes and 48 failures** (120 cases plus two corpus checks), separate from the repository suite; the failures are retained, not skipped or converted to expected passes. No new live research, model/provider, Tavily or MF calls were made. **External review is warranted; release is not recommended.**
+
+## 10. Overnight blocker remediation: preserved starting evidence
+
+Independent reviews of `aac9c9fefdad23d33e79f7234687e31d76fcfcdc`
+found ordinary false-supported facts beyond the earlier exercised populations.
+Publication safety is therefore an active correction target, not a solved
+problem behind research coverage. This run performs no new live research and
+does not rewrite the historical gold, retained inputs, or failed audit results.
+
+| Separate reviewed population | Negatives | Unsafe accepted | Positive controls | Fully accepted |
+| --- | ---: | ---: | ---: | ---: |
+| Existing OMP blind corpus | 57 | 0 | 57 | 15 |
+| Astra reported original population | 65 | 18, including identity | 65 | 61 |
+| Opus reported original population | 53 | 16 facts + 1 identity | 47 | 24 |
+
+OMP additionally had six negative preservation failures and six passing
+interface-integrity cases. These are not additional ordinary negatives.
+Astra's report and result summary were available locally, but its original
+130 input envelopes/runner were not found. The original Opus corpus and full
+report were unavailable; only the operator-supplied findings were available.
+Local Astra/Opus reproductions consequently have their own denominators and
+are not labeled as exact replays or fresh unseen holdouts.
+
+Before production edits, the new minimal actual-CLI population contained
+33 negatives and 23 affirmative controls: 27 ordinary unsafe facts and four
+identity contradictions were accepted; 16 controls passed completely.
+The two other ordinary negatives were already withheld. The corresponding
+pytest module also includes two unchecked-`model_copy` identity cases; these
+are not added to the 56-case CLI denominator.
+
+The first shared-contract correction reduced minimal ordinary false supports
+to two but did not clear the gate: guidance/outlook remained unsafe, two
+positive controls were rejected, and the full suite recorded 420 passes and
+28 failures, including employee/financial runtime regressions. Its outputs and
+source snapshot are preserved in the external remediation audit rather than
+overwritten by the next cycle. Astra local reproductions passed 40/40 at that
+intermediate point; Opus local reproductions passed 36/38. Neither result
+changes the original reported review denominators above.
+
+## 11. Frozen remediation candidate: BLOCKED
+
+**Release remains BLOCKED, not cleared.** Production implementation is frozen at `6a3a1156f7156708dcbd8c4347baafc83fd209b1` after two semantic cycles per family. The freeze is not a successful release gate; no third semantic cycle is authorized. The identity consistency and canonical context/ownership improvements are real, finite gains, but do not clear the remaining defects. The observed source records are the external audit's `after/known-populations-before-freeze.json`, `KNOWN_BLOCKER_MATRIX.md`, `after/cycle2-integrated-full-pytest.json`, and `cycle-ledger.json`.
+
+### Independent populations remain distinct
+
+| Population | Observed result |
+| --- | --- |
+| Minimal actual CLI, post-cycle 2 | 56/56 expectations: all 33 negatives withheld; all 23 affirmative controls fully accepted |
+| Local Astra reproduction | 40/40; reconstruction, not exact replay of original |
+| Local Opus reproduction | 38/38; reconstruction, not exact replay of original |
+| Integrated OMP CLI | 72 passed / 48 failed; 57/57 negatives withheld, six negative preservation failures, 15/57 positive controls fully accepted, interface 6/6, report mismatches 0 |
+| Full repository pytest | 444 passed / 4 failed |
+
+The minimal CLI includes 33 negatives and 23 controls; its two additional unchecked-`model_copy` pytest identity cases are outside that CLI denominator. Original reported review populations are not reproduced results: Astra reported **65 negatives / 18 unsafe** and **65 positives / 61 complete**; Opus reported **53 negatives / 17 unsafe** (16 facts plus identity) and **47 positives / 24 complete**. The original Astra inputs/runner and original Opus corpus/full report were unavailable; local reproductions have separate denominators. Do not combine populations or recast reconstructed results as original replays.
+
+The exact frozen-code local checks also observed Ruff exit 0, format check exit 0 across 39 `src`/`tests`/`scripts` files, and mypy exit 0 across 15 source files. These checks do not override the failing full suite or establish release readiness.
+
+### Residual release blockers and historical limits
+
+The existing financial negative with a target qualifier **after the amount** regressed from baseline withheld to current unsafe supported. Its actual-revenue positive remains correct: baseline pair 2/2, current pair 1/2. This is a known release blocker, not an unobserved risk. The other three full-suite failures are the positive current assertion after planned contrast and two frozen dated-employee cases. No expectation or historical gold was changed.
+
+The historical evaluator exited 0, but its current output differs from the preserved historical population: supported **46/46** (historical 47/47); registry **42/42** unchanged; researched **4/4** (historical 5/5); eligible researched recall **4/19** (historical 5/19); over-downgrade **15/19** (historical 14/19); retained-real researched yield **0/7** unchanged. These are two separately labeled result sets, not revisions to old gold. Locked utility remains **1/13 supported, 0 incorrect observed, 4 uncertain, 8 missing**. The fresh retained view is SONEL **0/7** and Asseco **6 unobservable**; it is not complete fresh recall. Earlier utility, historical replay, OMP, Astra, Opus and minimal CLI populations must remain separate.
+
+The known identity checks establish detectable internal consistency, not provenance authenticity: there is no cryptographic ledger authenticity, and a coherently forged ledger is not excluded. The verifier does not authenticate publishers or establish truth. Adversarial evaluation measures both unsafe acceptance and conservative rejection; passing a selected negative set alone is not a general safety guarantee, and conservative rejection is a real quality loss.
+
+The final frozen-code local commands reproduced the full suite at 444 passed / 4 failed (exit 1) and the overlapping adversarial subset at 176 passed / 2 failed (exit 1); these overlapping counts must not be added together. The independent OMP pytest driver reported 74 passed / 48 failed; it is a distinct population from the 72/48 actual-CLI run. Historical replay and both utility modes exited 0. Four actual verifier demos each exited 0; the offline reviewer helper exited 0 with zero external/paid calls and a local `FunctionModel` only. These local results do not constitute remote CI or a clean-clone result.
+
+Clean-clone verification remains unobserved. No clean-clone success, CI success, or release clearance is asserted. No live research, provider/model, Tavily or MF calls were made for this remediation.
+
+## 12. Fresh post-freeze holdout: adverse, release remains blocked
+
+A fresh independent author generated 27 pairs / 54 cases across nine categories after the implementation freeze. The raw input was hashed before validation. Two genuine fixture-construction defects were repaired with originals preserved: the `run.complete` wrapper affected all 54 cases, and an additional list-nesting defect affected six. Source text, scalar values, and expectations were unchanged; corrected envelope/schema errors were zero. The production CLI was executed once against the corrected saved population.
+
+| Holdout measure | Observed result |
+| --- | ---: |
+| Ordinary negatives withheld without unsafe support | 24/24 |
+| Identity contradictions accepted | 0/3 |
+| Negative event-content preservation failures | 3 |
+| Ordinary positive controls fully accepted | 0/24 |
+| Identity positive controls fully accepted | 3/3 |
+| Total expectations met / not met | 27/54 / 27/54 |
+| Corrected report-integrity mismatches | 0 |
+
+This result does **not** establish useful safety or generalization: although no unsafe assertion was accepted in these 27 negatives, all 24 ordinary positive controls were rejected or incomplete, and three negative cases lost valid event content. Identity controls alone do not compensate for broad conservative rejection.
+
+The original checker reported 48 false Markdown mismatches because it compared raw LF against the renderer's visible escaped newline. The external checker defect was corrected and the same saved CLI artifacts rescored; there was no CLI rerun and no code or corpus outcome tuning. Original raw measurements remain preserved. No second micro-holdout was generated: no post-freeze production correction was authorized and no reroll occurred. The earlier target-qualifier safety regression already triggered the two-cycle BLOCKED stop. Package version remains **0.1.0**; this evidence does not authorize v0.1.1 release or version hygiene.

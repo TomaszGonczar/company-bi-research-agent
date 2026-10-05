@@ -6,9 +6,9 @@ The bounded publication contracts are in [EVIDENCE_MODEL.md](EVIDENCE_MODEL.md#a
 
 The original A1–A4 measurements below were recorded for corrective commit `17fdc9d9cfc4e4a3dccf8f5e77e5ca5ecc9f4ffd`. Later sections extend that history with the attachment, legacy compatibility, fresh-context review and usefulness measurements; they do not overwrite the earlier measurements.
 
-**Latest compatibility result:** the subsequent legacy-read correction below restores local replay and the offline reviewer helper without trusting unproven legacy material. The earlier exit-1 measurements remain historical evidence, not the current result. No remote CI or release is claimed.
+**Legacy-read stage result (historical):** that correction restored local replay and the offline reviewer helper without trusting unproven legacy material. Its measurements are historical and do not describe the latest frozen candidate. No remote CI result is claimed here.
 
-**Latest product result:** four fixed-source extraction attempts and five live attempts published zero supported researched observations. The practical usefulness target was not met. The [actual live PARTIAL example](../examples/review/sonel-20261005.md) is evidence of that limitation, not a successful BI demonstration.
+**Stage C product result (historical):** four fixed-source extraction attempts and five live attempts published zero supported researched observations; the practical usefulness target was not met. The [actual live PARTIAL example](../examples/review/sonel-20261005.md) records that limitation, not a successful BI demonstration. Later frozen-remediation findings are documented at the end of this history.
 
 ## Evidence populations and preservation
 
@@ -228,3 +228,23 @@ citations with coherent registry material. No historical inputs or gold were
 changed. This proves detectable internal consistency, not authenticity of a
 coherently forged ledger. Other semantic blocker families remain under repair;
 this intermediate result does not clear the release.
+
+## Frozen cycle-2 remediation — blocked disposition
+
+The production implementation was frozen at `6a3a1156f7156708dcbd8c4347baafc83fd209b1` after two implementation cycles per semantic family. Identity and canonical-context/ownership changes are real, observed improvements, but finite and insufficient. The detailed current populations and limitations are recorded in the [quality report](V0_1_1_QUALITY.md#11-frozen-remediation-candidate-blocked); the evidence below supersedes earlier language about the current safety/release state without rewriting the historical measurements above.
+
+The observed minimal actual-CLI population is 56/56: all 33 negatives were withheld and 23/23 positive controls passed completely. This population includes identity checks; two separate `model_copy` pytest cases are outside that CLI denominator. Local Astra reproductions passed 40/40 and local Opus reproductions 38/38, but these are reconstructions, not exact replays of the unavailable original corpora. Reported originals remain separate: Astra 65 negatives/18 unsafe and 65 positives/61 complete; Opus 53 negatives/17 unsafe (16 facts plus identity) and 47 positives/24 complete.
+
+The integrated OMP CLI population remains **72 passed / 48 failed**: 57/57 negative unsafe assertions were withheld, but six negatives lost otherwise valid event content; only 15/57 affirmative controls were fully accepted. All six interface cases passed and no report mismatches were observed. These counts measure both safety and conservative rejection; there is no combined accuracy score.
+
+The full repository run observed **444 passed / 4 failed**. One existing post-amount financial-target negative regressed from withheld to unsafe supported, while its actual-revenue positive remains correct (baseline 2/2; current 1/2). The other failures are one positive current claim after planned contrast and two frozen dated-employee positives. Historical replay exited 0 but changed from its preserved historical metrics: supported 46/46 vs 47/47; registry 42/42 unchanged; researched 4/4 vs 5/5; eligible researched recall 4/19 vs 5/19; over-downgrade 15/19 vs 14/19; retained-real yield 0/7 unchanged. The locked utility gate remains 1/13, zero incorrect observed, with four uncertain and eight missing; fresh retained view is SONEL 0/7 and Asseco six outcomes unobservable, so it is not complete fresh recall.
+
+Final frozen-code local checks observed the full suite at 444 passed / 4 failed and overlapping adversarial subset at 176 passed / 2 failed; do not sum them. Independent OMP pytest was 74 passed / 48 failed, separate from OMP CLI 72/48. Ruff passed, formatting passed across 39 `src`/`tests`/`scripts` files, and mypy passed across 15 source files. Historical replay and both utility modes exited 0; four verifier demos and the offline reviewer helper exited 0, the latter with zero external/paid calls and local `FunctionModel` only. No gold, tests, or production code were changed after the freeze. No third semantic cycle is authorized. Clean-clone verification remains unobserved. These local results are not remote CI or release clearance.
+
+## Fresh independent post-freeze holdout — not a release pass
+
+The independent author generated 27 paired cases (54 total) across nine categories after freeze; the raw input was hashed before validation. Two real fixture construction defects were corrected with originals preserved: a `run.complete` wrapper affected all 54, and one extra list nesting affected six. All source text, scalar values and expectations were retained; corrected schema errors were zero. The actual CLI ran once.
+
+The corrected holdout observed 24/24 ordinary negatives withheld and 0/3 identity contradictions accepted, but three negative cases lost valid event content. Only 3/27 positive controls were fully accepted, all three identity controls; **0/24 ordinary positives passed completely**. Thus 27/54 total expectations passed and this result does not establish useful safety or generalization.
+
+The initial report checker falsely marked 48 Markdown cases because it compared raw LF with renderer-visible escaped newline. An external checker fix rescored the same saved artifacts with zero report mismatches; neither the CLI nor production code/corpus outcomes were rerun or tuned. Original raw results remain preserved. No second micro-holdout or further production correction cycle was authorized. Package version remains **0.1.0**, and v0.1.1 remains BLOCKED. Clean-clone results remain unobserved.

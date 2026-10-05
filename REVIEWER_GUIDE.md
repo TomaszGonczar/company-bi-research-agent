@@ -4,7 +4,9 @@ Follow these sections in order from the repository root. They describe a credent
 
 ## 0–2 — Thesis and architecture
 
-The bounded PydanticAI research agent proposes candidate company facts; deterministic code applies the publication gate and the offline verifier compares candidate with final facts using the retained source ledger. Read the [README architecture](README.md#architecture-and-report-interpretation). Polish NIP validation and the registry anchor legal identity; the model chooses research and proposes claims, but cannot assign host source IDs or approve publication. Structured output validates shape, not truth.
+The bounded PydanticAI research agent proposes candidate company facts; deterministic code applies a finite publication contract and the offline verifier compares candidate with final facts using the retained source ledger. Read the [README architecture](README.md#architecture-and-report-interpretation). Polish NIP validation and the registry anchor legal identity; the model chooses research and proposes claims, but cannot assign host source IDs or approve publication. Structured output validates shape, not truth.
+
+**Release status: v0.1.1 is BLOCKED.** Adversarial evaluation measures unsafe acceptance and conservative rejection; autonomous coverage remains experimental. The candidate has a known unsafe financial-qualifier regression and three other conservative failures (four full-suite failures total). Consult the [latest quality evidence](docs/V0_1_1_QUALITY.md#11-frozen-remediation-candidate-blocked) before interpreting older metrics.
 
 The verifier inspects the supplied retained run; it does not authenticate arbitrary edited JSON, prove publisher truth, or fetch sources. It makes accepted, downgraded, cleared, and preserved outcomes inspectable. A preserved uncertain or unknown fact is not accepted support.
 
@@ -50,7 +52,7 @@ Review [`tests/adversarial/test_verification.py`](tests/adversarial/test_verific
 - **Date precision:** source text says “In July this year.” Candidate occurrence `2026-07-01` is cleared to `None`; publication date does not authorize an occurrence day.
 - **Metric substitution:** operating-profit evidence proposed as net result becomes uncertain with no selected amount.
 
-The verifier reports observed candidate-to-final changes; it does not add a separate semantic interpretation layer. The exercised regression sets support only the bounded conclusion: **current bottleneck is research coverage, not publication safety in those sets**. Cleared values must be read from the final side, not inferred from candidate values.
+The verifier reports observed candidate-to-final changes under a finite contract; it does not add a separate general semantic interpretation layer. Adversarial evaluation measures both unsafe acceptance and conservative rejection. Cleared values must be read from the final side, not inferred from candidate values. The latest candidate remains blocked; see the quality report for the financial regression and conservative failures.
 
 ## 6–8 — Evaluation populations and tests
 
