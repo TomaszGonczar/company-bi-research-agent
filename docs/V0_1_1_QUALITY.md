@@ -78,3 +78,50 @@ Across all sprint-native attempts, observed usage was **39 model requests, 311,0
 ## 7. What claims are explicitly not made?
 
 This report does **not** claim general correctness, population-level precision, representative utility, complete fresh-model recall, a remote-CI result, release readiness, or a v0.1.1 publication. It does not claim that the historical 0/7 yield improved, that a zero observed false-support count proves zero risk, or that the probe suite is an untouched holdout. It makes no claim that one independently checked support generalizes, that matching literal text proves full-value truth, or that partial profiles are useful BI output. The measured result remains **PRODUCT UTILITY STILL NOT DEMONSTRATED**.
+
+## 8. Offline verifier productization after the accepted utility experiment
+
+**Company BI v0.1.1 does not claim demonstrated autonomous research utility. Its demonstrated artifact is the evidence-backed verification/publication boundary around agent-produced research.** This follow-up exposes existing behavior; it does not improve recall, change publication rules, or replace the experiment above.
+
+The first-class zero-key interface is:
+
+```sh
+uv run --frozen company-bi verify examples/verification/controlled-financial-sign.json --output-dir outputs/verification
+```
+
+The command validates a retained `CompanyResearchRun`, calls the existing `build_profile`, uses the existing profile renderers, and writes `profile.json`, `profile.md`, `verification.json`, and `verification.md`. The typed delta records candidate/final states, values, field context, reasons, evidence references, and changed paths. Financial metric/period/currency/unit/scope and employee/event dates remain explicit. Retained source metadata covers candidate and final references, including removed citations and blocked provenance; full retained page bodies are not copied into the report. The input basename and byte SHA-256 identify the supplied artifact.
+
+Decisions describe the gate result, not another semantic implementation:
+
+- `accepted`: the supported claim survives, possibly with a narrowed evidence list.
+- `downgraded`: a supported candidate becomes non-supported; a removed final value is shown as null, not copied from the candidate.
+- `cleared`: an asserted value or context component is removed without a state downgrade, such as an unverified occurrence date on an otherwise supported event.
+- `preserved`: an uncertain/unknown candidate remains non-supported. This is not acceptance.
+
+Gate reasons remain visible. A rejection can reflect insufficient context, unresolved scope, ineligible evidence, a contradiction, or a provenance limitation; it is not automatically labeled a hallucination. Candidate assertions and unverified evidence are distinguished from final support in Markdown.
+
+Exit 0 means verification completed, not that every claim was accepted. A valid run marked as failed research produces only the two verification files, `not_published`, retained diagnostics, and no invented profile or deltas; exit 1. Invalid JSON, invalid references/identity evidence, file errors, and input/output collisions fail with exit 2. Failed-run output refuses pre-existing profile artifacts instead of presenting a mixed old/new bundle. Verification neither fetches sources nor authenticates arbitrarily edited input or proves publisher truth.
+
+### Demonstrated interface behavior
+
+| Input population | Observed result |
+| --- | --- |
+| Controlled financial-sign example | Current cloud services accepted; candidate +PLN 10 million net result downgraded and cleared against explicit standalone net loss |
+| Controlled planned-activity example | Planned cloud accounting software not published as a supported current offering |
+| Controlled current-service example | Explicit current cloud services remain supported |
+| Existing real retained Asseco run | One accepted business description, three downgraded fields, three preserved unknown observations; partial profile |
+
+The [real retained verification report](../examples/review/asseco-poland-verification.md) is generated from the committed [Asseco input](../examples/utility_v011/runs/baseline/asseco-poland.json), not manually authored and not successful BI. Report decisions count fields/financial observations; they are not the atomic gold-claim denominator. The two-company fixed-source utility result remains **1/13**, with zero observed incorrect supports, and the three fresh live results remain zero. No new companies, model/Tavily/MF research, rerolls, or recall tuning occurred.
+
+README now leads with the verification boundary and separates demonstrated engineering from unproven autonomous coverage. The reviewer guide starts with accepted/rejected output inspection before large metric tables, then adversarial boundaries, replay/tests, and the real retained example. Current bottleneck: research coverage, not publication safety in the exercised regression sets. This is not a general semantic-safety claim.
+
+### Executed productization checks
+
+- Full pytest: **390 passed**. Adversarial subset: **120 passed**, included in 390. The new interface contributes 13 behavior tests, including actual financial/planned rejection, preserved states, partial date clearing, exact final evidence, deterministic real reports, invalid/failed inputs, file safety, blocked network/service entrypoints, and Markdown final-value/injection boundaries.
+- Ruff lint passed; format check passed on **38 Python files**; mypy passed on **15 source files**.
+- Historical replay, both v0.1.1 utility modes, and the existing offline reviewer helper exited 0. Historical metrics and both utility count objects matched the accepted results structurally; no gold or publication behavior changed.
+- The actual CLI produced the four files for all three controlled examples and the real retained run under OS network denial, without credentials. Failed-run and invalid-JSON CLI scenarios returned the required 1 and 2, without fabricated profiles.
+- After installation, the controlled financial demo took **1.374 seconds** in the measured Darwin arm64 development environment; the other controlled/real commands took 0.762–0.790 seconds. This is one observed run per final command, not a latency guarantee or installation-time promise.
+- A read-only interface review caught a missing gate import before the first recorded successful demos. Initial static checks then caught line-length and tuple-typing defects; they were corrected without changing the gate. Those findings and command outputs remain in the external productization audit.
+
+The exact final local commit's isolated README/reviewer-guide replay is recorded separately after this documentation is committed; this section does not claim a future run passed. The earlier utility failures, unobservable Asseco capture, small denominators, finite-language limits, and unresolved retrieval/security limitations remain part of the engineering record.
