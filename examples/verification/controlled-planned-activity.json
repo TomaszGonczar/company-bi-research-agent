@@ -1,0 +1,31 @@
+{
+  "identity": {
+    "nip": "1234563218",
+    "legal_name": {"state": "supported", "value": "Example sp. z o.o.", "evidence": [{"source_id": "registry", "excerpt": "\"Example sp. z o.o.\""}]},
+    "krs": {"state": "unknown", "reason": "Not supplied by the controlled registry record"},
+    "regon": {"state": "unknown", "reason": "Not supplied by the controlled registry record"},
+    "registered_city": {"state": "unknown", "reason": "Not supplied by the controlled registry record"},
+    "registered_address": {"state": "unknown", "reason": "Not supplied by the controlled registry record"},
+    "website": {"state": "unknown", "reason": "Not supplied by the controlled registry record"},
+    "resolved_at": "2026-10-03T12:00:00Z"
+  },
+  "draft": {
+    "business_description": {"state": "unknown", "reason": "Not established in this controlled demonstration"},
+    "products_services": {"state": "supported", "value": ["cloud accounting software"], "evidence": [{"source_id": "page", "excerpt": "Example sp. z o.o. plans to launch cloud accounting software next year."}]},
+    "industries": {"state": "unknown", "reason": "Not established in this controlled demonstration"},
+    "markets": {"state": "unknown", "reason": "Not established in this controlled demonstration"},
+    "employees": {"state": "unknown", "reason": "Not established in this controlled demonstration"},
+    "financials": [
+      {"state": "unknown", "reason": "No revenue observation in this controlled demonstration", "metric": "revenue"},
+      {"state": "unknown", "reason": "No net-result observation in this controlled demonstration", "metric": "net_result"}
+    ],
+    "recent_developments": [],
+    "limitations": ["Controlled synthetic demonstration; not a real-company report."]
+  },
+  "sources": [
+    {"source": {"source_id": "registry", "url": "https://registry.example/", "title": "Synthetic registry", "retrieved_at": "2026-10-03T12:00:00Z"}, "kind": "registry", "content": "\"Example sp. z o.o.\"", "fetch_mode": "registry"},
+    {"source": {"source_id": "page", "url": "https://company.example/", "title": "Synthetic company page", "retrieved_at": "2026-10-03T12:00:00Z"}, "kind": "full_page", "content": "Example sp. z o.o. plans to launch cloud accounting software next year.", "fetch_mode": "static"}
+  ],
+  "diagnostics": {"model": "controlled-synthetic-fixture", "status": "completed", "model_requests": 0, "searches": 0, "page_reads": 0, "dynamic_reads": 0, "output_retries": 0, "input_tokens": 0, "output_tokens": 0, "duration_seconds": 0},
+  "generated_at": "2026-10-03T12:00:00Z"
+}

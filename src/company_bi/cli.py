@@ -79,7 +79,20 @@ def main(argv: list[str] | None = None) -> int:
     evaluate = commands.add_parser("eval", help="Run offline deterministic evaluation")
     evaluate.add_argument("--dataset", type=Path, default=Path("examples/evals/dataset.json"))
     evaluate.add_argument("--output-dir", type=Path, default=Path("outputs/evals"))
+    verify = commands.add_parser("verify", help="Verify a retained research run offline")
+    verify.add_argument("research_run", type=Path)
+    verify.add_argument("--output-dir", type=Path, required=True)
     args = parser.parse_args(argv)
+    if args.command == "verify":
+        from company_bi.verification import write_verification
+
+        try:
+            report = write_verification(args.research_run, args.output_dir)
+        except (OSError, ValueError) as error:
+            print(f"VERIFY_ERROR: {error}", file=sys.stderr)
+            return 2
+        print(f"Wrote offline verification report to {args.output_dir}")
+        return 1 if report.status == "not_published" else 0
     if args.command == "eval":
         from company_bi.evaluation import write_reports
 
