@@ -79,6 +79,7 @@ OG-151 maps only the fixed MF JSON identity fields after exact NIP matching. Ide
 ## OG-152: documented research-stage gap and implementation
 
 Before implementation, the foundation deliberately deferred the candidate output (see “Structural validation versus evidence verification”); no `CompanyResearchDraft` existed. The narrow extension now lives in canonical `models.py`, reusing `Fact`, `EmployeeFact`, `FinancialFact` and `CompanyEvent` for business, scale, financial/news attempts and explicit limitations. Its model has no identity or source-ledger fields: the host supplies the unchanged OG-151 identity and owns every source ID. Draft `supported` is an LLM proposal, not an OG-153 publication decision.
+Supported descriptive/list values in a draft are atomic extractive observations: retain verbatim source-language spans with enough company/relation/qualifier context. They are not translations or claimed verified narrative synthesis; a candidate without an eligible statement remains uncertain or unknown.
 
 Small retrieval/run records live alongside those canonical models. Registry identity provenance, Tavily snippets and full-page text remain distinct material kinds with fetch mode and successful-retrieval metadata. A full-page read keeps the same host source ID and does not erase its discovery snippets; repeated IDs across snapshot kinds/versions are intentional. The draft, unchanged identity, retained material and diagnostics are persisted under ignored per-run artifacts, not final BI profile/Markdown paths.
 
