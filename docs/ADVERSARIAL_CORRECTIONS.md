@@ -145,3 +145,15 @@ Verification:
 Restored counts come from restoring publication of the Asseco partial profile, not from new researched facts. Historical datasets, gold, snapshots and baselines were not changed. This is compatibility/correctness evidence, **not new live usefulness**.
 
 The preserved evidence is under `d4423da-corrective-20261004/extended-20261005T070952Z/stage-a/`: invalid fixture setup is explicitly excluded in `before/`, accepted red tests are in `before-valid/`, initial runtime/replay/reviewer output is in `iteration-1/`, and final behavior-focused checks are in `verified/`.
+
+## Fresh-context review — extended Stage B
+
+A separate checker selected 19 new publication cases from the public contracts and candidate `9cae47f`, without prior findings or patch rationale. The parent executed its saved harness centrally. An initial invalid financial-scope fixture crashed; that attempt is preserved and excluded from product metrics.
+
+The valid baseline matched **17/19** expectations with **zero observed incorrect supports**. Two legitimate financial positives were lost: a leading `For 2025-01-01 to 2025-12-31,` adjunct prevented the existing direct-subject rule from recognizing the subsequent company reporting clause. These were conservative coverage losses, not invalid facts. The original positive controls were retained rather than moved to an easier word order after seeing results.
+
+The correction admits only that bounded English ISO-interval prefix before the existing financial assertion grammar. It does not add arbitrary prepositions to subject bridges or relax metric, period, scope, amount, actuality or identity checks. Five permanent regressions cover the two reported-unit positives, forecast, foreign subject and nested attribution.
+
+The unchanged 19-case harness then matched **19/19** through the real models, gate and JSON/Markdown renderers, including dated employees, current redirect validation, source ownership and retained-run re-gating/isolation. Those exposed cases are now regressions, not an untouched holdout. A separate test-helper identity-evidence omission caused an intermediate full-suite failure; the fixture was repaired without removing identity validation. Final integration: **340 tests passed**, Ruff/format/mypy passed, frozen replay **exit 0** with unchanged historical metrics.
+
+Raw inventory versions, the excluded crash, all before/after outputs and source hashes are retained under `extended-20261005T070952Z/stage-b/`. These are synthetic adversarial publication measurements, not fresh extraction or live usefulness.

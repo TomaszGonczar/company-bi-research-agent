@@ -112,7 +112,7 @@ This remains a bounded heuristic grammar, **not general natural-language entailm
 
 ### Actual financial observations and sign
 
-In addition to metric, interval, currency, unit, precision and entity scope, evidence must match a direct realized/reporting assertion or the narrow labeled-row form. Targets, forecasts, denials and conditions do not establish actual financial results, including qualifiers after the amount. This is not a universal financial-table or document parser.
+In addition to metric, interval, currency, unit, precision and entity scope, evidence must match a direct realized/reporting assertion or the narrow labeled-row form. A single leading `For YYYY-MM-DD to YYYY-MM-DD,` reporting-interval adjunct is excluded from direct-subject analysis; it does not relax any interval match or subject requirement. Targets, forecasts, denials and conditions do not establish actual financial results, including qualifiers after the amount. This is not a universal financial-table or document parser.
 
 An exclusive unsigned `net loss`/`strata netto` magnitude is interpreted as a negative **observation** for comparison. A wrong positive candidate is cleared and downgraded, never silently rewritten to the negative amount. Explicit signs remain meaningful; a combined `net profit/(loss)` label does not itself impose a minus sign. An explicitly reported zero remains valid. Distinct actual amounts for the same metric/context remain a conflict with both citations.
 

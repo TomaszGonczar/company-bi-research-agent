@@ -251,24 +251,114 @@ def test_affirmative_current_headcount_remains_publishable(
     assert publish(run)["employees"]["state"] == "supported"
 
 
-def financial_candidate(metric: str, value: str, quote: str) -> dict[str, Any]:
+def financial_candidate(
+    metric: str,
+    value: str,
+    quote: str,
+    *,
+    unit: str = "thousands",
+) -> dict[str, Any]:
     return {
         "state": "supported",
         "value": value,
         "metric": metric,
         "period": PERIOD,
         "currency": "PLN",
-        "unit": "thousands",
+        "unit": unit,
         "scope": "legal_entity",
         "evidence": [{"source_id": "page", "excerpt": quote}],
     }
 
 
-def financial_run(make_run: Any, quote: str, *, metric: str, value: str) -> Any:
+def financial_run(
+    make_run: Any,
+    quote: str,
+    *,
+    metric: str,
+    value: str,
+    unit: str = "thousands",
+    identity_name: str = "Example sp. z o.o.",
+) -> Any:
     rows = [dict(UNKNOWN_REVENUE), dict(UNKNOWN_RESULT)]
     index = 0 if metric == "revenue" else 1
-    rows[index] = financial_candidate(metric, value, quote)
-    return make_run(quote, financials=rows)
+    rows[index] = financial_candidate(metric, value, quote, unit=unit)
+    return make_run(quote, financials=rows, identity_name=identity_name)
+
+
+@pytest.mark.parametrize(
+    ("amount", "unit", "candidate"),
+    [
+        pytest.param("12 million", "millions", "12", id="millions"),
+        pytest.param("12000 thousand", "thousands", "12000", id="thousands"),
+    ],
+)
+def test_leading_bounded_reporting_period_preserves_direct_financial_observation(
+    make_run: Any,
+    publish: Any,
+    amount: str,
+    unit: str,
+    candidate: str,
+) -> None:
+    quote = (
+        "For 2025-01-01 to 2025-12-31, Fictional Aurora Systems sp. z o.o. "
+        f"reported standalone revenue of PLN {amount}."
+    )
+    result = publish(
+        financial_run(
+            make_run,
+            quote,
+            metric="revenue",
+            value=candidate,
+            unit=unit,
+            identity_name="Fictional Aurora Systems sp. z o.o.",
+        )
+    )
+    fact = result["financials"][0]
+    assert fact["state"] == "supported"
+    assert fact["value"] == candidate
+    assert fact["unit"] == unit
+    assert fact["period"] == PERIOD
+    assert fact["currency"] == "PLN"
+    assert fact["scope"] == "legal_entity"
+    assert fact["evidence"] == [{"source_id": "page", "excerpt": quote}]
+
+
+@pytest.mark.parametrize(
+    "quote",
+    [
+        pytest.param(
+            "For 2025-01-01 to 2025-12-31, Fictional Aurora Systems sp. z o.o. "
+            "forecasts standalone revenue of PLN 12 million.",
+            id="forecast_remains_nonactual",
+        ),
+        pytest.param(
+            "For 2025-01-01 to 2025-12-31, Northstar Systems sp. z o.o. "
+            "reported standalone revenue of PLN 12 million.",
+            id="foreign_company_remains_unattributed",
+        ),
+        pytest.param(
+            "For 2025-01-01 to 2025-12-31, Fictional Aurora Systems sp. z o.o. "
+            "cited Northstar Systems sp. z o.o., which reported standalone revenue "
+            "of PLN 12 million.",
+            id="nested_foreign_report_remains_unattributed",
+        ),
+    ],
+)
+def test_leading_bounded_reporting_period_does_not_relax_assertion_guards(
+    make_run: Any, publish: Any, quote: str
+) -> None:
+    fact = publish(
+        financial_run(
+            make_run,
+            quote,
+            metric="revenue",
+            value="12",
+            unit="millions",
+            identity_name="Fictional Aurora Systems sp. z o.o.",
+        )
+    )["financials"][0]
+    assert fact["state"] == "uncertain"
+    assert fact["value"] is None
 
 
 @pytest.mark.parametrize(

@@ -15,9 +15,14 @@ from company_bi.renderer import render_json, render_markdown
 
 @pytest.fixture
 def make_run() -> Callable[..., CompanyResearchRun]:
-    def factory(content: str, **draft_changes: Any) -> CompanyResearchRun:
+    def factory(
+        content: str,
+        *,
+        identity_name: str = "Example sp. z o.o.",
+        **draft_changes: Any,
+    ) -> CompanyResearchRun:
         unknown = {"state": "unknown", "reason": "Not established in this synthetic case"}
-        registry_ref = {"source_id": "registry", "excerpt": '"Example sp. z o.o."'}
+        registry_ref = {"source_id": "registry", "excerpt": f'"{identity_name}"'}
         timestamp = datetime(2026, 10, 3, 12, tzinfo=UTC)
         draft = {
             "business_description": unknown,
@@ -39,7 +44,7 @@ def make_run() -> Callable[..., CompanyResearchRun]:
                     "nip": "1234563218",
                     "legal_name": {
                         "state": "supported",
-                        "value": "Example sp. z o.o.",
+                        "value": identity_name,
                         "evidence": [registry_ref],
                     },
                     **{

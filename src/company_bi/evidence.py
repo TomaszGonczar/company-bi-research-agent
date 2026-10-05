@@ -972,6 +972,10 @@ def _has_unqualified_text_assertion(
 
 
 _DATE_PATTERN = re.compile(r"\b(?:\d{4}-\d{2}-\d{2}|\d{2}\.\d{2}\.\d{4}|\d{2}/\d{2}/\d{4})\b")
+_LEADING_FINANCIAL_PERIOD = re.compile(
+    r"^\s*for\s+\d{4}-\d{2}-\d{2}\s+to\s+\d{4}-\d{2}-\d{2}\s*,?\s*",
+    re.IGNORECASE,
+)
 _AMOUNT_PATTERN = re.compile(r"(?<![\w])[+-]?\d+(?:[ ,.]\d{3})*(?:[.,]\d+)?(?![\w])")
 
 
@@ -1080,7 +1084,8 @@ def _observed_metric_amount(text: str, fact: FinancialFact) -> str | None:
 
 def _financial_assertion_kind(text: str, fact: FinancialFact, run: CompanyResearchRun) -> str:
     """Recognize direct report clauses or a literal, fully labeled financial row."""
-    without_dates = _DATE_PATTERN.sub(" ", text)
+    assertion_text = _LEADING_FINANCIAL_PERIOD.sub("", text, count=1)
+    without_dates = _DATE_PATTERN.sub(" ", assertion_text)
     tokens = [token.casefold() for token in _WORD.findall(without_dates)]
     metrics = _metric_spans(tokens, fact.metric)
     core = (
