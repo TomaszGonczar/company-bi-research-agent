@@ -235,6 +235,8 @@ def render_markdown(profile: CompanyProfile) -> str:
                 f"{source.published_on.isoformat() if source.published_on else 'Unknown'}",
             ]
         )
+        if source.publication_blocked_reason is not None:
+            lines.append(f"  - Publication blocked: {_md(source.publication_blocked_reason)}")
         if source.redirect_chain:
             lines.append(
                 "  - Validated redirect chain: "

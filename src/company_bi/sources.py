@@ -99,6 +99,8 @@ class SourceStore:
         self._registry: list[RetrievedSource] = []
         self._next_id = 1
         for source in registry_sources:
+            if source.publication_blocked_reason is not None:
+                raise ValueError("SourceStore cannot write publication-blocked registry material")
             fields: list[str] = []
             for name in (
                 "legal_name",
@@ -172,6 +174,8 @@ class SourceStore:
 
     def store_page(self, material: RetrievedSource) -> None:
         source_id = material.source.source_id
+        if material.source.publication_blocked_reason is not None:
+            raise ValueError("SourceStore cannot write publication-blocked material")
         if source_id not in self._sources:
             raise ValueError("Cannot store a page for an unknown source ID")
         if material.kind != "full_page":

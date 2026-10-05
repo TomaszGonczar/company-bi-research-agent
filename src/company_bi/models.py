@@ -58,6 +58,7 @@ class Source(Model):
     retrieved_at: AwareDatetime
     published_on: date | None = None
     redirect_chain: list[HttpUrl] = Field(default_factory=list, max_length=6)
+    publication_blocked_reason: Literal["unproven_legacy_url_relationship"] | None = None
 
     @model_validator(mode="after")
     def check_redirect_chain(self) -> Self:
@@ -468,7 +469,7 @@ class RetrievedSource(Model):
     fetch_mode: Literal["registry", "tavily", "static", "dynamic"]
 
 
-def _normalized_source_url(url: HttpUrl) -> str:
+def _normalized_source_url(url: HttpUrl | str) -> str:
     parts = urlsplit(str(url))
     return f"{parts.scheme.lower()}://{parts.netloc.lower()}{parts.path or '/'}?{parts.query}"
 
@@ -487,6 +488,22 @@ def validate_source_lineage(materials: list[RetrievedSource]) -> None:
         by_id[material.source.source_id].append(material)
 
     for source_id, retained in by_id.items():
+        blocked = [
+            material
+            for material in retained
+            if material.source.publication_blocked_reason is not None
+        ]
+        if blocked:
+            if (
+                len(blocked) != len(retained)
+                or any(material.kind == "registry" for material in retained)
+                or any(material.source.redirect_chain for material in retained)
+            ):
+                raise ValueError(
+                    f"blocked source ID {source_id} has trusted or contradictory lineage"
+                )
+            continue
+
         chained = [material for material in retained if material.source.redirect_chain]
         if any(material.kind != "full_page" for material in chained):
             raise ValueError(
@@ -542,6 +559,58 @@ class CompanyResearchRun(Model):
     sources: list[RetrievedSource]
     diagnostics: ResearchDiagnostics
     generated_at: AwareDatetime
+
+    @model_validator(mode="before")
+    @classmethod
+    def mark_unproven_legacy_source_groups(cls, value: Any) -> Any:
+        """Quarantine old serialized groups only when lineage is absent and URLs differ."""
+        if not isinstance(value, dict) or not isinstance(value.get("sources"), list):
+            return value
+        groups: dict[str, list[tuple[int, dict[str, Any], dict[str, Any]]]] = defaultdict(list)
+        non_dict_source_ids: set[str] = set()
+        for index, material in enumerate(value["sources"]):
+            if not isinstance(material, dict) or not isinstance(material.get("source"), dict):
+                source = getattr(material, "source", None)
+                source_id = getattr(source, "source_id", None)
+                if isinstance(source_id, str):
+                    non_dict_source_ids.add(source_id)
+                continue
+            source = material["source"]
+            source_id = source.get("source_id")
+            if isinstance(source_id, str):
+                groups[source_id].append((index, material, source))
+        blocked_ids: set[str] = set()
+        for source_id, group in groups.items():
+            if source_id in non_dict_source_ids:
+                continue
+            if len(group) < 2 or any(
+                material.get("kind") not in {"search_snippet", "full_page"}
+                or "redirect_chain" in source
+                or "url" not in source
+                for _, material, source in group
+            ):
+                continue
+            urls = {_normalized_source_url(source["url"]) for _, _, source in group}
+            if len(urls) > 1:
+                blocked_ids.add(source_id)
+
+        if not blocked_ids:
+            return value
+        copied = dict(value)
+        sources = list(value["sources"])
+        for index, material in enumerate(sources):
+            if (
+                isinstance(material, dict)
+                and isinstance(material.get("source"), dict)
+                and material["source"].get("source_id") in blocked_ids
+            ):
+                copied_material = dict(material)
+                copied_source = dict(material["source"])
+                copied_source["publication_blocked_reason"] = "unproven_legacy_url_relationship"
+                copied_material["source"] = copied_source
+                sources[index] = copied_material
+        copied["sources"] = sources
+        return copied
 
     @model_validator(mode="after")
     def check_retrieval_references(self) -> Self:

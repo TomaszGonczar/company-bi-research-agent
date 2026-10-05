@@ -6,6 +6,8 @@ The bounded publication contracts are in [EVIDENCE_MODEL.md](EVIDENCE_MODEL.md#a
 
 The original A1–A4 measurements below were recorded for corrective commit `17fdc9d9cfc4e4a3dccf8f5e77e5ca5ecc9f4ffd`. The independently measured attachment correction at the end extends that package; it does not overwrite the earlier measurements.
 
+**Latest compatibility result:** the subsequent legacy-read correction below restores local replay and the offline reviewer helper without trusting unproven legacy material. The earlier exit-1 measurements remain historical evidence, not the current result. No remote CI or release is claimed.
+
 ## Evidence populations and preservation
 
 These measurements are deliberately separate:
@@ -122,3 +124,24 @@ Final independent verification:
 - The same 26 protected input/config/instruction files remain byte-identical to `d4423da`. No live calls were made.
 
 The separate evidence bundle is `overnight-quality-20261004T211518Z`: `complement-scope/` preserves the failing-before result, `after/` the first integration, and `iteration-2/` the final corrected measurements. Source-hash manifests and the local commit record identify the tested revision. The bounded-language and release limitations above still apply.
+
+## Legacy read compatibility — extended Stage A
+
+The prior whole-run rejection was too coarse: it discarded independent registry identity and unrelated eligible material when one old source-ID relationship was not provable. The actual legacy/current distinction is serialized `redirect_chain` absence, not a guessed date, URL equivalence, company or domain exception; the run has no historical version discriminator.
+
+The reader now marks the entire ambiguous, pre-lineage non-registry ID group with `publication_blocked_reason: "unproven_legacy_url_relationship"`. Original inputs and URLs remain unchanged. The group retains an auditable trace and explicit limitation but loses all publication/date/conflict permission. Typed/current source records, valid redirect chains, `SourceStore` write guards and identity-integrity rejection remain strict. The permission removal survives serialization.
+
+The frozen Asseco run publishes a **partial** profile again. `S006` and `S010` are explicitly blocked legacy groups; neither becomes researched support. Independent registry facts survive. A separate cross-domain/path fixture demonstrates the same behavior without an Asseco-specific rule, and independent employee evidence is not poisoned by a quarantined conflicting count.
+
+Verification:
+
+- Regression-first accepted baseline: 4 expected failures and 5 passes on unchanged `bc1d1cb`; final legacy set: **10 passed**, including the current-store denial guard.
+- Full suite: **335 passed**; separate adversarial suite: **70 passed**.
+- Ruff, format checks including `scripts/`, and mypy passed.
+- Original frozen replay: **exit 0**. Every metric object matches the historical baseline: supported precision 47/47, researched precision 5/5, researched recall 5/19, unsupported-as-supported 0, retained-real yield **0/7**.
+- `scripts/review_offline.py`: **exit 0**, all three retained real partial profiles and both explicitly controlled artifacts generated with zero external/provider calls.
+- JSON and Markdown show the denial marker and source-specific limitations. Raw-Markdown spelling/copy assertions were removed rather than repinned to escaping; structural permission, identity, independent-support and round-trip behavior remain tested.
+
+Restored counts come from restoring publication of the Asseco partial profile, not from new researched facts. Historical datasets, gold, snapshots and baselines were not changed. This is compatibility/correctness evidence, **not new live usefulness**.
+
+The preserved evidence is under `d4423da-corrective-20261004/extended-20261005T070952Z/stage-a/`: invalid fixture setup is explicitly excluded in `before/`, accepted red tests are in `before-valid/`, initial runtime/replay/reviewer output is in `iteration-1/`, and final behavior-focused checks are in `verified/`.

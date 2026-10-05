@@ -1678,6 +1678,16 @@ def build_profile(run: CompanyResearchRun) -> CompanyProfile:
     by_id: dict[str, list[RetrievedSource]] = defaultdict(list)
     for material in run.sources:
         by_id[material.source.source_id].append(material)
+    blocked_ids = {
+        source_id
+        for source_id, materials in by_id.items()
+        if any(material.source.publication_blocked_reason is not None for material in materials)
+    }
+    eligible_by_id = {
+        source_id: materials
+        for source_id, materials in by_id.items()
+        if source_id not in blocked_ids
+    }
     known_ids = set(by_id)
 
     identity_facts = (
@@ -1711,9 +1721,9 @@ def build_profile(run: CompanyResearchRun) -> CompanyProfile:
         eligible: list[tuple[EvidenceRef, RetrievedSource]] = []
         exact_refs: list[EvidenceRef] = []
         for ref in refs:
-            materials_for_ref = by_id.get(ref.source_id)
-            if not materials_for_ref:
+            if ref.source_id not in by_id:
                 raise ValueError(f"unknown evidence source ID: {ref.source_id}")
+            materials_for_ref = eligible_by_id.get(ref.source_id, [])
             matches = [
                 material
                 for material in materials_for_ref
@@ -1742,10 +1752,12 @@ def build_profile(run: CompanyResearchRun) -> CompanyProfile:
             else:
                 assert isinstance(candidate, EmployeeRange)
                 expected = (candidate.minimum, candidate.maximum)
-            candidate_date = fact.as_of if _employee_as_of_supported(fact, run, by_id) else None
+            candidate_date = (
+                fact.as_of if _employee_as_of_supported(fact, run, eligible_by_id) else None
+            )
             conflicts: list[tuple[RetrievedSource, str, tuple[int | None, int | None]]] = []
             for material in run.sources:
-                if material.kind != "full_page":
+                if material.kind != "full_page" or material.source.source_id in blocked_ids:
                     continue
                 for sentence in _sentences(material.content):
                     observed = _employee_range_observation(sentence)
@@ -1797,14 +1809,16 @@ def build_profile(run: CompanyResearchRun) -> CompanyProfile:
                 "NFC/whitespace-normalized excerpt from a retained full page"
             )
         elif isinstance(fact, EmployeeFact) and _has_unqualified_employee_assertion(
-            fact, exact_refs, run, by_id
+            fact, exact_refs, run, eligible_by_id
         ):
             reason = (
                 "Cited employee count lacks a recognized current assertion or an explicitly "
                 "attached observation date"
             )
             clear_value = True
-        elif kind != "employees" and _has_unqualified_text_assertion(fact, exact_refs, run, by_id):
+        elif kind != "employees" and _has_unqualified_text_assertion(
+            fact, exact_refs, run, eligible_by_id
+        ):
             reason = (
                 "Cited page contains the candidate wording but not a recognized bounded "
                 "affirmative relation for the resolved company"
@@ -1817,7 +1831,9 @@ def build_profile(run: CompanyResearchRun) -> CompanyProfile:
     industries = gate(run.draft.industries, "text")
     markets = gate(run.draft.markets, "text")
     employees = gate(run.draft.employees, "employees")
-    if employees.as_of is not None and not _employee_as_of_supported(employees, run, by_id):
+    if employees.as_of is not None and not _employee_as_of_supported(
+        employees, run, eligible_by_id
+    ):
         employees = employees.model_copy(
             update={
                 "as_of": None,
@@ -1839,16 +1855,16 @@ def build_profile(run: CompanyResearchRun) -> CompanyProfile:
         candidate_mismatch = False
         nip_conflict = False
         for ref in financial.evidence:
-            if not by_id.get(ref.source_id):
+            if ref.source_id not in by_id:
                 raise ValueError(f"unknown evidence source ID: {ref.source_id}")
             if any(
                 material.kind == "full_page"
                 and _exact_excerpt(material, ref.excerpt)
                 and _conflicting_nip(ref.excerpt, run.identity.nip)
-                for material in by_id[ref.source_id]
+                for material in eligible_by_id.get(ref.source_id, [])
             ):
                 nip_conflict = True
-        for source_id, source_materials in by_id.items():
+        for source_id, source_materials in eligible_by_id.items():
             for material in source_materials:
                 if material.kind != "full_page":
                     continue
@@ -1944,10 +1960,9 @@ def build_profile(run: CompanyResearchRun) -> CompanyProfile:
         occurrence_verified = event.value.occurred_on is None
         nip_conflict = False
         for ref in event.evidence:
-            materials_for_ref = by_id.get(ref.source_id)
-            if not materials_for_ref:
+            if ref.source_id not in by_id:
                 raise ValueError(f"unknown evidence source ID: {ref.source_id}")
-            for material in materials_for_ref:
+            for material in eligible_by_id.get(ref.source_id, []):
                 if material.kind != "full_page" or not _exact_excerpt(material, ref.excerpt):
                     continue
                 if _conflicting_nip(ref.excerpt, run.identity.nip):
@@ -2000,6 +2015,7 @@ def build_profile(run: CompanyResearchRun) -> CompanyProfile:
     used_ids.update(
         material.source.source_id for material in run.sources if material.kind == "registry"
     )
+    used_ids.update(blocked_ids)
     rank = {"search_snippet": 0, "full_page": 1, "registry": 2}
     sources: list[ProfileSource] = []
     for source_id in sorted(used_ids):
@@ -2018,6 +2034,10 @@ def build_profile(run: CompanyResearchRun) -> CompanyProfile:
 
     identity = run.identity.model_copy(deep=True)
     limitations = list(run.draft.limitations)
+    limitations.extend(
+        f"Source {source_id}: publication blocked: unproven_legacy_url_relationship"
+        for source_id in sorted(blocked_ids)
+    )
     # Ensure every downgraded candidate has an explicit visible gate reason.
     for field_name, gated in (
         ("business description", business),
