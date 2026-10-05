@@ -886,10 +886,17 @@ def _positive_assertion_qualifies(
         relations |= _EVENT_RELATIONS
     conditional_scope = False
     for sentence in _sentences(context):
+        sentence_tokens = [token.casefold() for token in _WORD.findall(sentence)]
+        explicitly_named = any(
+            set(sentence_tokens[:start]).issubset({"the", "currently", "separately"})
+            for start, _ in _legal_name_occurrences(sentence_tokens, run)
+        )
+        sentence_conditional = bool(set(sentence_tokens) & {"if", "whether", "unless"})
         if claim_sentence is not None and sentence != claim_sentence:
-            previous_tokens = {token.casefold() for token in _WORD.findall(sentence)}
-            conditional_scope |= bool(previous_tokens & {"if", "whether", "unless"})
+            conditional_scope |= sentence_conditional
             continue
+        if explicitly_named and not sentence_conditional:
+            conditional_scope = False
         if claim_sentence is None:
             conditional_scope = False
         clauses = _ASSERTION_CLAUSE_BREAK.split(sentence)
@@ -931,6 +938,7 @@ def _positive_assertion_qualifies(
                         if tokens[position] in company_subjects
                     ]
                     subject_prefix_words = {
+                        "separately",
                         "in",
                         "during",
                         "on",
@@ -1192,15 +1200,21 @@ def _lexical_support(
     fact: Fact[Any],
     evidence: list[tuple[EvidenceRef, RetrievedSource]],
     run: CompanyResearchRun,
-) -> bool:
+) -> list[tuple[EvidenceRef, RetrievedSource]]:
     phrases = _candidate_terms(fact.value)
-    return bool(phrases) and all(
-        any(
-            _ordered_phrase_supported(phrase, ref.excerpt, run, material.content)
-            for ref, material in evidence
-        )
-        for phrase in phrases
-    )
+    if not phrases:
+        return []
+    supporting: set[int] = set()
+    for phrase in phrases:
+        phrase_pairs = {
+            index
+            for index, (ref, material) in enumerate(evidence)
+            if _ordered_phrase_supported(phrase, ref.excerpt, run, material.content)
+        }
+        if not phrase_pairs:
+            return []
+        supporting.update(phrase_pairs)
+    return [pair for index, pair in enumerate(evidence) if index in supporting]
 
 
 def _has_unqualified_text_assertion(
@@ -1366,6 +1380,7 @@ def _financial_assertion_kind(text: str, fact: FinancialFact, run: CompanyResear
         _FINANCIAL_SUBJECT_BRIDGES
         | {token for suffix in _LEGAL_FORM_SUFFIXES for token in suffix}
         | {"s"}
+        | ({"of"} if fact.scope == "group" and fact.group_name else set())
     )
     scope_words = (
         {"group", "consolidated", "grupa", "skonsolidowany"}
@@ -2008,7 +2023,7 @@ def build_profile(run: CompanyResearchRun) -> CompanyProfile:
                 if _employee_supported(fact, ref.excerpt, run, material)
             ]
         else:
-            valid_pairs = eligible if _lexical_support(fact, eligible, run) else []
+            valid_pairs = _lexical_support(fact, eligible, run)
         if kind == "employees" and isinstance(fact, EmployeeFact) and valid_pairs:
             expected: tuple[int | None, int | None]
             candidate = fact.value
@@ -2063,7 +2078,10 @@ def build_profile(run: CompanyResearchRun) -> CompanyProfile:
                 clear_value=kind == "employees",
             )
         if valid_pairs:
-            return fact
+            supported_refs = list(
+                {(ref.source_id, ref.excerpt): ref for ref, _material in valid_pairs}.values()
+            )
+            return fact.model_copy(update={"evidence": supported_refs})
         reason = (
             "No exact full-page citation verifies the candidate value, entity, and required context"
         )
@@ -2114,6 +2132,7 @@ def build_profile(run: CompanyResearchRun) -> CompanyProfile:
             financials.append(financial)
             continue
         verified_amount = False
+        supporting_financial_refs: list[EvidenceRef] = []
         conflicting_amount = False
         nonactual_assertion = False
         unsupported_assertion = False
@@ -2166,14 +2185,18 @@ def build_profile(run: CompanyResearchRun) -> CompanyProfile:
                     observations.extend(
                         _financial_observations(financial, combined, run, material.content)
                     )
+                matching_observation = False
                 for observed in observations:
                     if financial.value is not None and _same_precision_amount(
                         observed, financial.value
                     ):
                         verified_amount = True
+                        matching_observation = True
                     else:
                         conflicting_amount = True
                         candidate_mismatch = True
+                if matching_observation:
+                    supporting_financial_refs.extend(cited)
         if nip_conflict:
             financials.append(
                 _downgrade(
@@ -2193,7 +2216,18 @@ def build_profile(run: CompanyResearchRun) -> CompanyProfile:
                 )
             )
         elif verified_amount:
-            financials.append(financial)
+            financials.append(
+                financial.model_copy(
+                    update={
+                        "evidence": list(
+                            {
+                                (ref.source_id, ref.excerpt): ref
+                                for ref in supporting_financial_refs
+                            }.values()
+                        )
+                    }
+                )
+            )
         else:
             reason = (
                 "Exact full-page evidence does not verify metric, reporting interval, currency, "
@@ -2224,6 +2258,7 @@ def build_profile(run: CompanyResearchRun) -> CompanyProfile:
         publication_verified = False
         occurrence_verified = event.value.occurred_on is None
         nip_conflict = False
+        supporting_event_refs: list[EvidenceRef] = []
         for ref in event.evidence:
             if ref.source_id not in by_id:
                 raise ValueError(f"unknown evidence source ID: {ref.source_id}")
@@ -2232,10 +2267,12 @@ def build_profile(run: CompanyResearchRun) -> CompanyProfile:
                     continue
                 if _conflicting_nip(ref.excerpt, run.identity.nip):
                     nip_conflict = True
-                if _event_publication_supported(event, ref.excerpt, run, material):
-                    publication_verified = True
-                if _event_occurrence_supported(event, ref.excerpt, run):
-                    occurrence_verified = True
+                supports_event = _event_publication_supported(event, ref.excerpt, run, material)
+                supports_occurrence = _event_occurrence_supported(event, ref.excerpt, run)
+                publication_verified |= supports_event
+                occurrence_verified |= supports_occurrence
+                if supports_event or supports_occurrence:
+                    supporting_event_refs.append(ref)
 
         rejections: list[str] = []
         value = event.value
@@ -2262,6 +2299,16 @@ def build_profile(run: CompanyResearchRun) -> CompanyProfile:
                 event = event.model_copy(update={"value": value})
         elif rejections:
             event = event.model_copy(update={"value": retained_value, "reason": event_reason})
+        elif event.state == "supported":
+            event = event.model_copy(
+                update={
+                    "evidence": list(
+                        {
+                            (ref.source_id, ref.excerpt): ref for ref in supporting_event_refs
+                        }.values()
+                    )
+                }
+            )
         events.append(event)
 
     # Preserve all retained IDs cited by immutable identity and draft candidates;
