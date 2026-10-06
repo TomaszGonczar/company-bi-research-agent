@@ -1,8 +1,8 @@
 # v0.1.1 pre-holdout integrity and freeze record
 
-**V0.1.1 IMPLEMENTATION FROZEN — READY FOR EXTERNAL HOLDOUT EXECUTION**
+**HISTORICAL PRE-HOLDOUT FREEZE RECORD — superseded for current holdout status by [the independent Holdout B result](V0_1_1_HOLDOUT_RESULT.md).**
 
-This is permission to proceed to the separate holdout protocol, not a release decision.
+This record preserves the earlier freeze evidence and the then-current authorization to proceed to external holdout. Holdout B subsequently passed on certified semantic commit `9f80eb7a7dcdb4c563a4bec897f22361cdbbae45`; current status is post-holdout release preparation, not release authorization. See the result report for exact outcomes, artifact hashes, audit provenance and limitations.
 
 ## Integrity correction from 29beb50
 
@@ -308,27 +308,27 @@ SHA-256 `5028ddab490df792d35a7d4b8f7a69fb61d6b615dab6a901509cdba6a41fabca`.
 It was not modified or rerun. All 70 intended probes were unexercised in its original
 execution; the six raw expected rejections are not targeted-boundary proof.
 
-**No fresh external release holdout has been supplied, frozen or executed.** The operator
-has not self-authored one or renamed local regressions as independent evidence. The next
-external author receives only the restricted package and should produce approximately
-20 positives, 20 true-OOC, 30 unsafe, five provenance-invalid and five identity-invalid
-cases. Preflight semantics first, freeze/hash, then exactly one verifier execution.
-No edits after seeing outcomes. Release gates remain unmet until that evidence exists.
+**Historical pre-holdout status (superseded):** At this record's freeze point, no fresh
+external release holdout had been supplied, frozen or executed. The authoring instructions
+above described the then-planned external population and one-execution process; they are
+not the current status. Holdout B later passed on the certified commit. Its independent
+first-execution evidence, exact population results and artifact audit are recorded in the
+[Holdout B result](V0_1_1_HOLDOUT_RESULT.md). The original 70-case fixture-construction
+failure above remains immutable history.
 
 ## Release hygiene and stop
 
-Package version remains **0.1.0** because the user conditions the 0.1.1 bump on passing
-code/tests **and** a fresh external holdout. CI formatting currently covers `src tests`,
-while the exercised local gate also covers `scripts`; the conditional CI alignment and
-optional action pinning are deferred, not silently claimed complete.
+Holdout B passed, superseding this record's earlier holdout-pending disposition. Current
+preparation is metadata-only v0.1.1 hygiene: package/lock version metadata changes from
+0.1.0 to 0.1.1, with no dependency-version or semantic implementation change. CI's Ruff
+format scope is aligned with the local gate to cover `src tests scripts`; optional action
+pinning is not part of this metadata-only change.
 
-Hosted CI has not run on the exact final merge candidate. The configured push/PR workflow
-requires a published commit, and this task forbids pushing. An isolated local clone is
-separate evidence, not hosted CI.
-
-The final review package contains full committed source, both requested diffs, separate
-results and availability records, toolkit, original failed holdout, all check/clone logs,
-and a complete SHA-256 manifest. It contains no invented fresh holdout or fabricated
-exact replay result. No push, merge, tag or release is authorized.
-
-**BLOCKED — DO NOT RELEASE**
+Local release-preparation gates passed: 740 tests, Ruff, formatting, mypy, the 262/262
+canonical CLI population (97/97 positives), and the deterministic offline reviewer path.
+These are separate regression checks, not another Holdout B execution. Check the final
+commit SHA and exact-commit clean-clone evidence in the external release-review package.
+Hosted CI is pending authorization and is not claimed as passed; its push/PR workflow
+requires a published commit. No push, merge, tag or release is authorized or claimed.
+This is post-holdout release preparation, **not a release**. See the
+[Holdout B result](V0_1_1_HOLDOUT_RESULT.md) for evidence and limits.
