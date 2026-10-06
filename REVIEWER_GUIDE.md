@@ -10,7 +10,7 @@ The contract's semantic unit is the entire retained full-page text, NFC-normaliz
 
 The agent's proposal is not publication approval. The gate does not authenticate arbitrary edited ledgers, prove publisher truth, or interpret text outside its finite language. Structured output validates shape, not truth. Unrecognized true prose is out of contract, not disproven.
 
-**Release status: BLOCKED, not released.** Local verification passed 262/262 canonical CLI cases and 621 pytest tests, with green Ruff/format/mypy. The fresh 70-case independent corpus failed envelope validation before its intended probes, so independent acceptance remains unproven; no reroll or production retuning followed. See the [strict review](docs/STRICT_CONTRACT_REVIEW.md). The prior `66dbbc89` failures and unavailable original Astra/Opus corpora remain separate historical evidence, not replaced denominators.
+**Release status: BLOCKED, not released.** Current boundary corrections pass 262/262 canonical CLI cases, 26/26 local CLI smoke cases and 683 pytest tests, with green Ruff/format/mypy. The original 70-case holdout remains immutable failed fixture construction; a new genuinely external release holdout is still required. Exact external replay inputs/runners and hosted CI on the final candidate are also missing prerequisites. See the [current boundary review](docs/FINAL_BOUNDARY_REVIEW.md); the [b521edf report](docs/STRICT_CONTRACT_REVIEW.md) remains a separate historical snapshot.
 
 The separate v2 reviewer-reported record lists 20/40 unsafe and 34/40 accepted; it was not local CLI execution, is not a current strict-matrix result, and its distinctness from other vendor corpora is unproven. Keep it separate; see [quality report §13](docs/V0_1_1_QUALITY.md#13-separate-v2-reviewer-reported-evidence-not-a-local-strict-result).
 
@@ -28,7 +28,7 @@ Run the canonical saved supported-contract matrix input through the offline veri
 uv run --frozen company-bi verify examples/strict_contract/supported.json --output-dir /tmp/company-bi-strict-supported
 ```
 
-The matrix uses five explicit classes: `SUPPORTED_CONTRACT_POSITIVE`, `OUT_OF_CONTRACT_TRUE`, `UNSAFE_NEGATIVE`, `IDENTITY_INVALID`, `PROVENANCE_INVALID`. True OOC abstention is correct, not a missed positive. Invalid wrappers are reported as unexercised, not as successful semantic probes. The audit preserves all initial failures, source-backed adjudication corrections and raw CLI outputs; see [observed results](docs/STRICT_CONTRACT_REVIEW.md).
+The matrix uses five explicit classes: `SUPPORTED_CONTRACT_POSITIVE`, `OUT_OF_CONTRACT_TRUE`, `UNSAFE_NEGATIVE`, `IDENTITY_INVALID`, `PROVENANCE_INVALID`. True OOC abstention is correct, not a missed positive. Invalid wrappers are reported as unexercised, not as successful semantic probes. The audit preserves all initial failures, source-backed adjudication corrections and raw CLI outputs; see [observed results](docs/FINAL_BOUNDARY_REVIEW.md).
 
 The existing [`examples/verification/`](examples/verification/) fixtures and frozen real-company runs are earlier-contract evidence. They can be inspected through the verifier, but are not strict positives and may be rejected for legacy-format provenance or whole-unit/grammar mismatch. For example, the older controlled fixture can be run separately:
 
@@ -56,6 +56,21 @@ local `FunctionModel` interruption. It does not call a provider. In the review Z
 `audit/holdout/first-cli/` and `fixture-defects.json` preserve their first rejection and
 why it is not an independent semantic pass. Do not silently repair or replace that
 population when reproducing this candidate.
+
+## Independent author handoff
+
+Use the [public fixture toolkit](docs/EXTERNAL_HOLDOUT_TOOLKIT.md), not manually assembled
+envelopes. Its preflight validates public models only; it never executes the verifier.
+Give the external author only the separate restricted author package, not the full
+review ZIP containing implementation, old cases and regression outcomes. Preflight all
+semantic envelopes, inspect intentional boundary errors, freeze/hash, then execute the
+verifier once. No local regression or neutral toolkit example is an independent holdout.
+
+Actual retained Asseco and SONEL replays each publish **0 researched facts**. This is
+strict abstention on ordinary retained web prose, **not useful BI output**. The complete
+retained baseline utility run set yields 0/13 gold researched claims; its earlier
+diagnostics are historical, not new provider calls.
+
 
 ## Historical evidence and population separation
 

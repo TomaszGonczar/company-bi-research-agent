@@ -27,9 +27,25 @@ from company_bi.models import (
     ProfileSource,
     RetrievedSource,
     _validate_registry_identity,
+    _validate_retrieval_invariants,
     profile_has_gaps,
     validate_source_lineage,
 )
+
+_BASE_UNIT_EXPONENTS = {
+    "units": 0,
+    "thousands": 3,
+    "millions": 6,
+    "billions": 9,
+}
+
+
+def _base_units(value: Decimal, unit: str) -> Decimal:
+    """Convert a reported amount exactly, independent of Decimal context precision."""
+    sign, digits, exponent = value.as_tuple()
+    assert isinstance(exponent, int)
+    return Decimal((sign, digits, exponent + _BASE_UNIT_EXPONENTS[unit]))
+
 
 _SPACE = re.compile(r"\s+")
 
@@ -96,6 +112,7 @@ def _financial_context_matches(financial: FinancialFact, observation: FinancialO
 
 def build_profile(run: CompanyResearchRun) -> CompanyProfile:
     """Publish only candidate facts matched by the finite whole-page grammar."""
+    _validate_retrieval_invariants(run.sources)
     validate_source_lineage(run.sources)
     _validate_registry_identity(run.identity, run.sources)
 
@@ -289,24 +306,18 @@ def build_profile(run: CompanyResearchRun) -> CompanyProfile:
             if isinstance(obs, FinancialObservation)
         ]
 
-        financial_matches = [
-            (ref, mat, obs)
-            for ref, mat, obs in financial_cited
-            if _financial_context_matches(financial, obs) and financial.value == obs.value
-        ]
+        candidate_key: tuple[Any, ...] | None = None
         recognized_same_key: dict[tuple[Any, ...], set[Decimal]] = defaultdict(set)
         for _mat, obs in parsed:
             if isinstance(obs, FinancialObservation):
                 key = (
                     obs.metric,
+                    obs.currency,
+                    obs.scope,
                     obs.period_start,
                     obs.period_end,
-                    obs.currency,
-                    obs.unit,
-                    obs.scope,
                 )
-                recognized_same_key[key].add(obs.value)
-        candidate_key: tuple[Any, ...] | None = None
+                recognized_same_key[key].add(_base_units(obs.value, obs.unit))
         if (
             financial.period is not None
             and financial.currency is not None
@@ -315,12 +326,16 @@ def build_profile(run: CompanyResearchRun) -> CompanyProfile:
         ):
             candidate_key = (
                 financial.metric,
+                financial.currency,
+                financial.scope,
                 financial.period.start,
                 financial.period.end,
-                financial.currency,
-                financial.unit,
-                financial.scope,
             )
+        financial_matches = [
+            (ref, mat, obs)
+            for ref, mat, obs in financial_cited
+            if _financial_context_matches(financial, obs) and financial.value == obs.value
+        ]
         if candidate_key is not None and len(recognized_same_key.get(candidate_key, ())) > 1:
             financials.append(
                 _downgrade(
@@ -364,7 +379,7 @@ def build_profile(run: CompanyResearchRun) -> CompanyProfile:
             (ref, mat, obs)
             for ref, mat, obs in event_cited
             if obs.title == unicodedata.normalize("NFC", detail.title)
-            and obs.summary == _norm(detail.summary)
+            and obs.summary == unicodedata.normalize("NFC", detail.summary).strip()
             and mat.source.published_on is not None
             and mat.source.published_on == detail.published_on
             and recent_start <= mat.source.published_on <= generated_on

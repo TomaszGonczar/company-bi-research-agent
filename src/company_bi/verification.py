@@ -25,7 +25,7 @@ VerificationDecision = Literal["accepted", "downgraded", "cleared", "preserved"]
 
 
 def _safe(value: object) -> str:
-    return _md(str(value).replace("\r", "\\r").replace("\n", "\\n"))
+    return _md(value)
 
 
 class FactSnapshot(Model):
@@ -382,12 +382,17 @@ def write_verification(input_path: Path, output_dir: Path) -> VerificationReport
         for name in ("profile.json", "profile.md", "verification.json", "verification.md")
     }
     resolved_input = input_path.resolve()
-    if any(
-        path.resolve() == resolved_input
-        or (path.exists() and input_path.exists() and path.samefile(input_path))
-        for path in outputs.values()
-    ):
-        raise ValueError("Verification output must not overwrite the input file")
+    destinations = list(outputs.values())
+    for index, path in enumerate(destinations):
+        if path.resolve() == resolved_input or (
+            path.exists() and input_path.exists() and path.samefile(input_path)
+        ):
+            raise ValueError("Verification output must not overwrite the input file")
+        for other in destinations[:index]:
+            if path.resolve() == other.resolve() or (
+                path.exists() and other.exists() and path.samefile(other)
+            ):
+                raise ValueError("Verification output destinations must be distinct")
     profile, report = verify_run(
         run,
         input_sha256=hashlib.sha256(data).hexdigest(),

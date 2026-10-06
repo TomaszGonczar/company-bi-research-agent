@@ -1,5 +1,9 @@
 # Strict-contract candidate review
 
+**Historical b521edf snapshot.** This report and its measurements describe that
+candidate. The subsequent bounded correction and separate results are in
+[FINAL_BOUNDARY_REVIEW.md](FINAL_BOUNDARY_REVIEW.md).
+
 ## Decision
 
 **BLOCKED — not approved for release.** The architectural contraction is implemented

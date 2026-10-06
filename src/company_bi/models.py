@@ -463,6 +463,13 @@ class SearchResults(Model):
     failure: OperationalFailure | None = None
 
 
+_RETRIEVAL_MODES = {
+    "registry": frozenset({"registry"}),
+    "search_snippet": frozenset({"tavily"}),
+    "full_page": frozenset({"static", "dynamic"}),
+}
+
+
 class RetrievedSource(Model):
     """Host-owned material; search discovery is not a full-page retrieval."""
 
@@ -470,6 +477,29 @@ class RetrievedSource(Model):
     kind: Literal["registry", "search_snippet", "full_page"]
     content: str
     fetch_mode: Literal["registry", "tavily", "static", "dynamic"]
+
+    @model_validator(mode="after")
+    def check_kind_and_fetch_mode(self) -> Self:
+        if self.fetch_mode not in _RETRIEVAL_MODES[self.kind]:
+            raise ValueError(
+                f"retrieved source kind {self.kind} cannot use fetch mode {self.fetch_mode}"
+            )
+        return self
+
+
+def _validate_retrieval_invariants(materials: list[RetrievedSource]) -> None:
+    """Recheck source invariants at trust boundaries, including unchecked model copies."""
+    full_page_ids: set[str] = set()
+    for material in materials:
+        if material.fetch_mode not in _RETRIEVAL_MODES.get(material.kind, ()):
+            raise ValueError(
+                f"retrieved source kind {material.kind} cannot use fetch mode {material.fetch_mode}"
+            )
+        if material.kind == "full_page" and material.source.publication_blocked_reason is None:
+            source_id = material.source.source_id
+            if source_id in full_page_ids:
+                raise ValueError(f"source ID {source_id} has duplicate full-page material")
+            full_page_ids.add(source_id)
 
 
 def _normalized_source_url(url: HttpUrl | str) -> str:
@@ -692,7 +722,12 @@ def _validate_registry_identity(
                 for material, fields in records
                 if material.source.source_id == ref.source_id
             ]
-            if not matching or not any(ref.excerpt in material.content for material, _ in matching):
+            retained = [
+                (material, fields)
+                for material, fields in matching
+                if _identity_text(ref.excerpt) in _identity_text(material.content)
+            ]
+            if not retained:
                 raise ValueError(
                     f"supported identity field {field_name} lacks retained registry evidence"
                 )
@@ -700,7 +735,7 @@ def _validate_registry_identity(
                 field_name in fields
                 and _identity_value_matches(value, fields[field_name])
                 and _identity_value_matches(value, ref.excerpt)
-                for _, fields in matching
+                for _, fields in retained
             ):
                 raise ValueError(
                     f"supported identity field {field_name} does not match mapped registry data"
@@ -782,6 +817,7 @@ class CompanyResearchRun(Model):
 
     @model_validator(mode="after")
     def check_retrieval_references(self) -> Self:
+        _validate_retrieval_invariants(self.sources)
         validate_source_lineage(self.sources)
         # One source ID may have multiple retained snippets and a full-page snapshot.
         source_ids = {material.source.source_id for material in self.sources}

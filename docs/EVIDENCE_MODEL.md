@@ -118,9 +118,9 @@ The recognized qualitative shapes are only the listed products/services predicat
 
 Registry identity is also structurally finite: only mapped fields in recognized MF JSON or the exact host-generated legacy snapshot can establish identity. Arbitrary registry prose, unrelated JSON paths, evidence strings alone, and identity inferred from researched text are not substitutes. Existing host ownership, source-ID quarantine, redirect lineage, citation membership, and model invariants remain mandatory.
 
-The implemented matrix passed 262/262 actual CLI cases, including 97 contract positives. This does not establish independent acceptance: the fresh blind corpus had invalid envelopes and did not exercise its intended probes. Earlier metrics remain historical; legacy-envelope rejection is not a semantic success. See [STRICT_CONTRACT_REVIEW.md](STRICT_CONTRACT_REVIEW.md) for the exact evidence and blocked verdict.
+The canonical matrix still passes 262/262 actual CLI cases, including 97 contract positives. The later bounded corrections additionally pass 683 tests and 26 local CLI smoke cases; see [FINAL_BOUNDARY_REVIEW.md](FINAL_BOUNDARY_REVIEW.md). The original 70-case blind corpus remains failed fixture construction, not semantic evidence. Fresh external release acceptance is still pending; earlier metrics remain separate history, and legacy-envelope rejection is not a semantic success.
 
-The three evidence states, financial field schema, dependencies and usage budgets remain. The proposal instructions now explain the deliberately narrower publication boundary. Current changes and limitations are in [STRICT_CONTRACT_REVIEW.md](STRICT_CONTRACT_REVIEW.md); earlier correction history remains in [ADVERSARIAL_CORRECTIONS.md](ADVERSARIAL_CORRECTIONS.md).
+The three evidence states, financial field schema, dependencies and usage budgets remain. The proposal instructions explain the deliberately narrower publication boundary. Current boundary changes and limitations are in [FINAL_BOUNDARY_REVIEW.md](FINAL_BOUNDARY_REVIEW.md); the [b521edf strict report](STRICT_CONTRACT_REVIEW.md) and [earlier correction history](ADVERSARIAL_CORRECTIONS.md) retain their original populations and metrics.
 
 ### Earlier-contract assertion qualification (superseded)
 

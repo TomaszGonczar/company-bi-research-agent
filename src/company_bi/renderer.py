@@ -14,8 +14,8 @@ def render_json(profile: CompanyProfile) -> str:
 
 
 def _md(value: object) -> str:
-    """Escape inline Markdown metacharacters while retaining readable text."""
-    text = str(value)
+    """Escape inline Markdown metacharacters and flatten untrusted line breaks."""
+    text = str(value).replace("\r\n", " ").replace("\r", " ").replace("\n", " ")
     return "".join("\\" + char if char in r"\\`*_{}[]<>()#+!|" else char for char in text)
 
 

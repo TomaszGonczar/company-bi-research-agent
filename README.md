@@ -4,7 +4,7 @@ A research agent may propose broadly; deterministic publication recognizes only 
 
 Under the [strict publication contract](docs/STRICT_PUBLICATION_CONTRACT.md), the one quoted direct assertion shown here is supported: `Example sp. z o.o. offers "cloud services".` The plausible unquoted assertion `Example sp. z o.o. offers cloud services.` is true but out of contract, so publication abstains. Labels are opaque, not a vocabulary of validated meanings.
 
-**v0.1.1 remains BLOCKED, not released.** The canonical CLI matrix passed **262/262** cases (97 contract positives), and **621 tests** passed. The fresh independent corpus had invalid fixtures, so independent semantic acceptance is unproven. See the [strict review and limitations](docs/STRICT_CONTRACT_REVIEW.md); earlier measurements below remain separate history.
+**v0.1.1 remains BLOCKED.** Boundary corrections pass **262/262** canonical CLI cases, **26/26** local CLI smoke cases and **683 tests**. A fresh external release holdout and exact-candidate hosted CI remain pending. Retained Asseco and SONEL each publish **0 researched facts**—strict abstention, not useful BI. See the [current evidence and missing prerequisites](docs/FINAL_BOUNDARY_REVIEW.md); earlier measurements below remain separate history.
 
 ## Historical evidence (earlier contract)
 
@@ -29,7 +29,7 @@ uv sync --frozen --python 3.12
 uv run --frozen company-bi verify examples/strict_contract/supported.json --output-dir /tmp/company-bi-strict-supported
 ```
 
-This writes profile and verification JSON/Markdown. The saved `supported`, `out_of_contract`, `unsafe`, and `identity_invalid` inputs exercise distinct outcomes: only `supported` publishes the researched service; the next two abstain, and invalid identity exits `2` without a profile. [Observed results](docs/STRICT_CONTRACT_REVIEW.md) · [normative contract](docs/STRICT_PUBLICATION_CONTRACT.md) · [adjudication](docs/HOLDOUT_ADJUDICATION.md).
+This writes profile and verification JSON/Markdown. The saved `supported`, `out_of_contract`, `unsafe`, and `identity_invalid` inputs exercise distinct outcomes: only `supported` publishes the researched service; the next two abstain, and invalid identity exits `2` without a profile. [Observed results](docs/FINAL_BOUNDARY_REVIEW.md) · [normative contract](docs/STRICT_PUBLICATION_CONTRACT.md) · [adjudication](docs/HOLDOUT_ADJUDICATION.md).
 
 The existing `examples/verification/` fixtures and frozen real-company runs are earlier-contract examples. They can be inspected with the offline verifier, but are not strict positives and may be rejected for legacy-format provenance or assertion-unit mismatch.
 

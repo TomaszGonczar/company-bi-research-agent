@@ -165,9 +165,9 @@ def parse_assertion(
         elif metric == "net loss":
             if sign:
                 return None
-            amount = -amount
+            amount = amount.copy_negate()
         elif sign in ("-", "−"):
-            amount = -amount
+            amount = amount.copy_negate()
         units = {
             "units": "units",
             "thousand": "thousands",
@@ -189,6 +189,10 @@ def parse_assertion(
 
     match = _EVENT.fullmatch(body)
     if match:
+        predicate = match.group("predicate")
+        datepart = match.group("datepart")
+        if datepart and ((predicate in ("opened", "launched", "signed")) != (datepart == "on")):
+            return None
         occurrence = _date(match.group("date")) if match.group("date") else None
         if match.group("date") and (occurrence is None or occurrence > generated_on):
             return None
