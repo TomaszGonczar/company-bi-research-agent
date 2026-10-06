@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
+from pydantic import HttpUrl
 
 from company_bi.models import CompanyResearchRun
 
@@ -162,7 +163,11 @@ def test_catalog_values_accept_distinct_exact_citations(make_run: Any, publish: 
     run = make_run(first)
     page = run.sources[1].model_copy(update={"content": second})
     page = page.model_copy(
-        update={"source": page.source.model_copy(update={"source_id": "page-2"})}
+        update={
+            "source": page.source.model_copy(
+                update={"source_id": "page-2", "url": HttpUrl("https://page-2.example/")}
+            )
+        }
     )
     payload = run.model_dump(mode="python")
     payload["sources"].append(page.model_dump(mode="python"))

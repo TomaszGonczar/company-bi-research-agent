@@ -6,7 +6,6 @@ import time
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Literal
-from urllib.parse import urlsplit, urlunsplit
 
 from pydantic import HttpUrl
 
@@ -16,6 +15,7 @@ from company_bi.models import (
     RetrievedSource,
     SearchHit,
     Source,
+    _normalized_source_url,
     validate_source_lineage,
 )
 
@@ -72,22 +72,6 @@ class ResearchBudget:
         self.note(failure.reason)
 
 
-def _normalized_url(url: HttpUrl | str) -> str:
-    parts = urlsplit(str(url))
-    scheme = parts.scheme.lower()
-    host = (parts.hostname or "").lower()
-    port = parts.port
-    netloc = (
-        host
-        if port is None or (scheme, port) in {("http", 80), ("https", 443)}
-        else f"{host}:{port}"
-    )
-    if parts.username or parts.password:
-        netloc = f"{parts.username or ''}:{parts.password or ''}@{netloc}"
-    path = parts.path or "/"
-    return urlunsplit((scheme, netloc, path, parts.query, ""))
-
-
 class SourceStore:
     """Run-local stable host source IDs with separately retained discovery materials."""
 
@@ -132,7 +116,7 @@ class SourceStore:
             )
 
     def _source_for(self, title: str, url: HttpUrl, retrieved_at: datetime) -> Source:
-        normalized = _normalized_url(url)
+        normalized = _normalized_source_url(url)
         source_id = self._by_url.get(normalized)
         if source_id is None:
             source_id = f"S{self._next_id:03d}"
@@ -182,7 +166,8 @@ class SourceStore:
             raise ValueError("Stored page material must have kind='full_page'")
         validate_source_lineage(
             [
-                *(snippet for snippet in self._snippets if snippet.source.source_id == source_id),
+                *self._snippets,
+                *(page for page in self._pages.values() if page.source.source_id != source_id),
                 material,
             ]
         )

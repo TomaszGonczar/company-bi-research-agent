@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from typing import Any
 
+from pydantic import HttpUrl
+
 from company_bi.models import CompanyResearchRun
 
 
@@ -17,7 +19,11 @@ def _with_pages(run: Any, pages: list[tuple[str, str]], **draft_changes: Any) ->
     for source_id, content in pages:
         source = template.model_copy(update={"content": content})
         source = source.model_copy(
-            update={"source": source.source.model_copy(update={"source_id": source_id})}
+            update={
+                "source": source.source.model_copy(
+                    update={"source_id": source_id, "url": HttpUrl(f"https://{source_id}.example/")}
+                )
+            }
         )
         retained.append(source)
     payload = run.model_dump(mode="python")

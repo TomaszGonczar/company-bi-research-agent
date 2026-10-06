@@ -7,7 +7,7 @@ from collections import defaultdict
 from datetime import date
 from decimal import Decimal
 from typing import Annotated, Any, Literal, Self
-from urllib.parse import urlsplit
+from urllib.parse import urlsplit, urlunsplit
 
 from pydantic import (
     AwareDatetime,
@@ -503,8 +503,19 @@ def _validate_retrieval_invariants(materials: list[RetrievedSource]) -> None:
 
 
 def _normalized_source_url(url: HttpUrl | str) -> str:
+    """Canonical URL key shared by source discovery and lineage validation."""
     parts = urlsplit(str(url))
-    return f"{parts.scheme.lower()}://{parts.netloc.lower()}{parts.path or '/'}?{parts.query}"
+    scheme = parts.scheme.lower()
+    host = (parts.hostname or "").lower()
+    port = parts.port
+    netloc = (
+        host
+        if port is None or (scheme, port) in {("http", 80), ("https", 443)}
+        else f"{host}:{port}"
+    )
+    if parts.username or parts.password:
+        netloc = f"{parts.username or ''}:{parts.password or ''}@{netloc}"
+    return urlunsplit((scheme, netloc, parts.path or "/", parts.query, ""))
 
 
 def _source_origin(url: HttpUrl) -> tuple[str, str, int | None]:
@@ -577,22 +588,39 @@ def validate_source_lineage(materials: list[RetrievedSource]) -> None:
                 f"redirect lineage for source ID {source_id} is attached to non-web material"
             )
 
+    owner_ids: dict[str, str] = {}
+    for material in materials:
+        if (
+            material.kind not in {"search_snippet", "full_page"}
+            or material.source.publication_blocked_reason is not None
+        ):
+            continue
+        owner_url = (
+            material.source.redirect_chain[0]
+            if material.kind == "full_page" and material.source.redirect_chain
+            else material.source.url
+        )
+        owner = _normalized_source_url(owner_url)
+        source_id = material.source.source_id
+        previous_id = owner_ids.setdefault(owner, source_id)
+        if previous_id != source_id:
+            raise ValueError("discovery URL is assigned to multiple source IDs")
+
 
 def _identity_text(value: Any) -> str:
     text = unicodedata.normalize("NFC", str(value))
     return " ".join(text.split())
 
 
-def _identity_value_matches(value: Any, cited: str) -> bool:
-    candidate = cited
+def _registry_citation_matches(mapped_value: str, excerpt: str) -> bool:
+    """Match a mapped registry value against a raw or JSON-string citation excerpt."""
+    if _identity_text(mapped_value) == _identity_text(excerpt):
+        return True
     try:
-        decoded = json.loads(cited)
+        decoded = json.loads(excerpt)
     except (json.JSONDecodeError, TypeError):
-        pass
-    else:
-        if isinstance(decoded, str):
-            candidate = decoded
-    return _identity_text(value) == _identity_text(candidate)
+        return False
+    return isinstance(decoded, str) and _identity_text(mapped_value) == _identity_text(decoded)
 
 
 _LEGACY_REGISTRY_HEADER = "MF VAT register identity material (not a raw registry response):"
@@ -733,8 +761,8 @@ def _validate_registry_identity(
                 )
             if not any(
                 field_name in fields
-                and _identity_value_matches(value, fields[field_name])
-                and _identity_value_matches(value, ref.excerpt)
+                and _identity_text(value) == _identity_text(fields[field_name])
+                and _registry_citation_matches(fields[field_name], ref.excerpt)
                 for _, fields in retained
             ):
                 raise ValueError(
@@ -744,7 +772,7 @@ def _validate_registry_identity(
         if not cited:
             raise ValueError(f"supported identity field {field_name} requires registry evidence")
         for _, fields in records:
-            if field_name in fields and not _identity_value_matches(value, fields[field_name]):
+            if field_name in fields and _identity_text(value) != _identity_text(fields[field_name]):
                 raise ValueError(f"retained registry material declares a conflicting {field_name}")
 
 

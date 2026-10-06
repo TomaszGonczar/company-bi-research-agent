@@ -118,7 +118,12 @@ The recognized qualitative shapes are only the listed products/services predicat
 
 Registry identity is also structurally finite: only mapped fields in recognized MF JSON or the exact host-generated legacy snapshot can establish identity. Arbitrary registry prose, unrelated JSON paths, evidence strings alone, and identity inferred from researched text are not substitutes. Existing host ownership, source-ID quarantine, redirect lineage, citation membership, and model invariants remain mandatory.
 
-The canonical matrix still passes 262/262 actual CLI cases, including 97 contract positives. The later bounded corrections additionally pass 683 tests and 26 local CLI smoke cases; see [FINAL_BOUNDARY_REVIEW.md](FINAL_BOUNDARY_REVIEW.md). The original 70-case blind corpus remains failed fixture construction, not semantic evidence. Fresh external release acceptance is still pending; earlier metrics remain separate history, and legacy-envelope rejection is not a semantic success.
+Already-decoded registry fields compare to candidate identity values using only NFC
+and whitespace-run normalization; literal quotation marks are data. Only the explicit
+citation path may JSON-decode an excerpt, and it compares that semantic value to the
+same mapped field after checking occurrence in the referenced retained material.
+
+The canonical matrix still passes 262/262 actual CLI cases, including 97 contract positives. The final micro-correction passes 696 tests, the prior 26 local CLI smoke cases, and 19 new CLI/unchecked-SDK smoke cases; see [FINAL_BOUNDARY_REVIEW.md](FINAL_BOUNDARY_REVIEW.md), which preserves the earlier 683-test snapshot separately. The original 70-case blind corpus remains failed fixture construction, not semantic evidence. Exact external replays and fresh external release acceptance remain unclaimed; legacy-envelope rejection is not a semantic success.
 
 The three evidence states, financial field schema, dependencies and usage budgets remain. The proposal instructions explain the deliberately narrower publication boundary. Current boundary changes and limitations are in [FINAL_BOUNDARY_REVIEW.md](FINAL_BOUNDARY_REVIEW.md); the [b521edf strict report](STRICT_CONTRACT_REVIEW.md) and [earlier correction history](ADVERSARIAL_CORRECTIONS.md) retain their original populations and metrics.
 
@@ -149,6 +154,12 @@ Differing counts for the same verified date remain uncertain. Distinct verified 
 Every static hop is public-target validated, and each response URL must match its actual request before response/redirect handling. Static thin-shell → dynamic fallback retains the static chain. An unexplained browser URL change is rejected, not invented as another validated hop. Existing private-target, redirect-limit and browser resource guards remain in force.
 
 Run validation, page storage and publication share the lineage checks. For current records, chain endpoints must agree with retained discovery/full-page URLs; registry/snippet material cannot claim a full-page chain. Without a chain, repeated source IDs require the same normalized URL, ignoring fragments. Neither `www` nor a trailing path slash is silently removed.
+
+The shared host key identifies the discovery URL, not the final page URL. It removes
+default ports and fragments while preserving path/query. For trusted web material,
+the redirect-chain start (or the unredirected source URL) cannot belong to two source
+IDs. Distinct discoveries may legitimately converge on the same final URL. Registry
+records have separate ownership; blocked groups cannot veto trusted discovery ownership.
 
 The research-run format has no historical version field. Its narrow read-compatibility distinction is the actual serialized source shape: all raw source dictionaries for a non-registry ID omit `redirect_chain`, yet their normalized URLs differ. The reader copies the affected mapping branches and adds `Source.publication_blocked_reason = "unproven_legacy_url_relationship"` to the whole ID group. It does not infer hops or repair the original URLs. Typed/native inputs and current records with an explicit `redirect_chain` field, including `[]`, are not inferred to be legacy.
 
