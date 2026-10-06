@@ -1,14 +1,20 @@
 # Reviewer guide — Company BI
 
-Follow these sections in order from the repository root. They describe a credential-free, offline review path; `uv sync` may download Python and dependencies. The section labels organize the review and are not a timing guarantee. No live service calls, API keys, login, browser, prior outputs, or internal history are needed.
+This is a credential-free offline review path. `uv sync` may download Python and dependencies; verification itself makes no model, registry, search, page, or other network calls. No API key, login, browser, or prior outputs are needed.
 
-## 0–2 — Thesis and architecture
+## Thesis and contract
 
-The bounded PydanticAI research agent proposes candidate company facts; deterministic code applies a finite publication contract and the offline verifier compares candidate with final facts using the retained source ledger. Read the [README architecture](README.md#architecture-and-report-interpretation). Polish NIP validation and the registry anchor legal identity; the model chooses research and proposes claims, but cannot assign host source IDs or approve publication. Structured output validates shape, not truth.
+A research agent may propose broadly. Deterministic publication is deliberately narrow: it recognizes a finite contract and abstains when semantics are unknown or outside that contract. This is neither general language understanding nor a demonstrated broad-coverage research product. See the [README](README.md), normative [strict publication contract](docs/STRICT_PUBLICATION_CONTRACT.md), and [holdout adjudication](docs/HOLDOUT_ADJUDICATION.md).
 
-**Release status: v0.1.1 is BLOCKED.** Adversarial evaluation measures unsafe acceptance and conservative rejection; autonomous coverage remains experimental. The candidate has a known unsafe financial-qualifier regression and three other conservative failures (four full-suite failures total). Consult the [latest quality evidence](docs/V0_1_1_QUALITY.md#11-frozen-remediation-candidate-blocked) before interpreting older metrics.
+The contract's semantic unit is the entire retained full-page text, NFC-normalized and outer-trimmed, limited to 4096 Unicode code points. It must match one complete production exactly, including its final full stop; clipping, surrounding context, extra clauses/sentences, or combining assertions is not allowed. The resolved legal name must match literally after NFC/whitespace-run normalization; labels are exact opaque quoted strings, not a vocabulary. Each qualitative list item needs its own supported unit. Employees, financials, and events have separate exact finite productions and component rules. Source ownership, full-page provenance, lineage, identity consistency, citation membership, and existing structural invariants remain required. The contract defines every allowed shape and boundary; do not infer unlisted synonyms, formats, or semantic rules.
 
-The verifier inspects the supplied retained run; it does not authenticate arbitrary edited JSON, prove publisher truth, or fetch sources. It makes accepted, downgraded, cleared, and preserved outcomes inspectable. A preserved uncertain or unknown fact is not accepted support.
+The agent's proposal is not publication approval. The gate does not authenticate arbitrary edited ledgers, prove publisher truth, or interpret text outside its finite language. Structured output validates shape, not truth. Unrecognized true prose is out of contract, not disproven.
+
+**Release status: BLOCKED, not released.** Local verification passed 262/262 canonical CLI cases and 621 pytest tests, with green Ruff/format/mypy. The fresh 70-case independent corpus failed envelope validation before its intended probes, so independent acceptance remains unproven; no reroll or production retuning followed. See the [strict review](docs/STRICT_CONTRACT_REVIEW.md). The prior `66dbbc89` failures and unavailable original Astra/Opus corpora remain separate historical evidence, not replaced denominators.
+
+The separate v2 reviewer-reported record lists 20/40 unsafe and 34/40 accepted; it was not local CLI execution, is not a current strict-matrix result, and its distinctness from other vendor corpora is unproven. Keep it separate; see [quality report §13](docs/V0_1_1_QUALITY.md#13-separate-v2-reviewer-reported-evidence-not-a-local-strict-result).
+
+## Zero-key strict matrix review
 
 Set up if needed:
 
@@ -16,80 +22,60 @@ Set up if needed:
 uv sync --frozen --python 3.12
 ```
 
-## 2–4 — Compare accepted and rejected claims
-
-Run the controlled financial-sign fixture first:
+Run the canonical saved supported-contract matrix input through the offline verifier:
 
 ```sh
-uv run --frozen company-bi verify examples/verification/controlled-financial-sign.json --output-dir outputs/verification
+uv run --frozen company-bi verify examples/strict_contract/supported.json --output-dir /tmp/company-bi-strict-supported
 ```
 
-It writes `profile.json`, `profile.md`, `verification.json`, and `verification.md`. Inspect `outputs/verification/verification.md` first: the explicitly current product is accepted, while the candidate **+PLN 10m net result** is rejected against retained evidence of a standalone **−PLN 10m net loss**. This is a controlled synthetic fixture, not evidence of real-company yield.
+The matrix uses five explicit classes: `SUPPORTED_CONTRACT_POSITIVE`, `OUT_OF_CONTRACT_TRUE`, `UNSAFE_NEGATIVE`, `IDENTITY_INVALID`, `PROVENANCE_INVALID`. True OOC abstention is correct, not a missed positive. Invalid wrappers are reported as unexercised, not as successful semantic probes. The audit preserves all initial failures, source-backed adjudication corrections and raw CLI outputs; see [observed results](docs/STRICT_CONTRACT_REVIEW.md).
 
-Two more controlled examples:
+The existing [`examples/verification/`](examples/verification/) fixtures and frozen real-company runs are earlier-contract evidence. They can be inspected through the verifier, but are not strict positives and may be rejected for legacy-format provenance or whole-unit/grammar mismatch. For example, the older controlled fixture can be run separately:
 
 ```sh
-uv run --frozen company-bi verify examples/verification/controlled-planned-activity.json --output-dir outputs/verification-planned
-uv run --frozen company-bi verify examples/verification/controlled-current-service.json --output-dir outputs/verification-current
+uv run --frozen company-bi verify examples/verification/controlled-financial-sign.json --output-dir /tmp/company-bi-earlier-contract
 ```
 
-The planned cloud-service assertion is downgraded rather than treated as a current offering; the current-service fixture provides another controlled positive.
+Exit `0` means verification completed, not that every candidate was supported. Downgraded/cleared values must be read from the final side; preserved uncertain/unknown facts are not accepted. Verification does not overwrite the input or fetch source content.
 
-Exit `0` means verification completed, even when facts were downgraded or cleared; it does **not** mean every candidate claim is supported. Preserved uncertain/unknown facts remain non-supported, not accepted. Clearing can be partial: an event may stay supported while an unverified occurrence date becomes null; inspect final snapshots and changed paths rather than carrying candidate values forward. A valid failed research run produces only `verification.json` and `verification.md`, with `not_published`, diagnostics/reason, and empty deltas; it has no profile and exits `1`. Invalid input, gate, or file errors exit `2`. The verifier does not overwrite its input.
-
-## 4–6 — Inspect adversarial boundaries
-
-These existing adversarial regression tests exercise defined verifier and deterministic-gate cases; they do not establish general semantic safety or arbitrary research quality:
+Additional zero-key checks:
 
 ```sh
-uv run --frozen pytest -q \
-  tests/adversarial/test_verification.py \
-  tests/test_evidence.py::test_month_only_event_occurrence_does_not_become_first_of_month \
-  tests/test_evidence.py::test_operating_profit_is_not_net_result
-```
-Review [`tests/adversarial/test_verification.py`](tests/adversarial/test_verification.py) for verifier-specific regression cases and the named functions in [`tests/test_evidence.py`](tests/test_evidence.py) for gate boundaries:
-
-- **Date precision:** source text says “In July this year.” Candidate occurrence `2026-07-01` is cleared to `None`; publication date does not authorize an occurrence day.
-- **Metric substitution:** operating-profit evidence proposed as net result becomes uncertain with no selected amount.
-
-The verifier reports observed candidate-to-final changes under a finite contract; it does not add a separate general semantic interpretation layer. Adversarial evaluation measures both unsafe acceptance and conservative rejection. Cleared values must be read from the final side, not inferred from candidate values. The latest candidate remains blocked; see the quality report for the financial regression and conservative failures.
-
-## 6–8 — Evaluation populations and tests
-
-Run the deterministic suite and frozen evaluation if desired:
-
-```sh
-uv run --frozen pytest -q
-uv run --frozen company-bi eval --dataset examples/evals/dataset.json --output-dir outputs/evals
+uv run --frozen company-bi verify examples/strict_contract/out_of_contract.json --output-dir /tmp/company-bi-strict-ooc
+uv run --frozen python scripts/review_offline.py --output-dir /tmp/company-bi-offline-review
+uv run --frozen python scripts/replay_strict_adjudication.py examples/evals/strict-historical.json --output /tmp/company-bi-strict-history.json
+uv run --frozen pytest
+uv run --frozen ruff check src tests scripts
+uv run --frozen ruff format --check src tests scripts
+uv run --frozen mypy src
 ```
 
-Keep the populations separate:
+The offline review separates current strict probes, historical snapshots and an actual
+local `FunctionModel` interruption. It does not call a provider. In the review ZIP,
+`audit/holdout/frozen-original/` contains the unchanged defective independent inputs;
+`audit/holdout/first-cli/` and `fixture-defects.json` preserve their first rejection and
+why it is not an independent semantic pass. Do not silently repair or replace that
+population when reproducing this candidate.
 
-| Population | Result |
+## Historical evidence and population separation
+
+These remain immutable **earlier-contract** measurements, not strict positives or current strict-contract performance:
+
+| Earlier-contract population / measure | Historical result |
 | --- | ---: |
-| Historical frozen overall supported precision | 47/47 |
-| Historical eligible researched recall | 5/19 |
-| Historical retained-real researched yield | **0/7** |
-| Fixed two-company real-source utility set: Asseco 6 + SONEL 7, locked baseline candidates re-gated | **1/13 supported; 0 incorrect observed** |
-| Asseco retained verification report | **1/6 supported** |
-| Three fresh live end-to-end runs | **zero supported researched observations** |
+| Frozen overall supported precision | 47/47 |
+| Eligible researched recall | 5/19 |
+| Retained-real researched yield | **0/7** |
+| Locked candidates re-gated in the two-company Asseco + SONEL utility set | **1/13 supported; 0 incorrect observed** |
+| Asseco-only retained verification | **1/6 supported** |
+| Three earlier fresh live end-to-end runs | **zero supported researched observations** |
 
-The historical overall precision includes registry facts; 5/19 is low eligible research coverage. **Neither 47/47 nor historical 5/5 researched support precision is production precision.** In the fixed two-company real-source utility set (Asseco 6 + SONEL 7), locked baseline candidates re-gated by the current verifier yielded 1/13 with 0 incorrect observed; the Asseco report alone yielded 1/6. These are not a single-run 1/13 result or 1/1 production precision. Zero incorrect observed with one support—or zero supports in the fresh live runs—is not precision evidence. Keep the historical, two-company re-gating, Asseco-only, and fresh-live populations separate.
+The 47/47 includes registry facts; 5/19 is limited research coverage. The 1/13, 1/6, 0/7, and earlier live zeros are distinct populations. None establishes strict-contract performance, broad usefulness, or population-level precision. The earlier blocked `66dbbc89` failures and missing original Astra/Opus envelopes remain limitations. Historical counts and documents are preserved, not rewritten as strict-contract outcomes.
 
-The historical 12-case frozen set contains nine controlled and three retained-real replays. Its source snapshots and gold remain historical evidence. A later adversarial review exposed finite counterexamples; corrections are regression evidence, not an untouched holdout. The earlier historical failed pass remains part of the record and is not claimed fixed by the verifier interface. See [evaluation methodology](docs/EVAL_SPEC.md), [historical results](docs/EVAL_RESULTS.md), [adversarial corrections and measurements](docs/ADVERSARIAL_CORRECTIONS.md), and [quality and scoped utility evidence](docs/V0_1_1_QUALITY.md).
+The earlier frozen set contains nine controlled and three retained-real replays. Its gold and source snapshots remain historical evidence. Later corrections are regression evidence, not an untouched holdout. The blocked frozen candidate also has an observed post-amount financial-target false support and three conservative full-suite failures; its exact observed status and separated measurements are in the [quality report](docs/V0_1_1_QUALITY.md#11-frozen-remediation-candidate-blocked). Historical methods/results remain in [evaluation specification](docs/EVAL_SPEC.md), [evaluation results](docs/EVAL_RESULTS.md), and [adversarial correction history](docs/ADVERSARIAL_CORRECTIONS.md).
 
-## 8–10 — Real retained input and limits
+## Offline real-input examples and limitations
 
-The real input command is also offline and writes to a separate output directory:
+The [Asseco verification report](examples/review/asseco-poland-verification.md) and [Sonel partial profile](examples/review/sonel-20261005.md) are historical earlier-contract artifacts, not strict success or fresh strict research. Asseco's earlier report recorded one supported researched observation among six eligible observations; neither artifact is a strict-contract positive.
 
-```sh
-uv run --frozen company-bi verify examples/utility_v011/runs/baseline/asseco-poland.json --output-dir outputs/asseco-verification
-```
-
-[`examples/review/asseco-poland-verification.md`](examples/review/asseco-poland-verification.md) is a **REAL RETAINED VERIFICATION**, not successful BI or fresh research. It reports exactly one researched support out of Asseco's six eligible observations (**1/6**). The fixed real-source utility set covers Asseco (6) and SONEL (7), with 1/13 supported researched observations across the two companies. The input is an existing retained run; no copy, re-research, or network call is part of this review.
-
-The demonstrated capability is deterministic identity anchoring, provenance and evidence rules, replay, failure isolation, and transparent publication decisions. Not demonstrated: production autonomous coverage, population-level precision, universal semantic verification, comprehensive financial extraction, or reliable real-company researched yield. Retained-real historical researched yield remained **0/7**; current utility is weak and experimental.
-
-Substantive limits remain: retrieved **PDF/XML/archive/Office financial parsing is unsupported**; provider and website behavior vary; Scrapling's supported-fact advantage was not demonstrated in a limited paired experiment; URL/DNS checks do **not** eliminate SSRF, with DNS rebinding/TOCTOU residual risk. The historical LPP run failed at its single repair ceiling and its exact cause is unrecoverable. No production-SaaS, population accuracy, or universal extraction claim follows from these demonstrations.
-
-Live research is a separately configured **experimental** route documented in [README](README.md#experimental-live-research-route); it is not part of the reviewer path and is not required to inspect the verifier.
+The documented product boundary is narrow and finite. It does not claim production autonomous coverage, population-level precision, universal semantic verification, comprehensive financial extraction, or reliable real-company researched yield. Retrieved PDF/XML/archive/Office financial parsing remains unsupported. Provider and website behavior vary. URL/DNS checks do not eliminate SSRF; DNS rebinding/TOCTOU remains residual risk. Live research is a separately configured experimental route in the [README](README.md#experimental-live-research-route), not part of this review path.

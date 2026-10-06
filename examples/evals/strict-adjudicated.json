@@ -1,0 +1,67 @@
+{
+  "view": "strict_adjudicated",
+  "version": "0.1.1",
+  "source_population": "final holdout-first-semantic-cli; original inputs and results remain immutable",
+  "cases": [
+    {
+      "case_id": "p06-01-positive",
+      "classification": "UNSAFE_NEGATIVE",
+      "family": "employee_semantics_entity",
+      "shape": "wrong-company-employee-claim",
+      "path": "employees",
+      "source_path": "adjudicated/previous_holdout/p06-01-positive.json",
+      "source_sha256": "c974419a361d9be8378dccd5daa8b90e19203e41dc88f5297c9a4d390f3f5036",
+      "expected": {"outcome": "rejected"},
+      "original_label": "positive",
+      "rationale": "The target identity is Northglass Works sp. z o.o.; the employee assertion subject is Brindle Harbor. A wrong-company positive is unsafe, not an out-of-contract true case. Source: final/holdout-first-semantic-cli/inputs/p06-01-positive.json; historical run record: final/holdout-first-semantic-cli/results.rescored.json."
+    },
+    {
+      "case_id": "p06-02-positive",
+      "classification": "UNSAFE_NEGATIVE",
+      "family": "employee_semantics_entity",
+      "shape": "wrong-company-employee-claim",
+      "path": "employees",
+      "source_path": "adjudicated/previous_holdout/p06-02-positive.json",
+      "source_sha256": "63b3a57b9b1180a9dce55bc5c41fb99933351e733cf2fd70687df2c170211a9",
+      "expected": {"outcome": "rejected"},
+      "original_label": "positive",
+      "rationale": "The target identity is Northglass Works sp. z o.o.; the employee assertion subject is Juniper Vale. A wrong-company positive is unsafe, not an out-of-contract true case. Source: final/holdout-first-semantic-cli/inputs/p06-02-positive.json; historical run record: final/holdout-first-semantic-cli/results.rescored.json."
+    },
+    {
+      "case_id": "p07-01-positive",
+      "classification": "UNSAFE_NEGATIVE",
+      "family": "event_denial_full_context",
+      "shape": "wrong-company-event-claim",
+      "path": "recent_developments.0",
+      "source_path": "adjudicated/previous_holdout/p07-01-positive.json",
+      "source_sha256": "50f160d7ae5f8a647f47ea219f188a7ab3f8f28e0d0623ab1ec611de0b1b2291",
+      "expected": {"outcome": "rejected"},
+      "original_label": "positive",
+      "rationale": "The target identity is Quiet Amber sp. z o.o.; the event assertion subject is Brindle Harbor. A wrong-company positive is unsafe, not an out-of-contract true case. Source: final/holdout-first-semantic-cli/inputs/p07-01-positive.json; historical run record: final/holdout-first-semantic-cli/results.rescored.json."
+    },
+    {
+      "case_id": "p07-02-positive",
+      "classification": "UNSAFE_NEGATIVE",
+      "family": "event_denial_full_context",
+      "shape": "wrong-company-event-claim",
+      "path": "recent_developments.0",
+      "source_path": "adjudicated/previous_holdout/p07-02-positive.json",
+      "source_sha256": "d27452ef10ea155476f0ce05ae31586f07bbadf3ee158d3bc68f11e99f6b5458",
+      "expected": {"outcome": "rejected"},
+      "original_label": "positive",
+      "rationale": "The target identity is Quiet Amber sp. z o.o.; the event assertion subject is Lumen Orchard. A wrong-company positive is unsafe, not an out-of-contract true case. Source: final/holdout-first-semantic-cli/inputs/p07-02-positive.json; historical run record: final/holdout-first-semantic-cli/results.rescored.json."
+    },
+    {
+      "case_id": "p07-03-positive",
+      "classification": "UNSAFE_NEGATIVE",
+      "family": "event_denial_full_context",
+      "shape": "wrong-company-event-claim",
+      "path": "recent_developments.0",
+      "source_path": "adjudicated/previous_holdout/p07-03-positive.json",
+      "source_sha256": "cb46c032090c44ccdd6f5dbdf219108fe17d6aa4f027d55d5e890c51d402cd37",
+      "expected": {"outcome": "rejected"},
+      "original_label": "positive",
+      "rationale": "The target identity is Quiet Amber sp. z o.o.; the event assertion subject is Copper Finch. A wrong-company positive is unsafe, not an out-of-contract true case. Source: final/holdout-first-semantic-cli/inputs/p07-03-positive.json; historical run record: final/holdout-first-semantic-cli/results.rescored.json."
+    }
+  ]
+}

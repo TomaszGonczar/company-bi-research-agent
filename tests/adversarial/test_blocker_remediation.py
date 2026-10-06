@@ -28,11 +28,8 @@ def _base() -> dict[str, Any]:
     registry = next(
         source for source in run["sources"] if source["source"]["source_id"] == "registry"
     )
-    registry["content"] = 'NIP: 1234563218; "Example sp. z o.o."'
-    # Preserve the template's exact name citation alongside explicit registry NIP.
-    run["identity"]["legal_name"]["evidence"][0]["excerpt"] = '"Example sp. z o.o."'
-    run["identity"]["legal_name"]["value"] = "Example sp. z o.o."
-    run["identity"]["nip"] = "1234563218"
+    registry["content"] = '{"result":{"subject":{"name":"Example sp. z o.o.","nip":"1234563218"}}}'
+    run["identity"]["legal_name"]["evidence"][0]["excerpt"] = "Example sp. z o.o."
     unknown = {"state": "unknown", "reason": "Not established in this blocker case"}
     draft = run["draft"]
     for name in ("business_description", "products_services", "industries", "markets", "employees"):
@@ -77,6 +74,7 @@ def _case(
     removed_paths: list[str] | None = None,
     preserve_supported: list[str] | None = None,
     origin: str = "runbook",
+    classification: str | None = None,
 ) -> dict[str, Any]:
     return {
         "id": case_id,
@@ -92,6 +90,8 @@ def _case(
             **({"removed_paths": removed_paths} if removed_paths else {}),
             **({"preserve_supported": preserve_supported} if preserve_supported else {}),
         },
+        "classification": classification
+        or ("UNSAFE_NEGATIVE" if role == "negative" else "OUT_OF_CONTRACT_TRUE"),
         "origin": origin,
     }
 
@@ -124,7 +124,7 @@ def blocker_cases() -> list[dict[str, Any]]:
                     "not prospective, expired, or conditional."
                 ),
                 run,
-                "supported" if role == "positive" else "blocked",
+                "blocked",
                 target_path="products_services",
                 origin=origin,
             )
@@ -232,7 +232,7 @@ def blocker_cases() -> list[dict[str, Any]]:
                     "not a nearby operating-profit mention or punctuation loss."
                 ),
                 run,
-                "supported" if role == "positive" else "blocked",
+                "blocked",
                 target_path="financials[1]",
                 origin=origin,
             )
@@ -380,8 +380,15 @@ def blocker_cases() -> list[dict[str, Any]]:
                     "observation."
                 ),
                 run,
-                "supported" if role == "positive" else "blocked",
+                "supported" if case_id == "c-reported-actual" else "blocked",
                 target_path="financials[0]",
+                classification=(
+                    "SUPPORTED_CONTRACT_POSITIVE"
+                    if case_id == "c-reported-actual"
+                    else "OUT_OF_CONTRACT_TRUE"
+                    if role == "positive"
+                    else "UNSAFE_NEGATIVE"
+                ),
             )
         )
 
@@ -468,20 +475,33 @@ def blocker_cases() -> list[dict[str, Any]]:
         *,
         identity_name: str = "Example sp. z o.o.",
         as_of: str | None = None,
+        classification: str | None = None,
     ) -> None:
         run = _base()
         if identity_name != "Example sp. z o.o.":
             registry = next(
                 source for source in run["sources"] if source["source"]["source_id"] == "registry"
             )
-            registry["content"] = f'NIP: 1234563218; "{identity_name}"'
+            registry["content"] = json.dumps(
+                {
+                    "result": {
+                        "subject": {
+                            "name": identity_name,
+                            "nip": "1234563218",
+                        }
+                    }
+                }
+            )
+            run["identity"]["legal_name"]["evidence"][0]["excerpt"] = identity_name
             run["identity"]["legal_name"]["value"] = identity_name
-            run["identity"]["legal_name"]["evidence"][0]["excerpt"] = f'"{identity_name}"'
         _set_content(run, text)
         run["draft"]["employees"] = {
             **_fact({"kind": "exact", "count": count}, text),
             "as_of": as_of,
         }
+        case_classification = classification or (
+            "SUPPORTED_CONTRACT_POSITIVE" if role == "positive" else "UNSAFE_NEGATIVE"
+        )
         cases.append(
             _case(
                 case_id,
@@ -494,8 +514,13 @@ def blocker_cases() -> list[dict[str, Any]]:
                     "to the exact target legal entity."
                 ),
                 run,
-                "supported" if role == "positive" else "blocked",
+                (
+                    "supported"
+                    if case_classification == "SUPPORTED_CONTRACT_POSITIVE"
+                    else "blocked"
+                ),
                 target_path="employees",
+                classification=case_classification,
             )
         )
 
@@ -506,6 +531,7 @@ def blocker_cases() -> list[dict[str, Any]]:
         "negative",
         "Example sp. z o.o. serves 12,000 people.",
         12000,
+        classification="UNSAFE_NEGATIVE",
     )
     employee_case(
         "d-serves-control",
@@ -514,6 +540,7 @@ def blocker_cases() -> list[dict[str, Any]]:
         "Example sp. z o.o. employs 12,000 people as of 2025-12-31.",
         12000,
         as_of="2025-12-31",
+        classification="OUT_OF_CONTRACT_TRUE",
     )
     employee_case(
         "d-trained-people",
@@ -521,6 +548,7 @@ def blocker_cases() -> list[dict[str, Any]]:
         "negative",
         "Example sp. z o.o. has trained 3,000 people.",
         3000,
+        classification="UNSAFE_NEGATIVE",
     )
     employee_case(
         "d-trained-control",
@@ -529,6 +557,7 @@ def blocker_cases() -> list[dict[str, Any]]:
         "Example sp. z o.o. employs 3,000 people as of 2025-12-31.",
         3000,
         as_of="2025-12-31",
+        classification="OUT_OF_CONTRACT_TRUE",
     )
     employee_case(
         "d-possessive-partner",
@@ -588,6 +617,7 @@ def blocker_cases() -> list[dict[str, Any]]:
         summary: str | None = None,
         occurred_on: str | None = "2026-09-10",
         expected: str = "supported",
+        classification: str | None = None,
     ) -> None:
         run = _base()
         _set_content(run, full)
@@ -606,6 +636,9 @@ def blocker_cases() -> list[dict[str, Any]]:
                 ),
             }
         ]
+        case_classification = classification or (
+            "OUT_OF_CONTRACT_TRUE" if role == "positive" else "UNSAFE_NEGATIVE"
+        )
         cases.append(
             _case(
                 case_id,
@@ -618,10 +651,17 @@ def blocker_cases() -> list[dict[str, Any]]:
                     "must attach to this event, not its neighbor."
                 ),
                 run,
-                expected,
+                (
+                    "supported"
+                    if case_classification == "SUPPORTED_CONTRACT_POSITIVE"
+                    else "blocked"
+                    if case_classification == "OUT_OF_CONTRACT_TRUE"
+                    else expected
+                ),
                 target_path="recent_developments[0]",
                 removed_paths=["value.occurred_on"] if expected == "removed" else None,
                 preserve_supported=["recent_developments[0]"] if expected == "removed" else None,
+                classification=case_classification,
             )
         )
 
@@ -674,6 +714,8 @@ def blocker_cases() -> list[dict[str, Any]]:
         "opened on 2026-08-01."
     )
 
+    # Retain this historical multi-event prose verbatim as true OOC. The whole
+    # unquoted assertion must abstain; neither candidate event may borrow a date.
     event_case(
         "f-wrong-neighbor-date",
         "f-correct-event-date",
@@ -683,27 +725,32 @@ def blocker_cases() -> list[dict[str, Any]]:
         title="robotics laboratory",
         summary="operates a robotics laboratory",
         occurred_on="2026-08-01",
-        expected="removed",
+        expected="blocked",
+        classification="OUT_OF_CONTRACT_TRUE",
     )
     event_case(
         "f-right-event-date",
         "f-correct-event-date",
-        "positive",
+        "negative",
         neighbors,
         neighbors,
         title="robotics laboratory",
         summary="operates a robotics laboratory",
         occurred_on="2026-09-10",
+        expected="blocked",
+        classification="OUT_OF_CONTRACT_TRUE",
     )
-    simple_event = "Example sp. z o.o. opened a robotics laboratory on 2026-09-10."
+    simple_event = 'Example sp. z o.o. opened "robotics laboratory" on 2026-09-10.'
     event_case(
         "f-straightforward-date",
         "f-correct-event-date",
         "positive",
         simple_event,
         simple_event,
-        title="opened a robotics laboratory",
+        title="robotics laboratory",
+        summary=simple_event,
         occurred_on="2026-09-10",
+        classification="SUPPORTED_CONTRACT_POSITIVE",
     )
 
     # G — mutations remain raw until test execution; real registry NIP/name stay exact.
@@ -723,7 +770,7 @@ def blocker_cases() -> list[dict[str, Any]]:
                 copy.deepcopy(template),
                 "identity_consistent",
                 target_path="identity",
-                origin=origin,
+                classification="SUPPORTED_CONTRACT_POSITIVE",
             )
         )
         bad_nip = copy.deepcopy(template)
@@ -742,7 +789,7 @@ def blocker_cases() -> list[dict[str, Any]]:
                 bad_nip,
                 "reject_run",
                 target_path="identity",
-                origin=origin,
+                classification="IDENTITY_INVALID",
             )
         )
         bad_name = copy.deepcopy(template)
@@ -761,7 +808,7 @@ def blocker_cases() -> list[dict[str, Any]]:
                 bad_name,
                 "reject_run",
                 target_path="identity",
-                origin=origin,
+                classification="IDENTITY_INVALID",
             )
         )
 

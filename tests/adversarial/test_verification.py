@@ -30,8 +30,8 @@ def delta(report: Any, path: str) -> Any:
     return next(item for item in report.deltas if item.path == path)
 
 
-def test_supported_current_offering_is_accepted(make_run: Any) -> None:
-    quote = "Cloud services are currently provided by Example sp. z o.o."
+def test_supported_canonical_offering_is_accepted(make_run: Any) -> None:
+    quote = 'Example sp. z o.o. provides "cloud services".'
     run = make_run(
         quote,
         products_services={
@@ -87,7 +87,7 @@ def test_cleared_claim_and_removed_employee_date_are_not_republished(make_run: A
     assert employee.final.context.get("as_of") is None
     assert employee.candidate.context["as_of"] == "2026-12-31"
 
-    dated_quote = "Example sp. z o.o. employs 40 people today."
+    dated_quote = "Example sp. z o.o. employs 40 people as of 2026-10-02."
     dated = make_run(
         dated_quote,
         employees={
@@ -104,6 +104,22 @@ def test_cleared_claim_and_removed_employee_date_are_not_republished(make_run: A
     assert removed_date.final.value == {"kind": "exact", "count": 40}
     assert removed_date.final.context.get("as_of") is None
     assert "context.as_of" in removed_date.changed_paths
+
+    mismatched_count = make_run(
+        dated_quote,
+        employees={
+            "state": "supported",
+            "value": {"kind": "exact", "count": 41},
+            "evidence": [{"source_id": "page", "excerpt": dated_quote}],
+            "as_of": "2026-10-02",
+        },
+    )
+    _, count_report = report_for(mismatched_count)
+    cleared_count = delta(count_report, "employees")
+    assert cleared_count.decision == "downgraded"
+    assert cleared_count.final.state == "uncertain"
+    assert cleared_count.final.value is None
+    assert cleared_count.final.context.get("as_of") is None
 
 
 def test_preexisting_uncertain_and_unknown_remain_unaccepted(make_run: Any) -> None:
@@ -132,16 +148,16 @@ def test_preexisting_uncertain_and_unknown_remain_unaccepted(make_run: Any) -> N
 
 
 def test_final_evidence_is_exact_filtered_subset_even_for_same_source(make_run: Any) -> None:
-    supported = "Example sp. z o.o. provides payroll outsourcing to Polish companies."
-    unrelated = "The company plans to launch cloud accounting software next year."
+    supported = 'Example sp. z o.o. provides "payroll outsourcing".'
+    clipped = "Example sp. z o.o."
     run = make_run(
-        f"{supported} {unrelated}",
+        supported,
         products_services={
             "state": "supported",
             "value": ["payroll outsourcing"],
             "evidence": [
                 {"source_id": "page", "excerpt": supported},
-                {"source_id": "page", "excerpt": unrelated},
+                {"source_id": "page", "excerpt": clipped},
             ],
         },
     )
@@ -151,7 +167,7 @@ def test_final_evidence_is_exact_filtered_subset_even_for_same_source(make_run: 
     assert change.decision == "accepted"
     assert [item.model_dump(mode="json") for item in change.candidate.evidence] == [
         {"source_id": "page", "excerpt": supported},
-        {"source_id": "page", "excerpt": unrelated},
+        {"source_id": "page", "excerpt": clipped},
     ]
     assert [item.model_dump(mode="json") for item in change.final.evidence] == [
         {"source_id": "page", "excerpt": supported}
@@ -195,15 +211,15 @@ def test_positive_ten_million_candidate_against_net_loss_is_not_accepted(make_ru
 
 
 def test_event_occurrence_clearing_preserves_verified_publication_date(make_run: Any) -> None:
-    quote = "In July this year Example sp. z o.o. launched a new distribution centre."
+    quote = 'Example sp. z o.o. launched "a distribution centre" on 2026-09-10.'
     run = make_run(
         quote,
         recent_developments=[
             {
                 "state": "supported",
                 "value": {
-                    "title": "Example launched a new distribution centre",
-                    "summary": "Example launched a new distribution centre",
+                    "title": "a distribution centre",
+                    "summary": quote,
                     "published_on": "2026-08-15",
                     "occurred_on": "2026-07-01",
                 },
@@ -341,11 +357,14 @@ def test_verify_command_does_not_enter_research_service(
     monkeypatch.setattr(cli, "run_batch", forbidden)
     monkeypatch.delenv("TAVILY_API_KEY", raising=False)
     monkeypatch.delenv("OPENAI_API_KEY", raising=False)
-    source = ROOT / "examples/verification/controlled-current-service.json"
+    input_path = ROOT / "examples/strict_contract/supported.json"
     output = tmp_path / "verified"
-    assert cli.main(["verify", str(source), "--output-dir", str(output)]) == 0
+    assert cli.main(["verify", str(input_path), "--output-dir", str(output)]) == 0
     assert (output / "verification.json").exists()
     assert (output / "profile.json").exists()
+    assert json.loads((output / "profile.json").read_text(encoding="utf-8"))["products_services"][
+        "value"
+    ] == ["cloud services"]
 
 
 def test_markdown_does_not_turn_untrusted_reason_into_a_heading(make_run: Any) -> None:

@@ -21,8 +21,7 @@ def response(
     status: int = 200,
     headers: dict[str, str] | None = None,
     content: str | bytes = (
-        "<html><head><title>Example company</title></head><body><article>"
-        "Example sp. z o.o. provides industrial packaging to customers."
+        '<html><body><article>Example sp. z o.o. provides "industrial packaging".'
         "</article></body></html>"
     ),
 ) -> Response:
@@ -46,13 +45,13 @@ def public_dns(monkeypatch: pytest.MonkeyPatch) -> None:
 
 
 def page_store(make_run: Any, url: str) -> tuple[SourceStore, str]:
-    run = make_run("Example sp. z o.o. provides industrial packaging to customers.")
+    run = make_run('Example sp. z o.o. provides "industrial packaging".')
     registry = next(item.source for item in run.sources if item.kind == "registry")
     store = SourceStore(run.identity, [registry])
     hit = store.add_search(
         title="Example company",
         url=HttpUrl(url),
-        content="Example sp. z o.o. provides industrial packaging to customers.",
+        content='Example sp. z o.o. provides "industrial packaging".',
         score=None,
         retrieved_at=datetime(2026, 10, 3, 12, tzinfo=UTC),
     )
@@ -70,7 +69,7 @@ def validated_run(make_run: Any, store: SourceStore, source_id: str) -> CompanyR
         "evidence": [
             {
                 "source_id": source_id,
-                "excerpt": "Example sp. z o.o. provides industrial packaging to customers.",
+                "excerpt": 'Example sp. z o.o. provides "industrial packaging".',
             }
         ],
     }
@@ -246,7 +245,7 @@ async def test_redirect_to_private_target_is_rejected_before_transport_contact(
 def test_unrecorded_same_host_path_change_is_rejected(
     make_run: Any,
 ) -> None:
-    run = make_run("Example sp. z o.o. provides industrial packaging to customers.")
+    run = make_run('Example sp. z o.o. provides "industrial packaging".')
     payload = run.model_dump(mode="python")
     page = next(item for item in payload["sources"] if item["source"]["source_id"] == "page")
     discovery = {
@@ -265,19 +264,7 @@ def test_unrecorded_same_host_path_change_is_rejected(
 def test_same_id_unrelated_host_substitution_cannot_be_published(
     make_run: Any, publish: Any
 ) -> None:
-    run = make_run(
-        "Example sp. z o.o. provides industrial packaging to customers.",
-        business_description={
-            "state": "supported",
-            "value": "Industrial packaging provider",
-            "evidence": [
-                {
-                    "source_id": "page",
-                    "excerpt": "Example sp. z o.o. provides industrial packaging to customers.",
-                }
-            ],
-        },
-    )
+    run = make_run('Example sp. z o.o. provides "industrial packaging".')
     payload = run.model_dump(mode="python")
     original_page = next(
         item for item in payload["sources"] if item["source"]["source_id"] == "page"
@@ -312,7 +299,7 @@ def test_same_id_unrelated_host_substitution_cannot_be_published(
 def test_redirect_lineage_must_match_discovered_and_final_urls(
     make_run: Any, chain: list[str]
 ) -> None:
-    run = make_run("Example sp. z o.o. provides industrial packaging to customers.")
+    run = make_run('Example sp. z o.o. provides "industrial packaging".')
     payload = run.model_dump(mode="python")
     page = next(item for item in payload["sources"] if item["source"]["source_id"] == "page")
     discovered = {
@@ -333,7 +320,7 @@ def test_redirect_lineage_must_match_discovered_and_final_urls(
 def test_non_page_material_cannot_masquerade_as_redirect_provenance(
     make_run: Any, kind: str
 ) -> None:
-    run = make_run("Example sp. z o.o. provides industrial packaging to customers.")
+    run = make_run('Example sp. z o.o. provides "industrial packaging".')
     payload = run.model_dump(mode="python")
     if kind == "registry":
         material = next(item for item in payload["sources"] if item["kind"] == kind)

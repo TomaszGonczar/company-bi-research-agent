@@ -72,26 +72,30 @@ def test_unchanged_asseco_legacy_fixture_publishes_registry_and_independent_rese
 def test_legacy_mismatched_ids_are_quarantined_but_independent_identity_and_page_survive(
     make_run: Any,
 ) -> None:
-    good_text = "Example sp. z o.o. provides industrial packaging to customers."
+    good_text = 'Example sp. z o.o. operates as "industrial packaging supplier".'
+    product_text = 'Example sp. z o.o. offers "industrial packaging".'
     run = make_run(
         good_text,
         business_description={
             "state": "supported",
-            "value": "provides industrial packaging to customers",
+            "value": "industrial packaging supplier",
             "evidence": [_ref("page", good_text)],
         },
     )
     payload = _legacy_pair(run, other_domain=True)
-    independent = deepcopy(next(item for item in payload["sources"] if item["kind"] == "full_page"))
+    page = next(item for item in payload["sources"] if item["kind"] == "full_page")
+    page["content"] = product_text
+    independent = deepcopy(page)
     independent["source"]["source_id"] = "independent"
     independent["source"]["url"] = "https://independent.example/company"
+    independent["content"] = good_text
     payload["sources"].append(independent)
     payload["draft"]["business_description"]["evidence"] = [_ref("independent", good_text)]
-    # Give the affected ID a genuine candidate, but never let it authorize publication.
+    # The quarantined page has a real product assertion, but cannot authorize it.
     payload["draft"]["products_services"] = {
         "state": "supported",
-        "value": ["Industrial packaging"],
-        "evidence": [_ref("page", good_text)],
+        "value": ["industrial packaging"],
+        "evidence": [_ref("page", product_text)],
     }
     validated = CompanyResearchRun.model_validate(payload)
     profile_data, _, _ = _published(validated)
@@ -162,12 +166,12 @@ def test_quarantine_marker_survives_json_round_trip_and_is_denial_only(make_run:
 
 
 def test_current_verified_redirect_lineage_remains_publishable(make_run: Any) -> None:
-    quote = "Example sp. z o.o. provides industrial packaging to customers."
+    quote = 'Example sp. z o.o. operates as "industrial packaging supplier".'
     run = make_run(
         quote,
         business_description={
             "state": "supported",
-            "value": "provides industrial packaging to customers",
+            "value": "industrial packaging supplier",
             "evidence": [_ref("page", quote)],
         },
     )
@@ -241,3 +245,91 @@ def test_source_store_rejects_publication_blocked_material(make_run: Any) -> Non
     )
     with pytest.raises(ValueError, match="publication-blocked"):
         store.store_page(blocked_page)
+
+
+def test_registry_address_in_comment_cannot_support_registered_address(make_run: Any) -> None:
+    run = make_run("Example sp. z o.o. provides industrial packaging.")
+    payload = run.model_dump(mode="python")
+    registry = next(item for item in payload["sources"] if item["kind"] == "registry")
+    registry["content"] = json.dumps(
+        {
+            "result": {
+                "subject": {
+                    "name": "Example sp. z o.o.",
+                    "nip": "1234563218",
+                }
+            },
+            "comment": "Registered address: 10 Main Street",
+        }
+    )
+    payload["identity"]["registered_address"] = {
+        "state": "supported",
+        "value": "10 Main Street",
+        "evidence": [_ref("registry", "10 Main Street")],
+    }
+    with pytest.raises(ValueError):
+        CompanyResearchRun.model_validate(payload)
+
+
+def test_duplicate_mf_identity_declarations_reject_run(make_run: Any) -> None:
+    run = make_run("Example sp. z o.o. provides industrial packaging.")
+    payload = run.model_dump(mode="python")
+    registry = next(item for item in payload["sources"] if item["kind"] == "registry")
+    registry["content"] = (
+        '{"result":{"subject":{"name":"Example sp. z o.o.",'
+        '"name":"Example sp. z o.o.","nip":"1234563218"}}}'
+    )
+    with pytest.raises(ValueError):
+        CompanyResearchRun.model_validate(payload)
+
+
+def test_legacy_registry_snapshot_rejects_evidence_only_address(make_run: Any) -> None:
+    run = make_run("Example sp. z o.o. provides industrial packaging.")
+    payload = run.model_dump(mode="python")
+    registry = next(item for item in payload["sources"] if item["kind"] == "registry")
+    registry["content"] = (
+        "MF VAT register identity material (not a raw registry response):\n"
+        "legal_name: Example sp. z o.o.\n"
+        "legal_name evidence from registry: Example sp. z o.o.\n"
+        "krs: unknown; Not supplied\n"
+        "regon: unknown; Not supplied\n"
+        "registered_city: unknown; Not supplied\n"
+        "registered_address: unknown; Not supplied\n"
+        "registered_address evidence from registry: 10 Main Street\n"
+        "website: unknown; Not supplied\n"
+        "NIP: 1234563218"
+    )
+    payload["identity"]["registered_address"] = {
+        "state": "supported",
+        "value": "10 Main Street",
+        "evidence": [_ref("registry", "10 Main Street")],
+    }
+    with pytest.raises(ValueError):
+        CompanyResearchRun.model_validate(payload)
+
+
+def test_publication_blocked_registry_cannot_establish_identity(make_run: Any) -> None:
+    run = make_run("Example sp. z o.o. provides industrial packaging.")
+    payload = run.model_dump(mode="python")
+    registry = next(item for item in payload["sources"] if item["kind"] == "registry")
+    registry["source"]["publication_blocked_reason"] = "unproven_legacy_url_relationship"
+    with pytest.raises(ValueError):
+        CompanyResearchRun.model_validate(payload)
+
+
+def test_mf_subject_nip_must_match_identity(make_run: Any) -> None:
+    run = make_run("Example sp. z o.o. provides industrial packaging.")
+    payload = run.model_dump(mode="python")
+    registry = next(item for item in payload["sources"] if item["kind"] == "registry")
+    registry["content"] = json.dumps(
+        {
+            "result": {
+                "subject": {
+                    "name": "Example sp. z o.o.",
+                    "nip": "9876543210",
+                }
+            }
+        }
+    )
+    with pytest.raises(ValueError):
+        CompanyResearchRun.model_validate(payload)

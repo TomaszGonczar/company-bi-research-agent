@@ -1,6 +1,6 @@
-# Financial data decision — Company BI v0.1
+# Financial data decision — Company BI v0.1 (historical)
 
-[OG-160](https://linear.app/tpg96/issue/OG-160) · **Decision frozen: official issuer HTML/text (linked CSV when present) is the primary route; UNKNOWN is the fallback.** No universal financial-document parser or financial-data provider integration is required to proceed.
+**Contract-version note:** this spike and v0.1 decision preserve earlier financial-source exploration and broad best-effort product design; they are not strict-contract positives or current financial publication rules. The strict contract permits only its enumerated actual standalone legal-entity financial shapes, explicit currency/scale/amount/sign and complete interval; it excludes group scope, tables/column assembly, and other unlisted formats. See [STRICT_PUBLICATION_CONTRACT.md](STRICT_PUBLICATION_CONTRACT.md) and [HOLDOUT_ADJUDICATION.md](HOLDOUT_ADJUDICATION.md). No strict evaluation result is asserted by this historical document.
 
 ## Time-box and scope
 
@@ -53,7 +53,7 @@ These outputs prove readable public routes exist. They are **spike observations/
 - LPP's [2025 consolidated annual-report page](https://www.lpp.com/en/reports/consolidated-annual-report-of-lpp-sa-group-for-2025/) exposes a downloadable **PDF and ZIP**. The [report index](https://www.lpp.com/en/investor-relations/reports/financial-reports/) also exposes interim PDFs.
 - Finding a link is not retrieving its contents and cannot support a financial amount. Easy discovery does not justify universal PDF/XML/XBRL/ESEF parsing. No such code or dependency was added.
 
-## Frozen v0.1 implementation contract
+## Earlier v0.1 implementation proposal
 
 ### One primary route
 

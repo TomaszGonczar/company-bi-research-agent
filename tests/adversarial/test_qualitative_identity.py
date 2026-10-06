@@ -6,6 +6,8 @@ from typing import Any
 
 import pytest
 
+from company_bi.models import CompanyResearchRun
+
 
 def _candidate(value: str | list[str], excerpt: str) -> dict[str, Any]:
     return {
@@ -16,254 +18,176 @@ def _candidate(value: str | list[str], excerpt: str) -> dict[str, Any]:
 
 
 @pytest.mark.parametrize(
-    ("identity", "quote", "field", "value"),
+    ("quote", "field", "value"),
     [
         (
-            "SONEL SPÓŁKA AKCYJNA",
-            "Sonel S.A. is a leader in the production of measuring instruments "
-            "and accessories for the power industry, electrical engineering, "
-            "industry, and telecommunications.",
+            "Example sp. z o.o. is a leader in the production of measuring instruments "
+            "and accessories for the power industry, electrical engineering, industry, "
+            "and telecommunications.",
             "business_description",
             "production of measuring instruments and accessories",
         ),
         (
-            '"ASSECO POLAND" SPÓŁKA AKCYJNA',
-            "The activities of the Asseco Poland S.A focus on "
-            "providing a wide range of proprietary IT solutions and services.",
+            "Example sp. z o.o. focuses on providing a wide range of proprietary IT "
+            "solutions and services.",
             "business_description",
-            "The activities of the Asseco Poland S.A focus on "
-            "providing a wide range of proprietary IT solutions and services.",
+            "proprietary IT solutions and services",
         ),
         (
-            "SONEL SPÓŁKA AKCYJNA",
-            "Sonel S.A. is a leader in the production of measuring instruments "
-            "and accessories for the power industry, electrical engineering, "
-            "industry, and telecommunications. The company offers a wide range "
-            "of products, including meters, analyzers, and thermal imaging cameras.",
+            "Example sp. z o.o. offers a wide range of products, including meters, "
+            "analyzers, and thermal imaging cameras.",
             "products_services",
             ["meters", "analyzers", "thermal imaging cameras"],
         ),
         (
-            "SONEL SPÓŁKA AKCYJNA",
-            "Sonel S.A. is a leader in the production of measuring instruments "
-            "and accessories for the power industry, electrical engineering, "
+            "Example sp. z o.o. serves power industry, electrical engineering, "
             "industry, and telecommunications.",
             "industries",
-            [
-                "power industry",
-                "electrical engineering",
-                "industry",
-                "telecommunications",
-            ],
+            ["power industry", "electrical engineering", "industry", "telecommunications"],
         ),
         (
-            "Example spółka komandytowa",
-            "Example sp.k. provides meters.",
+            "Example sp. z o.o. provides meters.",
             "products_services",
             ["meters"],
         ),
     ],
 )
-def test_legal_form_equivalent_bounded_current_assertions_publish(
-    make_run: Any,
-    publish: Any,
-    identity: str,
-    quote: str,
-    field: str,
-    value: Any,
+def test_former_qualitative_positives_are_out_of_contract_true(
+    make_run: Any, publish: Any, quote: str, field: str, value: Any
 ) -> None:
-    fact = publish(
-        make_run(
-            quote,
-            identity_name=identity,
-            **{field: _candidate(value, quote)},
-        )
-    )[field]
-    assert fact["state"] == "supported"
-    assert fact["value"] == value
-
-
-def test_production_wording_does_not_publish_leadership_claim(make_run: Any, publish: Any) -> None:
-    quote = (
-        "Sonel S.A. is a leader in the production of measuring instruments "
-        "and accessories for the power industry, electrical engineering, "
-        "industry, and telecommunications."
-    )
-    production = publish(
-        make_run(
-            quote,
-            identity_name="SONEL SPÓŁKA AKCYJNA",
-            business_description=_candidate(
-                "production of measuring instruments and accessories", quote
-            ),
-        )
-    )["business_description"]
-    leadership = publish(
-        make_run(
-            quote,
-            identity_name="SONEL SPÓŁKA AKCYJNA",
-            business_description=_candidate(
-                "leader in the production of measuring instruments and accessories",
-                quote,
-            ),
-        )
-    )["business_description"]
-    assert production["state"] == "supported"
-    assert production["value"] == ("production of measuring instruments and accessories")
-    assert leadership["state"] == "uncertain"
+    """OUT_OF_CONTRACT_TRUE: retain true research claims, but abstain outside the grammar."""
+    fact = publish(make_run(quote, **{field: _candidate(value, quote)}))[field]
+    assert fact["state"] == "uncertain"
+    assert fact["value"] is None
 
 
 @pytest.mark.parametrize(
-    ("identity", "quote", "phrase"),
+    ("quote", "phrase"),
     [
         (
-            "SONEL SPÓŁKA AKCYJNA",
-            "Sonel sp. z o.o. manufactures electrical safety meters.",
+            "Example sp. z o.o. does not provide electrical safety meters.",
             "electrical safety meters",
         ),
         (
-            "Example spółka komandytowa",
-            "Example sp. k.a. provides meters.",
-            "meters",
-        ),
-        (
-            "SONEL SPÓŁKA AKCYJNA",
-            "Sonex S.A. manufactures electrical safety meters.",
+            "Acme Ltd manufactures electrical safety meters.",
             "electrical safety meters",
         ),
         (
-            "SONEL SPÓŁKA AKCYJNA",
-            "Sonel S.A. NIP 1111111111 manufactures electrical safety meters.",
-            "electrical safety meters",
-        ),
-        (
-            "SONEL SPÓŁKA AKCYJNA",
-            "The competitor Sonel S.A. manufactures electrical safety meters.",
-            "electrical safety meters",
-        ),
-        (
-            "SONEL SPÓŁKA AKCYJNA",
-            "The Sonel Group manufactures electrical safety meters.",
-            "electrical safety meters",
-        ),
-        (
-            "SONEL SPÓŁKA AKCYJNA",
-            "Sonel S.A. has never offered electrical safety meters.",
-            "electrical safety meters",
-        ),
-        (
-            "SONEL SPÓŁKA AKCYJNA",
-            "Sonel S.A. no longer manufactures electrical safety meters.",
-            "electrical safety meters",
-        ),
-        (
-            "SONEL SPÓŁKA AKCYJNA",
-            "Sonel S.A. plans to manufacture electrical safety meters.",
-            "electrical safety meters",
-        ),
-        (
-            "SONEL SPÓŁKA AKCYJNA",
-            "Sonel S.A. formerly manufactured electrical safety meters.",
-            "electrical safety meters",
-        ),
-        (
-            "SONEL SPÓŁKA AKCYJNA",
-            "Sonel S.A.'s strategy is to provide electrical safety meters.",
-            "electrical safety meters",
-        ),
-        (
-            "SONEL SPÓŁKA AKCYJNA",
-            "Sonel S.A. welcomes visitors. Acme Ltd manufactures electrical safety meters.",
-            "electrical safety meters",
+            "Example sp. z o.o. manufactures electrical safety meters.",
+            "gas detectors",
         ),
     ],
 )
-def test_ambiguous_or_noncurrent_company_claims_do_not_publish(
-    make_run: Any, publish: Any, identity: str, quote: str, phrase: str
+def test_wrong_entity_and_mismatched_label_remain_unsafe(
+    make_run: Any, publish: Any, quote: str, phrase: str
 ) -> None:
-    fact = publish(
-        make_run(
-            quote,
-            identity_name=identity,
-            products_services=_candidate([phrase], quote),
-        )
-    )["products_services"]
+    fact = publish(make_run(quote, products_services=_candidate([phrase], quote)))[
+        "products_services"
+    ]
     assert fact["state"] == "uncertain"
+    assert fact["value"] is None
+
+
+def test_extra_sentence_is_out_of_contract_true(make_run: Any, publish: Any) -> None:
+    quote = "Example sp. z o.o. offers meters. Example sp. z o.o. provides analyzers."
+    fact = publish(make_run(quote, products_services=_candidate(["meters"], quote)))[
+        "products_services"
+    ]
+    assert fact["state"] == "uncertain"
+    assert fact["value"] is None
 
 
 def test_footer_identity_does_not_attach_first_person_testimonial(
     make_run: Any, publish: Any
 ) -> None:
     quote = (
-        "SONEL S.A. NIP 1234563218. Customer testimonial: We manufacture electrical safety meters."
+        "Example sp. z o.o. NIP 1234563218. Customer testimonial: "
+        "We manufacture electrical safety meters."
     )
     fact = publish(
         make_run(
             quote,
-            identity_name="SONEL SPÓŁKA AKCYJNA",
             products_services=_candidate(["electrical safety meters"], quote),
         )
     )["products_services"]
     assert fact["state"] == "uncertain"
+    assert fact["value"] is None
 
 
-def test_repeated_quote_uses_matching_positive_owner_context(make_run: Any, publish: Any) -> None:
+def test_positive_owner_context_does_not_override_extra_denial(make_run: Any, publish: Any) -> None:
+    """UNSAFE_NEGATIVE: an explicit denial in the full source blocks support."""
     quote = "Example sp. z o.o. does not provide meters. Example sp. z o.o. provides meters."
-    fact = publish(
-        make_run(
-            quote,
-            products_services=_candidate(["meters"], "meters"),
-        )
-    )["products_services"]
-    assert fact["state"] == "supported"
+    fact = publish(make_run(quote, products_services=_candidate(["meters"], quote)))[
+        "products_services"
+    ]
+    assert fact["state"] == "uncertain"
 
 
-def test_repeated_quote_cannot_combine_entity_and_claim_from_different_contexts(
+def test_candidate_cannot_combine_entity_and_claim_from_different_contexts(
     make_run: Any, publish: Any
 ) -> None:
     quote = (
         "Example sp. z o.o. does not provide meters. "
         "Acme Ltd sells sensors. The company provides meters."
     )
-    fact = publish(
-        make_run(
-            quote,
-            products_services=_candidate(["meters"], "meters"),
-        )
-    )["products_services"]
+    fact = publish(make_run(quote, products_services=_candidate(["meters"], quote)))[
+        "products_services"
+    ]
     assert fact["state"] == "uncertain"
 
 
-def test_each_catalog_value_requires_its_own_exact_quote(make_run: Any, publish: Any) -> None:
-    quote = "Sonel S.A. offers meters. The company plans to offer analyzers."
+def test_every_catalog_item_requires_its_own_complete_quoted_assertion(
+    make_run: Any, publish: Any
+) -> None:
+    first = 'Example sp. z o.o. offers "meters".'
+    second = 'Example sp. z o.o. plans to offer "analyzers".'
+    quote = f"{first} {second}"
     fact = publish(
         make_run(
             quote,
-            identity_name="SONEL SPÓŁKA AKCYJNA",
-            products_services=_candidate(
-                ["meters", "analyzers"],
-                "Sonel S.A. offers meters.",
-            ),
-        )
-    )["products_services"]
-    assert fact["state"] == "uncertain"
-
-
-def test_atomic_catalog_values_accept_distinct_exact_citations(make_run: Any, publish: Any) -> None:
-    first = "Example sp. z o.o. offers meters."
-    second = "The company provides analyzers."
-    fact = publish(
-        make_run(
-            f"{first} {second}",
             products_services={
                 "state": "supported",
                 "value": ["meters", "analyzers"],
-                "evidence": [
-                    {"source_id": "page", "excerpt": first},
-                    {"source_id": "page", "excerpt": second},
-                ],
+                "evidence": [{"source_id": "page", "excerpt": quote}],
             },
         )
     )["products_services"]
+    assert fact["state"] == "uncertain"
+    assert fact["value"] is None
+
+
+def test_catalog_values_accept_distinct_exact_citations(make_run: Any, publish: Any) -> None:
+    first = 'Example sp. z o.o. offers "meters".'
+    second = 'Example sp. z o.o. provides "analyzers".'
+    run = make_run(first)
+    page = run.sources[1].model_copy(update={"content": second})
+    page = page.model_copy(
+        update={"source": page.source.model_copy(update={"source_id": "page-2"})}
+    )
+    payload = run.model_dump(mode="python")
+    payload["sources"].append(page.model_dump(mode="python"))
+    payload["draft"]["products_services"] = {
+        "state": "supported",
+        "value": ["meters", "analyzers"],
+        "evidence": [
+            {"source_id": "page", "excerpt": first},
+            {"source_id": "page-2", "excerpt": second},
+        ],
+    }
+    run = CompanyResearchRun.model_validate(payload)
+    fact = publish(run)["products_services"]
     assert fact["state"] == "supported"
     assert fact["value"] == ["meters", "analyzers"]
+    assert {ref["source_id"] for ref in fact["evidence"]} == {"page", "page-2"}
+
+
+def test_quoted_business_label_matches_complete_production(make_run: Any, publish: Any) -> None:
+    quote = 'Example sp. z o.o. operates as "a manufacturer of instruments".'
+    fact = publish(
+        make_run(
+            quote,
+            business_description=_candidate("a manufacturer of instruments", quote),
+        )
+    )["business_description"]
+    assert fact["state"] == "supported"
+    assert fact["value"] == "a manufacturer of instruments"

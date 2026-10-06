@@ -28,6 +28,7 @@ class EvalInput(BaseModel):
     model_config = ConfigDict(extra="forbid")
     nip: Any
     run_file: str | None = None
+    run_data: dict[str, Any] | None = None
     registry_file: str | None = None
 
 
@@ -61,6 +62,303 @@ class EvalOutput(BaseModel):
     diagnostics: dict[str, Any] | None = None
 
 
+STRICT_CLASSIFICATIONS = (
+    "SUPPORTED_CONTRACT_POSITIVE",
+    "OUT_OF_CONTRACT_TRUE",
+    "UNSAFE_NEGATIVE",
+    "IDENTITY_INVALID",
+    "PROVENANCE_INVALID",
+)
+
+
+def evaluate_strict_case(case: dict[str, Any], output: EvalOutput) -> dict[str, Any]:
+    """Score one explicitly adjudicated contract case, separately from historical gold."""
+    classification = case["classification"]
+    if classification not in STRICT_CLASSIFICATIONS:
+        raise ValueError(f"unknown strict classification: {classification!r}")
+    expected = case["expected"]
+    facts = _facts(output)
+    fact = facts.get(case["path"])
+    state = "missing" if fact is None else fact.get("state", "missing")
+    supported = state == "supported"
+    expected_outcome = expected["outcome"]
+    published = output.outcome == "published"
+    boundary_only = classification in ("IDENTITY_INVALID", "PROVENANCE_INVALID")
+    result = {
+        "case_id": case["case_id"],
+        "classification": classification,
+        "outcome": output.outcome,
+        "path": case["path"],
+        "state": state,
+        "value": fact.get("value") if fact else None,
+        "assertion_domain": "identity" if case["path"].startswith("identity.") else "research",
+        "expected": expected,
+        "semantic_execution": (
+            "not_applicable" if boundary_only else "executed" if published else "unexercised"
+        ),
+        "raw_output": output.model_dump(mode="json"),
+        **{
+            key: case[key]
+            for key in (
+                "family",
+                "shape",
+                "original_gold_claim",
+                "original_assertion",
+                "source_path",
+                "source_sha256",
+                "source_provenance",
+            )
+            if key in case
+        },
+    }
+    result["eligible"] = classification == "SUPPORTED_CONTRACT_POSITIVE"
+    allowed_states = expected.get("allowed_states")
+    allowed_state_ok = allowed_states is None or state in allowed_states
+    if "state" in expected:
+        allowed_state_ok = allowed_state_ok and state == expected["state"]
+    required_ok = _matches_required(fact, expected.get("required_fields", {}))
+    if classification == "SUPPORTED_CONTRACT_POSITIVE":
+        result["correct"] = bool(
+            published
+            and expected_outcome == "published"
+            and supported
+            and _matches_required(fact, expected.get("supported_fields", {}))
+            and required_ok
+            and allowed_state_ok
+        )
+    elif classification in ("OUT_OF_CONTRACT_TRUE", "UNSAFE_NEGATIVE"):
+        if not published:
+            result["correct"] = None
+        elif classification == "UNSAFE_NEGATIVE" and expected.get("state") == "supported":
+            result["correct"] = bool(
+                supported
+                and expected.get("supported_fields")
+                and expected.get("required_fields")
+                and _matches_required(fact, expected["supported_fields"])
+                and required_ok
+            )
+        else:
+            result["correct"] = bool(not supported and required_ok and allowed_state_ok)
+    elif classification == "PROVENANCE_INVALID":
+        if expected_outcome in ("rejected", "invalid_input", "unresolved"):
+            result["correct"] = output.outcome == expected_outcome
+        elif not published:
+            result["correct"] = None
+        elif "state" in expected:
+            result["correct"] = bool(state == expected["state"] and not supported and required_ok)
+        else:
+            result["correct"] = bool(not supported and required_ok and allowed_state_ok)
+    else:  # IDENTITY_INVALID
+        result["correct"] = (
+            output.outcome == expected_outcome
+            if expected_outcome in ("rejected", "invalid_input", "unresolved")
+            else output.outcome != "published"
+        )
+    result["assessment"] = (
+        "unassessed" if result["correct"] is None else "correct" if result["correct"] else "failed"
+    )
+    return result
+
+
+def _raw_value_at(root: Any, dotted_path: str) -> Any:
+    value = root
+    for part in dotted_path.split("."):
+        if isinstance(value, list):
+            if not part.isdecimal():
+                return None
+            index = int(part)
+            if index >= len(value):
+                return None
+            value = value[index]
+        elif isinstance(value, dict):
+            if part not in value:
+                return None
+            value = value[part]
+        else:
+            return None
+    return value
+
+
+def _historical_gold_cases(
+    eval_root: Path,
+    dataset_path: str,
+    adjudications: dict[str, Any],
+) -> list[dict[str, Any]]:
+    dataset = json.loads(_case_path(eval_root, dataset_path).read_text(encoding="utf-8"))
+    historical_case_names = {item["name"] for item in dataset["cases"]}
+    if historical_case_names != set(adjudications):
+        raise ValueError(
+            "historical adjudication case coverage mismatch; "
+            f"missing={sorted(historical_case_names - set(adjudications))}, "
+            f"extra={sorted(set(adjudications) - historical_case_names)}"
+        )
+    cases = []
+    for historical_case in dataset["cases"]:
+        case_id = historical_case["name"]
+        grouped = adjudications.get(case_id)
+        if grouped is None:
+            raise ValueError(f"missing strict adjudications for historical case {case_id}")
+        path_rules = {}
+        for classification, rule in grouped.items():
+            if classification not in STRICT_CLASSIFICATIONS:
+                raise ValueError(f"{case_id}: invalid classification {classification!r}")
+            for claim_path in rule["paths"]:
+                if claim_path in path_rules:
+                    raise ValueError(f"{case_id}: duplicate adjudication for {claim_path}")
+                path_rules[claim_path] = (classification, rule)
+        claims = historical_case["metadata"]["claims"]
+        gold_paths = {claim["path"] for claim in claims}
+        if gold_paths != set(path_rules):
+            missing = sorted(gold_paths - set(path_rules))
+            extra = sorted(set(path_rules) - gold_paths)
+            raise ValueError(
+                f"{case_id}: gold adjudication coverage mismatch; missing={missing}, extra={extra}"
+            )
+        for claim in claims:
+            classification, rule = path_rules[claim["path"]]
+            expected: dict[str, Any] = {
+                "outcome": rule.get("expected_outcome", "published"),
+                "required_fields": claim.get("required_fields", {}),
+            }
+            if classification == "SUPPORTED_CONTRACT_POSITIVE":
+                expected["supported_fields"] = claim.get("supported_fields") or {}
+            elif classification in (
+                "OUT_OF_CONTRACT_TRUE",
+                "UNSAFE_NEGATIVE",
+                "PROVENANCE_INVALID",
+            ):
+                expected["allowed_states"] = ["uncertain", "unknown", "missing"]
+            cases.append(
+                {
+                    "case_id": f"historical:{case_id}:{claim['path']}",
+                    "inputs": historical_case["inputs"],
+                    "classification": classification,
+                    "family": historical_case["metadata"]["categories"],
+                    "shape": claim["path"],
+                    "path": claim["path"],
+                    "expected": expected,
+                    "rationale": rule["rationale"],
+                    "original_gold_claim": claim,
+                    "source_provenance": {
+                        "historical_case": case_id,
+                        "evidence": claim.get("evidence", []),
+                        "gold_note": claim.get("note"),
+                    },
+                }
+            )
+    return cases
+
+
+def run_strict_view(path: Path) -> dict[str, Any]:
+    """Replay a separate adjudicated view; its raw cases never alter historical gold."""
+    global EVAL_ROOT
+    EVAL_ROOT = path.resolve().parent
+    document = json.loads(path.read_text(encoding="utf-8"))
+    if "gold_claim_adjudications" in document:
+        cases = _historical_gold_cases(
+            EVAL_ROOT,
+            document["source_dataset"],
+            document["gold_claim_adjudications"],
+        )
+    else:
+        cases = document["cases"]
+    results = []
+    for population_case in cases:
+        assertions = population_case.get("assertions", [population_case])
+        for assertion in assertions:
+            case = {**population_case, **assertion}
+            source_raw = case.get("run")
+            source_reference = None
+            if source_raw is not None:
+                case_inputs = {"nip": source_raw["identity"]["nip"], "run_data": source_raw}
+            elif case.get("source_path"):
+                source_reference = _case_path(EVAL_ROOT, case["source_path"])
+                source_raw = json.loads(source_reference.read_text(encoding="utf-8"))
+                case_inputs = {"nip": source_raw["identity"]["nip"], "run_data": source_raw}
+            else:
+                case_inputs = case["inputs"]
+                if case_inputs.get("run_file"):
+                    source_reference = _case_path(EVAL_ROOT, case_inputs["run_file"])
+                    source_raw = json.loads(source_reference.read_text(encoding="utf-8"))
+                elif case_inputs.get("registry_file"):
+                    source_reference = _case_path(EVAL_ROOT, case_inputs["registry_file"])
+            if source_raw is not None:
+                root = (
+                    source_raw.get("identity", {})
+                    if case["path"].startswith("identity.")
+                    else source_raw.get("draft", {})
+                )
+                raw_path = (
+                    case["path"].removeprefix("identity.")
+                    if case["path"].startswith("identity.")
+                    else case["path"]
+                )
+                original_assertion = _raw_value_at(root, raw_path)
+                if isinstance(original_assertion, dict) and original_assertion.get("state") in (
+                    "unknown",
+                    "missing",
+                ):
+                    original_assertion = None
+                case["original_assertion"] = original_assertion
+            if source_reference is not None:
+                provenance = case.setdefault("source_provenance", {})
+                provenance.update(
+                    {
+                        "input": str(source_reference.relative_to(EVAL_ROOT)),
+                        "sha256": hashlib.sha256(source_reference.read_bytes()).hexdigest(),
+                    }
+                )
+            inputs = EvalInput.model_validate(case_inputs)
+            results.append(evaluate_strict_case(case, _predict(inputs)))
+    counts: dict[str, int] = defaultdict(int)
+    for result in results:
+        classification = result["classification"]
+        domain = result["assertion_domain"]
+        counts[f"classification_{classification}"] += 1
+        counts[f"{domain}_assertions"] += 1
+        counts[f"{domain}_assessment_{result['assessment']}"] += 1
+        counts[f"assessment_{result['assessment']}"] += 1
+        if result["assessment"] == "correct":
+            counts[f"correct_{classification}"] += 1
+        elif result["assessment"] == "failed":
+            counts[f"failed_{classification}"] += 1
+        else:
+            counts[f"unassessed_{classification}"] += 1
+        if result["eligible"]:
+            counts["eligible_positive"] += 1
+            counts["eligible_positive_correct"] += int(result["correct"] is True)
+            counts[f"eligible_{domain}_positive"] += 1
+            counts[f"eligible_{domain}_positive_correct"] += int(result["correct"] is True)
+        if classification == "UNSAFE_NEGATIVE" and result["state"] == "supported":
+            counts["unsafe_supports"] += 1
+        counts[f"semantic_execution_{result['semantic_execution']}"] += 1
+        if classification == "PROVENANCE_INVALID":
+            if result["outcome"] == "rejected":
+                counts["provenance_rejected"] += 1
+            elif result["outcome"] == "published" and result["state"] != "supported":
+                counts["provenance_fact_withheld"] += 1
+        if result["outcome"] == "input_error":
+            counts["wrapper_input_errors"] += 1
+    return {
+        "view": "strict_adjudicated",
+        "source": str(path),
+        "historical_scoring": "separate; not included",
+        "cases": results,
+        "counts": dict(counts),
+        "eligible_positive_recall": _ratio(
+            counts.get("eligible_positive_correct", 0), counts.get("eligible_positive", 0)
+        ),
+        "eligible_identity_positive_recall": _ratio(
+            counts.get("eligible_identity_positive_correct", 0),
+            counts.get("eligible_identity_positive", 0),
+        ),
+        "eligible_research_positive_recall": _ratio(
+            counts.get("eligible_research_positive_correct", 0),
+            counts.get("eligible_research_positive", 0),
+        ),
+    }
+
+
 def _case_path(root: Path, relative: str) -> Path:
     root = root.resolve()
     path = (root / relative).resolve()
@@ -75,9 +373,14 @@ def _predict(inputs: EvalInput) -> EvalOutput:
     except (InvalidNIP, TypeError, ValueError) as exc:
         return EvalOutput(outcome="invalid_input", error=f"INVALID_NIP: {exc}")
 
-    if inputs.run_file:
+    if inputs.run_file or inputs.run_data is not None:
         try:
-            raw = json.loads(_case_path(EVAL_ROOT, inputs.run_file).read_text(encoding="utf-8"))
+            if inputs.run_file:
+                raw = json.loads(_case_path(EVAL_ROOT, inputs.run_file).read_text(encoding="utf-8"))
+            elif inputs.run_data is not None:
+                raw = inputs.run_data
+            else:
+                return EvalOutput(outcome="input_error", error="RUN_INPUT_ERROR: missing run data")
         except (OSError, ValueError) as exc:
             return EvalOutput(outcome="input_error", error=f"RUN_INPUT_ERROR: {exc}")
         trusted_identity: CompanyIdentity | None = None
@@ -535,6 +838,7 @@ def run_dataset(path: Path) -> tuple[Any, dict[str, Any]]:
         },
     }
     return report, {
+        "view": "historical_earlier_contract",
         "cases": cases + failed_cases,
         "failed_cases": failed_cases,
         "report_evaluator_failures": report_evaluator_failures,
@@ -549,6 +853,7 @@ def write_reports(dataset_path: Path, output_dir: Path) -> bool:
     package = Path(__file__).parent
     source_hashes = {}
     for filename in (
+        "assertions.py",
         "evidence.py",
         "models.py",
         "nip.py",
@@ -582,7 +887,7 @@ def write_reports(dataset_path: Path, output_dir: Path) -> bool:
         json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
     )
     lines = [
-        f"# Evaluation baseline {BASELINE_ID}",
+        f"# Historical earlier-contract evaluation baseline {BASELINE_ID}",
         "",
         f"Dataset SHA-256: `{hashes[str(dataset_path)]}`",
         "",

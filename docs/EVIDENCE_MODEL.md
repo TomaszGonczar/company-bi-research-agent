@@ -1,6 +1,8 @@
 # Canonical data and evidence contract
 
-[OG-150](https://linear.app/tpg96/issue/OG-150) established the canonical models in [`src/company_bi/models.py`](../src/company_bi/models.py). The implemented publication gate is [`src/company_bi/evidence.py`](../src/company_bi/evidence.py); the issue sections below record the successive contract extensions.
+[OG-150](https://linear.app/tpg96/issue/OG-150) established the canonical models in [`src/company_bi/models.py`](../src/company_bi/models.py). The gate in [`src/company_bi/evidence.py`](../src/company_bi/evidence.py) and issue history below describe the earlier implementation. The current normative semantic rules are in [STRICT_PUBLICATION_CONTRACT.md](STRICT_PUBLICATION_CONTRACT.md), with case classification in [HOLDOUT_ADJUDICATION.md](HOLDOUT_ADJUDICATION.md).
+
+The OG-150 through OG-153 implementation narrative and adversarial correction history below document the earlier contract. They are preserved historical context, not the current semantic specification; historical examples/results do not establish strict-contract execution.
 
 ## Models
 
@@ -89,6 +91,9 @@ Host validation rejects invented source IDs and identity fields; the run model a
 
 ## OG-153: publication and recovery contract extensions
 
+This section records the earlier OG-153 behavior. For the current accepted grammar
+and date/citation rules, the strict contract below supersedes its semantic heuristics.
+
 The deterministic gate consumes the trusted `CompanyResearchRun`, not an LLM-supplied source list, and produces `CompanyProfile`. Final `ProfileSource` records preserve the strongest retained provenance kind and retriever-owned metadata; full bodies remain in research artifacts. Registry material establishes identity only. Discovery-only material may explain uncertain candidates but never authorizes researched `supported` facts.
 
 Excerpt matching uses Unicode NFC canonical normalization and whitespace collapse (`" ".join(text.split())`) identically for excerpt and retained content. Matching remains case-sensitive and contiguous: no punctuation deletion, fuzzy similarity, paraphrase or silent ellipsis repair. Quote occurrence is necessary, not sufficient; conservative deterministic entity, claim, quantity, metric, unit, period, scope and date checks must additionally support the observation. Unverifiable interpretations downgrade rather than claiming semantic proof.
@@ -101,9 +106,23 @@ Final paths remain `outputs/<nip>.json`, `outputs/<nip>.md` and `outputs/batch_s
 
 ## Adversarial correction contract
 
-These corrections do not change the three evidence states, financial required fields, canonical version `0.1`, research instructions, dependencies or usage budgets. Measurements and compatibility losses are recorded separately in [ADVERSARIAL_CORRECTIONS.md](ADVERSARIAL_CORRECTIONS.md).
+**Earlier-contract history:** the issue-specific rules below record the earlier heuristic publication design and its observed corrections. They are retained for provenance, not a description of the strict contract's accepted language. The current normative grammar, full-unit scope, and evaluation taxonomy are in [STRICT_PUBLICATION_CONTRACT.md](STRICT_PUBLICATION_CONTRACT.md) and [HOLDOUT_ADJUDICATION.md](HOLDOUT_ADJUDICATION.md). Historical measurements remain earlier-contract evidence.
 
-### Assertion qualification
+### Strict contract and semantic scope
+
+The strict contract replaces the earlier heuristic assertion rules with exact finite productions. Its unit of semantic analysis is the entire retained `full_page.content`, NFC-normalized and stripped only at the outer edges, no more than 4096 Unicode code points. The whole unit must match one production, including the final full stop. No sentence/window extraction, favorable-clause selection, header or neighboring context, tables, combined assertions, ignored trailing content, or retrieval-time clipping can manufacture a match.
+
+Entity matching is literal against the resolved legal name after NFC and whitespace-run normalization; case, punctuation, legal form, spelling, and order are not relaxed. Labels must be source-quoted JSON strings decoded as labels; values are opaque, exact, and cannot be inferred from unquoted text, synonyms, translations, substrings, or delimiters. The contract's English/Polish qualitative productions, optional modifiers, and exact predicates are enumerated in the normative document; unlisted variants are not implicitly accepted.
+
+The recognized qualitative shapes are only the listed products/services predicates (`offers`, `provides`, `sells`, `manufactures`, `supplies`; Polish `oferuje`, `świadczy`, `sprzedaje`, `produkuje`, `dostarcza`), optional `currently`/`obecnie`, English/Polish “operates as,” and exact industry/market bridges. They require the literal resolved entity, fixed case-sensitive grammar, one opaque quoted label, and final period. No other modifier, predicate, prefix, tail, alias, translation, or inferred category is admitted. Employees require the exact English `employs COUNT people` or Polish `zatrudnia COUNT pracowników` shape, optionally followed by an explicit valid `as of`/`na dzień` Gregorian date; count is ASCII digits, no grouping/range/approximation, and cannot be later than run generation. Financials have only `reported`/`recorded` × `revenue`/`net profit`/`net loss`/`net result`; currency is exactly PLN/EUR/USD, scale exactly units/thousand/million/billion, amount is a bounded ASCII decimal with the specified sign rules, and both complete ISO interval dates are required. Actual standalone legal-entity scope is mandatory; no group scope, conversion, rounding, table/column assembly, neighbor borrowing, guidance, delta, conditional result, or extra amount/context is accepted. Events are only opened/launched/signed or otworzyła/uruchomiła/podpisała with one opaque quoted label and optional explicit occurrence date; title equals label and summary equals the entire assertion unit. Publication date must come from that same page's publication metadata within the recent-event window; occurrence and publication dates cannot substitute for one another. Every list member needs its own complete, independently eligible unit. The normative contract specifies exact regex-level bounds and edge cases; these examples are not an extension point.
+
+Registry identity is also structurally finite: only mapped fields in recognized MF JSON or the exact host-generated legacy snapshot can establish identity. Arbitrary registry prose, unrelated JSON paths, evidence strings alone, and identity inferred from researched text are not substitutes. Existing host ownership, source-ID quarantine, redirect lineage, citation membership, and model invariants remain mandatory.
+
+The implemented matrix passed 262/262 actual CLI cases, including 97 contract positives. This does not establish independent acceptance: the fresh blind corpus had invalid envelopes and did not exercise its intended probes. Earlier metrics remain historical; legacy-envelope rejection is not a semantic success. See [STRICT_CONTRACT_REVIEW.md](STRICT_CONTRACT_REVIEW.md) for the exact evidence and blocked verdict.
+
+The three evidence states, financial field schema, dependencies and usage budgets remain. The proposal instructions now explain the deliberately narrower publication boundary. Current changes and limitations are in [STRICT_CONTRACT_REVIEW.md](STRICT_CONTRACT_REVIEW.md); earlier correction history remains in [ADVERSARIAL_CORRECTIONS.md](ADVERSARIAL_CORRECTIONS.md).
+
+### Earlier-contract assertion qualification (superseded)
 
 Literal presence is still necessary, but a nearby verb is not sufficient. Current business/catalog claims require a recognized company-linked affirmative relation in the retained enclosing statement. The finite contract recognizes direct present relations, selected Polish present forms, restricted copular/product-list and passive forms. Actual events have a separate past-event relation set. A past offering, plan, hypothetical/conditional statement or discontinued activity is not a current offering. An excerpt cannot gain support by trimming away an enclosing condition. Recognized contrast clauses can retain an affirmative observation even when a different clause describes a plan or denial.
 
@@ -111,13 +130,13 @@ The relation must govern the candidate, not merely occur nearby. Active offering
 
 This remains a bounded heuristic grammar, **not general natural-language entailment**. Unrecognized phrasing, complex scope, attribution and unsupported languages can lose valid observations. A downgrade reason identifies a failed assertion contract without claiming that every rejected sentence has been disproved. Rejected proposed catalog values are cleared; the raw research run retains the original candidate and quote.
 
-### Actual financial observations and sign
+### Earlier-contract financial rules (superseded)
 
 In addition to metric, interval, currency, unit, precision and entity scope, evidence must match a direct realized/reporting assertion or the narrow labeled-row form. A single leading `For YYYY-MM-DD to YYYY-MM-DD,` reporting-interval adjunct is excluded from direct-subject analysis; it does not relax any interval match or subject requirement. Targets, forecasts, denials and conditions do not establish actual financial results, including qualifiers after the amount. This is not a universal financial-table or document parser.
 
 An exclusive unsigned `net loss`/`strata netto` magnitude is interpreted as a negative **observation** for comparison. A wrong positive candidate is cleared and downgraded, never silently rewritten to the negative amount. Explicit signs remain meaningful; a combined `net profit/(loss)` label does not itself impose a minus sign. An explicitly reported zero remains valid. Distinct actual amounts for the same metric/context remain a conflict with both citations.
 
-### Employee observation dates
+### Earlier-contract employee-date rules (superseded)
 
 An observation date must belong to the cited employee observation, using a recognized explicit date role such as `as of` or `na dzień`. Publication/retrieval dates do not supply that role. Invalid optional `as_of` is cleared independently of an otherwise verified count. Dated past-tense observations may remain supported within the existing freshness policy; future hiring does not establish headcount.
 
@@ -137,9 +156,9 @@ That marker only removes permission. The group remains visible in JSON, Markdown
 
 The chain and denial marker are application metadata, **not cryptographic proof for arbitrary edited JSON**. Structural consistency cannot authenticate a fabricated ledger or establish that a remote publisher's assertions are true. Historical redirects still cannot be reconstructed from URL similarity; compatibility does not make affected legacy material eligible.
 
-## Finite contract, identity consistency, and limits
+## Earlier-contract implementation and limits
 
-The deterministic verifier applies a finite publication contract to candidate facts proposed by research. It checks retained-source consistency, citation text, target identity consistency, and bounded claim/context rules; it does not infer arbitrary semantic entailment. Adversarial evaluation must report unsafe acceptance and conservative rejection separately. Passing selected negatives alone is not a safety certification, and declining positives is not proof of invalidity.
+This section records the earlier-contract verifier boundary, not a guarantee of strict-contract implementation. Both the earlier and strict specifications are finite, but their accepted languages differ; strict semantic scope is the complete retained assertion unit described above and in the normative contract. Adversarial evaluation must report unsafe acceptance and conservative rejection separately. Passing selected negatives alone is not a safety certification, and declining positives is not proof of invalidity.
 
 Identity coherence is an internal consistency check: retained registry evidence and supported identity fields must agree with the resolved NIP/legal entity, including paths that bypass ordinary model validation. This can reject detectable contradictory mutation, but it is not cryptographic ledger authenticity. A coherently forged or edited source ledger is not authenticated, and consistent retained evidence does not establish that a publisher tells the truth.
 

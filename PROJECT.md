@@ -1,8 +1,12 @@
-# Company BI v0.1
+# Company BI — historical v0.1 project specification
 
-## Mission
+## Current product thesis
 
-Build a deliberately small portfolio-grade AI system that turns a list of Polish company NIPs into evidence-backed Business Intelligence profiles.
+The research agent may propose broadly; deterministic publication recognizes a narrow finite contract and abstains when semantics are unknown or outside it. This is not general language understanding or a claim of useful broad-coverage research. The strict semantic unit is the complete retained page assertion defined in [the normative contract](docs/STRICT_PUBLICATION_CONTRACT.md); evaluation labels and historical separation are in [holdout adjudication](docs/HOLDOUT_ADJUDICATION.md). No new strict-contract result is asserted by this historical project specification.
+
+## Earlier mission (historical)
+
+The sections below preserve the earlier v0.1 design and implementation record. Their broad profile-field aspirations and heuristic publication descriptions are not claims of strict-contract support.
 
 ```text
 CSV/XLSX with Polish NIPs

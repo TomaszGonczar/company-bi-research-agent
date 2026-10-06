@@ -1,5 +1,12 @@
 # v0.1.1 utility and evidence quality report
 
+**Contract-version note:** every metric and execution record in this report is historical earlier-contract evidence unless explicitly stated otherwise. The report does not provide strict-contract matrix results. The strict contract changes the semantic unit to a complete bounded retained assertion and narrows publication to listed exact productions; none of the historical positives should be recast as strict positives. No new strict result is asserted by this documentation edit. See [STRICT_PUBLICATION_CONTRACT.md](STRICT_PUBLICATION_CONTRACT.md) and [HOLDOUT_ADJUDICATION.md](HOLDOUT_ADJUDICATION.md).
+
+The separate current [strict-contract review](STRICT_CONTRACT_REVIEW.md) records the
+new architecture, actual LOC contraction, 262-case canonical CLI matrix, 621-test
+verification, separate historical replays and invalid independent-fixture blocker.
+It does not replace any population or measurement below.
+
 **Result: product utility is still not demonstrated.** This report records the corrective branch's frozen-source and fresh-source evidence without changing the historical populations or treating missing captures as model outcomes. The report is not a release, publication, or claim of general correctness.
 
 The authorized comparison is between the approved start `a99b959c8eb510fd0526a301a23466a30067c9ec`, utility candidate `5c36e045a1f32336c403b0b254f1c6faa7cfe641`, and production final `7f781a035915a9372b306e82625611cd641b0e1b`. Tracked machine-readable results: [comparison](../examples/utility_v011/comparison.json), [first-loss ledger](../examples/utility_v011/loss-ledger.json), [fresh live summary](../examples/utility_v011/live-summary.json), [adversarial summary](../examples/utility_v011/adversarial-summary.json), and [independent assessment of the locked baseline output](../examples/utility_v011/assessments/locked-baseline.json). The earlier corrective findings and their preserved populations remain in [ADVERSARIAL_CORRECTIONS.md](ADVERSARIAL_CORRECTIONS.md); this report supplements rather than replaces that history.
@@ -209,6 +216,8 @@ changes the original reported review denominators above.
 
 **Release remains BLOCKED, not cleared.** Production implementation is frozen at `6a3a1156f7156708dcbd8c4347baafc83fd209b1` after two semantic cycles per family. The freeze is not a successful release gate; no third semantic cycle is authorized. The identity consistency and canonical context/ownership improvements are real, finite gains, but do not clear the remaining defects. The observed source records are the external audit's `after/known-populations-before-freeze.json`, `KNOWN_BLOCKER_MATRIX.md`, `after/cycle2-integrated-full-pytest.json`, and `cycle-ledger.json`.
 
+The prior blocked `66dbbc89` baseline is separately preserved in the strict-contract audit's `baseline/previous-final-results/` logs; this note records that baseline and does not rerun or replace it. Its full suite recorded **444 passed / 4 failed**; the overlapping adversarial subset recorded **176 passed / 2 failed**. Ruff, format, and mypy passed, but those passes do not override the failures. The four full-suite failures were: the current assertion after planned contrast was rejected; `negative_post_amount_target_qualification` was unsafely supported; the exact 84-employee observation with `as_of` was rejected; and preservation of an other-company employee-date count was rejected. These are prior blocked-candidate failures, not strict-contract matrix outcomes.
+
 ### Independent populations remain distinct
 
 | Population | Observed result |
@@ -252,3 +261,7 @@ A fresh independent author generated 27 pairs / 54 cases across nine categories 
 This result does **not** establish useful safety or generalization: although no unsafe assertion was accepted in these 27 negatives, all 24 ordinary positive controls were rejected or incomplete, and three negative cases lost valid event content. Identity controls alone do not compensate for broad conservative rejection.
 
 The original checker reported 48 false Markdown mismatches because it compared raw LF against the renderer's visible escaped newline. The external checker defect was corrected and the same saved CLI artifacts rescored; there was no CLI rerun and no code or corpus outcome tuning. Original raw measurements remain preserved. No second micro-holdout was generated: no post-freeze production correction was authorized and no reroll occurred. The earlier target-qualifier safety regression already triggered the two-cycle BLOCKED stop. Package version remains **0.1.0**; this evidence does not authorize v0.1.1 release or version hygiene.
+
+## 13. Separate v2 reviewer-reported evidence (not a local strict result)
+
+An independent v2 reviewer report preserved in the external strict-contract audit reported **20/40 unsafe** and **34/40 accepted**. These are reviewer-reported historical findings, not an execution performed by this repository's local CLI and not current strict-contract matrix results. Attribution establishing whether the v2 cases are distinct from other vendor corpora was not proven; keep these figures separate from all local, OMP, Astra, Opus, and strict-matrix populations. No corpus merge, cross-population comparison, or strict-contract performance claim follows from the report.

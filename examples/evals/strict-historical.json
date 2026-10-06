@@ -1,0 +1,63 @@
+{
+  "view": "strict_adjudicated",
+  "version": "0.1.1",
+  "population": "original repository historical dataset; separate from previous holdout corrections and external corpora",
+  "source_dataset": "dataset.json",
+  "adjudication_basis": "retained source bodies, source kinds, source identity/scope, generated date, and frozen gold-corrections.json rationales; never gate outcomes",
+  "adjudication_revision": 3,
+  "supersedes_revision": 2,
+  "revision_note": "Revision 3 expands to every frozen metadata.claim and corrects registry classifications from source-format inspection: all seven controlled registry strings are unrecognized unheaded prose; only the three retained MF host snapshots have accepted legacy headers. Original gold and first replay/result artifacts remain immutable.",
+  "gold_claim_adjudications": {
+    "fully_supported": {
+      "PROVENANCE_INVALID": {"paths":["identity.legal_name","identity.krs","identity.regon","identity.registered_city","identity.registered_address","identity.website"],"expected_outcome":"rejected","rationale":"The retained source is unheaded ad hoc 'Registry identity: ...' prose, not MF JSON or the recognized host legacy serialization; the run is rejected before identity facts can publish."},
+      "OUT_OF_CONTRACT_TRUE": {"paths":["business_description","products_services","industries","markets","employees","financials.0","financials.1","recent_developments.0"],"rationale":"The retained source supports these truths, but each complete unit is outside the finite strict production (multi-sentence page, unquoted label, nonliteral subject, or predicate mismatch)."},
+      "UNSAFE_NEGATIVE": {"paths":["recent_developments.1"],"rationale":"The source gives July only; the gold claim invents an occurrence day."}
+    },
+    "employee_exact_official": {
+      "PROVENANCE_INVALID": {"paths":["identity.legal_name","identity.krs","identity.regon","identity.registered_city","identity.registered_address","identity.website","business_description","products_services","industries","markets","financials.0","financials.1","recent_developments.0"],"expected_outcome":"rejected","rationale":"The registry material is unheaded 'Registry identity: ...' prose, not a recognized host format, and the remaining gold-only assertions lack retained evidence."},
+      "OUT_OF_CONTRACT_TRUE": {"paths":["employees"],"rationale":"The dated count is true in the full issuer page but uses an abbreviated issuer name and 'employees', not the literal legal-name/people production."}
+    },
+    "employee_conflict": {
+      "PROVENANCE_INVALID": {"paths":["identity.legal_name","identity.krs","identity.regon","identity.registered_city","identity.registered_address","identity.website","business_description","products_services","industries","markets","financials.0","financials.1","recent_developments.0"],"expected_outcome":"rejected","rationale":"The registry material is unheaded 'Registry identity: ...' prose, not a recognized host format, and the remaining gold-only assertions lack retained evidence."},
+      "UNSAFE_NEGATIVE": {"paths":["employees"],"rationale":"Two credible retained pages disagree on the count for the same exact date; selecting either count is ambiguous."}
+    },
+    "employee_range_stale": {
+      "PROVENANCE_INVALID": {"paths":["identity.legal_name","identity.krs","identity.regon","identity.registered_city","identity.registered_address","identity.website","business_description","products_services","industries","markets","financials.0","financials.1","recent_developments.0"],"expected_outcome":"rejected","rationale":"The registry material is unheaded 'Registry identity: ...' prose, not a recognized host format, and the remaining gold-only assertions lack retained evidence."},
+      "UNSAFE_NEGATIVE": {"paths":["employees"],"rationale":"The retained page reports a historical range; the exact count and current date are fabricated precision."}
+    },
+    "ellipsis_snippet": {
+      "PROVENANCE_INVALID": {"paths":["identity.legal_name","identity.krs","identity.regon","identity.registered_city","identity.registered_address","identity.website","employees","business_description","products_services","industries","markets","financials.0","financials.1","recent_developments.0"],"expected_outcome":"rejected","rationale":"The registry material is unheaded 'Registry identity: ...' prose, not a recognized host format; research citations are also snippet-only or absent."}
+    },
+    "financial_context_metric": {
+      "PROVENANCE_INVALID": {"paths":["identity.legal_name","identity.krs","identity.regon","identity.registered_city","identity.registered_address","identity.website","business_description","products_services","industries","markets","recent_developments.0","employees"],"expected_outcome":"rejected","rationale":"The registry material is unheaded 'Registry identity: ...' prose, not a recognized host format, and these additional fields lack eligible retained evidence."},
+      "UNSAFE_NEGATIVE": {"paths":["financials.0","financials.1"],"rationale":"Operating profit is not net result, and the retained context does not establish the proposed structured net-result observation."}
+    },
+    "invalid_source_id": {
+      "PROVENANCE_INVALID": {"paths":["identity.legal_name","identity.krs","identity.regon","identity.registered_city","identity.registered_address","identity.website","business_description","products_services","industries","markets","employees","financials.0","financials.1","recent_developments.0"],"expected_outcome":"rejected","rationale":"The run envelope contains orphan research evidence IDs and is rejected as a whole; none of its identity or research profile assertions is published from this malformed envelope."}
+    },
+    "invalid_nip": {
+      "IDENTITY_INVALID": {"paths":["identity.legal_name","identity.krs","identity.regon","identity.registered_city","identity.registered_address","identity.website"],"expected_outcome":"invalid_input","rationale":"The supplied NIP fails checksum validation before a target identity exists."},
+      "PROVENANCE_INVALID": {"paths":["business_description","products_services","industries","markets","employees","financials.0","financials.1","recent_developments.0"],"expected_outcome":"invalid_input","rationale":"Without a checksum-valid target NIP, no target-company research assertion envelope can be evaluated."}
+    },
+    "unresolved_nip": {
+      "PROVENANCE_INVALID": {"paths":["identity.legal_name","identity.krs","identity.regon","identity.registered_city","identity.registered_address","identity.website","business_description","products_services","industries","markets","employees","financials.0","financials.1","recent_developments.0"],"expected_outcome":"unresolved","rationale":"The retained MF response has subject=null rather than a mapped subject object; it proves no identity or target-company assertion."}
+    },
+    "retained_asseco_poland": {
+      "SUPPORTED_CONTRACT_POSITIVE": {"paths":["identity.legal_name","identity.krs","identity.regon","identity.registered_address"],"rationale":"Retained host-owned MF snapshot maps the exact legal identity field."},
+      "PROVENANCE_INVALID": {"paths":["identity.registered_city","identity.website","employees","financials.0","financials.1","recent_developments.1"],"rationale":"No eligible retained source envelope establishes this standalone-company value or event body."},
+      "UNSAFE_NEGATIVE": {"paths":["business_description","products_services","industries","markets"],"rationale":"The sources establish Group/segment scope, not the claimed standalone legal-entity facts."},
+      "OUT_OF_CONTRACT_TRUE": {"paths":["recent_developments.0"],"rationale":"The retained full page supports a true segment event, but the text is outside the strict entity-literal/quoted-label event production."}
+    },
+    "retained_lpp": {
+      "SUPPORTED_CONTRACT_POSITIVE": {"paths":["identity.legal_name","identity.krs","identity.regon","identity.registered_address"],"rationale":"Retained host-owned MF snapshot maps the exact legal identity field."},
+      "PROVENANCE_INVALID": {"paths":["identity.registered_city","identity.website","financials.0","financials.1"],"rationale":"No mapped registry city/website or eligible standalone interval financial source is retained."},
+      "OUT_OF_CONTRACT_TRUE": {"paths":["business_description","products_services","industries","recent_developments.0","recent_developments.2"],"rationale":"Frozen source adjudication supports these truths, but their descriptive or multi-assertion event units are outside the finite grammar."},
+      "UNSAFE_NEGATIVE": {"paths":["markets","employees","recent_developments.1"],"rationale":"The market/workforce claims are Group-level; the event drops a constant-currency qualifier and invents an occurrence day."}
+    },
+    "retained_orlen": {
+      "SUPPORTED_CONTRACT_POSITIVE": {"paths":["identity.legal_name","identity.krs","identity.regon","identity.registered_address"],"rationale":"Retained host-owned MF snapshot maps the exact legal identity field."},
+      "PROVENANCE_INVALID": {"paths":["identity.registered_city","identity.website","business_description","products_services","industries","markets","employees","financials.0","financials.1","recent_developments.0","recent_developments.1","recent_developments.2"],"expected_outcome":"published","rationale":"The research facts rely on snippets, group-only scope, failed page reads, or listing pages; no eligible retained full-page assertion envelope establishes them."}
+    }
+  },
+  "cases": []
+}

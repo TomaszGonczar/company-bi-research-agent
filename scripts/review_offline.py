@@ -23,8 +23,10 @@ from company_bi.nip import InvalidNIP, validate_nip
 from company_bi.renderer import render_json, render_markdown
 
 ROOT = Path(__file__).resolve().parents[1]
+STRICT_DIR = ROOT / "examples" / "strict_contract"
 RETAINED_DIR = ROOT / "examples" / "evals" / "retained"
 RETAINED_NAMES = ("asseco-poland", "lpp", "orlen")
+STRICT_NAMES = ("supported", "out_of_contract")
 
 
 async def _deny_network_async(*_args: object, **_kwargs: object) -> None:
@@ -87,10 +89,17 @@ async def _interrupted_research(run: CompanyResearchRun) -> CompanyResearchRun:
     return failed
 
 
+def _load_run(path: Path) -> CompanyResearchRun:
+    return CompanyResearchRun.model_validate_json(path.read_text(encoding="utf-8"))
+
+
 def review(output_dir: Path) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
     provenance: dict[str, Any] = {
-        "purpose": "offline review; committed inputs and retained snapshots only",
+        "purpose": (
+            "offline review; current strict-contract probes and separately labeled "
+            "historical earlier-contract inputs"
+        ),
         "external_network_calls": 0,
         "paid_or_live_provider_calls": 0,
         "controlled_function_model_invocations": 1,
@@ -99,8 +108,18 @@ def review(output_dir: Path) -> None:
             "and checked with company_bi.nip.validate_nip"
         ),
         "sample_rows": _sample_inputs(),
-        "retained_runs": {},
-        "controlled_synthetic_complete": None,
+        "strict_contract_runs": {},
+        "historical_retained_runs": {},
+        "historical_prebuilt_profile": {
+            "input": "examples/profiles/complete.json",
+            "status": (
+                "historical COMPLETE profile; rendered only as historical, "
+                "not strict-contract evidence"
+            ),
+            "limitation": "prebuilt earlier-contract COMPLETE profile is not proof of the new gate",
+            "json": None,
+            "markdown": None,
+        },
         "controlled_failed_research": None,
         "controlled_failure_timing": (
             "Preserves the observed generated_at and duration_seconds; these vary per execution."
@@ -110,54 +129,90 @@ def review(output_dir: Path) -> None:
             "--dataset examples/evals/dataset.json --output-dir outputs/evals"
         ),
     }
-    retained: dict[str, str] = {}
-    for name in RETAINED_NAMES:
-        run = CompanyResearchRun.model_validate_json(
-            (RETAINED_DIR / f"{name}.json").read_text(encoding="utf-8")
-        )
-        profile = build_profile(run)
-        if profile.status != "partial":
-            raise RuntimeError(
-                f"retained real replay {name} unexpectedly produced {profile.status}"
-            )
-        stem = output_dir / "retained" / name
-        json_path, markdown_path = stem.with_suffix(".json"), stem.with_suffix(".md")
-        _render(profile, json_path, markdown_path)
-        retained[name] = "partial — retained real research inputs; not a complete-yield example"
-        provenance["retained_runs"][name] = {
-            "input": f"examples/evals/retained/{name}.json",
-            "status": profile.status,
-            "json": str(json_path.relative_to(output_dir)),
-            "markdown": str(markdown_path.relative_to(output_dir)),
-        }
 
-    complete = CompanyProfile.model_validate_json(
+    historical_complete = CompanyProfile.model_validate_json(
         (ROOT / "examples" / "profiles" / "complete.json").read_text(encoding="utf-8")
     )
-    if complete.status != "complete":
-        raise RuntimeError("controlled example profile must remain COMPLETE")
-    complete_json = output_dir / "controlled" / "synthetic-complete.json"
-    complete_markdown = output_dir / "controlled" / "synthetic-complete.md"
-    _render(complete, complete_json, complete_markdown)
-    provenance["controlled_synthetic_complete"] = {
-        "input": "examples/profiles/complete.json",
-        "status": "complete (controlled synthetic; not real-company yield)",
-        "json": str(complete_json.relative_to(output_dir)),
-        "markdown": str(complete_markdown.relative_to(output_dir)),
-    }
-
-    failed = asyncio.run(
-        _interrupted_research(
-            CompanyResearchRun.model_validate_json(
-                (RETAINED_DIR / "asseco-poland.json").read_text(encoding="utf-8")
-            )
-        )
+    if historical_complete.status != "complete":
+        raise RuntimeError("historical prebuilt profile must remain COMPLETE")
+    complete_json = output_dir / "historical" / "prebuilt-complete.json"
+    complete_markdown = output_dir / "historical" / "prebuilt-complete.md"
+    _render(historical_complete, complete_json, complete_markdown)
+    provenance["historical_prebuilt_profile"].update(
+        json=str(complete_json.relative_to(output_dir)),
+        markdown=str(complete_markdown.relative_to(output_dir)),
     )
+    valid_strict_runs: list[tuple[str, CompanyResearchRun]] = []
+    for name in STRICT_NAMES:
+        input_path = STRICT_DIR / f"{name}.json"
+        record: dict[str, Any] = {"input": input_path.relative_to(ROOT).as_posix()}
+        try:
+            run = _load_run(input_path)
+            profile = build_profile(run)
+        except (OSError, ValueError) as error:
+            record.update(
+                status="rejected",
+                rejection=f"{type(error).__name__}: {error}",
+                semantic_execution="unexercised",
+                json=None,
+                markdown=None,
+            )
+        else:
+            stem = output_dir / "strict_contract" / name
+            json_path, markdown_path = stem.with_suffix(".json"), stem.with_suffix(".md")
+            _render(profile, json_path, markdown_path)
+            record.update(
+                status=profile.status,
+                purpose="current finite-contract probe; not a real-company yield claim",
+                semantic_execution="rendered",
+                json=str(json_path.relative_to(output_dir)),
+                markdown=str(markdown_path.relative_to(output_dir)),
+            )
+            valid_strict_runs.append((name, run))
+        provenance["strict_contract_runs"][name] = record
+
+    for name in RETAINED_NAMES:
+        input_path = RETAINED_DIR / f"{name}.json"
+        record = {
+            "input": input_path.relative_to(ROOT).as_posix(),
+            "purpose": "historical earlier-contract input",
+        }
+        try:
+            run = _load_run(input_path)
+            profile = build_profile(run)
+        except (OSError, ValueError) as error:
+            record.update(
+                status="rejected",
+                rejection=f"{type(error).__name__}: {error}",
+                semantic_execution="unexercised",
+                json=None,
+                markdown=None,
+            )
+        else:
+            stem = output_dir / "historical" / name
+            json_path, markdown_path = stem.with_suffix(".json"), stem.with_suffix(".md")
+            _render(profile, json_path, markdown_path)
+            record.update(
+                status=profile.status,
+                semantic_execution="historical earlier-contract replay; not strict evidence",
+                json=str(json_path.relative_to(output_dir)),
+                markdown=str(markdown_path.relative_to(output_dir)),
+            )
+        provenance["historical_retained_runs"][name] = record
+
+    if not valid_strict_runs:
+        raise RuntimeError(
+            "no current strict-contract run passed validation for the controlled interruption"
+        )
+    interruption_name, interruption_run = valid_strict_runs[0]
+    failed = asyncio.run(_interrupted_research(interruption_run))
     failed_path = output_dir / "controlled" / "provider-interruption-research.json"
     failed_path.parent.mkdir(parents=True, exist_ok=True)
     failed_path.write_text(failed.model_dump_json(indent=2) + "\n", encoding="utf-8")
     provenance["controlled_failed_research"] = {
-        "input_identity_and_registry_source": "examples/evals/retained/asseco-poland.json",
+        "input_identity_and_registry_source": (
+            f"examples/strict_contract/{interruption_name}.json"
+        ),
         "method": (
             "actual research_company path with a guarded FunctionModel "
             "raising provider interruption"
@@ -178,10 +233,16 @@ def review(output_dir: Path) -> None:
         "OFFLINE REVIEW — external network calls: 0; paid/live provider calls: 0; "
         "one controlled local FunctionModel interruption"
     )
-    for value in retained:
-        print(f"retained real partial: {value} → retained/{value}.json + .md")
+    for name in STRICT_NAMES:
+        print(
+            f"current strict-contract probe: {name} → "
+            f"strict_contract/{name}.json + .md (or rejection in manifest)"
+        )
+    for name in RETAINED_NAMES:
+        print(f"historical input: {name} → historical/{name}.json + .md (or rejection in manifest)")
     print(
-        "controlled synthetic complete → controlled/synthetic-complete.json + .md (not real yield)"
+        "historical prebuilt COMPLETE → historical/prebuilt-complete.json + .md "
+        "(not strict evidence)"
     )
     print(
         "controlled failed research → controlled/provider-interruption-research.json "

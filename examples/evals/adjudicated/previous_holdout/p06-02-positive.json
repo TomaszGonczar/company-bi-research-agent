@@ -1,0 +1,166 @@
+{
+  "identity": {
+    "nip": "4100000800",
+    "legal_name": {
+      "state": "supported",
+      "value": "Northglass Works sp. z o.o.",
+      "evidence": [
+        {
+          "source_id": "registry",
+          "excerpt": "legal_name: \"Northglass Works sp. z o.o.\""
+        }
+      ],
+      "reason": null
+    },
+    "krs": {
+      "state": "unknown",
+      "value": null,
+      "evidence": [],
+      "reason": "Not established in this synthetic case."
+    },
+    "regon": {
+      "state": "unknown",
+      "value": null,
+      "evidence": [],
+      "reason": "Not established in this synthetic case."
+    },
+    "registered_city": {
+      "state": "unknown",
+      "value": null,
+      "evidence": [],
+      "reason": "Not established in this synthetic case."
+    },
+    "registered_address": {
+      "state": "unknown",
+      "value": null,
+      "evidence": [],
+      "reason": "Not established in this synthetic case."
+    },
+    "website": {
+      "state": "unknown",
+      "value": null,
+      "evidence": [],
+      "reason": "Not established in this synthetic case."
+    },
+    "resolved_at": "2026-10-03T12:00:00Z"
+  },
+  "draft": {
+    "business_description": {
+      "state": "unknown",
+      "value": null,
+      "evidence": [],
+      "reason": "No assertion in this synthetic source."
+    },
+    "products_services": {
+      "state": "unknown",
+      "value": null,
+      "evidence": [],
+      "reason": "No current product assertion in this synthetic source."
+    },
+    "industries": {
+      "state": "unknown",
+      "value": null,
+      "evidence": [],
+      "reason": "No industry assertion in this synthetic source."
+    },
+    "markets": {
+      "state": "unknown",
+      "value": null,
+      "evidence": [],
+      "reason": "No market assertion in this synthetic source."
+    },
+    "employees": {
+      "state": "supported",
+      "value": {
+        "kind": "exact",
+        "count": 21
+      },
+      "evidence": [
+        {
+          "source_id": "page",
+          "excerpt": "Company: Northglass Works sp. z o.o.\nJuniper Vale sp. z o.o. employs 21 people."
+        }
+      ],
+      "reason": null,
+      "as_of": null
+    },
+    "financials": [
+      {
+        "state": "unknown",
+        "value": null,
+        "evidence": [],
+        "reason": "No revenue assertion in this synthetic source.",
+        "metric": "revenue",
+        "period": null,
+        "currency": null,
+        "unit": null,
+        "scope": null,
+        "group_name": null
+      },
+      {
+        "state": "unknown",
+        "value": null,
+        "evidence": [],
+        "reason": "No net-result assertion in this synthetic source.",
+        "metric": "net_result",
+        "period": null,
+        "currency": null,
+        "unit": null,
+        "scope": null,
+        "group_name": null
+      }
+    ],
+    "recent_developments": [],
+    "limitations": [
+      "Synthetic adversarial case, not a real-company report"
+    ]
+  },
+  "sources": [
+    {
+      "source": {
+        "source_id": "registry",
+        "url": "https://registry.example/6",
+        "title": "Synthetic registry extract",
+        "retrieved_at": "2026-10-03T12:00:00Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null
+      },
+      "kind": "registry",
+      "content": "NIP: 4100000800\nlegal_name: \"Northglass Works sp. z o.o.\"",
+      "fetch_mode": "registry"
+    },
+    {
+      "source": {
+        "source_id": "page",
+        "url": "https://facts.example/6",
+        "title": "Synthetic company statement",
+        "retrieved_at": "2026-10-03T12:00:00Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null
+      },
+      "kind": "full_page",
+      "content": "Company: Northglass Works sp. z o.o.\nJuniper Vale sp. z o.o. employs 21 people.",
+      "fetch_mode": "static"
+    }
+  ],
+  "diagnostics": {
+    "model": "offline-adversarial-fixture",
+    "status": "completed",
+    "stop_reason": null,
+    "failure_code": null,
+    "failures": [],
+    "validated_progress_retained": false,
+    "model_requests": 0,
+    "searches": 0,
+    "page_reads": 0,
+    "dynamic_reads": 0,
+    "output_retries": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "duration_seconds": 0,
+    "cost_usd": null
+  },
+  "generated_at": "2026-10-03T12:00:00Z"
+}

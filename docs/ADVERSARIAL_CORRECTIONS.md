@@ -1,5 +1,7 @@
 # Adversarial corrections against d4423da
 
+**Earlier-contract evidence:** this report preserves historical heuristic-contract corrections, failures, and measurements. Its accepted cases and metrics are not strict-contract positives or current strict-contract results. The strict full-page grammar and case taxonomy are defined in [STRICT_PUBLICATION_CONTRACT.md](STRICT_PUBLICATION_CONTRACT.md) and [HOLDOUT_ADJUDICATION.md](HOLDOUT_ADJUDICATION.md). No new strict execution result is asserted by this documentation update.
+
 Local corrective package for possible v0.1.1; not a release or a claim of green CI. Reference commit: `d4423da54ed84cfa20104dee5cb8cc5decde19bd`. Branch: `fix/v0.1.1-adversarial-corrections`.
 
 The bounded publication contracts are in [EVIDENCE_MODEL.md](EVIDENCE_MODEL.md#assertion-qualification). The original corrections introduced no new model/provider, dependencies, research instructions, budgets or financial-document parser. Extended Stage C later measured exactly two instruction-only changes, documented separately below; provider, dependencies, budgets and publication rules stayed unchanged.

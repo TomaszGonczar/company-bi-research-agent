@@ -22,8 +22,8 @@ def make_run() -> Callable[..., CompanyResearchRun]:
         **draft_changes: Any,
     ) -> CompanyResearchRun:
         unknown = {"state": "unknown", "reason": "Not established in this synthetic case"}
-        registry_ref = {"source_id": "registry", "excerpt": f'"{identity_name}"'}
         timestamp = datetime(2026, 10, 3, 12, tzinfo=UTC)
+        registry_ref = {"source_id": "registry", "excerpt": identity_name}
         draft = {
             "business_description": unknown,
             "products_services": unknown,
@@ -77,7 +77,16 @@ def make_run() -> Callable[..., CompanyResearchRun]:
                             "registry",
                             "Synthetic registry",
                             "registry",
-                            registry_ref["excerpt"],
+                            json.dumps(
+                                {
+                                    "result": {
+                                        "subject": {
+                                            "name": identity_name,
+                                            "nip": "1234563218",
+                                        }
+                                    }
+                                }
+                            ),
                             "registry",
                         ),
                         ("page", "Synthetic company page", "full_page", content, "static"),

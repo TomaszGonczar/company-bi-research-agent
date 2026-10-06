@@ -1,38 +1,43 @@
 # Company BI
 
-**A research agent proposes candidate company facts; a deterministic offline verifier decides what can be published from the retained source ledger.** The verifier replays the existing evidence gate, compares candidate with final facts, and emits a reviewable report without model, registry, search, or network calls.
+A research agent may propose broadly; deterministic publication recognizes only a narrow finite contract and abstains when meaning is outside it. This is not general language understanding or a useful broad-coverage research claim.
 
-## What this repository demonstrates
+Under the [strict publication contract](docs/STRICT_PUBLICATION_CONTRACT.md), the one quoted direct assertion shown here is supported: `Example sp. z o.o. offers "cloud services".` The plausible unquoted assertion `Example sp. z o.o. offers cloud services.` is true but out of contract, so publication abstains. Labels are opaque, not a vocabulary of validated meanings.
 
-- Bounded PydanticAI research that proposes candidate facts; deterministic Polish NIP validation anchors legal identity.
-- Retained provenance, claim-specific evidence checks, publication abstention, replay, and failure isolation; adversarial regression tests exercise defined gate cases.
-- The supported / uncertain / unknown evidence states and a candidate → verified workflow make accepted, downgraded, cleared, and preserved outcomes inspectable.
+**v0.1.1 remains BLOCKED, not released.** The canonical CLI matrix passed **262/262** cases (97 contract positives), and **621 tests** passed. The fresh independent corpus had invalid fixtures, so independent semantic acceptance is unproven. See the [strict review and limitations](docs/STRICT_CONTRACT_REVIEW.md); earlier measurements below remain separate history.
 
-**Utility remains weak and experimental.** In the fixed two-company real-source utility set (Asseco Poland: 6 eligible observations; SONEL: 7), the locked baseline candidates re-gated by the current verifier yielded **1/13 supported researched observations, with 0 incorrect observed**. The Asseco report alone is **1/6**. This is not 1/1 production precision. Three fresh live end-to-end runs published **zero supported researched observations**. Historical frozen replay results are a separate population: **47/47 overall supported precision, 5/19 eligible researched recall**, with historical retained-real researched yield **0/7**. The earlier failed pass and its limitations remain historical evidence; this interface does not claim to fix them.
+## Historical evidence (earlier contract)
 
-**Release status: v0.1.1 is BLOCKED.** The finite deterministic verifier applies a publication contract to facts proposed by research; adversarial evaluation measures both unsafe acceptance and conservative rejection. Autonomous coverage remains experimental. The frozen candidate has a known unsafe financial-qualifier regression and three full-suite failures. See [the latest quality report](docs/V0_1_1_QUALITY.md#11-frozen-remediation-candidate-blocked) for separate populations and remaining limits.
+The earlier-contract fixed populations remain distinct: **47/47** historical overall supported precision, **5/19** eligible researched recall, **0/7** retained-real researched yield, and **1/13** locked-candidate support in the separate two-company utility set (with 0 incorrect observed). Three earlier live end-to-end runs produced zero supported researched observations. These numbers predate the strict contract; none establishes strict-contract performance, population-level accuracy, or useful coverage. The prior blocked `66dbbc89` failures and missing original Astra/Opus envelopes remain limitations, not results repaired by this docs edit; see the [quality report](docs/V0_1_1_QUALITY.md#11-frozen-remediation-candidate-blocked) for the preserved blocker record.
 
-Not demonstrated: production autonomous coverage or population-level precision; universal semantic verification; comprehensive financial extraction; reliable real-company researched yield; or general superiority of a retrieval approach. Zero incorrect observations in a small population is not precision proof.
+## Offline review
 
-## Verify one controlled candidate offline
+The [reviewer guide](REVIEWER_GUIDE.md) provides the verified zero-key path using `examples/strict_contract/`. Frozen controlled/real-company inputs and the [Asseco](examples/review/asseco-poland-verification.md) / [Sonel](examples/review/sonel-20261005.md) generated reports remain earlier-contract evidence; they are not strict positives and may be rejected for provenance or assertion-unit mismatch.
 
-Requires `uv`; setup selects Python 3.12 and may download it and dependencies. The commands below need no API key, login, browser, or network service call after setup.
+The verifier inspects a supplied retained run; it does not authenticate arbitrary edited JSON, fetch sources, or prove that a publisher is truthful. Pydantic structured output validates shape, not truth. Unknown semantics remain unpublished rather than inferred.
+
+## Product and evaluation limits
+
+Not demonstrated: production autonomous coverage or population-level precision; universal semantic verification; comprehensive financial extraction; reliable real-company researched yield; or general superiority of a retrieval approach. A finite grammar can abstain on true prose outside its productions. Zero incorrect observations in a small population is not precision proof.
+
+## Zero-key offline review
+
+Use the strict matrix's canonical saved runs as zero-key review inputs without re-research or network access:
 
 ```sh
 uv sync --frozen --python 3.12
+uv run --frozen company-bi verify examples/strict_contract/supported.json --output-dir /tmp/company-bi-strict-supported
+```
+
+This writes profile and verification JSON/Markdown. The saved `supported`, `out_of_contract`, `unsafe`, and `identity_invalid` inputs exercise distinct outcomes: only `supported` publishes the researched service; the next two abstain, and invalid identity exits `2` without a profile. [Observed results](docs/STRICT_CONTRACT_REVIEW.md) · [normative contract](docs/STRICT_PUBLICATION_CONTRACT.md) · [adjudication](docs/HOLDOUT_ADJUDICATION.md).
+
+The existing `examples/verification/` fixtures and frozen real-company runs are earlier-contract examples. They can be inspected with the offline verifier, but are not strict positives and may be rejected for legacy-format provenance or assertion-unit mismatch.
+
+```sh
 uv run --frozen company-bi verify examples/verification/controlled-financial-sign.json --output-dir outputs/verification
 ```
 
-The command writes four files: `profile.json`, `profile.md`, `verification.json`, and `verification.md`. The controlled fixture demonstrates an explicitly current product being accepted while a candidate **+PLN 10m net result** is rejected against retained evidence of a standalone **−PLN 10m net loss**. This is a synthetic example, not real-company yield.
-
-Other controlled examples:
-
-```sh
-uv run --frozen company-bi verify examples/verification/controlled-planned-activity.json --output-dir outputs/verification-planned
-uv run --frozen company-bi verify examples/verification/controlled-current-service.json --output-dir outputs/verification-current
-```
-
-The planned cloud-service fixture demonstrates a future plan downgraded rather than published as a current offering; the current-service fixture is a positive controlled example.
+Legacy inputs are historical probes, not strict positives. A rejected legacy envelope exits `2` before producing a profile; it does not demonstrate execution of the research grammar.
 
 ## Architecture and report interpretation
 
@@ -67,17 +72,9 @@ flowchart TD
   end
 ```
 
-The model chooses searches, sources, and candidate interpretations—not which legal entity the user meant or whether a claim may be published. Host tools assign source IDs and retain metadata/text. Supported research requires eligible retained evidence and claim-specific context checks. **Pydantic structured output validates shape, not truth.** The verifier checks the supplied retained run and its ledger; it does not authenticate arbitrary edited JSON or prove that a publisher is truthful. No source text is fetched during verification.
+The model may choose searches and propose facts; deterministic code owns identity, source IDs, retained evidence, and publication. The strict gate accepts only complete recognized assertion units from eligible retained full-page material; when meaning is unknown or outside the finite grammar, it abstains. **Pydantic structured output validates shape, not truth.** The verifier checks the supplied retained run and its ledger; it does not authenticate arbitrary edited JSON or prove that a publisher is truthful. No source text is fetched during verification.
 
-For a real retained input, verify into a separate output directory:
-
-```sh
-uv run --frozen company-bi verify examples/utility_v011/runs/baseline/asseco-poland.json --output-dir outputs/asseco-verification
-```
-
-[`examples/review/asseco-poland-verification.md`](examples/review/asseco-poland-verification.md) is a **REAL RETAINED VERIFICATION**, not successful BI or fresh research. It reports exactly one researched support out of Asseco's six eligible observations (**1/6**). The combined fixed real-source utility set covers Asseco (6) and SONEL (7), with 1/13 supported researched observations. The input is an existing retained run; the command is offline.
-
-Exit `0` means verification completed, even if facts were downgraded or cleared; it does **not** mean every candidate claim is supported. Preserved uncertain/unknown facts remain non-supported, not accepted. Clearing can be partial: for example, an event may remain supported while an unverified occurrence date is cleared; inspect the final snapshot and changed paths. A valid run with failed research diagnostics produces only `verification.json` and `verification.md`, status `not_published`, no profile, and exit `1`. Invalid input, gate, or file errors exit `2`. Verification does not overwrite its input.
+Exit `0` means verification completed, even if facts were downgraded or cleared; it does **not** mean every candidate claim is supported. Preserved uncertain/unknown facts remain non-supported, not accepted. Invalid input, gate, or file errors exit `2`. Verification does not overwrite its input. See the [reviewer guide](REVIEWER_GUIDE.md) for the strict matrix review path and interpretation.
 
 ## Evaluation and adversarial evidence
 

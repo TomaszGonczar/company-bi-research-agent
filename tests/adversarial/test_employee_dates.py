@@ -25,12 +25,33 @@ def make_employee_run(make_run: Any, content: str, quote: str, count: int, as_of
     return CompanyResearchRun.model_validate(payload)
 
 
+def add_employee_page(payload: dict[str, Any], run: Any, source_id: str, content: str) -> None:
+    payload["sources"].append(
+        {
+            "source": {
+                "source_id": source_id,
+                "url": f"https://{source_id}.example/",
+                "title": source_id,
+                "retrieved_at": run.generated_at,
+                "published_on": date(2026, 10, 2),
+            },
+            "kind": "full_page",
+            "content": content,
+            "fetch_mode": "static",
+        }
+    )
+
+
 def test_different_employee_counts_on_distinct_dates_are_not_automatic_conflicts(
     make_run: Any, publish: Any
 ) -> None:
-    quote = "As of 2026-06-30, Example sp. z o.o. employs 120 employees."
-    content = "As of 2025-12-31, Example sp. z o.o. employed 100 employees. " + quote
-    result = publish(make_employee_run(make_run, content, quote, 120, "2026-06-30"))
+    quote = "Example sp. z o.o. employs 120 people as of 2026-06-30."
+    run = make_employee_run(make_run, quote, quote, 120, "2026-06-30")
+    payload = run.model_dump(mode="python")
+    add_employee_page(
+        payload, run, "older-page", "Example sp. z o.o. employs 100 people as of 2025-12-31."
+    )
+    result = publish(CompanyResearchRun.model_validate(payload))
     employees = result["employees"]
     assert employees["state"] == "supported"
     assert employees["value"] == {"kind": "exact", "count": 120}
@@ -43,29 +64,32 @@ def test_different_employee_counts_on_distinct_dates_are_not_automatic_conflicts
 def test_differing_employee_counts_for_same_date_remain_uncertain(
     make_run: Any, publish: Any
 ) -> None:
-    quote = "As of 2026-06-30, Example sp. z o.o. employs 120 employees."
-    content = quote + " As of 2026-06-30, Example sp. z o.o. employs 100 employees."
-    result = publish(make_employee_run(make_run, content, quote, 120, "2026-06-30"))
+    quote = "Example sp. z o.o. employs 120 people as of 2026-06-30."
+    run = make_employee_run(make_run, quote, quote, 120, "2026-06-30")
+    payload = run.model_dump(mode="python")
+    add_employee_page(
+        payload, run, "conflicting-page", "Example sp. z o.o. employs 100 people as of 2026-06-30."
+    )
+    result = publish(CompanyResearchRun.model_validate(payload))
     assert result["employees"]["state"] == "uncertain"
     assert result["employees"]["value"] is None
-    assert len(result["employees"]["evidence"]) >= 2
 
 
 def test_undated_alternative_does_not_authorize_newest_count_selection(
     make_run: Any, publish: Any
 ) -> None:
-    quote = "As of 2026-06-30, Example sp. z o.o. employs 120 employees."
-    content = quote + " Example sp. z o.o. employs 100 employees."
-    result = publish(make_employee_run(make_run, content, quote, 120, "2026-06-30"))
+    quote = "Example sp. z o.o. employs 120 people as of 2026-06-30."
+    run = make_employee_run(make_run, quote, quote, 120, "2026-06-30")
+    payload = run.model_dump(mode="python")
+    add_employee_page(payload, run, "undated-page", "Example sp. z o.o. employs 100 people.")
+    result = publish(CompanyResearchRun.model_validate(payload))
     assert result["employees"]["state"] == "uncertain"
     assert result["employees"]["value"] is None
 
 
-def test_missing_candidate_date_with_multiple_dated_pages_stays_uncertain(
-    make_run: Any, publish: Any
-) -> None:
-    quote = "As of 2026-09-01, Example sp. z o.o. employs 120 employees."
-    older_quote = "As of 2025-09-01, Example sp. z o.o. employed 100 employees."
+def test_missing_candidate_date_is_not_filled_from_dated_pages(make_run: Any, publish: Any) -> None:
+    quote = "Example sp. z o.o. employs 120 people as of 2026-09-01."
+    older_quote = "Example sp. z o.o. employs 100 people as of 2025-09-01."
     run = make_run(
         quote,
         employees={
@@ -91,31 +115,44 @@ def test_missing_candidate_date_with_multiple_dated_pages_stays_uncertain(
         }
     )
     result = publish(CompanyResearchRun.model_validate(payload))
+    assert result["employees"]["state"] == "supported"
+    assert result["employees"]["value"] == {"kind": "exact", "count": 120}
+    assert result["employees"]["as_of"] is None
+
+
+def test_past_tense_headcount_is_true_out_of_contract(make_run: Any, publish: Any) -> None:
+    quote = "Example sp. z o.o. employed 100 people as of 2025-09-01."
+    result = publish(make_employee_run(make_run, quote, quote, 100, "2025-09-01"))
     assert result["employees"]["state"] == "uncertain"
     assert result["employees"]["value"] is None
     assert result["employees"]["as_of"] is None
 
 
-def test_explicitly_dated_past_tense_headcount_can_remain_supported(
-    make_run: Any, publish: Any
-) -> None:
-    quote = "Example sp. z o.o. employed 100 employees as of 2025-09-01."
-    result = publish(make_employee_run(make_run, quote, quote, 100, "2025-09-01"))
-    assert result["employees"]["state"] == "supported"
-    assert result["employees"]["value"] == {"kind": "exact", "count": 100}
-    assert result["employees"]["as_of"] == "2025-09-01"
-
-
 def test_explicit_group_and_other_entity_counts_are_not_company_alternatives(
     make_run: Any, publish: Any
 ) -> None:
-    quote = "As of 2026-06-30, Example sp. z o.o. employs 120 employees."
-    content = (
-        quote
-        + " The Example Group employs 900 employees. "
-        + "Other Company employs 400 employees."
-    )
-    result = publish(make_employee_run(make_run, content, quote, 120, "2026-06-30"))
+    quote = "Example sp. z o.o. employs 120 people as of 2026-06-30."
+    run = make_employee_run(make_run, quote, quote, 120, "2026-06-30")
+    payload = run.model_dump(mode="python")
+    for source_id, content in (
+        ("group-page", "The Example Group employs 900 people."),
+        ("other-page", "Other Company employs 400 people."),
+    ):
+        payload["sources"].append(
+            {
+                "source": {
+                    "source_id": source_id,
+                    "url": f"https://{source_id}.example/",
+                    "title": source_id,
+                    "retrieved_at": run.generated_at,
+                    "published_on": date(2026, 10, 2),
+                },
+                "kind": "full_page",
+                "content": content,
+                "fetch_mode": "static",
+            }
+        )
+    result = publish(CompanyResearchRun.model_validate(payload))
     employees = result["employees"]
     assert employees["state"] == "supported"
     assert employees["value"] == {"kind": "exact", "count": 120}

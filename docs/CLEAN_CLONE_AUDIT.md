@@ -1,5 +1,7 @@
 # OG-156 — clean-clone audit
 
+**Historical earlier-contract audit:** the clone/reviewer measurements below predate the strict publication contract. They document the then-current offline review path and immutable earlier-contract populations; they are not strict positives or current strict-contract results. See [STRICT_PUBLICATION_CONTRACT.md](STRICT_PUBLICATION_CONTRACT.md) and [HOLDOUT_ADJUDICATION.md](HOLDOUT_ADJUDICATION.md). No strict execution result is asserted by this historical audit.
+
 ## Audited baseline and isolation
 
 - Approved baseline: `9dcbf0b9988e63d510ef358b24d53a18b8d870fc`.

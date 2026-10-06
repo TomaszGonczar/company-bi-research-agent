@@ -66,16 +66,26 @@ def _run(profile: CompanyProfile, state: str = "completed") -> Any:
     for source in profile.sources:
         if source.kind == "registry":
             identity = profile.identity
-            lines = [f"NIP: {identity.nip}"]
-            for field, fact in identity.model_dump(mode="json").items():
-                if not isinstance(fact, dict) or fact.get("state") != "supported":
-                    continue
-                lines.append(f"{field}: {json.dumps(fact['value'], ensure_ascii=False)}")
-                lines.extend(
-                    f"{field} evidence: {ref['excerpt']}"
-                    for ref in fact["evidence"]
-                    if ref["source_id"] == source.source_id
-                )
+            lines = ["MF VAT register identity material (not a raw registry response):"]
+            for field in (
+                "legal_name",
+                "krs",
+                "regon",
+                "registered_city",
+                "registered_address",
+                "website",
+            ):
+                fact = getattr(identity, field)
+                if fact.state == "supported":
+                    lines.append(f"{field}: {fact.value}")
+                    lines.extend(
+                        f"{field} evidence from {ref.source_id}: {ref.excerpt}"
+                        for ref in fact.evidence
+                        if ref.source_id == source.source_id
+                    )
+                else:
+                    lines.append(f"{field}: unknown; Fixture value unavailable")
+            lines.append(f"NIP: {identity.nip}")
             content = "\n".join(lines)
         else:
             content = "Fixture retained material"
