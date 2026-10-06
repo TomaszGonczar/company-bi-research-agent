@@ -1,30 +1,52 @@
 # Company BI
 
-Company BI converts Polish NIPs into evidence-backed company intelligence profiles. One bounded **PydanticAI research agent proposes candidate knowledge; deterministic code decides what may be published**.
+A research agent may propose broadly; deterministic publication recognizes only a narrow finite contract and abstains when meaning is outside it. This is not general language understanding or a useful broad-coverage research claim.
 
-The engineering problem is not generating plausible JSON. It is preserving legal identity, provenance and uncertainty when web evidence is incomplete or model output is wrong. This small v0.1 makes that boundary inspectable rather than claiming production readiness. Follow the [10-minute reviewer guide](REVIEWER_GUIDE.md).
+Under the [strict publication contract](docs/STRICT_PUBLICATION_CONTRACT.md), the one quoted direct assertion shown here is supported: `Example sp. z o.o. offers "cloud services".` The plausible unquoted assertion `Example sp. z o.o. offers cloud services.` is true but out of contract, so publication abstains. Labels are opaque, not a vocabulary of validated meanings.
 
-## Quick deterministic verification
+**v0.1.1 Holdout B: PASS on the sampled frozen finite publication contract; current release preparation is not a release.** Certified commit `9f80eb7a7dcdb4c563a4bec897f22361cdbbae45`; the independent first-execution result and limitations are summarized in the [Holdout B report](docs/V0_1_1_HOLDOUT_RESULT.md). Separate local release-preparation gates passed: **740 tests**, Ruff, formatting and mypy, **262/262** canonical CLI cases (**97/97** contract positives), boundary/micro smoke **26/26** and **19/19**, IPv6 CLI/SDK smoke **11/11**, public-toolkit smoke **10/10**, and component-scoring smoke **5/5**. No combined accuracy, publisher-truth, exhaustive-coverage, or useful broad-coverage claim follows. Exact-commit clean-clone evidence is a separate release prerequisite; hosted CI is pending authorization. Asseco and SONEL still have **0 researched facts published**. Strict real-world researched yield remains poor.
 
-Requires `uv`; setup selects Python 3.12 and may download it and dependencies. **No Tavily key or model credentials are required.** Tests, evaluation and offline review need no login, browser installation or prior run state.
+## Historical evidence (earlier contract)
+
+The earlier-contract fixed populations remain distinct: **47/47** historical overall supported precision, **5/19** eligible researched recall, **0/7** retained-real researched yield, and **1/13** locked-candidate support in the separate two-company utility set (with 0 incorrect observed). Three earlier live end-to-end runs produced zero supported researched observations. These numbers predate the strict contract; none establishes strict-contract performance, population-level accuracy, or useful coverage. The prior blocked `66dbbc89` failures and missing original Astra/Opus envelopes remain limitations, not results repaired by this docs edit; see the [quality report](docs/V0_1_1_QUALITY.md#11-frozen-remediation-candidate-blocked) for the preserved blocker record.
+
+## Offline review
+
+The [reviewer guide](REVIEWER_GUIDE.md) provides the verified zero-key path using `examples/strict_contract/`. Frozen controlled/real-company inputs and the [Asseco](examples/review/asseco-poland-verification.md) / [Sonel](examples/review/sonel-20261005.md) generated reports remain earlier-contract evidence; they are not strict positives and may be rejected for provenance or assertion-unit mismatch.
+
+The verifier inspects a supplied retained run; it does not authenticate arbitrary edited JSON, fetch sources, or prove that a publisher is truthful. Pydantic structured output validates shape, not truth. Unknown semantics remain unpublished rather than inferred.
+
+## Product and evaluation limits
+
+Not demonstrated: production autonomous coverage or population-level precision; universal semantic verification; comprehensive financial extraction; reliable real-company researched yield; or general superiority of a retrieval approach. A finite grammar can abstain on true prose outside its productions. Zero incorrect observations in a small population is not precision proof.
+
+## Zero-key offline review
+
+Use the strict matrix's canonical saved runs as zero-key review inputs without re-research or network access:
 
 ```sh
 uv sync --frozen --python 3.12
-uv run --frozen pytest -q
-uv run --frozen company-bi eval --dataset examples/evals/dataset.json --output-dir outputs/evals
-uv run --frozen python scripts/review_offline.py --output-dir outputs/review
+uv run --frozen company-bi verify examples/strict_contract/supported.json --output-dir /tmp/company-bi-strict-supported
 ```
 
-Evaluation prints the frozen counts and writes `outputs/evals/results.md` plus JSON. The helper writes provenance-labeled examples below. Setup download time is separate from the short offline checks.
+This writes profile and verification JSON/Markdown. The saved `supported`, `out_of_contract`, `unsafe`, and `identity_invalid` inputs exercise distinct outcomes: only `supported` publishes the researched service; the next two abstain, and invalid identity exits `2` without a profile. [Observed results](docs/FINAL_BOUNDARY_REVIEW.md) · [normative contract](docs/STRICT_PUBLICATION_CONTRACT.md) · [adjudication](docs/HOLDOUT_ADJUDICATION.md).
 
-## Architecture
+The existing `examples/verification/` fixtures and frozen real-company runs are earlier-contract examples. They can be inspected with the offline verifier, but are not strict positives and may be rejected for legacy-format provenance or assertion-unit mismatch.
+
+```sh
+uv run --frozen company-bi verify examples/verification/controlled-financial-sign.json --output-dir outputs/verification
+```
+
+Legacy inputs are historical probes, not strict positives. A rejected legacy envelope exits `2` before producing a profile; it does not demonstrate execution of the research grammar.
+
+## Architecture and report interpretation
 
 ```mermaid
 flowchart TD
   subgraph I["Deterministic identity"]
     CSV["CSV / XLSX"] --> NIP["Validate Polish NIP"]
     NIP --> MF["MF public registry"]
-    MF --> Identity["Trusted CompanyIdentity"]
+    MF --> Identity["MF-anchored CompanyIdentity"]
   end
   subgraph A["Probabilistic research"]
     Agent["One bounded PydanticAI agent"] --> Draft["CompanyResearchDraft"]
@@ -37,85 +59,61 @@ flowchart TD
   Agent --> Search
   Agent --> Read
   Sources --> Agent
-  subgraph P["Deterministic publication"]
-    Gate["Evidence gate"] --> Profile["CompanyProfile"]
+  subgraph P["Deterministic publication and offline verification"]
+    Identity --> Gate["Evidence gate"]
+    Draft --> Gate
+    Sources --> Gate
+    Gate --> Profile["CompanyProfile"]
     Profile --> Reports["JSON / Markdown"]
-    Reports --> Summary["batch_summary.csv"]
+    Draft --> Verify["Offline candidate-to-final comparison"]
+    Sources --> Verify
+    Profile --> Verify
+    Verify --> VReports["Verification JSON / Markdown"]
   end
-  Draft --> Gate
-  Sources --> Gate
 ```
 
-The model chooses searches, sources and candidate interpretations—not which legal entity the user meant. Host tools assign source IDs and retain metadata/text. Research citations must reference that ledger; supported research requires exact retained full-page excerpts and claim-specific entity/context checks. **Pydantic structured output validates shape, not truth.** Gate and renderers make no model calls. Batch isolates failures and checkpoints on the filesystem.
+The model may choose searches and propose facts; deterministic code owns identity, source IDs, retained evidence, and publication. The strict gate accepts only complete recognized assertion units from eligible retained full-page material; when meaning is unknown or outside the finite grammar, it abstains. **Pydantic structured output validates shape, not truth.** The verifier checks the supplied retained run and its ledger; it does not authenticate arbitrary edited JSON or prove that a publisher is truthful. No source text is fetched during verification.
 
-Per-company ceilings: 180 seconds, 6 searches, 10 page reads, 2 browser attempts, 12 model requests, 24 tool calls and one output repair. [Architecture decisions](docs/ARCHITECTURE_DECISIONS.md#og-152-bounded-research-implementation) record the bounds and trust tradeoffs.
+Exit `0` means verification completed, even if facts were downgraded or cleared; it does **not** mean every candidate claim is supported. Preserved uncertain/unknown facts remain non-supported, not accepted. Invalid input, gate, or file errors exit `2`. Verification does not overwrite its input. See the [reviewer guide](REVIEWER_GUIDE.md) for the strict matrix review path and interpretation.
 
-## Example output
+## Evaluation and adversarial evidence
 
-Run the helper above, then open `outputs/review/review-manifest.json` and:
+Historical frozen replay/contract metrics are retained as historical results, not results newly produced by this interface:
 
-| Example | Generated artifact | Provenance |
-| --- | --- | --- |
-| COMPLETE | `outputs/review/controlled/synthetic-complete.md` and `.json` | **CONTROLLED FIXTURE** from `examples/profiles/complete.json`; not real yield |
-| PARTIAL | `outputs/review/retained/asseco-poland.md` and `.json` | **REAL RETAINED RUN**, republished through the current gate |
-| FAILED | `outputs/review/controlled/provider-interruption-research.json` | **CONTROLLED FAILURE**, one guarded local FunctionModel interruption; no final profile/report |
-
-The real Asseco replay lacks sufficient legal-entity/context evidence; financial values stay null. PARTIAL is intentional, not a crash. The helper also renders LPP/ORLEN. No live calls or generated artifacts need committing.
-
-Sample input: [`examples/research_batch.csv`](examples/research_batch.csv) contains public Asseco, LPP and ORLEN NIPs for optional live batches. [`examples/nips.csv`](examples/nips.csv) is the helper's validation demonstration: public Asseco NIP, invalid `123`, and a synthetic fixture identifier. Checksum validity alone is not identity resolution.
-
-## Evidence semantics
-
-`supported`: eligible retained evidence verifies the claim and context. `uncertain`: evidence/candidate exists but cannot justify support. `unknown`: insufficient evidence; value is null, never a guessed zero/false.
-
-`COMPLETE` means core coverage has no gap or limitation; `PARTIAL` is valid with gaps/uncertainties/unknowns; `FAILED` means no safe final profile. Unresolved/invalid identity outcomes are distinct. A research diagnostic of `completed` is not a COMPLETE profile.
-
-## Evaluation results
-
-The selected diagnostic set has **12 cases** (9 controlled, 3 retained-real), not a representative sample. Frozen OG-154A results:
-
-| Measure | Result |
+| Population / measure | Result |
 | --- | ---: |
-| Overall supported precision | 47/47 |
-| Registry supported precision | 42/42 |
-| Researched supported precision | 5/5 |
-| Eligible researched recall | 5/19 |
-| Unsupported facts published as supported | 0 |
-| Identity correctness | 10/10 |
-| Correct uncertainty handling | 28/28 |
-| Correct strict unknown handling | 40/41 |
-| Retained-real eligible researched yield | **0/7** |
-| Retained real profiles | **0 COMPLETE / 3 PARTIAL / 0 FAILED** |
+| Historical overall supported precision | 47/47 |
+| Historical eligible researched recall | 5/19 |
+| Historical retained-real eligible researched yield | **0/7** |
+| Fixed two-company real-source utility set (Asseco 6 + SONEL 7), locked baseline candidates re-gated | **1/13 supported; 0 incorrect observed** |
+| Asseco retained verification report | **1/6 supported** |
+| Three fresh live end-to-end runs | **zero supported researched observations** |
 
-**5/5 does not establish production precision; 5/19 is low coverage.** This deliberately small evaluation set does not establish population-level production accuracy.
+The historical 47/47 overall count includes registry supports and does not establish autonomous research precision. The two-company 1/13 and Asseco-only 1/6 are distinct scopes; fresh-live zero-support results are another population. None establishes population-level accuracy or useful coverage. The historical replay's changed 4/19 researched recall and 15/19 over-downgrade are reported separately in the [latest quality report](docs/V0_1_1_QUALITY.md#11-frozen-remediation-candidate-blocked). The old historical LPP run failed at its single repair ceiling; its exact cause is unrecoverable. The verifier is a finite publication contract, not a general semantic-safety guarantee.
 
-## What the evaluation changed
+The historical frozen set selected 12 cases (9 controlled, 3 retained-real); original drafts, gold, and source snapshots remain frozen. Historical researched support precision was 5/5 and eligible recall 5/19; 5/5 is not production precision. A later adversarial review exposed finite counterexamples and corrections; those cases are regression evidence, not an untouched holdout. [Evaluation methodology](docs/EVAL_SPEC.md) · [historical results](docs/EVAL_RESULTS.md) · [adversarial corrections and current measurements](docs/ADVERSARIAL_CORRECTIONS.md) · [quality and scoped utility evidence](docs/V0_1_1_QUALITY.md).
 
-**Measure → classify retrieval/extraction/gate/unavailable-context losses → regression-first corrections → rerun the frozen benchmark.** Eligible recall moved **2/19 (10.5%) → 5/19 (26.3%)**, with false-supported **0 → 0**. All three recoveries were controlled; real yield stayed **0/7**. Exact-excerpt admission and narrow entity attachment improved without weakening financial/date/source rules. The eligible-miss and broader retrieval-loss populations are separate. [Results](docs/EVAL_RESULTS.md) · [failure analysis and corrections](docs/RECALL_RECOVERY.md).
+## Experimental live research route
 
-A historical live LPP run failed at the single repair ceiling; its exact cause is unrecoverable. The [paired Scrapling experiment](docs/SCRAPLING_EXPERIMENT.md) found **no additional published supported facts**; only one pair exercised retrieval. Scrapling remains the full-page mechanism, but its supported-fact advantage was **not demonstrated**.
-
-## Optional live research
-
-Export `TAVILY_API_KEY` through your usual secret-management method, then use standard `codex login`. The tested path is **`openai-codex:gpt-6-luna`**, with SDK-managed authentication and no required `OPENAI_API_KEY`. An explicitly selected `openai:` model requires `OPENAI_API_KEY`; this is not a provider-agnostic validation claim. Optional [`.env.example`](.env.example) contains placeholders only: create an ignored `.env` without overwriting existing configuration, then explicitly add `--env-file .env` to `uv run` if using it. Never commit keys or auth caches.
-
-Using the existing public three-NIP batch example:
+Live research remains an experimental, separately configured path; it is not the offline verifier. It contacts MF, Tavily, websites, and a model and may incur costs. Export `TAVILY_API_KEY` through your usual secret-management method, then use standard `codex login`. The tested path is `openai-codex:gpt-6-luna`, with SDK-managed authentication and no required `OPENAI_API_KEY`. An explicitly selected `openai:` model requires `OPENAI_API_KEY`; this is not a provider-agnostic validation claim. Optional [`.env.example`](.env.example) contains placeholders only; create an ignored `.env` without overwriting existing configuration, then explicitly add `--env-file .env` to `uv run` if using it. Never commit keys or auth caches.
 
 ```sh
 uv run --frozen company-bi batch examples/research_batch.csv --output-dir outputs --runs-dir runs --model openai-codex:gpt-6-luna
 ```
 
-Live mode contacts MF, Tavily, websites and the model; costs, availability and results vary. The [post-hardening Asseco smoke](docs/CLEAN_CLONE_AUDIT.md#single-final-live-smoke) exercised the full path and produced valid PARTIAL JSON/Markdown with zero supported researched facts. It was not rerun for packaging. `research` emits a draft/run; `batch` emits final reports and `batch_summary.csv`, with retained research under `runs/`.
+Live results, costs, and availability vary. `research` emits a draft/run; `batch` emits final reports and `batch_summary.csv`, with retained research under `runs/`. The measured live samples above published no supported researched observations.
 
-## What this project does not claim
+## Reliability, safety, and scope limits
 
-Not production SaaS or multi-tenant; not a complete Polish financial-data platform, universal web extraction, population-level precision proof, multi-agent orchestration, universal Scrapling improvement, or resolution of every fact. Real-company researched yield remains weak/unproven. Retrieved **PDF/XML/archive/Office financial parsing is unsupported** (CSV/XLSX NIP input works). Provider/web variability remains. URL/DNS checks do **not** eliminate SSRF: DNS rebinding/TOCTOU is residual risk.
+Per-company ceilings: 180 seconds, 6 searches, 10 page reads, 2 browser attempts, 12 model requests, 24 tool calls, and one output repair. [Architecture decisions](docs/ARCHITECTURE_DECISIONS.md#og-152-bounded-research-implementation) record the bounds and trust tradeoffs.
+
+Not production SaaS or multi-tenant; not a complete Polish financial-data platform, universal web extraction, multi-agent orchestration, or resolution of every fact. Retrieved **PDF/XML/archive/Office financial parsing is unsupported** (CSV/XLSX NIP input works). Provider/web variability remains. URL/DNS checks do **not** eliminate SSRF; DNS rebinding/TOCTOU is residual risk. Scrapling remains the full-page mechanism; its supported-fact advantage was not demonstrated in the limited paired experiment.
 
 ## Repository map
 
 - `src/company_bi/agent.py` — bounded research; `search.py` / `fetch.py` — Tavily / guarded retrieval.
-- `src/company_bi/sources.py` — host ledger; `evidence.py` — publication gate; `renderer.py` — JSON/Markdown; `batch.py` — failure-isolated, resumable batches.
-- `examples/` — input, controlled fixtures and retained public runs; `tests/` — deterministic regressions.
-- `docs/` — [eval methodology](docs/EVAL_SPEC.md), [results](docs/EVAL_RESULTS.md), [recovery](docs/RECALL_RECOVERY.md), [clean-clone audit](docs/CLEAN_CLONE_AUDIT.md), [Scrapling experiment](docs/SCRAPLING_EXPERIMENT.md).
+- `src/company_bi/sources.py` — host ledger; `evidence.py` — publication gate; `verification.py` — offline comparison; `renderer.py` — JSON/Markdown; `batch.py` — failure-isolated, resumable batches.
+- `examples/` — controlled fixtures, input, and retained public runs; `tests/` — deterministic regressions.
+- `docs/` — [evaluation methodology](docs/EVAL_SPEC.md), [historical results](docs/EVAL_RESULTS.md), [recovery](docs/RECALL_RECOVERY.md), [clean-clone audit](docs/CLEAN_CLONE_AUDIT.md), [Scrapling experiment](docs/SCRAPLING_EXPERIMENT.md).
 
-Licensed under the [MIT License](LICENSE), copyright © 2026 Tomasz Gonczar. The [clean-clone audit](docs/CLEAN_CLONE_AUDIT.md) records local verification; check [GitHub Actions CI](https://github.com/TomaszGonczar/company-bi-research-agent/actions/workflows/ci.yml) for the hosted result of the commit being reviewed. Local checks are not GitHub Actions evidence.
+Licensed under the [MIT License](LICENSE), copyright © 2026 Tomasz Gonczar.

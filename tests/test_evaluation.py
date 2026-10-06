@@ -4,7 +4,9 @@ from company_bi.evaluation import (
     GoldClaim,
     _add_counts,
     _ratio,
+    _raw_value_at,
     evaluate_case,
+    evaluate_strict_case,
 )
 
 
@@ -297,3 +299,154 @@ def test_published_identity_mismatch_cannot_hide_behind_correct_input_identity()
     assert score["counts"]["identity_fields_correct"] == 1
     assert score["counts"]["identity_cases_total"] == 1
     assert score["counts"].get("identity_cases_correct", 0) == 0
+
+
+def test_strict_out_of_contract_true_is_not_an_eligible_miss():
+    case = {
+        "case_id": "true-outside-grammar",
+        "classification": "OUT_OF_CONTRACT_TRUE",
+        "path": "products_services",
+        "expected": {"outcome": "published"},
+        "rationale": "True but outside finite grammar.",
+    }
+    output = EvalOutput(
+        outcome="published",
+        profile={"products_services": {"state": "uncertain", "value": None}},
+    )
+    scored = evaluate_strict_case(case, output)
+    assert scored["correct"] is True
+    assert scored["eligible"] is False
+    assert scored["classification"] == "OUT_OF_CONTRACT_TRUE"
+
+
+def test_strict_contract_positive_requires_verified_support():
+    case = {
+        "case_id": "contract-positive",
+        "classification": "SUPPORTED_CONTRACT_POSITIVE",
+        "path": "products_services",
+        "expected": {
+            "outcome": "published",
+            "supported_fields": {"value": ["cloud services"]},
+        },
+        "rationale": "Source-backed grammar positive.",
+    }
+    output = EvalOutput(
+        outcome="published",
+        profile={"products_services": {"state": "uncertain", "value": None}},
+    )
+    scored = evaluate_strict_case(case, output)
+    assert scored["correct"] is False
+    assert scored["eligible"] is True
+
+
+def test_strict_positive_rejection_remains_in_eligible_denominator():
+    case = {
+        "case_id": "positive-rejected",
+        "classification": "SUPPORTED_CONTRACT_POSITIVE",
+        "path": "products_services",
+        "expected": {"outcome": "published", "supported_fields": {"value": ["cloud"]}},
+        "rationale": "Source-backed finite-language positive.",
+    }
+    scored = evaluate_strict_case(case, EvalOutput(outcome="rejected", error="GATE_REJECTED"))
+    assert scored["eligible"] is True
+    assert scored["correct"] is False
+    assert scored["assessment"] == "failed"
+    assert scored["semantic_execution"] == "unexercised"
+
+
+def test_strict_positive_rejects_wrong_supported_context():
+    case = {
+        "case_id": "wrong-context",
+        "classification": "SUPPORTED_CONTRACT_POSITIVE",
+        "path": "products_services",
+        "expected": {
+            "outcome": "published",
+            "supported_fields": {"value": ["Group services"]},
+            "required_fields": {"scope": "legal_entity"},
+        },
+        "rationale": "Group evidence is not legal-entity support.",
+    }
+    output = EvalOutput(
+        outcome="published",
+        profile={
+            "products_services": {
+                "state": "supported",
+                "value": ["Group services"],
+                "scope": "group",
+            }
+        },
+    )
+    scored = evaluate_strict_case(case, output)
+    assert scored["correct"] is False
+    assert scored["assessment"] == "failed"
+
+
+def test_strict_positive_allows_only_explicitly_adjudicated_optional_date_clearance():
+    case = {
+        "case_id": "optional-event-date-cleared",
+        "classification": "SUPPORTED_CONTRACT_POSITIVE",
+        "path": "recent_developments.0",
+        "expected": {
+            "outcome": "published",
+            "supported_fields": {
+                "value": {
+                    "title": "New facility",
+                    "summary": "Example sp. z o.o. opened a new facility.",
+                    "published_on": "2026-09-01",
+                }
+            },
+            "required_fields": {"value": {"occurred_on": None}},
+        },
+        "rationale": (
+            "The source supports the event and publication date but not an optional occurrence day."
+        ),
+    }
+    output = EvalOutput(
+        outcome="published",
+        profile={
+            "recent_developments": [
+                {
+                    "state": "supported",
+                    "value": {
+                        "title": "New facility",
+                        "summary": "Example sp. z o.o. opened a new facility.",
+                        "published_on": "2026-09-01",
+                        "occurred_on": None,
+                    },
+                }
+            ]
+        },
+    )
+    scored = evaluate_strict_case(case, output)
+    assert scored["correct"] is True
+    assert scored["semantic_execution"] == "executed"
+
+
+def test_provenance_invalid_citation_can_be_withheld_in_published_identity_profile():
+    case = {
+        "case_id": "bad-citation-withheld",
+        "classification": "PROVENANCE_INVALID",
+        "path": "products_services",
+        "expected": {
+            "outcome": "published",
+            "state": "uncertain",
+            "required_fields": {"value": None},
+        },
+        "rationale": "Identity may publish while a fact with a rejected citation is withheld.",
+    }
+    output = EvalOutput(
+        outcome="published",
+        profile={
+            "identity": {"legal_name": {"state": "supported", "value": "Example sp. z o.o."}},
+            "products_services": {"state": "uncertain", "value": None},
+        },
+    )
+    scored = evaluate_strict_case(case, output)
+    assert scored["correct"] is True
+    assert scored["semantic_execution"] == "not_applicable"
+
+
+def test_raw_value_lookup_returns_none_for_missing_paths():
+    assert _raw_value_at({"draft": {"employees": []}}, "employees.2") is None
+    assert _raw_value_at({"draft": {"employees": []}}, "employees.not_an_index") is None
+    assert _raw_value_at({"draft": {}}, "employees.0") is None

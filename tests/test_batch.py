@@ -23,7 +23,13 @@ NIPS = ["5220003782", "5831014898", "1234563218"]
 def _profile(status: str = "complete", nip: str = NIPS[0]) -> CompanyProfile:
     fixture = "partial.json" if status == "partial" else "complete.json"
     data = json.loads(Path(f"examples/profiles/{fixture}").read_text(encoding="utf-8"))
-    data["identity"]["nip"] = nip
+    identity = data["identity"]
+    identity["nip"] = nip
+    for fact in identity.values():
+        if isinstance(fact, dict):
+            for evidence in fact.get("evidence", []):
+                evidence["source_id"] = "registry"
+                evidence["excerpt"] = json.dumps(fact["value"], ensure_ascii=False)
     return CompanyProfile.model_validate(data)
 
 
@@ -56,19 +62,45 @@ def _run(profile: CompanyProfile, state: str = "completed") -> Any:
             "limitations": ["Fixture research contains no findings"],
         }
     )
-    sources = [
-        RetrievedSource(
-            source=source,
-            kind=source.kind,
-            content="Fixture retained material",
-            fetch_mode={
-                "registry": "registry",
-                "full_page": "static",
-                "search_snippet": "tavily",
-            }[source.kind],
+    sources = []
+    for source in profile.sources:
+        if source.kind == "registry":
+            identity = profile.identity
+            lines = ["MF VAT register identity material (not a raw registry response):"]
+            for field in (
+                "legal_name",
+                "krs",
+                "regon",
+                "registered_city",
+                "registered_address",
+                "website",
+            ):
+                fact = getattr(identity, field)
+                if fact.state == "supported":
+                    lines.append(f"{field}: {fact.value}")
+                    lines.extend(
+                        f"{field} evidence from {ref.source_id}: {ref.excerpt}"
+                        for ref in fact.evidence
+                        if ref.source_id == source.source_id
+                    )
+                else:
+                    lines.append(f"{field}: unknown; Fixture value unavailable")
+            lines.append(f"NIP: {identity.nip}")
+            content = "\n".join(lines)
+        else:
+            content = "Fixture retained material"
+        sources.append(
+            RetrievedSource(
+                source=source,
+                kind=source.kind,
+                content=content,
+                fetch_mode={
+                    "registry": "registry",
+                    "full_page": "static",
+                    "search_snippet": "tavily",
+                }[source.kind],
+            )
         )
-        for source in profile.sources
-    ]
     return CompanyResearchRun(
         identity=profile.identity,
         draft=draft,

@@ -1,0 +1,176 @@
+{
+  "schema_version": "v0.1.1-utility-1",
+  "frozen_at": "2026-10-05T11:23:50.145Z",
+  "reference_kind": "independently reviewed real fixed-source observations, not OG-154 historical gold",
+  "value_contract": "A: literal source-language value anchors. A published same-field value may contain the exact anchor with additional source-supported context; no translation/synonym credit. Any broader unsupported content or unmatched support requires separate assessment, not automatic precision credit.",
+  "observation_unit": "One scalar business activity or one atomic list member, not citation count; repeated mention/duplicate source is not a second observation.",
+  "claims": [
+    {
+      "id": "A1",
+      "company": "asseco-poland",
+      "field": "business_description",
+      "expected_value": "providing a wide range of proprietary IT solutions and services",
+      "source_id": "U007",
+      "exact_source_span": "The activities of the Asseco Poland S.A focus on providing a wide range of proprietary IT solutions and services.",
+      "material_qualifier_scope": "Direct current activities of Asseco Poland S.A.; not the Group or strategic objectives.",
+      "expected_publication_state": "supported",
+      "why_supported": "Named legal entity and present-tense current activity are explicit."
+    },
+    {
+      "id": "A2",
+      "company": "asseco-poland",
+      "field": "products_services",
+      "expected_value": "IT projects ordered by various clients",
+      "source_id": "U007",
+      "exact_source_span": "The activities of the Asseco Poland S.A focus on providing a wide range of proprietary IT solutions and services. The company specializes in implementing the largest and most complex IT projects ordered by various clients, offering comprehensive solutions to all sectors of the economy, and also selling standardized products to smaller entities.",
+      "material_qualifier_scope": "IT project implementation for various clients; no claim of largest/most complex or independently verified superiority.",
+      "expected_publication_state": "supported",
+      "why_supported": "The same company explicitly specializes in implementation; customer and action context are retained."
+    },
+    {
+      "id": "A3",
+      "company": "asseco-poland",
+      "field": "products_services",
+      "expected_value": "standardized products to smaller entities",
+      "source_id": "U007",
+      "exact_source_span": "The activities of the Asseco Poland S.A focus on providing a wide range of proprietary IT solutions and services. The company specializes in implementing the largest and most complex IT projects ordered by various clients, offering comprehensive solutions to all sectors of the economy, and also selling standardized products to smaller entities.",
+      "material_qualifier_scope": "Current sale of standardized products to smaller entities; not an invented customer segment.",
+      "expected_publication_state": "supported",
+      "why_supported": "Coordinated selling predicate has the same company subject and explicit recipient qualification."
+    },
+    {
+      "id": "A4",
+      "company": "asseco-poland",
+      "field": "products_services",
+      "expected_value": "rozwiązania chmurowe",
+      "source_id": "U008",
+      "exact_source_span": "Cyfryzujemy biznes, oferujemy rozwiązania chmurowe i zapewniamy przewagę konkurencyjną",
+      "material_qualifier_scope": "Current official offering; do not assert the advertised competitive advantage. Full page identifies legal entity and NIP.",
+      "expected_publication_state": "supported",
+      "why_supported": "First-person offer statement is in the official offer section, not a customer testimonial."
+    },
+    {
+      "id": "A5",
+      "company": "asseco-poland",
+      "field": "industries",
+      "expected_value": "sektora finansów",
+      "source_id": "U008",
+      "exact_source_span": "Wspieramy zarządzanie procesami i rozwojem produktów dla sektora finansów",
+      "material_qualifier_scope": "Served financial-sector context; no revenue, market share or registered-PKD inference.",
+      "expected_publication_state": "supported",
+      "why_supported": "Official offer section states support for financial-sector processes and products."
+    },
+    {
+      "id": "A6",
+      "company": "asseco-poland",
+      "field": "industries",
+      "expected_value": "jednostek medycznych",
+      "source_id": "U008",
+      "exact_source_span": "Wdrażamy rozwiązania, które wspierają pracę jednostek medycznych i leczenie pacjentów",
+      "material_qualifier_scope": "Healthcare institutions as solution-application/client sector; no medical efficacy claim.",
+      "expected_publication_state": "supported",
+      "why_supported": "Official offer section explicitly describes deployed solutions supporting medical institutions."
+    },
+    {
+      "id": "S1",
+      "company": "sonel",
+      "field": "business_description",
+      "expected_value": "production of measuring instruments and accessories",
+      "source_id": "U002",
+      "exact_source_span": "Sonel S.A. is a leader in the production of measuring instruments and accessories for the power industry, electrical engineering, industry, and telecommunications.",
+      "material_qualifier_scope": "Current production activity; explicitly omit leadership/superiority, quality and precision claims.",
+      "expected_publication_state": "supported",
+      "why_supported": "Named company is expressly in production; narrower activity claim does not require proving leadership."
+    },
+    {
+      "id": "S2",
+      "company": "sonel",
+      "field": "products_services",
+      "expected_value": "meters",
+      "source_id": "U002",
+      "exact_source_span": "Sonel S.A. is a leader in the production of measuring instruments and accessories for the power industry, electrical engineering, industry, and telecommunications. The company offers a wide range of products, including meters, analyzers, and thermal imaging cameras.",
+      "material_qualifier_scope": "An example product in the stated range, not an exhaustive catalog or a technical specification.",
+      "expected_publication_state": "supported",
+      "why_supported": "The company pronoun has the adjacent named Sonel subject and an explicit current offers predicate."
+    },
+    {
+      "id": "S3",
+      "company": "sonel",
+      "field": "products_services",
+      "expected_value": "analyzers",
+      "source_id": "U002",
+      "exact_source_span": "Sonel S.A. is a leader in the production of measuring instruments and accessories for the power industry, electrical engineering, industry, and telecommunications. The company offers a wide range of products, including meters, analyzers, and thermal imaging cameras.",
+      "material_qualifier_scope": "An example product in the stated range, not an exhaustive catalog or a technical specification.",
+      "expected_publication_state": "supported",
+      "why_supported": "The company pronoun has the adjacent named Sonel subject and an explicit current offers predicate."
+    },
+    {
+      "id": "S4",
+      "company": "sonel",
+      "field": "products_services",
+      "expected_value": "thermal imaging cameras",
+      "source_id": "U002",
+      "exact_source_span": "Sonel S.A. is a leader in the production of measuring instruments and accessories for the power industry, electrical engineering, industry, and telecommunications. The company offers a wide range of products, including meters, analyzers, and thermal imaging cameras.",
+      "material_qualifier_scope": "An example product in the stated range, not an exhaustive catalog or a technical specification.",
+      "expected_publication_state": "supported",
+      "why_supported": "The company pronoun has the adjacent named Sonel subject and an explicit current offers predicate."
+    },
+    {
+      "id": "S5",
+      "company": "sonel",
+      "field": "products_services",
+      "expected_value": "calibration services",
+      "source_id": "U002",
+      "exact_source_span": "The company also has its own research and calibration laboratory, which provides calibration services.",
+      "material_qualifier_scope": "Service of the company’s own laboratory; no certification/testing/accreditation scope inferred.",
+      "expected_publication_state": "supported",
+      "why_supported": "Own-laboratory relationship explicitly links the stated calibration service to Sonel in the same about paragraph."
+    },
+    {
+      "id": "S6",
+      "company": "sonel",
+      "field": "industries",
+      "expected_value": "power industry",
+      "source_id": "U002",
+      "exact_source_span": "Sonel S.A. is a leader in the production of measuring instruments and accessories for the power industry, electrical engineering, industry, and telecommunications.",
+      "material_qualifier_scope": "Advertised product application sector, not proof of booked sales or market share.",
+      "expected_publication_state": "supported",
+      "why_supported": "Explicit for-sector relation links current manufactured products to this application industry."
+    },
+    {
+      "id": "S7",
+      "company": "sonel",
+      "field": "industries",
+      "expected_value": "telecommunications",
+      "source_id": "U002",
+      "exact_source_span": "Sonel S.A. is a leader in the production of measuring instruments and accessories for the power industry, electrical engineering, industry, and telecommunications.",
+      "material_qualifier_scope": "Advertised product application sector, not proof of booked sales or market share.",
+      "expected_publication_state": "supported",
+      "why_supported": "Explicit for-sector relation links current manufactured products to this application industry."
+    }
+  ],
+  "exclusions": [
+    {
+      "company": "asseco-poland",
+      "source_id": "U007",
+      "claim": "clients in Poland and abroad as established markets",
+      "reason": "Strategy-qualified geography is not demonstrated current geographic sales; omitted before predictions."
+    },
+    {
+      "company": "asseco-poland",
+      "claim": "Group figures, segment outcomes, SaaS strategic objective, biographies",
+      "reason": "Wrong entity/scope or strategic intent; not gold."
+    },
+    {
+      "company": "sonel",
+      "claim": "leadership, highest quality/precision, accreditation, dates, employee counts",
+      "reason": "Not independently established or no explicit relevant observation evidence."
+    }
+  ],
+  "pre_freeze_revision": {
+    "id": "A1",
+    "before": "The activities of the Asseco Poland S.A focus on providing a wide range of proprietary IT solutions and services.",
+    "after": "providing a wide range of proprietary IT solutions and services",
+    "reason": "Independent checker recommended an action-and-object literal anchor rather than irrelevant sentence framing; no predictions seen."
+  }
+}

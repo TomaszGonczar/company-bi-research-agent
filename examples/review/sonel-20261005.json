@@ -1,0 +1,184 @@
+{
+  "schema_version": "0.1",
+  "status": "partial",
+  "generated_at": "2026-10-05T08:54:56.641578Z",
+  "identity": {
+    "nip": "8840033448",
+    "legal_name": {
+      "state": "supported",
+      "value": "SONEL SPÓŁKA AKCYJNA",
+      "evidence": [
+        {
+          "source_id": "mf-vat-8840033448-20261005T085350642165Z",
+          "excerpt": "\"SONEL SPÓŁKA AKCYJNA\""
+        }
+      ],
+      "reason": null
+    },
+    "krs": {
+      "state": "supported",
+      "value": "0000090121",
+      "evidence": [
+        {
+          "source_id": "mf-vat-8840033448-20261005T085350642165Z",
+          "excerpt": "\"0000090121\""
+        }
+      ],
+      "reason": null
+    },
+    "regon": {
+      "state": "supported",
+      "value": "890236667",
+      "evidence": [
+        {
+          "source_id": "mf-vat-8840033448-20261005T085350642165Z",
+          "excerpt": "\"890236667\""
+        }
+      ],
+      "reason": null
+    },
+    "registered_city": {
+      "state": "unknown",
+      "value": null,
+      "evidence": [],
+      "reason": "Registry provides no separate city field; no city inferred from address"
+    },
+    "registered_address": {
+      "state": "supported",
+      "value": "STANISŁAWA WOKULSKIEGO 11, 58-100 ŚWIDNICA",
+      "evidence": [
+        {
+          "source_id": "mf-vat-8840033448-20261005T085350642165Z",
+          "excerpt": "\"STANISŁAWA WOKULSKIEGO 11, 58-100 ŚWIDNICA\""
+        }
+      ],
+      "reason": null
+    },
+    "website": {
+      "state": "unknown",
+      "value": null,
+      "evidence": [],
+      "reason": "This registry supplies no website; no website verification performed"
+    },
+    "resolved_at": "2026-10-05T08:53:50.642541Z"
+  },
+  "business_description": {
+    "state": "uncertain",
+    "value": "Sonel S.A. is a leader in the production of measuring instruments and accessories for the power industry, electrical engineering, industry, and telecommunications.",
+    "evidence": [
+      {
+        "source_id": "S007",
+        "excerpt": "Sonel S.A. is a leader in the production of measuring instruments and accessories for the power industry, electrical engineering, industry, and telecommunications."
+      }
+    ],
+    "reason": "No exact full-page citation verifies the candidate value, entity, and required context"
+  },
+  "products_services": {
+    "state": "uncertain",
+    "value": [
+      "meters",
+      "analyzers",
+      "thermal imaging cameras",
+      "calibration services"
+    ],
+    "evidence": [
+      {
+        "source_id": "S007",
+        "excerpt": "The company offers a wide range of products, including meters, analyzers, and thermal imaging cameras."
+      },
+      {
+        "source_id": "S007",
+        "excerpt": "The company also has its own research and calibration laboratory, which provides calibration services."
+      }
+    ],
+    "reason": "No exact full-page citation verifies the candidate value, entity, and required context"
+  },
+  "industries": {
+    "state": "uncertain",
+    "value": [
+      "the power industry",
+      "electrical engineering",
+      "industry",
+      "telecommunications"
+    ],
+    "evidence": [
+      {
+        "source_id": "S007",
+        "excerpt": "measuring instruments and accessories for the power industry, electrical engineering, industry, and telecommunications."
+      }
+    ],
+    "reason": "No exact full-page citation verifies the candidate value, entity, and required context"
+  },
+  "markets": {
+    "state": "unknown",
+    "value": null,
+    "evidence": [],
+    "reason": "No full-page source establishing the company's geographic markets was verified."
+  },
+  "employees": {
+    "state": "unknown",
+    "value": null,
+    "evidence": [],
+    "reason": "No primary-source employee count was verified; third-party figures were not used.",
+    "as_of": null
+  },
+  "financials": [
+    {
+      "state": "unknown",
+      "value": null,
+      "evidence": [],
+      "reason": "No eligible official financial statement amount and fiscal-period context were retrieved.",
+      "metric": "revenue",
+      "period": null,
+      "currency": null,
+      "unit": null,
+      "scope": null,
+      "group_name": null
+    },
+    {
+      "state": "unknown",
+      "value": null,
+      "evidence": [],
+      "reason": "No eligible official financial statement total net result and fiscal-period context were retrieved.",
+      "metric": "net_result",
+      "period": null,
+      "currency": null,
+      "unit": null,
+      "scope": null,
+      "group_name": null
+    }
+  ],
+  "recent_developments": [],
+  "sources": [
+    {
+      "source_id": "S007",
+      "url": "https://sonel.pl/en/about",
+      "title": "About | Sonel S.A.",
+      "retrieved_at": "2026-10-05T08:54:06.208933Z",
+      "published_on": null,
+      "redirect_chain": [
+        "https://www.sonel.pl/en/about",
+        "https://sonel.pl/en/about"
+      ],
+      "publication_blocked_reason": null,
+      "kind": "full_page"
+    },
+    {
+      "source_id": "mf-vat-8840033448-20261005T085350642165Z",
+      "url": "https://wl-api.mf.gov.pl/api/search/nip/8840033448?date=2026-10-05",
+      "title": "Ministerstwo Finansów — Wykaz podatników VAT",
+      "retrieved_at": "2026-10-05T08:53:50.642165Z",
+      "published_on": null,
+      "redirect_chain": [],
+      "publication_blocked_reason": null,
+      "kind": "registry"
+    }
+  ],
+  "limitations": [
+    "No recent development with an established exact publication date within the 12 months preceding 2026-10-05 was verified.",
+    "Employee count, financial statements, and geographic markets remain unverified.",
+    "business description: No exact full-page citation verifies the candidate value, entity, and required context",
+    "products/services: No exact full-page citation verifies the candidate value, entity, and required context",
+    "industries: No exact full-page citation verifies the candidate value, entity, and required context"
+  ]
+}

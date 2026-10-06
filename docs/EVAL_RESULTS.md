@@ -1,6 +1,8 @@
-# OG-154 — reproducible v0.1 evaluation results
+# OG-154 — historical earlier-contract evaluation results
 
-**Current frozen result (OG-154A onward):** supported precision **47/47**, researched precision **5/5**, eligible recall **5/19**, false-supported **0**; retained-real researched yield **0/7**. See the [targeted-recovery result](#og-154a--targeted-recovery-separate-from-the-frozen-baseline) below. The OG-154 sections preserve the earlier **44/44, 2/2, 2/19** baseline; they are history, not the current headline.
+**Contract-version note:** This file preserves earlier-contract results and original inputs/gold; they are not strict-contract positives or current strict-contract performance. The strict contract and taxonomy are defined in [STRICT_PUBLICATION_CONTRACT.md](STRICT_PUBLICATION_CONTRACT.md) and [HOLDOUT_ADJUDICATION.md](HOLDOUT_ADJUDICATION.md). No new strict evaluation result is asserted here.
+
+**Historical frozen result:** supported precision **47/47**, researched precision **5/5**, eligible recall **5/19**, false-supported **0**; retained-real researched yield **0/7**. See the [targeted-recovery result](#og-154a--targeted-recovery-separate-from-the-frozen-baseline) below. Earlier OG-154 sections preserve the **44/44, 2/2, 2/19** baseline; all are history, not the strict-contract headline.
 
 ## Conclusion
 

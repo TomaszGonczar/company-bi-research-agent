@@ -1,0 +1,133 @@
+{
+  "company": "sonel",
+  "nip": "8840033448",
+  "identity": {
+    "nip": "8840033448",
+    "legal_name": {
+      "state": "supported",
+      "value": "SONEL SPÓŁKA AKCYJNA",
+      "evidence": [
+        {
+          "source_id": "mf-vat-8840033448-20261005T083020151392Z",
+          "excerpt": "\"SONEL SPÓŁKA AKCYJNA\""
+        }
+      ],
+      "reason": null
+    },
+    "krs": {
+      "state": "supported",
+      "value": "0000090121",
+      "evidence": [
+        {
+          "source_id": "mf-vat-8840033448-20261005T083020151392Z",
+          "excerpt": "\"0000090121\""
+        }
+      ],
+      "reason": null
+    },
+    "regon": {
+      "state": "supported",
+      "value": "890236667",
+      "evidence": [
+        {
+          "source_id": "mf-vat-8840033448-20261005T083020151392Z",
+          "excerpt": "\"890236667\""
+        }
+      ],
+      "reason": null
+    },
+    "registered_city": {
+      "state": "unknown",
+      "value": null,
+      "evidence": [],
+      "reason": "Registry provides no separate city field; no city inferred from address"
+    },
+    "registered_address": {
+      "state": "supported",
+      "value": "STANISŁAWA WOKULSKIEGO 11, 58-100 ŚWIDNICA",
+      "evidence": [
+        {
+          "source_id": "mf-vat-8840033448-20261005T083020151392Z",
+          "excerpt": "\"STANISŁAWA WOKULSKIEGO 11, 58-100 ŚWIDNICA\""
+        }
+      ],
+      "reason": null
+    },
+    "website": {
+      "state": "unknown",
+      "value": null,
+      "evidence": [],
+      "reason": "This registry supplies no website; no website verification performed"
+    },
+    "resolved_at": "2026-10-05T08:30:20.155610Z"
+  },
+  "registry_source": {
+    "source_id": "mf-vat-8840033448-20261005T083020151392Z",
+    "url": "https://wl-api.mf.gov.pl/api/search/nip/8840033448?date=2026-10-05",
+    "title": "Ministerstwo Finansów — Wykaz podatników VAT",
+    "retrieved_at": "2026-10-05T08:30:20.151392Z",
+    "published_on": null,
+    "redirect_chain": [],
+    "publication_blocked_reason": null
+  },
+  "sources": [
+    {
+      "source_id": "U002",
+      "original_source_id": "S007",
+      "content_sha256": "22522be74893d271861e327bb99cdf47605d001d70b6ca98fb611e62dc644fd9",
+      "origin_reference": "extended-20261005T070952Z/stage-c/sonel-candidate-live/runs/8840033448/20261005T085456641578Z/research.json",
+      "material": {
+        "source": {
+          "source_id": "U002",
+          "url": "https://sonel.pl/en/about",
+          "title": "About | Sonel S.A.",
+          "retrieved_at": "2026-10-05T08:54:06.208933Z",
+          "published_on": null,
+          "redirect_chain": [
+            "https://www.sonel.pl/en/about",
+            "https://sonel.pl/en/about"
+          ],
+          "publication_blocked_reason": null
+        },
+        "kind": "full_page",
+        "content": "About | Sonel S.A.\nMy account\nContact\nContact\nCustomer Service\n+48 74 884 10 53\nSales department\n+48 74 85 83 860\nAll contacts\nFrequently asked questions (FAQ)\nLanguage\nLanguage\nPolish\nDeutsch\nSpanish\nSpanish (Peru)\nSpanish (Chile)\nItalian (Italy)\nУкраїнська\nEnglish (India)\nEnglish (Southeast Asia)\nEnglish (USA)\nMenu\nMenu\nCategories\nProducts\nApplications\nServices\nDownloads\nKnowledge centre\nHome page\nAbout\nAbout\nSonel S.A. is a leader in the production of measuring instruments and accessories for the power industry, electrical engineering, industry, and telecommunications. The company offers a wide range of products, including meters, analyzers, and thermal imaging cameras. Thanks to innovative technological solutions, Sonel ensures the highest quality and precision of its devices. The company also has its own research and calibration laboratory, which provides calibration services.\nCompany\nFind out more about our company\nRead more\nCertificates\nRead more\nHistory\nRead more\nKey values\nSee our values\nRead more\nNewsletter\nJoin and stay up to date with the latest news.\n* I consent to the processing of my personal data (e-mail address) by SONEL S.A. with its registered office at ul. Wokulskiego 11, 58-100 Świdnica, for the purpose of sending a newsletter containing commercial and marketing information, in accordance with Article 6(1)(a) of the General Data Protection Regulation (GDPR).\nMore\n* I agree to receive commercial information from SONEL S.A. with its registered office at ul. Wokulskiego 11, 58-100 Świdnica, by electronic means (to the e-mail address provided) for marketing purposes, in accordance with Article 398 of the Act of July 12, 2024, Electronic Communications Law.\nMore\n* this consent is required\nThe controller of your data is SONEL S.A. Data will be used to send a commercial and marketing informations. See our\nPrivacy Policy\nfor details.\nAbout Sonel\nCompany\nNews\nKey values\nHistory\nCertificates\nContact Sonel\n+48 74 884 10 53\n[email protected]\nFollow us\nCopyright © 2016-2026 SONEL S.A. All right reserved\nPrivacy Policy",
+        "fetch_mode": "static"
+      },
+      "discovery": {
+        "title": "About | Sonel S.A.",
+        "url": "https://www.sonel.pl/en/about",
+        "content": "About\n\nSonel S.A. is a leader in the production of measuring instruments and accessories for the power industry, electrical engineering, industry, and telecommunications. The company offers a wide range of products, including meters, analyzers, and thermal imaging cameras. Thanks to innovative technological solutions, Sonel ensures the highest quality and precision of its devices. The company also has its own research and calibration laboratory, which provides calibration services.\n\nCompany [...] Company\n\nFind out more about our company\n\nRead more\n\nCertificates\n\nRead more\n\nHistory\n\nRead more\n\nKey values\n\nSee our values\n\nRead more\n\nNewsletter\n\nJoin and stay up to date with the latest news.\n\nnewsletter thumbnail [...] My account\n\nContact\n\nContact\n\nCustomer Service+48 74 884 10 53\n\nSales department+48 74 85 83 860\n\nAll contacts\n\nFrequently asked questions (FAQ)\n\nLanguagePolishDeutschSpanishSpanish (Peru)Spanish (Chile)Italian (Italy)УкраїнськаEnglish (India)English (Southeast Asia)English (USA)\n\n Home page\n # About\n\nAbout",
+        "retrieved_at": "2026-10-05T08:54:02.298357Z"
+      }
+    },
+    {
+      "source_id": "U003",
+      "original_source_id": "S001",
+      "content_sha256": "62bd46eadbfd995e6434629debb8ebb284dd924442fadd33e897a55ca80f37be",
+      "origin_reference": "extended-20261005T070952Z/stage-c/sonel-legal-anchor/page.json",
+      "material": {
+        "source": {
+          "source_id": "U003",
+          "url": "https://sonel.pl/en/contact",
+          "title": "Contact | Sonel S.A.",
+          "retrieved_at": "2026-10-05T08:33:04.110852Z",
+          "published_on": null,
+          "redirect_chain": [],
+          "publication_blocked_reason": null
+        },
+        "kind": "full_page",
+        "content": "Contact | Sonel S.A.\nMy account\nContact\nContact\nCustomer Service\n+48 74 884 10 53\nSales department\n+48 74 85 83 860\nAll contacts\nFrequently asked questions (FAQ)\nLanguage\nLanguage\nPolish\nDeutsch\nSpanish\nSpanish (Peru)\nSpanish (Chile)\nItalian (Italy)\nУкраїнська\nEnglish (India)\nEnglish (Southeast Asia)\nEnglish (USA)\nMenu\nMenu\nCategories\nProducts\nApplications\nServices\nDownloads\nKnowledge centre\nHome page\nContact\nContact\nContact us. Find contact information, address, phone, and email. We are at your disposal.\nSonel S.A.\nWokulskiego 11, 58-100 Świdnica\n[email protected]\nREGON: 890236667\nNIP: 8840033448\nKRS: 0000090121\nSONEL S.A. company duly incorporated and having its legal address at Wokulskiego Str. 11, 58-100 Świdnica, Poland, for which the District Court for Wrocław Fabryczna keeps register no. KRS 0000090121, VAT Number PL8840033448, stock capital 1,400,000 PLN fully paid.\nChoose a convenient form of contact with us\nRequest a visit from an advisor\nSend inquiry\nSend an inquiry to the laboratory\nCustomer Service\nCustomer Service\n7:00 - 15:00\n+48 74 884 10 53\n[email protected]\nIf you want to:\ncheck the status of a service order\ncheck the status of a laboratory service order\nget training information\nPrepare before calling:\nprepare the serial number of your product\nread the information:\nhow to send the meter?\ncheck if the\nanswer is in the FAQ section\nor\nCustomer Support section\nprepare the name of your case manager\nTechnical Support Department\nTechnical Support Department\n+48 74 884 10 53\n[email protected]\nIf you want to:\nsolve a technical problem concerning the operation of hardware or software\nPrepare before calling:\nmake sure the equipment has the latest\nsoftware (firmware)\ninstalled\nread the instrument's\nuser manual\ncheck for\nanswers in the FAQ section\nor\nCustomer Support section\nSales Department\nSales Department\n7:00 – 15:00\n74 85 83 860\n[email protected]\nCheck out all\ncontacts\nin this section\nAll contacts\nSMT and THT Contract Assembly Services Sales Department\nSMT and THT Contract Assembly Services Sales Department\n[email protected]\nCheck out all\ncontacts\nin this section\nAll contacts\nProcurement Department\nProcurement Department\nCheck out all\ncontacts\nin this section\nAll contacts\nMarketing Department\nMarketing Department\n[email protected]\nSonel around the world\nGlobal HQ Poland\nSONEL S.A.\nShow on map\nREGON: 890236667\nNIP: 8840033448\nKRS: 0000090121\nWokulskiego 11, 58-100 Świdnica\n+48 74 884 10 53\n[email protected]\nIndia\nSONEL INSTRUMENTS INDIA PRIVATE LIMITED\nShow on map\nCORPORATE OFFICE\nPlot No. 21, 2nd floor “Spero Sierra” Electrical, Electronics and Instruments Industries, Perungudi, Chennai-600096\nWAREHOUSE\nPlot No:191, New No.4/225,Maxworth Nagar, S.Kolathur, Kovilambakkam, Chennai-600117.\n+91 44 22682346\n+91 984 000 4425\n[email protected]\nwww.sonel.in\nGermany\nMBS-Sonel GmbH\nShow on map\nHandelsregisternummer: HRB796020\nRegistergericht: Amtsgericht Stuttgart\nUSt-IdNr. DE369741750\nEisbachstr. 51 D-74429 Sulzbach-Laufen Deutschland\n07976-21097-10\n[email protected]\nmbs-sonel.de\nArgentina\nSERVICIO TÉCNICO DE SONEL EN AMÉRICA - ESPA ELEC\nShow on map\nDr. Enrique Finochietto 2053. Parque Patricios (C1275AAQ) - CABA\n(+54) 11 2098-1860\n[email protected]\nwww.espaelec.com.ar\nUSA\nAUTHORISED SONEL AGENT IN US\nShow on map\nLouis J. Nemec\n4266 Roswell Rd NE #F2 Atlanta, GA 30342 USA\n(770) 331-1393\n[email protected]\nwww.soneltest.com\nUSA & Canada\nSTRATATEK TEST & MEASUREMENT LTD\nShow on map\nUS Headquarters & Dallas Fort Worth Office\n1517 W Carrier Pkwy, Ste 110 Grand Prairie, TX 75050\nCanada Headquarters & Toronto Office\n101 Amber St, Unit 18-20 Markham, ON L3R 3B2\n(888) 868-4546\n[email protected]\nstratatek.com\nSoutheast Asia\nSONEL SOUTH EAST ASIA PTE LTD\nShow on map\n750A Chai Chee Road\n#07-23 ESR BIZPARK @ Chai Chee\n469001, Singapore\n+65 69081833\n+65 8024 1772\n[email protected]\nsonel.sg\nChina\nBST CALTEK INDUSTRIAL LTD\nShow on map\nUnit 23, Block A, 16 Floor, Roxy Industrial Centre, 41- 49 Kwai Cheong Road, Kwai Chung, Hong Kong\n+852 2424 4694\n+86 1334 296 8583\nSonel-1\n[email protected]\n[email protected]\nsonel-cn.com\nUnited Kingdom\nPOWER QUALITY EXPERT LIMITED\nShow on map\nLeigh, Lancashire, WN7 5TG\n+44 333 733 1337\n[email protected]\npowerqualityexpert.com\nNewsletter\nJoin and stay up to date with the latest news.\n* I consent to the processing of my personal data (e-mail address) by SONEL S.A. with its registered office at ul. Wokulskiego 11, 58-100 Świdnica, for the purpose of sending a newsletter containing commercial and marketing information, in accordance with Article 6(1)(a) of the General Data Protection Regulation (GDPR).\nMore\n* I agree to receive commercial information from SONEL S.A. with its registered office at ul. Wokulskiego 11, 58-100 Świdnica, by electronic means (to the e-mail address provided) for marketing purposes, in accordance with Article 398 of the Act of July 12, 2024, Electronic Communications Law.\nMore\n* this consent is required\nThe controller of your data is SONEL S.A. Data will be used to send a commercial and marketing informations. See our\nPrivacy Policy\nfor details.\nAbout Sonel\nCompany\nNews\nKey values\nHistory\nCertificates\nContact Sonel\n+48 74 884 10 53\n[email protected]\nFollow us\nCopyright © 2016-2026 SONEL S.A. All right reserved\nPrivacy Policy",
+        "fetch_mode": "static"
+      },
+      "discovery": {
+        "url": "https://sonel.pl/en/contact",
+        "title": "Contact | Sonel S.A.",
+        "content": "REGON: 890236667 NIP: 8840033448 KRS: 0000090121\n\nSONEL S.A. company duly incorporated and having its legal address at Wokulskiego Str. 11, 58-100 Świdnica, Poland, for which the District Court for Wrocław Fabryczna keeps register no. KRS 0000090121, VAT Number PL8840033448, stock capital 1,400,000 PLN fully paid.\n\nChoose a convenient form of contact with us\n\n Request a visit from an advisor\n Send inquiry\n Send an inquiry to the laboratory\n\n1. Customer Service\n\n   Customer Service [...] Global HQ PolandSONEL S.A.\n\n  Show on map\n\n  REGON: 890236667 NIP: 8840033448 KRS: 0000090121\n\n  Wokulskiego 11, 58-100 Świdnica\n\n  +48 74 884 10 53(/cdn-cgi/l/email-protection#c8bba7a6ada488bba7a6ada4e6b8a4)\n IndiaSONEL INSTRUMENTS INDIA PRIVATE LIMITED\n\n  Show on map\n\n  CORPORATE OFFICE Plot No. 21, 2nd floor “Spero Sierra” Electrical, Electronics and Instruments Industries, Perungudi, Chennai-600096 [...] WAREHOUSE Plot No:191, New No.4/225,Maxworth Nagar, S.Kolathur, Kovilambakkam, Chennai-600117.\n\n  +91 44 22682346+91 984 000 4425(/cdn-cgi/l/email-protection#285b40514945685b47464d44064146)\n\n  www.sonel.in\n GermanyMBS-Sonel GmbH\n\n  Show on map\n\n  Handelsregisternummer: HRB796020 Registergericht: Amtsgericht Stuttgart USt-IdNr. DE369741750\n\n  Eisbachstr. 51 D-74429 Sulzbach-Laufen Deutschland\n\n  07976-21097-10(/cdn-cgi/l/email-protection#8ff9eafdfbfde6eaedcfe2edfca2fce0e1eae3a1ebea)",
+        "score": 0.8849276,
+        "raw_content": null,
+        "id": "75c70b-00",
+        "retrieved_at": "2026-10-05T08:29:42.447651+00:00"
+      }
+    }
+  ]
+}

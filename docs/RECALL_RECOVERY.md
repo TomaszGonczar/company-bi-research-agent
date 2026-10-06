@@ -1,5 +1,7 @@
 # OG-154A — targeted researched-claim recovery
 
+**Historical earlier-contract evidence:** this recovery study preserves the OG-154A benchmark, source snapshots, and measurements under the prior heuristic publication rules. None of its recovered positives are strict-contract positives, and its recall numbers are not current strict-contract performance. The normative current grammar and taxonomy are [STRICT_PUBLICATION_CONTRACT.md](STRICT_PUBLICATION_CONTRACT.md) and [HOLDOUT_ADJUDICATION.md](HOLDOUT_ADJUDICATION.md). No strict result is asserted by this historical record.
+
 ## Frozen OG-154 baseline
 
 Approved commit: `46bdd26`. Initial `git status`, last-ten-commit log and diff showed that commit at HEAD and a clean working tree. Before any production edit, the existing offline command wrote `outputs/evals/before-og154a/results.json` and exited 0:

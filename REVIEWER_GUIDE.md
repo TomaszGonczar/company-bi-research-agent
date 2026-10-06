@@ -1,129 +1,96 @@
-# Reviewer guide — Company BI in ten minutes
+# Reviewer guide — Company BI
 
-Use this path from the repository root; no PROJECT.md, internal history, API keys, login, browser installation or previous outputs are required. The target is ten minutes of reading and offline verification after dependencies are installed; download time depends on the machine/network. If you already ran README's commands, reuse their outputs.
+This is a credential-free offline review path. `uv sync` may download Python and dependencies; verification itself makes no model, registry, search, page, or other network calls. No API key, login, browser, or prior outputs are needed.
 
-## 0–2 minutes — Understand the boundary
+## Thesis and contract
 
-Read the [README opening and architecture](README.md#architecture): CSV/XLSX NIPs become company intelligence profiles. **One bounded agent proposes knowledge; deterministic code approves publication.** NIP and the public registry anchor legal identity. The model selects searches/pages and extracts `CompanyResearchDraft`; it cannot invent host source IDs or approve `CompanyProfile` publication. Schema-valid JSON is not evidence.
+A research agent may propose broadly. Deterministic publication is deliberately narrow: it recognizes a finite contract and abstains when semantics are unknown or outside that contract. This is neither general language understanding nor a demonstrated broad-coverage research product. See the [README](README.md), normative [strict publication contract](docs/STRICT_PUBLICATION_CONTRACT.md), and [holdout adjudication](docs/HOLDOUT_ADJUDICATION.md).
 
-Start the locked setup if needed:
+The contract's semantic unit is the entire retained full-page text, NFC-normalized and outer-trimmed, limited to 4096 Unicode code points. It must match one complete production exactly, including its final full stop; clipping, surrounding context, extra clauses/sentences, or combining assertions is not allowed. The resolved legal name must match literally after NFC/whitespace-run normalization; labels are exact opaque quoted strings, not a vocabulary. Each qualitative list item needs its own supported unit. Employees, financials, and events have separate exact finite productions and component rules. Source ownership, full-page provenance, lineage, identity consistency, citation membership, and existing structural invariants remain required. The contract defines every allowed shape and boundary; do not infer unlisted synonyms, formats, or semantic rules.
+
+The agent's proposal is not publication approval. The gate does not authenticate arbitrary edited ledgers, prove publisher truth, or interpret text outside its finite language. Structured output validates shape, not truth. Unrecognized true prose is out of contract, not disproven.
+
+**Release status: Holdout B PASS; post-holdout release preparation, not released.** The certified commit `9f80eb7a7dcdb4c563a4bec897f22361cdbbae45` passed one independent first execution of 80 calls (70 semantic, 10 boundary; zero reruns): 20/20 supported positives, 20/20 true-OOC abstentions, 30/30 unsafe with no support, and 5/5 each provenance and identity model-rejections. See the [compact Holdout B result and independent artifact-audit provenance](docs/V0_1_1_HOLDOUT_RESULT.md). This sampled finite-contract evidence does not establish general accuracy, publisher truth, exhaustive coverage, or useful real-world output. Asseco and SONEL remain at **0 researched facts published**. Separate local release-preparation gates passed: 740 tests, Ruff, formatting, mypy, and 262/262 canonical CLI cases (**97/97** contract positives); the historical original 70-case holdout remains failed fixture construction, and earlier missing external replay corpora/runners have not been replayed. Check the final commit SHA and exact-commit clean-clone evidence in the external release-review package; hosted CI is pending authorization. No tag, merge, push, or release is claimed. The [current boundary review](docs/FINAL_BOUNDARY_REVIEW.md) points to the newer result; the [b521edf report](docs/STRICT_CONTRACT_REVIEW.md) remains a separate historical snapshot.
+
+The separate v2 reviewer-reported record lists 20/40 unsafe and 34/40 accepted; it was not local CLI execution, is not a current strict-matrix result, and its distinctness from other vendor corpora is unproven. Keep it separate; see [quality report §13](docs/V0_1_1_QUALITY.md#13-separate-v2-reviewer-reported-evidence-not-a-local-strict-result).
+
+## Zero-key strict matrix review
+
+Set up if needed:
 
 ```sh
 uv sync --frozen --python 3.12
 ```
 
-Installation may download Python/packages. The remaining main path makes no live service calls.
-
-## 2–4 minutes — Run the deterministic proof
+Run the canonical saved supported-contract matrix input through the offline verifier:
 
 ```sh
-uv run --frozen pytest -q
-uv run --frozen company-bi eval --dataset examples/evals/dataset.json --output-dir outputs/evals
+uv run --frozen company-bi verify examples/strict_contract/supported.json --output-dir /tmp/company-bi-strict-supported
 ```
 
-Read the console counts or `outputs/evals/results.md`, not raw eval JSON first:
+The matrix uses five explicit classes: `SUPPORTED_CONTRACT_POSITIVE`, `OUT_OF_CONTRACT_TRUE`, `UNSAFE_NEGATIVE`, `IDENTITY_INVALID`, `PROVENANCE_INVALID`. True OOC abstention is correct, not a missed positive. Invalid wrappers are reported as unexercised, not as successful semantic probes. The audit preserves all initial failures, source-backed adjudication corrections and raw CLI outputs; see [observed results](docs/FINAL_BOUNDARY_REVIEW.md).
 
-| Metric | Frozen result |
-| --- | ---: |
-| Overall supported precision | 47/47 |
-| Researched supported precision | 5/5 |
-| Eligible researched recall | 5/19 |
-| Unsupported-as-supported | 0 |
-| Registry precision | 42/42 |
-| Identity correctness | 10/10 |
-| Correct uncertainty handling | 28/28 |
-| Strict unknown handling | 40/41 |
-
-The 12 cases are nine controlled examples and three retained-real replays. Precision counts correctly supported observations over published supports; recall counts published eligible research over eligible retained gold. **5/5 is not production precision; 5/19 is low coverage.** Registry successes must not hide the real-company researched yield of **0/7**. The missing strict-unknown obligation belongs to a safely rejected run with no final Fact, not an invented unknown profile.
-
-## 4–6 minutes — Inspect two adversarial boundaries
+The existing [`examples/verification/`](examples/verification/) fixtures and frozen real-company runs are earlier-contract evidence. They can be inspected through the verifier, but are not strict positives and may be rejected for legacy-format provenance or whole-unit/grammar mismatch. For example, the older controlled fixture can be run separately:
 
 ```sh
-uv run --frozen pytest -q \
-  tests/test_evidence.py::test_month_only_event_occurrence_does_not_become_first_of_month \
-  tests/test_evidence.py::test_operating_profit_is_not_net_result
+uv run --frozen company-bi verify examples/verification/controlled-financial-sign.json --output-dir /tmp/company-bi-earlier-contract
 ```
 
-Open those named functions in [`tests/test_evidence.py`](tests/test_evidence.py), not the whole suite:
+Exit `0` means verification completed, not that every candidate was supported. Downgraded/cleared values must be read from the final side; preserved uncertain/unknown facts are not accepted. Verification does not overwrite the input or fetch source content.
 
-- **Date precision:** source text says “In July this year.” A supported event remains supported, but candidate occurrence `2026-07-01` is cleared to `None`; publication date does not authorize an occurrence day.
-- **Metric substitution:** operating-profit evidence proposed as net result becomes `uncertain` with no selected amount.
-
-These are actual deterministic gate regressions, not invented model demonstrations or proof of arbitrary research quality.
-
-## 6–8 minutes — Inspect three outcome classes
+Additional zero-key checks:
 
 ```sh
-uv run --frozen python scripts/review_offline.py --output-dir outputs/review
-```
-
-Open `outputs/review/review-manifest.json`, then these exact artifacts:
-
-| Label | Artifact | What to inspect |
-| --- | --- | --- |
-| **CONTROLLED FIXTURE — COMPLETE** | `outputs/review/controlled/synthetic-complete.md` and `.json` | Existing fictional `examples/profiles/complete.json`; supported core fields show the rendering contract, not real extraction yield. |
-| **REAL RETAINED RUN — PARTIAL** | `outputs/review/retained/asseco-poland.md` and `.json` | Current gate applied to the committed public Asseco run; uncertain entity/Group context and unknown/null financial values remain visible. |
-| **CONTROLLED FAILURE — FAILED** | `outputs/review/controlled/provider-interruption-research.json` | `diagnostics.status: failed`, `MODEL_FAILURE`, one guarded local FunctionModel interruption. The manifest has `company_profile_or_report: null`; no final report is fabricated. |
-
-The helper has zero external/paid-provider calls and one in-process model function call. Its failure timestamp/duration reflect this local invocation. The real input is [`examples/evals/retained/asseco-poland.json`](examples/evals/retained/asseco-poland.json): inspect `draft`, `sources` (IDs, kind, retained content, metadata) and `diagnostics` to follow one actual historical AI run without credentials.
-
-**PARTIAL is a valid product result**, not a crash. Missing financials alone do not mean FAILED. Research `completed` means a candidate draft exists, not complete publication. Unresolved identity is a separate safe no-profile outcome.
-
-## 8–10 minutes — Read the falsification, not a sales claim
-
-**2/19 → failure classification → regression-first corrections → 5/19; false-supported 0 → 0.** Three controlled claims recovered; retained-real researched yield stayed **0/7**. This demonstrates a measured correction process, not good coverage. Retrieval/extraction/gate/unavailable-context attribution uses distinct populations; no frozen gold was rewritten to improve the score.
-
-Scrapling remains the full-page retrieval mechanism. The paired experiment demonstrated **no additional published supported facts**, and only one pair exercised retrieval. The result is limited/inconclusive, not superiority or universal ineffectiveness.
-
-Read only the relevant sections if you want to challenge a claim:
-
-- [Evaluation methodology](docs/EVAL_SPEC.md#separate-metrics) and [current result](docs/EVAL_RESULTS.md#og-154a--targeted-recovery-separate-from-the-frozen-baseline).
-- [Before/after and remaining misses](docs/RECALL_RECOVERY.md#same-frozen-set-before--after).
-- [Clean-clone audit and post-hardening PARTIAL smoke](docs/CLEAN_CLONE_AUDIT.md#single-final-live-smoke).
-- [Scrapling falsification](docs/SCRAPLING_EXPERIMENT.md#verdict).
-
-Keep the non-claims visible: weak real yield, unsupported financial PDF/XML/archive/Office parsing, DNS rebinding/TOCTOU, provider/web variability and unrecoverable historical LPP output-failure cause. No population-accuracy or production-SaaS claim.
-
-### Optional live run — outside the timed proof
-
-Follow [README's separately configured live command](README.md#optional-live-research) only if credentials are available. It uses the three public company NIPs in `examples/research_batch.csv`, Tavily and the tested native Codex path; it can incur costs. No live run is required for this review.
-
-## Maintainer appendix — outside the timed path
-
-### Static checks
-
-```sh
-uv run --frozen ruff check .
+uv run --frozen company-bi verify examples/strict_contract/out_of_contract.json --output-dir /tmp/company-bi-strict-ooc
+uv run --frozen python scripts/review_offline.py --output-dir /tmp/company-bi-offline-review
+uv run --frozen python scripts/replay_strict_adjudication.py examples/evals/strict-historical.json --output /tmp/company-bi-strict-history.json
+uv run --frozen pytest
+uv run --frozen ruff check src tests scripts
+uv run --frozen ruff format --check src tests scripts
 uv run --frozen mypy src
-uv run --frozen ruff format --check src tests
 ```
 
-### Final isolated reviewer audit
+The offline review separates current strict probes, historical snapshots and an actual
+local `FunctionModel` interruption. It does not call a provider. In the review ZIP,
+`audit/holdout/frozen-original/` contains the unchanged defective independent inputs;
+`audit/holdout/first-cli/` and `fixture-defects.json` preserve their first rejection and
+why it is not an independent semantic pass. Do not silently repair or replace that
+population when reproducing this candidate.
 
-The OG-157 package passed a genuine `git clone --no-local` of temporary review snapshot `246610bfb020a4c0985206e5a3b004470290fcb6` (parent `05dafda`). HOME, Codex state, config, cache, temporary files, Python installation and virtualenv were isolated. No dotenv files, paid-key variables, authentication cache or prior runs were copied; runtime inspection confirmed Python **3.12.13** and package/virtualenv paths inside the clone.
+## Independent author handoff
 
-Using only the README/guide commands: locked installation, **265 tests**, the **two named adversarial tests**, offline eval, the review helper, Ruff lint, mypy (**14 source files**) and formatting (**25 files**) passed without rescue. The command sequence took **20.94 seconds**, including installation on this machine—not a portable setup-time promise. **17 upstream `strip_cdata` warnings** remain visible.
+Use the [public fixture toolkit](docs/EXTERNAL_HOLDOUT_TOOLKIT.md), not manually assembled
+envelopes. Its preflight validates public models only; it never executes the verifier.
+Give the external author only the separate restricted author package, not the full
+review ZIP containing implementation, old cases and regression outcomes. Preflight all
+semantic envelopes, inspect intentional boundary errors, freeze/hash, then execute the
+verifier once. No local regression or neutral toolkit example is an independent holdout.
 
-The generated JSON, Markdown and provenance manifest were inspected: controlled COMPLETE, real Asseco PARTIAL with null financials, and controlled FAILED with `MODEL_FAILURE` and no report. All frozen metric objects matched with no input-hash errors. The final implementation-checkout validation also passed. Production source, tests, scripts, lock, gold and retained fixtures stayed unchanged. Relative documentation links were checked and the Mermaid diagram rendered; no frontend or application feature was added.
+Actual retained Asseco and SONEL replays each publish **0 researched facts**. This is
+strict abstention on ordinary retained web prose, **not useful BI output**. The complete
+retained baseline utility run set yields 0/13 gold researched claims; its earlier
+diagnostics are historical, not new provider calls.
 
-### Instrumentation decision
 
-**AgentCanvas: SKIPPED.** There is no active trace-producing setup. Adding instrumentation/configuration would expand packaging work without improving this short evidence path. Retained provenance, diagnostics and deterministic reports already expose the important boundaries.
+## Historical evidence and population separation
 
-### Public-repository safety and metadata
+These remain immutable **earlier-contract** measurements, not strict positives or current strict-contract performance:
 
-At approved baseline `05dafda`, all eight reachable commits' 120 distinct text blobs (about 2.98 MB) were inspected by local pattern scanning for API/provider keys, private-key blocks, bearer/JWT material, credential assignments/URLs/headers, emails and absolute machine paths. No known committed credentials, private customer records or machine-local paths were found. Hits were one synthetic Bearer sentinel in a sanitization regression and two corporate role addresses retained in public Asseco/ORLEN source text. No credential/session paths were tracked. This is a bounded audit, not proof that automated scanning finds every secret. Ignored dotenv/authentication state was not opened.
+| Earlier-contract population / measure | Historical result |
+| --- | ---: |
+| Frozen overall supported precision | 47/47 |
+| Eligible researched recall | 5/19 |
+| Retained-real researched yield | **0/7** |
+| Locked candidates re-gated in the two-company Asseco + SONEL utility set | **1/13 supported; 0 incorrect observed** |
+| Asseco-only retained verification | **1/6 supported** |
+| Three earlier fresh live end-to-end runs | **zero supported researched observations** |
 
-Package metadata remains `company-bi` 0.1.0, Python `>=3.12`; the tested reviewer environment is Python 3.12. `.env.example` contains placeholders only; dotenv files, caches, `runs/` and `outputs/` remain ignored. No tracked scratch/generated clutter required removal. Historical project and experiment documents remain as evidence, outside the timed path.
+The 47/47 includes registry facts; 5/19 is limited research coverage. The 1/13, 1/6, 0/7, and earlier live zeros are distinct populations. None establishes strict-contract performance, broad usefulness, or population-level precision. The earlier blocked `66dbbc89` failures and missing original Astra/Opus envelopes remain limitations. Historical counts and documents are preserved, not rewritten as strict-contract outcomes.
 
-### License and publication
+The earlier frozen set contains nine controlled and three retained-real replays. Its gold and source snapshots remain historical evidence. Later corrections are regression evidence, not an untouched holdout. The blocked frozen candidate also has an observed post-amount financial-target false support and three conservative full-suite failures; its exact observed status and separated measurements are in the [quality report](docs/V0_1_1_QUALITY.md#11-frozen-remediation-candidate-blocked). Historical methods/results remain in [evaluation specification](docs/EVAL_SPEC.md), [evaluation results](docs/EVAL_RESULTS.md), and [adversarial correction history](docs/ADVERSARIAL_CORRECTIONS.md).
 
-The operator selected the [MIT License](LICENSE): copyright © 2026 Tomasz Gonczar.
+## Offline real-input examples and limitations
 
-Publication target: [TomaszGonczar/company-bi-research-agent](https://github.com/TomaszGonczar/company-bi-research-agent). The pre-publication OG-157 audit recorded hosted CI as **NOT VERIFIED** because no remote existed then. Check [Actions → CI](https://github.com/TomaszGonczar/company-bi-research-agent/actions/workflows/ci.yml) for the reviewed commit's actual hosted result; local verification alone is not a hosted pass.
+The [Asseco verification report](examples/review/asseco-poland-verification.md) and [Sonel partial profile](examples/review/sonel-20261005.md) are historical earlier-contract artifacts, not strict success or fresh strict research. Asseco's earlier report recorded one supported researched observation among six eligible observations; neither artifact is a strict-contract positive.
 
-The [first public CI run](https://github.com/TomaszGonczar/company-bi-research-agent/actions/runs/37207583133) failed workflow validation before any job ran: job-level `env` could not reference `runner.temp`. CI now initializes the isolated `CODEX_HOME` in a runner step via `$RUNNER_TEMP` and `$GITHUB_ENV`; the actual shell step was smoke-checked locally. No application, dependency, metric or evidence rule changed.
-
-The [second run](https://github.com/TomaszGonczar/company-bi-research-agent/actions/runs/37207916159) reached runner setup but could not resolve the existing `setup-uv` commit pin. The pin now matches the actual `astral-sh/setup-uv` `v10.1.0` tag (`bec219d24cd3e171d82865faccec33120bb574f4`), verified against GitHub. The selected action release, uv `0.12.3`, Python version, dependency lock and checks remain unchanged.
-
-The `v0.1.0` checkpoint requires a successful public push, a **VERIFIED PASS** hosted run and a fresh public zero-key clone. No GitHub Release or generated marketing copy is required.
+The documented product boundary is narrow and finite. It does not claim production autonomous coverage, population-level precision, universal semantic verification, comprehensive financial extraction, or reliable real-company researched yield. Retrieved PDF/XML/archive/Office financial parsing remains unsupported. Provider and website behavior vary. URL/DNS checks do not eliminate SSRF; DNS rebinding/TOCTOU remains residual risk. Live research is a separately configured experimental route in the [README](README.md#experimental-live-research-route), not part of this review path.

@@ -1,0 +1,945 @@
+{
+  "publication_commit": "7f781a035915a9372b306e82625611cd641b0e1b",
+  "counts": {
+    "citation_failures": 0,
+    "failed": 0,
+    "false_supports": 0,
+    "fixture_invalid": 0,
+    "passed": 43,
+    "positive_control_failures": 0,
+    "total": 43
+  },
+  "positive_controls": 15,
+  "cases": [
+    {
+      "case": "affirmative_catalog_control",
+      "expected": "supported",
+      "failure_kind": null,
+      "family": "descriptive_claims",
+      "observed": {
+        "as_of": null,
+        "evidence": [
+          {
+            "excerpt": "Example sp. z o.o. produces industrial pumps.",
+            "source_id": "page"
+          }
+        ],
+        "reason": null,
+        "rendered_markdown_contains_fact": false,
+        "source_ids": [
+          "page",
+          "registry"
+        ],
+        "state": "supported",
+        "value": [
+          "industrial pumps"
+        ]
+      },
+      "positive_control": true,
+      "result": "pass"
+    },
+    {
+      "case": "paraphrase_not_exact_citation",
+      "expected": "uncertain",
+      "failure_kind": null,
+      "family": "descriptive_claims",
+      "observed": {
+        "as_of": null,
+        "evidence": [
+          {
+            "excerpt": "Example produces industrial pumps.",
+            "source_id": "page"
+          }
+        ],
+        "reason": "Evidence is absent, snippet-only, or not an exact NFC/whitespace-normalized excerpt from a retained full page",
+        "rendered_markdown_contains_fact": false,
+        "source_ids": [
+          "page",
+          "registry"
+        ],
+        "state": "uncertain",
+        "value": [
+          "industrial pumps"
+        ]
+      },
+      "positive_control": false,
+      "result": "pass"
+    },
+    {
+      "case": "unrelated_exact_citation_retained_with_supported_fact",
+      "expected": "supported",
+      "failure_kind": null,
+      "family": "citations",
+      "observed": {
+        "as_of": null,
+        "evidence": [
+          {
+            "excerpt": "Example sp. z o.o. produces industrial pumps.",
+            "source_id": "page"
+          }
+        ],
+        "reason": null,
+        "rendered_markdown_contains_fact": false,
+        "same_source_id_variant": false,
+        "source_ids": [
+          "page",
+          "registry"
+        ],
+        "state": "supported",
+        "unrelated_evidence_retained": false,
+        "unrelated_source_retained": false,
+        "value": [
+          "industrial pumps"
+        ]
+      },
+      "positive_control": true,
+      "result": "pass"
+    },
+    {
+      "case": "unrelated_exact_citation_same_source_id_different_excerpt",
+      "expected": "supported",
+      "failure_kind": null,
+      "family": "citations",
+      "observed": {
+        "as_of": null,
+        "evidence": [
+          {
+            "excerpt": "Example sp. z o.o. produces industrial pumps.",
+            "source_id": "page"
+          }
+        ],
+        "reason": null,
+        "rendered_markdown_contains_fact": false,
+        "same_source_id_variant": true,
+        "source_ids": [
+          "page",
+          "registry"
+        ],
+        "state": "supported",
+        "unrelated_evidence_retained": false,
+        "unrelated_source_retained": false,
+        "value": [
+          "industrial pumps"
+        ]
+      },
+      "positive_control": true,
+      "result": "pass"
+    },
+    {
+      "case": "unrelated_exact_citation_retained_alongside_support",
+      "expected": "supported",
+      "failure_kind": null,
+      "family": "descriptive_claims",
+      "observed": {
+        "as_of": null,
+        "evidence": [
+          {
+            "excerpt": "Example sp. z o.o. produces industrial pumps. The weather is sunny.",
+            "source_id": "page"
+          }
+        ],
+        "reason": null,
+        "rendered_markdown_contains_fact": false,
+        "source_ids": [
+          "page",
+          "registry"
+        ],
+        "state": "supported",
+        "value": [
+          "industrial pumps"
+        ]
+      },
+      "positive_control": false,
+      "result": "pass"
+    },
+    {
+      "case": "unrelated_citation_only",
+      "expected": "uncertain",
+      "failure_kind": null,
+      "family": "descriptive_claims",
+      "observed": {
+        "as_of": null,
+        "evidence": [
+          {
+            "excerpt": "The weather is sunny.",
+            "source_id": "page"
+          }
+        ],
+        "reason": "No exact full-page citation verifies the candidate value, entity, and required context",
+        "rendered_markdown_contains_fact": false,
+        "source_ids": [
+          "page",
+          "registry"
+        ],
+        "state": "uncertain",
+        "value": [
+          "industrial pumps"
+        ]
+      },
+      "positive_control": false,
+      "result": "pass"
+    },
+    {
+      "case": "trimmed_excerpt_does_not_hide_negation",
+      "expected": "uncertain",
+      "failure_kind": null,
+      "family": "descriptive_claims",
+      "observed": {
+        "as_of": null,
+        "evidence": [
+          {
+            "excerpt": "produces industrial pumps",
+            "source_id": "page"
+          }
+        ],
+        "reason": "Cited page contains the candidate wording but not a recognized bounded affirmative relation for the resolved company",
+        "rendered_markdown_contains_fact": false,
+        "source_ids": [
+          "page",
+          "registry"
+        ],
+        "state": "uncertain",
+        "value": null
+      },
+      "positive_control": false,
+      "result": "pass"
+    },
+    {
+      "case": "never_negation",
+      "expected": "uncertain",
+      "failure_kind": null,
+      "family": "descriptive_claims",
+      "observed": {
+        "as_of": null,
+        "evidence": [
+          {
+            "excerpt": "Example sp. z o.o. never produces industrial pumps.",
+            "source_id": "page"
+          }
+        ],
+        "reason": "Cited page contains the candidate wording but not a recognized bounded affirmative relation for the resolved company",
+        "rendered_markdown_contains_fact": false,
+        "source_ids": [
+          "page",
+          "registry"
+        ],
+        "state": "uncertain",
+        "value": null
+      },
+      "positive_control": false,
+      "result": "pass"
+    },
+    {
+      "case": "no_longer_negation",
+      "expected": "uncertain",
+      "failure_kind": null,
+      "family": "descriptive_claims",
+      "observed": {
+        "as_of": null,
+        "evidence": [
+          {
+            "excerpt": "Example sp. z o.o. no longer produces industrial pumps.",
+            "source_id": "page"
+          }
+        ],
+        "reason": "Cited page contains the candidate wording but not a recognized bounded affirmative relation for the resolved company",
+        "rendered_markdown_contains_fact": false,
+        "source_ids": [
+          "page",
+          "registry"
+        ],
+        "state": "uncertain",
+        "value": null
+      },
+      "positive_control": false,
+      "result": "pass"
+    },
+    {
+      "case": "unrelated_prior_conditional_does_not_suppress_affirmative",
+      "expected": "supported",
+      "failure_kind": null,
+      "family": "descriptive_claims",
+      "observed": {
+        "as_of": null,
+        "evidence": [
+          {
+            "excerpt": "If market conditions improve, Example sp. z o.o. might produce turbines. Separately, Example sp. z o.o. produces industrial pumps.",
+            "source_id": "page"
+          }
+        ],
+        "reason": null,
+        "rendered_markdown_contains_fact": false,
+        "source_ids": [
+          "page",
+          "registry"
+        ],
+        "state": "supported",
+        "value": [
+          "industrial pumps"
+        ]
+      },
+      "positive_control": true,
+      "result": "pass"
+    },
+    {
+      "case": "conditional_only",
+      "expected": "uncertain",
+      "failure_kind": null,
+      "family": "descriptive_claims",
+      "observed": {
+        "as_of": null,
+        "evidence": [
+          {
+            "excerpt": "If market conditions improve, Example sp. z o.o. might produce turbines.",
+            "source_id": "page"
+          }
+        ],
+        "reason": "Cited page contains the candidate wording but not a recognized bounded affirmative relation for the resolved company",
+        "rendered_markdown_contains_fact": false,
+        "source_ids": [
+          "page",
+          "registry"
+        ],
+        "state": "uncertain",
+        "value": null
+      },
+      "positive_control": false,
+      "result": "pass"
+    },
+    {
+      "case": "future_plan_only",
+      "expected": "uncertain",
+      "failure_kind": null,
+      "family": "descriptive_claims",
+      "observed": {
+        "as_of": null,
+        "evidence": [
+          {
+            "excerpt": "Example sp. z o.o. plans to produce turbines next year.",
+            "source_id": "page"
+          }
+        ],
+        "reason": "Cited page contains the candidate wording but not a recognized bounded affirmative relation for the resolved company",
+        "rendered_markdown_contains_fact": false,
+        "source_ids": [
+          "page",
+          "registry"
+        ],
+        "state": "uncertain",
+        "value": null
+      },
+      "positive_control": false,
+      "result": "pass"
+    },
+    {
+      "case": "historical_not_current",
+      "expected": "uncertain",
+      "failure_kind": null,
+      "family": "descriptive_claims",
+      "observed": {
+        "as_of": null,
+        "evidence": [
+          {
+            "excerpt": "Example sp. z o.o. produced industrial pumps until 2020.",
+            "source_id": "page"
+          }
+        ],
+        "reason": "Cited page contains the candidate wording but not a recognized bounded affirmative relation for the resolved company",
+        "rendered_markdown_contains_fact": false,
+        "source_ids": [
+          "page",
+          "registry"
+        ],
+        "state": "uncertain",
+        "value": null
+      },
+      "positive_control": false,
+      "result": "pass"
+    },
+    {
+      "case": "discontinued_not_current",
+      "expected": "uncertain",
+      "failure_kind": null,
+      "family": "descriptive_claims",
+      "observed": {
+        "as_of": null,
+        "evidence": [
+          {
+            "excerpt": "Example sp. z o.o. formerly produced industrial pumps.",
+            "source_id": "page"
+          }
+        ],
+        "reason": "Cited page contains the candidate wording but not a recognized bounded affirmative relation for the resolved company",
+        "rendered_markdown_contains_fact": false,
+        "source_ids": [
+          "page",
+          "registry"
+        ],
+        "state": "uncertain",
+        "value": null
+      },
+      "positive_control": false,
+      "result": "pass"
+    },
+    {
+      "case": "affirmative_after_prior_denial",
+      "expected": "supported",
+      "failure_kind": null,
+      "family": "descriptive_claims",
+      "observed": {
+        "as_of": null,
+        "evidence": [
+          {
+            "excerpt": "Example sp. z o.o. does not produce turbines. However, Example sp. z o.o. produces pumps.",
+            "source_id": "page"
+          }
+        ],
+        "reason": null,
+        "rendered_markdown_contains_fact": false,
+        "source_ids": [
+          "page",
+          "registry"
+        ],
+        "state": "supported",
+        "value": [
+          "pumps"
+        ]
+      },
+      "positive_control": true,
+      "result": "pass"
+    },
+    {
+      "case": "other_company_not_target",
+      "expected": "uncertain",
+      "failure_kind": null,
+      "family": "descriptive_claims",
+      "observed": {
+        "as_of": null,
+        "evidence": [
+          {
+            "excerpt": "Other sp. z o.o. produces industrial pumps.",
+            "source_id": "page"
+          }
+        ],
+        "reason": "No exact full-page citation verifies the candidate value, entity, and required context",
+        "rendered_markdown_contains_fact": false,
+        "source_ids": [
+          "page",
+          "registry"
+        ],
+        "state": "uncertain",
+        "value": [
+          "industrial pumps"
+        ]
+      },
+      "positive_control": false,
+      "result": "pass"
+    },
+    {
+      "case": "target_positive_entity_anchor",
+      "expected": "supported",
+      "failure_kind": null,
+      "family": "descriptive_claims",
+      "observed": {
+        "as_of": null,
+        "evidence": [
+          {
+            "excerpt": "Example sp. z o.o. produces industrial pumps.",
+            "source_id": "page"
+          }
+        ],
+        "reason": null,
+        "rendered_markdown_contains_fact": false,
+        "source_ids": [
+          "page",
+          "registry"
+        ],
+        "state": "supported",
+        "value": [
+          "industrial pumps"
+        ]
+      },
+      "positive_control": true,
+      "result": "pass"
+    },
+    {
+      "case": "group_not_legal_entity",
+      "expected": "uncertain",
+      "failure_kind": null,
+      "family": "descriptive_claims",
+      "observed": {
+        "as_of": null,
+        "evidence": [
+          {
+            "excerpt": "Example sp. z o.o. group reports revenue of 500 thousand PLN for 2025.",
+            "source_id": "page"
+          }
+        ],
+        "reason": "No exact full-page citation verifies the candidate value, entity, and required context",
+        "rendered_markdown_contains_fact": false,
+        "source_ids": [
+          "page",
+          "registry"
+        ],
+        "state": "uncertain",
+        "value": [
+          "500"
+        ]
+      },
+      "positive_control": false,
+      "result": "pass"
+    },
+    {
+      "case": "employee_as_of_explicit_positive",
+      "expected": "supported",
+      "failure_kind": null,
+      "family": "employee_dates",
+      "observed": {
+        "as_of": "2025-06-30",
+        "evidence": [
+          {
+            "excerpt": "Example sp. z o.o. employs 120 employees as of 2025-06-30.",
+            "source_id": "page"
+          }
+        ],
+        "reason": null,
+        "rendered_markdown_contains_fact": true,
+        "source_ids": [
+          "page",
+          "registry"
+        ],
+        "state": "supported",
+        "value": {
+          "count": 120,
+          "kind": "exact"
+        }
+      },
+      "positive_control": true,
+      "result": "pass"
+    },
+    {
+      "case": "employee_publication_metadata_not_observation_date",
+      "expected": "supported",
+      "failure_kind": null,
+      "family": "employee_dates",
+      "observed": {
+        "as_of": null,
+        "evidence": [
+          {
+            "excerpt": "Example sp. z o.o. employs 120 employees.",
+            "source_id": "page"
+          }
+        ],
+        "reason": "Unverified employee as-of date removed",
+        "rendered_markdown_contains_fact": true,
+        "source_ids": [
+          "page",
+          "registry"
+        ],
+        "state": "supported",
+        "value": {
+          "count": 120,
+          "kind": "exact"
+        }
+      },
+      "positive_control": false,
+      "result": "pass"
+    },
+    {
+      "case": "employee_publication_date_does_not_supply_as_of",
+      "expected": "supported",
+      "failure_kind": null,
+      "family": "employee_dates",
+      "observed": {
+        "as_of": null,
+        "evidence": [
+          {
+            "excerpt": "Example sp. z o.o. employs 120 employees.",
+            "source_id": "page"
+          }
+        ],
+        "reason": "Unverified employee as-of date removed",
+        "rendered_markdown_contains_fact": true,
+        "source_ids": [
+          "page",
+          "registry"
+        ],
+        "state": "supported",
+        "value": {
+          "count": 120,
+          "kind": "exact"
+        }
+      },
+      "positive_control": true,
+      "result": "pass"
+    },
+    {
+      "case": "different_employee_observation_dates_are_not_conflict",
+      "expected": "supported",
+      "failure_kind": null,
+      "family": "employee_dates",
+      "observed": {
+        "as_of": "2025-06-30",
+        "evidence": [
+          {
+            "excerpt": "Example sp. z o.o. employs 120 employees as of 2025-06-30.",
+            "source_id": "page"
+          }
+        ],
+        "reason": null,
+        "rendered_markdown_contains_fact": true,
+        "source_ids": [
+          "page",
+          "registry"
+        ],
+        "state": "supported",
+        "value": {
+          "count": 120,
+          "kind": "exact"
+        }
+      },
+      "positive_control": true,
+      "result": "pass"
+    },
+    {
+      "case": "same_date_employee_counts_are_conflict",
+      "expected": "uncertain",
+      "failure_kind": null,
+      "family": "employee_dates",
+      "observed": {
+        "as_of": null,
+        "evidence": [
+          {
+            "excerpt": "Example sp. z o.o. employs 120 employees as of 2025-06-30.",
+            "source_id": "page"
+          },
+          {
+            "excerpt": "Example sp. z o.o. employs 90 employees as of 2025-06-30.",
+            "source_id": "page2"
+          }
+        ],
+        "reason": "Conflicting employee observations for the same or unresolved observation date; Unverified employee as-of date removed",
+        "rendered_markdown_contains_fact": true,
+        "source_ids": [
+          "page",
+          "page2",
+          "registry"
+        ],
+        "state": "uncertain",
+        "value": null
+      },
+      "positive_control": false,
+      "result": "pass"
+    },
+    {
+      "case": "employee_future_hiring_not_current_headcount",
+      "expected": "uncertain",
+      "failure_kind": null,
+      "family": "employee_dates",
+      "observed": {
+        "as_of": null,
+        "evidence": [
+          {
+            "excerpt": "Example sp. z o.o. plans to hire 120 employees next year.",
+            "source_id": "page"
+          }
+        ],
+        "reason": "Cited employee count lacks a recognized current assertion or an explicitly attached observation date",
+        "rendered_markdown_contains_fact": true,
+        "source_ids": [
+          "page",
+          "registry"
+        ],
+        "state": "uncertain",
+        "value": null
+      },
+      "positive_control": false,
+      "result": "pass"
+    },
+    {
+      "case": "employee_positive_current_control",
+      "expected": "supported",
+      "failure_kind": null,
+      "family": "employee_dates",
+      "observed": {
+        "as_of": null,
+        "evidence": [
+          {
+            "excerpt": "Example sp. z o.o. employs 120 employees.",
+            "source_id": "page"
+          }
+        ],
+        "reason": null,
+        "rendered_markdown_contains_fact": true,
+        "source_ids": [
+          "page",
+          "registry"
+        ],
+        "state": "supported",
+        "value": {
+          "count": 120,
+          "kind": "exact"
+        }
+      },
+      "positive_control": true,
+      "result": "pass"
+    },
+    {
+      "case": "year_only_revenue_missing_explicit_interval",
+      "expected": "uncertain",
+      "failure_kind": null,
+      "family": "financials",
+      "observed": {
+        "markdown_mentions_metric": true,
+        "reason": "Exact full-page evidence does not verify metric, reporting interval, currency, unit, entity scope, and amount",
+        "state": "uncertain",
+        "value": null
+      },
+      "positive_control": false,
+      "result": "pass"
+    },
+    {
+      "case": "explicit_interval_missing_standalone_scope",
+      "expected": "uncertain",
+      "failure_kind": null,
+      "family": "financials",
+      "observed": {
+        "markdown_mentions_metric": true,
+        "reason": "Exact full-page evidence does not verify metric, reporting interval, currency, unit, entity scope, and amount",
+        "state": "uncertain",
+        "value": null
+      },
+      "positive_control": false,
+      "result": "pass"
+    },
+    {
+      "case": "standalone_actual_revenue_positive",
+      "expected": "supported",
+      "failure_kind": null,
+      "family": "financials",
+      "observed": {
+        "markdown_mentions_metric": true,
+        "reason": null,
+        "state": "supported",
+        "value": "500"
+      },
+      "positive_control": true,
+      "result": "pass"
+    },
+    {
+      "case": "standalone_revenue_target_not_actual",
+      "expected": "uncertain",
+      "failure_kind": null,
+      "family": "financials",
+      "observed": {
+        "markdown_mentions_metric": true,
+        "reason": "Cited financial assertion is a target, forecast, denial, or conditional, not an actual reported result",
+        "state": "uncertain",
+        "value": null
+      },
+      "positive_control": false,
+      "result": "pass"
+    },
+    {
+      "case": "standalone_revenue_forecast_not_actual",
+      "expected": "uncertain",
+      "failure_kind": null,
+      "family": "financials",
+      "observed": {
+        "markdown_mentions_metric": true,
+        "reason": "Cited financial assertion is a target, forecast, denial, or conditional, not an actual reported result",
+        "state": "uncertain",
+        "value": null
+      },
+      "positive_control": false,
+      "result": "pass"
+    },
+    {
+      "case": "year_only_target_missing_explicit_interval",
+      "expected": "uncertain",
+      "failure_kind": null,
+      "family": "financials",
+      "observed": {
+        "markdown_mentions_metric": true,
+        "reason": "Cited financial assertion is a target, forecast, denial, or conditional, not an actual reported result",
+        "state": "uncertain",
+        "value": null
+      },
+      "positive_control": false,
+      "result": "pass"
+    },
+    {
+      "case": "explicit_interval_target_missing_standalone_scope",
+      "expected": "uncertain",
+      "failure_kind": null,
+      "family": "financials",
+      "observed": {
+        "markdown_mentions_metric": true,
+        "reason": "Cited financial assertion is a target, forecast, denial, or conditional, not an actual reported result",
+        "state": "uncertain",
+        "value": null
+      },
+      "positive_control": false,
+      "result": "pass"
+    },
+    {
+      "case": "year_only_forecast_missing_explicit_interval",
+      "expected": "uncertain",
+      "failure_kind": null,
+      "family": "financials",
+      "observed": {
+        "markdown_mentions_metric": true,
+        "reason": "Cited financial assertion is a target, forecast, denial, or conditional, not an actual reported result",
+        "state": "uncertain",
+        "value": null
+      },
+      "positive_control": false,
+      "result": "pass"
+    },
+    {
+      "case": "explicit_interval_forecast_missing_standalone_scope",
+      "expected": "uncertain",
+      "failure_kind": null,
+      "family": "financials",
+      "observed": {
+        "markdown_mentions_metric": true,
+        "reason": "Cited financial assertion is a target, forecast, denial, or conditional, not an actual reported result",
+        "state": "uncertain",
+        "value": null
+      },
+      "positive_control": false,
+      "result": "pass"
+    },
+    {
+      "case": "standalone_net_loss_unsigned_mismatch",
+      "expected": "uncertain",
+      "failure_kind": null,
+      "family": "financials",
+      "observed": {
+        "markdown_mentions_metric": false,
+        "reason": "Cited actual financial amount or sign does not match the candidate at the declared precision",
+        "state": "uncertain",
+        "value": null
+      },
+      "positive_control": false,
+      "result": "pass"
+    },
+    {
+      "case": "standalone_net_loss_negative_control",
+      "expected": "supported",
+      "failure_kind": null,
+      "family": "financials",
+      "observed": {
+        "markdown_mentions_metric": false,
+        "reason": null,
+        "state": "supported",
+        "value": "-120"
+      },
+      "positive_control": true,
+      "result": "pass"
+    },
+    {
+      "case": "standalone_signed_revenue_mismatch",
+      "expected": "uncertain",
+      "failure_kind": null,
+      "family": "financials",
+      "observed": {
+        "markdown_mentions_metric": true,
+        "reason": "Cited actual financial amount or sign does not match the candidate at the declared precision",
+        "state": "uncertain",
+        "value": null
+      },
+      "positive_control": false,
+      "result": "pass"
+    },
+    {
+      "case": "explicit_interval_named_group_scope_positive",
+      "expected": "supported",
+      "failure_kind": null,
+      "family": "entity_group_scope",
+      "observed": {
+        "markdown_mentions_metric": true,
+        "reason": null,
+        "state": "supported",
+        "value": "500"
+      },
+      "positive_control": true,
+      "result": "pass"
+    },
+    {
+      "case": "explicit_interval_group_amount_not_entity_amount",
+      "expected": "uncertain",
+      "failure_kind": null,
+      "family": "entity_group_scope",
+      "observed": {
+        "markdown_mentions_metric": true,
+        "reason": "Cited financial text does not match the bounded reported-observation or labeled-row contract",
+        "state": "uncertain",
+        "value": null
+      },
+      "positive_control": false,
+      "result": "pass"
+    },
+    {
+      "case": "redirect_chain_valid_positive",
+      "expected": "accepted",
+      "failure_kind": null,
+      "family": "redirect_provenance",
+      "observed": "accepted",
+      "positive_control": true,
+      "result": "pass"
+    },
+    {
+      "case": "unexplained_url_change_rejected",
+      "expected": "rejected",
+      "failure_kind": null,
+      "family": "redirect_provenance",
+      "observed": "rejected",
+      "positive_control": false,
+      "result": "pass"
+    },
+    {
+      "case": "legacy_unproven_url_relationship_quarantined",
+      "expected": "uncertain",
+      "failure_kind": null,
+      "family": "legacy_loading",
+      "observed": {
+        "as_of": null,
+        "blocked_reason": "unproven_legacy_url_relationship",
+        "evidence": [
+          {
+            "excerpt": "Example sp. z o.o. produces industrial pumps.",
+            "source_id": "page"
+          }
+        ],
+        "reason": "Evidence is absent, snippet-only, or not an exact NFC/whitespace-normalized excerpt from a retained full page",
+        "rendered_markdown_contains_fact": false,
+        "source_ids": [
+          "page",
+          "registry"
+        ],
+        "state": "uncertain",
+        "value": [
+          "industrial pumps"
+        ]
+      },
+      "positive_control": false,
+      "result": "pass"
+    },
+    {
+      "case": "explicit_empty_redirect_chain_is_not_legacy",
+      "expected": "unblocked",
+      "failure_kind": null,
+      "family": "legacy_loading",
+      "observed": "unblocked",
+      "positive_control": true,
+      "result": "pass"
+    }
+  ],
+  "limitations": [
+    "No current span schema exists, so no span cases are included.",
+    "No live retrieval/network behavior exercised; redirect lineage validator and stored serialized provenance are tested offline.",
+    "Heuristic semantic boundaries are sampled, not exhaustive language entailment."
+  ],
+  "independence": "Fresh contexts authored findings/cases after utility implementation stopped. Initial fixture and assertion errors are archived in the external audit; final reruns are regression verification, not untouched holdout measurements."
+}

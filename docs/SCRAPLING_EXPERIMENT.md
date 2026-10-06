@@ -1,5 +1,7 @@
 # OG-156 — paired Scrapling falsification experiment
 
+**Historical earlier-contract experiment:** these live retrieval/model executions used the prior gate and are not strict-contract matrix results or strict positives. Its outputs, methods, and metrics are retained unchanged. Current semantic rules are defined by [STRICT_PUBLICATION_CONTRACT.md](STRICT_PUBLICATION_CONTRACT.md) and case taxonomy by [HOLDOUT_ADJUDICATION.md](HOLDOUT_ADJUDICATION.md); no newly executed strict result is asserted here.
+
 ## Verdict
 
 **No additional publishable researched facts were observed: 0 → 0 across all three pairs.** ORLEN's Scrapling arm acquired one page and proposed four supported candidates, but the unchanged gate downgraded all four to uncertain. This is a negative result for published gain in this sample, not evidence that Scrapling is universally ineffective or safe to remove.

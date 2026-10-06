@@ -1,6 +1,6 @@
-# Company BI v0.1 — product contract
+# Company BI v0.1 — historical product contract
 
-[OG-149](https://linear.app/tpg96/issue/OG-149) · **CSV/XLSX of Polish NIPs → evidence-backed JSON and Markdown BI files.** This page freezes complete product behavior. OG-151 executes deterministic ingest/identity; OG-152 adds a bounded one-company candidate draft and source artifacts, not final BI reports.
+**Contract-version note:** This document records the earlier v0.1 product design and its broader profile aspirations, not the current strict publication language. The current product thesis is broad agent proposals plus narrow finite deterministic publication and abstention outside recognized semantics; it is not general language understanding or a useful broad-coverage research claim. See the normative [strict publication contract](STRICT_PUBLICATION_CONTRACT.md) and [holdout adjudication](HOLDOUT_ADJUDICATION.md). This document's prior examples/measurements do not count as strict-contract results.
 
 ## Input and identity
 

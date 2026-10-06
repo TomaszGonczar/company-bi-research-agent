@@ -1,0 +1,119 @@
+{
+  "identity": {
+    "nip": "5220003782",
+    "legal_name": {
+      "state": "supported",
+      "value": "Example sp. z o.o.",
+      "evidence": [
+        {
+          "source_id": "registry",
+          "excerpt": "\"Example sp. z o.o.\""
+        }
+      ]
+    },
+    "krs": {
+      "state": "unknown",
+      "reason": "Not established in this synthetic offline example"
+    },
+    "regon": {
+      "state": "unknown",
+      "reason": "Not established in this synthetic offline example"
+    },
+    "registered_city": {
+      "state": "unknown",
+      "reason": "Not established in this synthetic offline example"
+    },
+    "registered_address": {
+      "state": "unknown",
+      "reason": "Not established in this synthetic offline example"
+    },
+    "website": {
+      "state": "unknown",
+      "reason": "Not established in this synthetic offline example"
+    },
+    "resolved_at": "2026-10-05T12:00:00Z"
+  },
+  "draft": {
+    "business_description": {
+      "state": "unknown",
+      "reason": "Not established in this synthetic offline example"
+    },
+    "products_services": {
+      "state": "supported",
+      "value": [
+        "cloud services"
+      ],
+      "evidence": [
+        {
+          "source_id": "page",
+          "excerpt": "Example sp. z o.o. offers cloud services."
+        }
+      ]
+    },
+    "industries": {
+      "state": "unknown",
+      "reason": "Not established in this synthetic offline example"
+    },
+    "markets": {
+      "state": "unknown",
+      "reason": "Not established in this synthetic offline example"
+    },
+    "employees": {
+      "state": "unknown",
+      "reason": "Not established in this synthetic offline example"
+    },
+    "financials": [
+      {
+        "state": "unknown",
+        "reason": "Not established in this synthetic offline example",
+        "metric": "revenue"
+      },
+      {
+        "state": "unknown",
+        "reason": "Not established in this synthetic offline example",
+        "metric": "net_result"
+      }
+    ],
+    "recent_developments": [],
+    "limitations": [
+      "Synthetic strict-contract probe; no live-company research"
+    ]
+  },
+  "sources": [
+    {
+      "source": {
+        "source_id": "registry",
+        "url": "https://registry.example/",
+        "title": "Synthetic MF-shaped registry record",
+        "retrieved_at": "2026-10-05T12:00:00Z"
+      },
+      "kind": "registry",
+      "content": "{\"result\":{\"subject\":{\"nip\":\"5220003782\",\"name\":\"Example sp. z o.o.\"}}}",
+      "fetch_mode": "registry"
+    },
+    {
+      "source": {
+        "source_id": "page",
+        "url": "https://company.example/",
+        "title": "Synthetic complete assertion unit",
+        "retrieved_at": "2026-10-05T12:00:00Z"
+      },
+      "kind": "full_page",
+      "content": "Example sp. z o.o. offers cloud services.",
+      "fetch_mode": "static"
+    }
+  ],
+  "diagnostics": {
+    "model": "offline-synthetic-fixture",
+    "status": "completed",
+    "model_requests": 0,
+    "searches": 0,
+    "page_reads": 1,
+    "dynamic_reads": 0,
+    "output_retries": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "duration_seconds": 0
+  },
+  "generated_at": "2026-10-05T12:00:00Z"
+}

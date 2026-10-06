@@ -72,3 +72,27 @@ def test_markdown_sensitive_content_is_escaped() -> None:
     assert r"A \*bold\* \[claim\]\(x\) \| \# heading" in markdown
     assert r"Company \[page\] \(synthetic\)" in markdown
     assert "path_%28one%29" in markdown
+
+
+def test_inline_newlines_cannot_inject_markdown_blocks_and_json_is_unchanged() -> None:
+    data: dict[str, Any] = json.loads((PROFILE_DIR / "complete.json").read_text())
+    title = "Company\r\n# Injected heading"
+    excerpt = "Evidence\r\n- Injected list item"
+    value = "Services\r\n# Injected value"
+    data["sources"][1]["title"] = title
+    data["business_description"]["value"] = value
+    data["business_description"]["evidence"][0]["excerpt"] = excerpt
+    profile = CompanyProfile.model_validate(data)
+
+    markdown = render_markdown(profile)
+    serialized = render_json(profile)
+    lines = markdown.splitlines()
+    assert "# Injected heading" not in lines
+    assert "- Injected list item" not in lines
+    assert "# Injected value" not in lines
+    assert r"Company \# Injected heading" in markdown
+    assert r"Evidence - Injected list item" in markdown
+    assert r"Services \# Injected value" in markdown
+    assert json.loads(serialized)["sources"][1]["title"] == title
+    assert json.loads(serialized)["business_description"]["value"] == value
+    assert json.loads(serialized)["business_description"]["evidence"][0]["excerpt"] == excerpt

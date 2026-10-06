@@ -1,5 +1,7 @@
 # Architecture decisions — Company BI v0.1
 
+**Earlier-contract architecture record:** this file preserves the v0.1 implementation and prior publication-gate design. It is not the current strict semantic contract or evidence that strict productions have passed. The present product thesis is broad agent proposals with narrow finite deterministic publication and abstention outside recognized semantics. See [STRICT_PUBLICATION_CONTRACT.md](STRICT_PUBLICATION_CONTRACT.md) and [HOLDOUT_ADJUDICATION.md](HOLDOUT_ADJUDICATION.md).
+
 Contract for [OG-148](https://linear.app/tpg96/issue/OG-148). The purpose is a small NIP-to-BI-file product, not stack imitation. The foundation choices remain frozen; OG-151 implements the deterministic ingest/identity leg only, not the research or BI-report pipeline.
 
 ## Minimum architecture

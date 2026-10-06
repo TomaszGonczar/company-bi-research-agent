@@ -1,0 +1,382 @@
+{
+  "baseline_commit": "a99b959c8eb510fd0526a301a23466a30067c9ec",
+  "publication_commit": "7f781a035915a9372b306e82625611cd641b0e1b",
+  "baseline": {
+    "counts": {
+      "SOURCE_PRESENTATION": 3,
+      "EXTRACTION": 2,
+      "VALUE_NORMALIZATION": 1,
+      "CITATION": 0,
+      "ENTITY_ATTACHMENT": 7,
+      "POLARITY_MODALITY_TIME": 0,
+      "GATE_OTHER": 0
+    },
+    "claims": [
+      {
+        "id": "A1",
+        "company": "asseco-poland",
+        "field": "business_description",
+        "first_loss": "ENTITY_ATTACHMENT",
+        "basis": "Current actual source-entity attachment probe fails for a gold anchor on final evidence."
+      },
+      {
+        "id": "A2",
+        "company": "asseco-poland",
+        "field": "products_services",
+        "first_loss": "EXTRACTION",
+        "basis": "Read source contains the gold current activity, but saved/final products select different strategy statements; no paraphrase of this gold claim is present."
+      },
+      {
+        "id": "A3",
+        "company": "asseco-poland",
+        "field": "products_services",
+        "first_loss": "EXTRACTION",
+        "basis": "Read source contains the gold current activity, but saved/final products select different strategy statements; no paraphrase of this gold claim is present."
+      },
+      {
+        "id": "A4",
+        "company": "asseco-poland",
+        "field": "products_services",
+        "first_loss": "SOURCE_PRESENTATION",
+        "basis": "Gold span exists in canonical source but was not visible in a successful run read (unread, failed read, or omitted from presented content)."
+      },
+      {
+        "id": "A5",
+        "company": "asseco-poland",
+        "field": "industries",
+        "first_loss": "SOURCE_PRESENTATION",
+        "basis": "Gold span exists in canonical source but was not visible in a successful run read (unread, failed read, or omitted from presented content)."
+      },
+      {
+        "id": "A6",
+        "company": "asseco-poland",
+        "field": "industries",
+        "first_loss": "SOURCE_PRESENTATION",
+        "basis": "Gold span exists in canonical source but was not visible in a successful run read (unread, failed read, or omitted from presented content)."
+      },
+      {
+        "id": "S1",
+        "company": "sonel",
+        "field": "business_description",
+        "first_loss": "VALUE_NORMALIZATION",
+        "basis": "Full candidate repeats self-claimed leader superiority, while independently frozen activity gold intentionally excludes leadership. Anchor presence is not whole-value correctness."
+      },
+      {
+        "id": "S2",
+        "company": "sonel",
+        "field": "products_services",
+        "first_loss": "ENTITY_ATTACHMENT",
+        "basis": "Current actual source-entity attachment probe fails for a gold anchor on final evidence."
+      },
+      {
+        "id": "S3",
+        "company": "sonel",
+        "field": "products_services",
+        "first_loss": "ENTITY_ATTACHMENT",
+        "basis": "Current actual source-entity attachment probe fails for a gold anchor on final evidence."
+      },
+      {
+        "id": "S4",
+        "company": "sonel",
+        "field": "products_services",
+        "first_loss": "ENTITY_ATTACHMENT",
+        "basis": "Current actual source-entity attachment probe fails for a gold anchor on final evidence."
+      },
+      {
+        "id": "S5",
+        "company": "sonel",
+        "field": "products_services",
+        "first_loss": "ENTITY_ATTACHMENT",
+        "basis": "Current actual source-entity attachment probe fails for a gold anchor on final evidence."
+      },
+      {
+        "id": "S6",
+        "company": "sonel",
+        "field": "industries",
+        "first_loss": "ENTITY_ATTACHMENT",
+        "basis": "Current actual source-entity attachment probe fails for a gold anchor on final evidence."
+      },
+      {
+        "id": "S7",
+        "company": "sonel",
+        "field": "industries",
+        "first_loss": "ENTITY_ATTACHMENT",
+        "basis": "Current actual source-entity attachment probe fails for a gold anchor on final evidence."
+      }
+    ]
+  },
+  "locked_candidate_replay": {
+    "counts": {
+      "stages": {
+        "SOURCE_PRESENTATION": 3,
+        "EXTRACTION": 2,
+        "VALUE_NORMALIZATION": 1,
+        "CITATION": 0,
+        "ENTITY_ATTACHMENT": 4,
+        "POLARITY_MODALITY_TIME": 0,
+        "GATE_OTHER": 2
+      },
+      "published": 1,
+      "unobservable": 0
+    },
+    "claims": [
+      {
+        "id": "A1",
+        "company": "asseco-poland",
+        "field": "business_description",
+        "first_loss": null,
+        "published": true,
+        "unobservable": false,
+        "basis": "No observed loss: actual build_profile supports a value containing the gold literal anchor."
+      },
+      {
+        "id": "A2",
+        "company": "asseco-poland",
+        "field": "products_services",
+        "first_loss": "EXTRACTION",
+        "published": false,
+        "unobservable": false,
+        "basis": "Actual model selected different strategy assertions; this eligible current claim was not extracted."
+      },
+      {
+        "id": "A3",
+        "company": "asseco-poland",
+        "field": "products_services",
+        "first_loss": "EXTRACTION",
+        "published": false,
+        "unobservable": false,
+        "basis": "Actual model selected different strategy assertions; this eligible current claim was not extracted."
+      },
+      {
+        "id": "A4",
+        "company": "asseco-poland",
+        "field": "products_services",
+        "first_loss": "SOURCE_PRESENTATION",
+        "published": false,
+        "unobservable": false,
+        "basis": "Gold span exists in canonical source but was not visible in a successful run read (unread, failed read, or omitted from presented content)."
+      },
+      {
+        "id": "A5",
+        "company": "asseco-poland",
+        "field": "industries",
+        "first_loss": "SOURCE_PRESENTATION",
+        "published": false,
+        "unobservable": false,
+        "basis": "Gold span exists in canonical source but was not visible in a successful run read (unread, failed read, or omitted from presented content)."
+      },
+      {
+        "id": "A6",
+        "company": "asseco-poland",
+        "field": "industries",
+        "first_loss": "SOURCE_PRESENTATION",
+        "published": false,
+        "unobservable": false,
+        "basis": "Gold span exists in canonical source but was not visible in a successful run read (unread, failed read, or omitted from presented content)."
+      },
+      {
+        "id": "S1",
+        "company": "sonel",
+        "field": "business_description",
+        "first_loss": "VALUE_NORMALIZATION",
+        "published": false,
+        "unobservable": false,
+        "basis": "Candidate includes leadership superiority excluded from frozen gold; whole-value correctness fails before gate."
+      },
+      {
+        "id": "S2",
+        "company": "sonel",
+        "field": "products_services",
+        "first_loss": "ENTITY_ATTACHMENT",
+        "published": false,
+        "unobservable": false,
+        "basis": "A literal lexical occurrence exists in canonical source contexts, but actual source-entity attachment fails at every such occurrence."
+      },
+      {
+        "id": "S3",
+        "company": "sonel",
+        "field": "products_services",
+        "first_loss": "ENTITY_ATTACHMENT",
+        "published": false,
+        "unobservable": false,
+        "basis": "A literal lexical occurrence exists in canonical source contexts, but actual source-entity attachment fails at every such occurrence."
+      },
+      {
+        "id": "S4",
+        "company": "sonel",
+        "field": "products_services",
+        "first_loss": "ENTITY_ATTACHMENT",
+        "published": false,
+        "unobservable": false,
+        "basis": "A literal lexical occurrence exists in canonical source contexts, but actual source-entity attachment fails at every such occurrence."
+      },
+      {
+        "id": "S5",
+        "company": "sonel",
+        "field": "products_services",
+        "first_loss": "ENTITY_ATTACHMENT",
+        "published": false,
+        "unobservable": false,
+        "basis": "A literal lexical occurrence exists in canonical source contexts, but actual source-entity attachment fails at every such occurrence."
+      },
+      {
+        "id": "S6",
+        "company": "sonel",
+        "field": "industries",
+        "first_loss": "GATE_OTHER",
+        "published": false,
+        "unobservable": false,
+        "basis": "Actual build_profile rejected or altered the gold anchor; inspect exact per-occurrence context/assertion results and profile reason. Missing lexical occurrence or predicate admission is not guessed to be entity or polarity loss."
+      },
+      {
+        "id": "S7",
+        "company": "sonel",
+        "field": "industries",
+        "first_loss": "GATE_OTHER",
+        "published": false,
+        "unobservable": false,
+        "basis": "Actual build_profile rejected or altered the gold anchor; inspect exact per-occurrence context/assertion results and profile reason. Missing lexical occurrence or predicate admission is not guessed to be entity or polarity loss."
+      }
+    ]
+  },
+  "fresh_extraction": {
+    "counts": {
+      "stages": {
+        "SOURCE_PRESENTATION": 0,
+        "EXTRACTION": 0,
+        "VALUE_NORMALIZATION": 0,
+        "CITATION": 0,
+        "ENTITY_ATTACHMENT": 4,
+        "POLARITY_MODALITY_TIME": 0,
+        "GATE_OTHER": 3
+      },
+      "published": 0,
+      "unobservable": 6
+    },
+    "claims": [
+      {
+        "id": "A1",
+        "company": "asseco-poland",
+        "field": "business_description",
+        "first_loss": null,
+        "published": false,
+        "unobservable": true,
+        "basis": "Product-stage outcome is unobservable because audit capture failed; this is not a zero-support/model result."
+      },
+      {
+        "id": "A2",
+        "company": "asseco-poland",
+        "field": "products_services",
+        "first_loss": null,
+        "published": false,
+        "unobservable": true,
+        "basis": "Product-stage outcome is unobservable because audit capture failed; this is not a zero-support/model result."
+      },
+      {
+        "id": "A3",
+        "company": "asseco-poland",
+        "field": "products_services",
+        "first_loss": null,
+        "published": false,
+        "unobservable": true,
+        "basis": "Product-stage outcome is unobservable because audit capture failed; this is not a zero-support/model result."
+      },
+      {
+        "id": "A4",
+        "company": "asseco-poland",
+        "field": "products_services",
+        "first_loss": null,
+        "published": false,
+        "unobservable": true,
+        "basis": "Product-stage outcome is unobservable because audit capture failed; this is not a zero-support/model result."
+      },
+      {
+        "id": "A5",
+        "company": "asseco-poland",
+        "field": "industries",
+        "first_loss": null,
+        "published": false,
+        "unobservable": true,
+        "basis": "Product-stage outcome is unobservable because audit capture failed; this is not a zero-support/model result."
+      },
+      {
+        "id": "A6",
+        "company": "asseco-poland",
+        "field": "industries",
+        "first_loss": null,
+        "published": false,
+        "unobservable": true,
+        "basis": "Product-stage outcome is unobservable because audit capture failed; this is not a zero-support/model result."
+      },
+      {
+        "id": "S1",
+        "company": "sonel",
+        "field": "business_description",
+        "first_loss": "GATE_OTHER",
+        "published": false,
+        "unobservable": false,
+        "basis": "Actual build_profile rejected or altered the gold anchor; inspect exact per-occurrence context/assertion results and profile reason. Missing lexical occurrence or predicate admission is not guessed to be entity or polarity loss."
+      },
+      {
+        "id": "S2",
+        "company": "sonel",
+        "field": "products_services",
+        "first_loss": "ENTITY_ATTACHMENT",
+        "published": false,
+        "unobservable": false,
+        "basis": "A literal lexical occurrence exists in canonical source contexts, but actual source-entity attachment fails at every such occurrence."
+      },
+      {
+        "id": "S3",
+        "company": "sonel",
+        "field": "products_services",
+        "first_loss": "ENTITY_ATTACHMENT",
+        "published": false,
+        "unobservable": false,
+        "basis": "A literal lexical occurrence exists in canonical source contexts, but actual source-entity attachment fails at every such occurrence."
+      },
+      {
+        "id": "S4",
+        "company": "sonel",
+        "field": "products_services",
+        "first_loss": "ENTITY_ATTACHMENT",
+        "published": false,
+        "unobservable": false,
+        "basis": "A literal lexical occurrence exists in canonical source contexts, but actual source-entity attachment fails at every such occurrence."
+      },
+      {
+        "id": "S5",
+        "company": "sonel",
+        "field": "products_services",
+        "first_loss": "ENTITY_ATTACHMENT",
+        "published": false,
+        "unobservable": false,
+        "basis": "A literal lexical occurrence exists in canonical source contexts, but actual source-entity attachment fails at every such occurrence."
+      },
+      {
+        "id": "S6",
+        "company": "sonel",
+        "field": "industries",
+        "first_loss": "GATE_OTHER",
+        "published": false,
+        "unobservable": false,
+        "basis": "Actual build_profile rejected or altered the gold anchor; inspect exact per-occurrence context/assertion results and profile reason. Missing lexical occurrence or predicate admission is not guessed to be entity or polarity loss."
+      },
+      {
+        "id": "S7",
+        "company": "sonel",
+        "field": "industries",
+        "first_loss": "GATE_OTHER",
+        "published": false,
+        "unobservable": false,
+        "basis": "Actual build_profile rejected or altered the gold anchor; inspect exact per-occurrence context/assertion results and profile reason. Missing lexical occurrence or predicate admission is not guessed to be entity or polarity loss."
+      }
+    ]
+  },
+  "notes": [
+    "Pipeline diagnostics and manual whole-value review are separate from gold labels; no gold changed.",
+    "Unobservable capture failures are not assigned to a product loss stage.",
+    "Literal predicate probes may conservatively miss a form; actual publication and independently assessed full value determine supported credit."
+  ],
+  "trace_correction": "Post-change diagnostics select exact full_page material and reconstruct canonical bounded source contexts; entity and predicate must hold at the same occurrence. The previous excerpt-only/first-source diagnostic script and outputs are archived, not overwritten. This instrumentation correction changes no production code, gold, candidate or publication outcome."
+}

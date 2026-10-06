@@ -1,0 +1,44 @@
+{
+  "classification": "LIVE END-TO-END; PARTIAL; not a successful useful-BI demonstration",
+  "nip": "8840033448",
+  "producing_commit": "9f7c2d24e28dab96fd107b437cd8c3f5bc1a6e7a",
+  "generated_at": "2026-10-05T08:54:56.641578Z",
+  "source_run_reference": "extended-20261005T070952Z/stage-c/sonel-candidate-live/runs/8840033448/20261005T085456641578Z/research.json",
+  "source_run_sha256": "3bdb38b671424bb7a9401caa805dec4e977136ffed94a213c3ce422cbfb2a88d",
+  "execution_reference": "extended-20261005T070952Z/stage-c/runner/sonel-candidate-live-execution.json",
+  "command_template": "uv run --frozen --env-file .env company-bi batch <audit>/stage-c/sonel.csv --output-dir <audit>/stage-c/sonel-candidate-live/outputs --runs-dir <audit>/stage-c/sonel-candidate-live/runs --model openai-codex:gpt-6-luna",
+  "command_note": "<audit> substitutes the private audit root; exact invocation is retained in the execution record. Fresh reproduction requires configured credentials and incurs service calls.",
+  "input_csv": "nip\n8840033448\n",
+  "researched_supported_observations": 0,
+  "profile_status": "partial",
+  "diagnostics": {
+    "model": "openai-codex:gpt-6-luna",
+    "status": "completed",
+    "stop_reason": null,
+    "failure_code": "EVIDENCE_VALIDATION_FAILURE",
+    "failures": [
+      {
+        "code": "EVIDENCE_VALIDATION_FAILURE",
+        "stage": "evidence_validation",
+        "reason": "Recent development publication dates must be within the previous 12 months",
+        "error_type": "_DraftValidationFailure",
+        "field_path": "recent_developments.0.value.published_on",
+        "attempt": 1,
+        "source_id": null,
+        "validated_progress_available": true
+      }
+    ],
+    "validated_progress_retained": false,
+    "model_requests": 8,
+    "searches": 3,
+    "page_reads": 2,
+    "dynamic_reads": 0,
+    "output_retries": 1,
+    "input_tokens": 73499,
+    "output_tokens": 1385,
+    "duration_seconds": 66.00100975017995,
+    "cost_usd": null
+  },
+  "curation": "JSON and Markdown copied byte-for-byte; public legal identity, source metadata and exact cited excerpts only. No full source dumps, credentials or provider payloads.",
+  "zero_key_scope": "Committed example is inspectable without keys. README offline commands exercise frozen historical/controlled artifacts, not a newly executed live Sonel run."
+}

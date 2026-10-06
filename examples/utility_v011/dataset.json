@@ -1,0 +1,19 @@
+{
+  "schema_version": "v0.1.1-utility-1",
+  "gold_file": "gold.json",
+  "cases": [
+    {
+      "id": "asseco-poland",
+      "nip": "5220003782",
+      "case_file": "cases/asseco-poland.json"
+    },
+    {
+      "id": "sonel",
+      "nip": "8840033448",
+      "case_file": "cases/sonel.json"
+    }
+  ],
+  "default_runs_dir": "runs/candidate",
+  "baseline_runs_dir": "runs/baseline",
+  "description": "13 independently reviewed real non-registry observations from retained Asseco/Sonel full pages. Offline replay evaluates actual retained agent candidates with current publication gate; not fresh extraction or live research. Explicit model extraction attempts are recorded separately."
+}

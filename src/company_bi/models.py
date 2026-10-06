@@ -1,8 +1,13 @@
 """Publication schemas, not an identity resolver or an evidence-verification engine."""
 
+import json
+import re
+import unicodedata
+from collections import defaultdict
 from datetime import date
 from decimal import Decimal
 from typing import Annotated, Any, Literal, Self
+from urllib.parse import urlsplit, urlunsplit
 
 from pydantic import (
     AwareDatetime,
@@ -55,6 +60,14 @@ class Source(Model):
     title: Text
     retrieved_at: AwareDatetime
     published_on: date | None = None
+    redirect_chain: list[HttpUrl] = Field(default_factory=list, max_length=6)
+    publication_blocked_reason: Literal["unproven_legacy_url_relationship"] | None = None
+
+    @model_validator(mode="after")
+    def check_redirect_chain(self) -> Self:
+        if self.redirect_chain and len(self.redirect_chain) < 2:
+            raise ValueError("redirect lineage must contain a start and final HTTP URL")
+        return self
 
 
 class ProfileSource(Source):
@@ -450,6 +463,13 @@ class SearchResults(Model):
     failure: OperationalFailure | None = None
 
 
+_RETRIEVAL_MODES = {
+    "registry": frozenset({"registry"}),
+    "search_snippet": frozenset({"tavily"}),
+    "full_page": frozenset({"static", "dynamic"}),
+}
+
+
 class RetrievedSource(Model):
     """Host-owned material; search discovery is not a full-page retrieval."""
 
@@ -457,6 +477,314 @@ class RetrievedSource(Model):
     kind: Literal["registry", "search_snippet", "full_page"]
     content: str
     fetch_mode: Literal["registry", "tavily", "static", "dynamic"]
+
+    @model_validator(mode="after")
+    def check_kind_and_fetch_mode(self) -> Self:
+        if self.fetch_mode not in _RETRIEVAL_MODES[self.kind]:
+            raise ValueError(
+                f"retrieved source kind {self.kind} cannot use fetch mode {self.fetch_mode}"
+            )
+        return self
+
+
+def _validate_retrieval_invariants(materials: list[RetrievedSource]) -> None:
+    """Recheck source invariants at trust boundaries, including unchecked model copies."""
+    full_page_ids: set[str] = set()
+    for material in materials:
+        if material.fetch_mode not in _RETRIEVAL_MODES.get(material.kind, ()):
+            raise ValueError(
+                f"retrieved source kind {material.kind} cannot use fetch mode {material.fetch_mode}"
+            )
+        if material.kind == "full_page" and material.source.publication_blocked_reason is None:
+            source_id = material.source.source_id
+            if source_id in full_page_ids:
+                raise ValueError(f"source ID {source_id} has duplicate full-page material")
+            full_page_ids.add(source_id)
+
+
+def _normalized_source_url(url: HttpUrl | str) -> str:
+    """Canonical URL key shared by source discovery and lineage validation."""
+    parts = urlsplit(str(url))
+    scheme = parts.scheme.lower()
+    host = (parts.hostname or "").lower()
+    port = parts.port
+    authority_host = f"[{host}]" if ":" in host else host
+    netloc = (
+        authority_host
+        if port is None or (scheme, port) in {("http", 80), ("https", 443)}
+        else f"{authority_host}:{port}"
+    )
+    if parts.username or parts.password:
+        netloc = f"{parts.username or ''}:{parts.password or ''}@{netloc}"
+    return urlunsplit((scheme, netloc, parts.path or "/", parts.query, ""))
+
+
+def _source_origin(url: HttpUrl) -> tuple[str, str, int | None]:
+    parts = urlsplit(str(url))
+    scheme = parts.scheme.lower()
+    port = parts.port
+    if port is None:
+        port = 443 if scheme == "https" else 80
+    return scheme, (parts.hostname or "").lower(), port
+
+
+def validate_source_lineage(materials: list[RetrievedSource]) -> None:
+    """Reject unexplained same-ID URL changes while allowing retained redirect chains."""
+    by_id: dict[str, list[RetrievedSource]] = defaultdict(list)
+    for material in materials:
+        by_id[material.source.source_id].append(material)
+
+    for source_id, retained in by_id.items():
+        blocked = [
+            material
+            for material in retained
+            if material.source.publication_blocked_reason is not None
+        ]
+        if blocked:
+            if (
+                len(blocked) != len(retained)
+                or any(material.kind == "registry" for material in retained)
+                or any(material.source.redirect_chain for material in retained)
+            ):
+                raise ValueError(
+                    f"blocked source ID {source_id} has trusted or contradictory lineage"
+                )
+            continue
+
+        chained = [material for material in retained if material.source.redirect_chain]
+        if any(material.kind != "full_page" for material in chained):
+            raise ValueError(
+                f"redirect lineage for source ID {source_id} is not full-page provenance"
+            )
+
+        if not chained:
+            origins = {_source_origin(material.source.url) for material in retained}
+            if len(origins) > 1:
+                raise ValueError(f"source ID {source_id} has conflicting host metadata")
+            urls = {_normalized_source_url(material.source.url) for material in retained}
+            if len(urls) > 1:
+                raise ValueError(f"source ID {source_id} has unexplained URL changes")
+            continue
+
+        chains = {
+            tuple(_normalized_source_url(url) for url in material.source.redirect_chain)
+            for material in chained
+        }
+        if len(chains) != 1:
+            raise ValueError(f"source ID {source_id} has conflicting redirect lineages")
+        chain = chained[0].source.redirect_chain
+        start_url = _normalized_source_url(chain[0])
+        end_url = _normalized_source_url(chain[-1])
+        start_origin = _source_origin(chain[0])
+        end_origin = _source_origin(chain[-1])
+        discoveries = [material for material in retained if material.kind == "search_snippet"]
+        pages = [material for material in retained if material.kind == "full_page"]
+        if not discoveries or not pages:
+            raise ValueError(f"redirect lineage for source ID {source_id} lacks retained discovery")
+        if any(
+            _source_origin(item.source.url) != start_origin
+            or _normalized_source_url(item.source.url) != start_url
+            for item in discoveries
+        ):
+            raise ValueError(f"redirect lineage for source ID {source_id} has the wrong origin")
+        if any(
+            not item.source.redirect_chain
+            or _source_origin(item.source.url) != end_origin
+            or _normalized_source_url(item.source.url) != end_url
+            for item in pages
+        ):
+            raise ValueError(f"redirect lineage for source ID {source_id} has the wrong final URL")
+        if any(item.kind not in {"search_snippet", "full_page"} for item in retained):
+            raise ValueError(
+                f"redirect lineage for source ID {source_id} is attached to non-web material"
+            )
+
+    owner_ids: dict[str, str] = {}
+    for material in materials:
+        if (
+            material.kind not in {"search_snippet", "full_page"}
+            or material.source.publication_blocked_reason is not None
+        ):
+            continue
+        owner_url = (
+            material.source.redirect_chain[0]
+            if material.kind == "full_page" and material.source.redirect_chain
+            else material.source.url
+        )
+        owner = _normalized_source_url(owner_url)
+        source_id = material.source.source_id
+        previous_id = owner_ids.setdefault(owner, source_id)
+        if previous_id != source_id:
+            raise ValueError("discovery URL is assigned to multiple source IDs")
+
+
+def _identity_text(value: Any) -> str:
+    text = unicodedata.normalize("NFC", str(value))
+    return " ".join(text.split())
+
+
+def _registry_citation_matches(mapped_value: str, excerpt: str) -> bool:
+    """Match a mapped registry value against a raw or JSON-string citation excerpt."""
+    if _identity_text(mapped_value) == _identity_text(excerpt):
+        return True
+    try:
+        decoded = json.loads(excerpt)
+    except (json.JSONDecodeError, TypeError):
+        return False
+    return isinstance(decoded, str) and _identity_text(mapped_value) == _identity_text(decoded)
+
+
+_LEGACY_REGISTRY_HEADER = "MF VAT register identity material (not a raw registry response):"
+_LEGACY_FIELDS = (
+    "legal_name",
+    "krs",
+    "regon",
+    "registered_city",
+    "registered_address",
+    "website",
+)
+
+
+def _unique_json_object(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+    result: dict[str, Any] = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError("registry JSON contains duplicate object keys")
+        result[key] = value
+    return result
+
+
+def _legacy_registry_record(content: str) -> tuple[dict[str, str], str]:
+    lines = content.splitlines()
+    if len(lines) < 8 or lines[0] != _LEGACY_REGISTRY_HEADER:
+        raise ValueError("unsupported registry material format")
+    if re.fullmatch(r"NIP: [0-9]{10}", lines[-1]) is None:
+        raise ValueError("legacy registry snapshot requires a final canonical NIP")
+    nip = lines[-1][5:]
+    declarations: dict[str, str] = {}
+    for line in lines[1:-1]:
+        evidence = re.fullmatch(
+            r"(legal_name|krs|regon|registered_city|registered_address|website) "
+            r"evidence from ([^:\s]+): (.+)",
+            line,
+        )
+        if evidence is not None:
+            continue
+        declaration = re.fullmatch(
+            r"(legal_name|krs|regon|registered_city|registered_address|website): (.+)",
+            line,
+        )
+        if declaration is None:
+            raise ValueError("legacy registry snapshot contains an unknown or ambiguous line")
+        field_name, value = declaration.groups()
+        if field_name in declarations:
+            raise ValueError("legacy registry snapshot contains duplicate declarations")
+        if value.startswith(("unknown; ", "uncertain; ")):
+            continue
+        declarations[field_name] = value
+    if not any(line.startswith("legal_name: ") for line in lines[1:-1]):
+        raise ValueError("legacy registry snapshot is missing legal_name")
+    # The declaration count is structural, including explicitly unknown fields.
+    declared = [
+        re.match(r"(legal_name|krs|regon|registered_city|registered_address|website):", line)
+        for line in lines[1:-1]
+    ]
+    names = [match.group(1) for match in declared if match is not None]
+    if len(names) != len(_LEGACY_FIELDS) or set(names) != set(_LEGACY_FIELDS):
+        raise ValueError("legacy registry snapshot requires each identity declaration once")
+    return declarations, nip
+
+
+def _registry_record(content: str) -> tuple[dict[str, str], str]:
+    try:
+        root = json.loads(content, object_pairs_hook=_unique_json_object)
+    except json.JSONDecodeError:
+        return _legacy_registry_record(content)
+    if not isinstance(root, dict):
+        raise ValueError("unsupported registry material format")
+    result = root.get("result")
+    subject = result.get("subject") if isinstance(result, dict) else None
+    if not isinstance(subject, dict):
+        raise ValueError("MF registry JSON requires result.subject")
+    nip, legal_name = subject.get("nip"), subject.get("name")
+    if not isinstance(nip, str) or re.fullmatch(r"[0-9]{10}", nip) is None:
+        raise ValueError("MF registry JSON requires a canonical subject NIP")
+    if not isinstance(legal_name, str) or not legal_name:
+        raise ValueError("MF registry JSON requires a subject legal name")
+    mapped: dict[str, str] = {"legal_name": legal_name}
+    for field_name in ("krs", "regon"):
+        value = subject.get(field_name)
+        if value is not None:
+            if not isinstance(value, str):
+                raise ValueError(f"MF registry {field_name} must be a string")
+            mapped[field_name] = value
+    working = subject.get("workingAddress")
+    residence = subject.get("residenceAddress")
+    if working is not None and not isinstance(working, str):
+        raise ValueError("MF registry workingAddress must be a string")
+    if residence is not None and not isinstance(residence, str):
+        raise ValueError("MF registry residenceAddress must be a string")
+    address = working if isinstance(working, str) and working else residence
+    if address:
+        mapped["registered_address"] = address
+    return mapped, nip
+
+
+def _validate_registry_identity(
+    identity: CompanyIdentity, materials: list[RetrievedSource]
+) -> None:
+    """Require every retained registry record and supported identity value to agree."""
+    registry_materials = [material for material in materials if material.kind == "registry"]
+    if not registry_materials:
+        raise ValueError("resolved identity requires recognized registry material")
+    records: list[tuple[RetrievedSource, dict[str, str]]] = []
+    target_name = _identity_text(identity.legal_name.value)
+    for material in registry_materials:
+        if material.source.publication_blocked_reason is not None:
+            raise ValueError("publication-blocked registry material cannot establish identity")
+        fields, nip = _registry_record(material.content)
+        if nip != identity.nip:
+            raise ValueError("retained registry material contains a conflicting NIP")
+        if "legal_name" not in fields or _identity_text(fields["legal_name"]) != target_name:
+            raise ValueError("retained registry material contains a conflicting legal_name")
+        records.append((material, fields))
+
+    for field_name in _LEGACY_FIELDS:
+        fact = getattr(identity, field_name)
+        value = fact.value
+        if fact.state != "supported":
+            continue
+        cited = False
+        for ref in fact.evidence:
+            matching = [
+                (material, fields)
+                for material, fields in records
+                if material.source.source_id == ref.source_id
+            ]
+            retained = [
+                (material, fields)
+                for material, fields in matching
+                if _identity_text(ref.excerpt) in _identity_text(material.content)
+            ]
+            if not retained:
+                raise ValueError(
+                    f"supported identity field {field_name} lacks retained registry evidence"
+                )
+            if not any(
+                field_name in fields
+                and _identity_text(value) == _identity_text(fields[field_name])
+                and _registry_citation_matches(fields[field_name], ref.excerpt)
+                for _, fields in retained
+            ):
+                raise ValueError(
+                    f"supported identity field {field_name} does not match mapped registry data"
+                )
+            cited = True
+        if not cited:
+            raise ValueError(f"supported identity field {field_name} requires registry evidence")
+        for _, fields in records:
+            if field_name in fields and _identity_text(value) != _identity_text(fields[field_name]):
+                raise ValueError(f"retained registry material declares a conflicting {field_name}")
 
 
 class PageReadResult(Model):
@@ -474,8 +802,62 @@ class CompanyResearchRun(Model):
     diagnostics: ResearchDiagnostics
     generated_at: AwareDatetime
 
+    @model_validator(mode="before")
+    @classmethod
+    def mark_unproven_legacy_source_groups(cls, value: Any) -> Any:
+        """Quarantine old serialized groups only when lineage is absent and URLs differ."""
+        if not isinstance(value, dict) or not isinstance(value.get("sources"), list):
+            return value
+        groups: dict[str, list[tuple[int, dict[str, Any], dict[str, Any]]]] = defaultdict(list)
+        non_dict_source_ids: set[str] = set()
+        for index, material in enumerate(value["sources"]):
+            if not isinstance(material, dict) or not isinstance(material.get("source"), dict):
+                source = getattr(material, "source", None)
+                source_id = getattr(source, "source_id", None)
+                if isinstance(source_id, str):
+                    non_dict_source_ids.add(source_id)
+                continue
+            source = material["source"]
+            source_id = source.get("source_id")
+            if isinstance(source_id, str):
+                groups[source_id].append((index, material, source))
+        blocked_ids: set[str] = set()
+        for source_id, group in groups.items():
+            if source_id in non_dict_source_ids:
+                continue
+            if len(group) < 2 or any(
+                material.get("kind") not in {"search_snippet", "full_page"}
+                or "redirect_chain" in source
+                or "url" not in source
+                for _, material, source in group
+            ):
+                continue
+            urls = {_normalized_source_url(source["url"]) for _, _, source in group}
+            if len(urls) > 1:
+                blocked_ids.add(source_id)
+
+        if not blocked_ids:
+            return value
+        copied = dict(value)
+        sources = list(value["sources"])
+        for index, material in enumerate(sources):
+            if (
+                isinstance(material, dict)
+                and isinstance(material.get("source"), dict)
+                and material["source"].get("source_id") in blocked_ids
+            ):
+                copied_material = dict(material)
+                copied_source = dict(material["source"])
+                copied_source["publication_blocked_reason"] = "unproven_legacy_url_relationship"
+                copied_material["source"] = copied_source
+                sources[index] = copied_material
+        copied["sources"] = sources
+        return copied
+
     @model_validator(mode="after")
     def check_retrieval_references(self) -> Self:
+        _validate_retrieval_invariants(self.sources)
+        validate_source_lineage(self.sources)
         # One source ID may have multiple retained snippets and a full-page snapshot.
         source_ids = {material.source.source_id for material in self.sources}
         if any(material.source.retrieved_at > self.generated_at for material in self.sources):
@@ -508,4 +890,5 @@ class CompanyResearchRun(Model):
                 or any(ref.source_id not in full_page_ids for ref in financial.evidence)
             ):
                 raise ValueError("financial amounts require retained full-page evidence")
+        _validate_registry_identity(self.identity, self.sources)
         return self

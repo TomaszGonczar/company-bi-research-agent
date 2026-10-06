@@ -14,8 +14,8 @@ def render_json(profile: CompanyProfile) -> str:
 
 
 def _md(value: object) -> str:
-    """Escape inline Markdown metacharacters while retaining readable text."""
-    text = str(value)
+    """Escape inline Markdown metacharacters and flatten untrusted line breaks."""
+    text = str(value).replace("\r\n", " ").replace("\r", " ").replace("\n", " ")
     return "".join("\\" + char if char in r"\\`*_{}[]<>()#+!|" else char for char in text)
 
 
@@ -235,4 +235,11 @@ def render_markdown(profile: CompanyProfile) -> str:
                 f"{source.published_on.isoformat() if source.published_on else 'Unknown'}",
             ]
         )
+        if source.publication_blocked_reason is not None:
+            lines.append(f"  - Publication blocked: {_md(source.publication_blocked_reason)}")
+        if source.redirect_chain:
+            lines.append(
+                "  - Validated redirect chain: "
+                + " → ".join(_link(url, str(url)) for url in source.redirect_chain)
+            )
     return "\n".join(lines) + "\n"

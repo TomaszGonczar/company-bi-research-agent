@@ -1,0 +1,203 @@
+{
+  "kind": "observed pre-change utility baseline; not OG-154 historical replay",
+  "gate_commit": "a99b959c8eb510fd0526a301a23466a30067c9ec",
+  "model": "openai-codex:gpt-6-luna",
+  "gold_sha256": "9760e445e38f375b237c1c3c0df07108618cd3e75126a60bc69e08a847e74dfa",
+  "companies": [
+    {
+      "company": "asseco-poland",
+      "run_sha256": "ad1a1487cab80ee3acb1fd6478eef62e51d11fd275ad5684d90e0aea35d5d1af",
+      "counts": {
+        "gold": {
+          "supported": 0,
+          "uncertain": 1,
+          "unknown": 0,
+          "missing": 5
+        },
+        "recall": {
+          "numerator": 0,
+          "denominator": 6,
+          "rate": 0
+        },
+        "supported_observations": 0,
+        "gold_backed_support": 0,
+        "externally_assessed_support": 0,
+        "externally_assessed_unsupported": 0,
+        "unassessed_support": 0,
+        "precision": {
+          "numerator": 0,
+          "denominator": 0,
+          "rate": null
+        }
+      }
+    },
+    {
+      "company": "sonel",
+      "run_sha256": "260c3807165cd1468bdeb1dcdbd0db6833f8c05112b37f2858c828102b262806",
+      "counts": {
+        "gold": {
+          "supported": 0,
+          "uncertain": 7,
+          "unknown": 0,
+          "missing": 0
+        },
+        "recall": {
+          "numerator": 0,
+          "denominator": 7,
+          "rate": 0
+        },
+        "supported_observations": 0,
+        "gold_backed_support": 0,
+        "externally_assessed_support": 0,
+        "externally_assessed_unsupported": 0,
+        "unassessed_support": 0,
+        "precision": {
+          "numerator": 0,
+          "denominator": 0,
+          "rate": null
+        }
+      }
+    }
+  ],
+  "aggregate": {
+    "gold": {
+      "supported": 0,
+      "uncertain": 8,
+      "unknown": 0,
+      "missing": 5
+    },
+    "recall": {
+      "numerator": 0,
+      "denominator": 13,
+      "rate": 0
+    },
+    "supported_observations": 0,
+    "gold_backed_support": 0,
+    "externally_assessed_support": 0,
+    "externally_assessed_unsupported": 0,
+    "unassessed_support": 0,
+    "precision": {
+      "numerator": 0,
+      "denominator": 0,
+      "rate": null
+    }
+  },
+  "loss_ledger": {
+    "counts": {
+      "SOURCE_PRESENTATION": 3,
+      "EXTRACTION": 2,
+      "VALUE_NORMALIZATION": 1,
+      "CITATION": 0,
+      "ENTITY_ATTACHMENT": 7,
+      "POLARITY_MODALITY_TIME": 0,
+      "GATE_OTHER": 0
+    },
+    "claims": [
+      {
+        "claim_id": "A1",
+        "company": "asseco-poland",
+        "field": "business_description",
+        "first_loss": "ENTITY_ATTACHMENT",
+        "basis": "Current actual source-entity attachment probe fails for a gold anchor on final evidence."
+      },
+      {
+        "claim_id": "A2",
+        "company": "asseco-poland",
+        "field": "products_services",
+        "first_loss": "EXTRACTION",
+        "basis": "Read source contains the gold current activity, but saved/final products select different strategy statements; no paraphrase of this gold claim is present."
+      },
+      {
+        "claim_id": "A3",
+        "company": "asseco-poland",
+        "field": "products_services",
+        "first_loss": "EXTRACTION",
+        "basis": "Read source contains the gold current activity, but saved/final products select different strategy statements; no paraphrase of this gold claim is present."
+      },
+      {
+        "claim_id": "A4",
+        "company": "asseco-poland",
+        "field": "products_services",
+        "first_loss": "SOURCE_PRESENTATION",
+        "basis": "Gold span exists in canonical source but was not visible in a successful run read (unread, failed read, or omitted from presented content)."
+      },
+      {
+        "claim_id": "A5",
+        "company": "asseco-poland",
+        "field": "industries",
+        "first_loss": "SOURCE_PRESENTATION",
+        "basis": "Gold span exists in canonical source but was not visible in a successful run read (unread, failed read, or omitted from presented content)."
+      },
+      {
+        "claim_id": "A6",
+        "company": "asseco-poland",
+        "field": "industries",
+        "first_loss": "SOURCE_PRESENTATION",
+        "basis": "Gold span exists in canonical source but was not visible in a successful run read (unread, failed read, or omitted from presented content)."
+      },
+      {
+        "claim_id": "S1",
+        "company": "sonel",
+        "field": "business_description",
+        "first_loss": "VALUE_NORMALIZATION",
+        "basis": "Full candidate repeats self-claimed leader superiority, while independently frozen activity gold intentionally excludes leadership. Anchor presence is not whole-value correctness."
+      },
+      {
+        "claim_id": "S2",
+        "company": "sonel",
+        "field": "products_services",
+        "first_loss": "ENTITY_ATTACHMENT",
+        "basis": "Current actual source-entity attachment probe fails for a gold anchor on final evidence."
+      },
+      {
+        "claim_id": "S3",
+        "company": "sonel",
+        "field": "products_services",
+        "first_loss": "ENTITY_ATTACHMENT",
+        "basis": "Current actual source-entity attachment probe fails for a gold anchor on final evidence."
+      },
+      {
+        "claim_id": "S4",
+        "company": "sonel",
+        "field": "products_services",
+        "first_loss": "ENTITY_ATTACHMENT",
+        "basis": "Current actual source-entity attachment probe fails for a gold anchor on final evidence."
+      },
+      {
+        "claim_id": "S5",
+        "company": "sonel",
+        "field": "products_services",
+        "first_loss": "ENTITY_ATTACHMENT",
+        "basis": "Current actual source-entity attachment probe fails for a gold anchor on final evidence."
+      },
+      {
+        "claim_id": "S6",
+        "company": "sonel",
+        "field": "industries",
+        "first_loss": "ENTITY_ATTACHMENT",
+        "basis": "Current actual source-entity attachment probe fails for a gold anchor on final evidence."
+      },
+      {
+        "claim_id": "S7",
+        "company": "sonel",
+        "field": "industries",
+        "first_loss": "ENTITY_ATTACHMENT",
+        "basis": "Current actual source-entity attachment probe fails for a gold anchor on final evidence."
+      }
+    ]
+  },
+  "evidence_reference_decision": {
+    "eligible_claims": 13,
+    "first_citation_losses": 0,
+    "host_span_only_rescues": 0,
+    "span_migration": false
+  },
+  "historical_real_yield_unchanged": {
+    "supported": 0,
+    "eligible": 7
+  },
+  "prior_completed_pass": {
+    "attempts": 9,
+    "researched_supported": 0
+  }
+}

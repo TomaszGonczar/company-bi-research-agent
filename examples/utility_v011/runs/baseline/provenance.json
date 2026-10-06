@@ -1,0 +1,97 @@
+{
+  "kind": "actual fresh fixed-source model extraction; not live research and not human-filled gold drafts",
+  "producing_commit": "a99b959c8eb510fd0526a301a23466a30067c9ec",
+  "model": "openai-codex:gpt-6-luna",
+  "gold_frozen_at": "2026-10-05T11:23:50.145Z",
+  "gold_sha256": "9760e445e38f375b237c1c3c0df07108618cd3e75126a60bc69e08a847e74dfa",
+  "case_sha256": {
+    "examples/utility_v011/dataset.json": "f580660a85586aa4cfbb693cb1f5d2310d6f7676a46dc1e191fdab65af1cc21f",
+    "examples/utility_v011/gold.json": "9760e445e38f375b237c1c3c0df07108618cd3e75126a60bc69e08a847e74dfa",
+    "examples/utility_v011/cases/asseco-poland.json": "02b365d51ab43003b6396c9605885c801331db738e037c440912cca0b5ee2c82",
+    "examples/utility_v011/cases/sonel.json": "63ad969611773cdb995bd5d1d2d9f332f943e92fbf831ccfc45818fa544a83cc"
+  },
+  "attempts": [
+    {
+      "company": "asseco-poland",
+      "run_file": "asseco-poland.json",
+      "run_sha256": "ad1a1487cab80ee3acb1fd6478eef62e51d11fd275ad5684d90e0aea35d5d1af",
+      "source_id_map": {
+        "U007": "S001",
+        "U008": "S002"
+      },
+      "read_attempts": [
+        {
+          "source_id": "S001",
+          "original_source_id": "U007",
+          "presented_chars": 5644,
+          "content_sha256": "5040d3db594185facbe9ff5808687371833b50fbe6e59e518bf9ad466e783e02",
+          "url": "https://inwestor.asseco.com/en/about-asseco/strategy/",
+          "retrieved_at": "2026-10-05T08:52:47.874936+00:00",
+          "redirect_chain": [
+            "https://inwestor.asseco.com/en/about-asseco/strategy",
+            "https://inwestor.asseco.com/en/about-asseco/strategy/"
+          ]
+        }
+      ],
+      "draft_attempts": 2,
+      "diagnostics": {
+        "model": "openai-codex:gpt-6-luna",
+        "status": "completed",
+        "stop_reason": null,
+        "failure_code": null,
+        "failures": [],
+        "validated_progress_retained": false,
+        "model_requests": 5,
+        "searches": 5,
+        "page_reads": 1,
+        "dynamic_reads": 0,
+        "output_retries": 0,
+        "input_tokens": 23895,
+        "output_tokens": 1111,
+        "duration_seconds": 40.1280493340455,
+        "cost_usd": null
+      }
+    },
+    {
+      "company": "sonel",
+      "run_file": "sonel.json",
+      "run_sha256": "260c3807165cd1468bdeb1dcdbd0db6833f8c05112b37f2858c828102b262806",
+      "source_id_map": {
+        "U002": "S001",
+        "U003": "S002"
+      },
+      "read_attempts": [
+        {
+          "source_id": "S001",
+          "original_source_id": "U002",
+          "presented_chars": 2061,
+          "content_sha256": "22522be74893d271861e327bb99cdf47605d001d70b6ca98fb611e62dc644fd9",
+          "url": "https://sonel.pl/en/about",
+          "retrieved_at": "2026-10-05T08:54:06.208933+00:00",
+          "redirect_chain": [
+            "https://www.sonel.pl/en/about",
+            "https://sonel.pl/en/about"
+          ]
+        }
+      ],
+      "draft_attempts": 2,
+      "diagnostics": {
+        "model": "openai-codex:gpt-6-luna",
+        "status": "completed",
+        "stop_reason": null,
+        "failure_code": null,
+        "failures": [],
+        "validated_progress_retained": false,
+        "model_requests": 5,
+        "searches": 6,
+        "page_reads": 1,
+        "dynamic_reads": 0,
+        "output_retries": 0,
+        "input_tokens": 25521,
+        "output_tokens": 976,
+        "duration_seconds": 28.61420595785603,
+        "cost_usd": null
+      }
+    }
+  ]
+}

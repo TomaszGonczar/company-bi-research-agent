@@ -1,5 +1,7 @@
 # OG-154 — v0.1 evaluation specification
 
+**Earlier-contract methodology:** this specification governs the historical OG-154 dataset and its immutable measurements. It predates the strict publication contract and does not define its positives. Strict assertions use the full-page, exact finite productions and taxonomy in [STRICT_PUBLICATION_CONTRACT.md](STRICT_PUBLICATION_CONTRACT.md) and [HOLDOUT_ADJUDICATION.md](HOLDOUT_ADJUDICATION.md); do not merge those results or denominators. This edit asserts no new evaluation execution.
+
 Baseline: approved production commit `59e76de`. Establish results before changing identity, retrieval, research, gate, or rendering behavior. This is a deliberately small diagnostic set, not an accuracy benchmark or a COMPLETE-count target.
 
 ## Dataset and execution

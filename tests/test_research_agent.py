@@ -25,7 +25,7 @@ from company_bi.sources import ResearchBudget
 
 @pytest.fixture
 def identity() -> CompanyIdentity:
-    evidence = [{"source_id": "identity-record", "excerpt": "Verified registry identity"}]
+    evidence = [{"source_id": "identity-record", "excerpt": "Example sp. z o.o."}]
     return CompanyIdentity.model_validate(
         {
             "nip": "1234567890",
@@ -71,8 +71,8 @@ def unknown_output() -> dict[str, Any]:
 
 
 PAGE_EXCERPT = (
-    "The Example Group reported approximately PLN 1.2 billion in consolidated revenue "
-    "for the fiscal year from 1 January 2025 to 31 December 2025."
+    "Example sp. z o.o. reported standalone revenue of PLN 1.2 billion "
+    "for 2025-01-01 to 2025-12-31."
 )
 
 
@@ -96,6 +96,7 @@ async def install_full_page(
             url=url,
             published_on=None,
             title="Example Group annual report",
+            redirect_chain=(),
         )
 
     async def controlled_url(url: str, timeout: float = 3.0) -> str:
@@ -115,8 +116,7 @@ def supported_revenue(excerpt: str) -> dict[str, Any]:
         "period": {"start": "2025-01-01", "end": "2025-12-31"},
         "currency": "PLN",
         "unit": "billions",
-        "scope": "group",
-        "group_name": "Example Group",
+        "scope": "legal_entity",
         "evidence": [{"source_id": "S001", "excerpt": excerpt}],
     }
     return output

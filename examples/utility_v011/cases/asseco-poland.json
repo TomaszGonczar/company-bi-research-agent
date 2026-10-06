@@ -1,0 +1,133 @@
+{
+  "company": "asseco-poland",
+  "nip": "5220003782",
+  "identity": {
+    "nip": "5220003782",
+    "legal_name": {
+      "state": "supported",
+      "value": "\"ASSECO POLAND\" SPÓŁKA AKCYJNA",
+      "evidence": [
+        {
+          "source_id": "mf-vat-5220003782-20261005T082944526457Z",
+          "excerpt": "\"\\\"ASSECO POLAND\\\" SPÓŁKA AKCYJNA\""
+        }
+      ],
+      "reason": null
+    },
+    "krs": {
+      "state": "supported",
+      "value": "0000033391",
+      "evidence": [
+        {
+          "source_id": "mf-vat-5220003782-20261005T082944526457Z",
+          "excerpt": "\"0000033391\""
+        }
+      ],
+      "reason": null
+    },
+    "regon": {
+      "state": "supported",
+      "value": "010334578",
+      "evidence": [
+        {
+          "source_id": "mf-vat-5220003782-20261005T082944526457Z",
+          "excerpt": "\"010334578\""
+        }
+      ],
+      "reason": null
+    },
+    "registered_city": {
+      "state": "unknown",
+      "value": null,
+      "evidence": [],
+      "reason": "Registry provides no separate city field; no city inferred from address"
+    },
+    "registered_address": {
+      "state": "supported",
+      "value": "OLCHOWA 14, 35-322 RZESZÓW",
+      "evidence": [
+        {
+          "source_id": "mf-vat-5220003782-20261005T082944526457Z",
+          "excerpt": "\"OLCHOWA 14, 35-322 RZESZÓW\""
+        }
+      ],
+      "reason": null
+    },
+    "website": {
+      "state": "unknown",
+      "value": null,
+      "evidence": [],
+      "reason": "This registry supplies no website; no website verification performed"
+    },
+    "resolved_at": "2026-10-05T08:29:44.533097Z"
+  },
+  "registry_source": {
+    "source_id": "mf-vat-5220003782-20261005T082944526457Z",
+    "url": "https://wl-api.mf.gov.pl/api/search/nip/5220003782?date=2026-10-05",
+    "title": "Ministerstwo Finansów — Wykaz podatników VAT",
+    "retrieved_at": "2026-10-05T08:29:44.526457Z",
+    "published_on": null,
+    "redirect_chain": [],
+    "publication_blocked_reason": null
+  },
+  "sources": [
+    {
+      "source_id": "U007",
+      "original_source_id": "S008",
+      "content_sha256": "5040d3db594185facbe9ff5808687371833b50fbe6e59e518bf9ad466e783e02",
+      "origin_reference": "extended-20261005T070952Z/stage-c/asseco-poland-candidate-live/runs/5220003782/20261005T085349297190Z/research.json",
+      "material": {
+        "source": {
+          "source_id": "U007",
+          "url": "https://inwestor.asseco.com/en/about-asseco/strategy/",
+          "title": "Strategy - Asseco Poland S.A. - Centrum Relacji Inwestorskich",
+          "retrieved_at": "2026-10-05T08:52:47.874936Z",
+          "published_on": null,
+          "redirect_chain": [
+            "https://inwestor.asseco.com/en/about-asseco/strategy",
+            "https://inwestor.asseco.com/en/about-asseco/strategy/"
+          ],
+          "publication_blocked_reason": null
+        },
+        "kind": "full_page",
+        "content": "Strategy - Asseco Poland S.A. - Centrum Relacji Inwestorskich\nFind us on social media:\n+48 667 662 161\n[email protected]\nSubscribe to the newsletter\nContact us\nAsseco Poland\nen\nPL\nEN\nAbout Asseco\nclose\nPress Releases\nGeneral information\nGoverning bodies\nShareholders\nGroup structure\nStrategy\nMarket environment\nCorporate Governance\nReports\nclose\nRegulatory Filings\nFinancial Reports\nClosed periods\nFinancial information\nclose\nAsseco in numbers\nFinancial highlights\nFinancial ratios – consolidated\nDividend\nAsseco on the WSE\nclose\nStock information\nStock quotes\nAnalysts covering Asseco\nIssuance prospectuses\nEvent calendar\nInformational materials\nclose\nPresentations\nFact sheet\nVideos\nESG\nYou are here:\nMain page\nAbout Asseco\nStrategy\nAbout Asseco\nPress Releases\nGeneral information\nGoverning bodies\nShareholders\nGroup structure\nStrategy\nMarket environment\nCorporate Governance\nCode of Business Ethics and Conduct\nBest Practices\nCorporate regulations\nRemuneration Policy\nArticles of Association of Asseco Poland S.A\nAGM\nEGM\nStrategy\nThe\nmission\nof Asseco Poland and the Asseco Group is to improve the quality of life by providing solutions for people and technologies for business.\nDriven by the\nvision:\nAsseco Poland is willing to be reliable and fast and offer the best products and services to support customers around the world in achieving their goals. Its employees form a competent and passionate team combining traditional values with modern approach,\nThe company builds an international group of technology companies, whose federal model allows for the use of local entrepreneurship and market knowledge. When a company joins the group, it increases its implementation capabilities and credibility towards demanding customers.\nThe strategy of Asseco Poland is focused on building long-term value for its stakeholders. It is based on two key pillars: development of proprietary software and services and increasing the scale of operations through acquisitions.\nOrganic growth\nThe strategy of organic growth of Asseco Poland S.A. is based on providing proprietary IT software and services to clients in Poland and abroad. The company's strategy relies on sector-specific business expertise, which is supported by technological competence. In addition, Asseco leverages on the vast experience of its international affiliated companies to create a comprehensive portfolio of products satisfying the highest needs of its customers.\nThe activities of the Asseco Poland S.A focus on providing a wide range of proprietary IT solutions and services. The company specializes in implementing the largest and most complex IT projects ordered by various clients, offering comprehensive solutions to all sectors of the economy, and also selling standardized products to smaller entities. The company builds long-term trust-based relationships with customers, becoming their strategic business partner.\nApart from its operating activities, as the owner controlling other companies of the Asseco Group, Asseco Poland S.A. plays a key role in the Group. Asseco Poland sets strategic directions for the Group's development, monitors and supervises their implementation, sets forth internal rules of operation, and regulates mutual relations among the companies within the federation.\nDevelopment through acquisitions\nFor many years, Asseco has pursued an effective acquisition policy at home and abroad. Since 2004, it has successfully completed over 170 acquisitions, increasing its business scale and geographic reach many times over. The Group is primarily interested in profitable entities with specialized and committed staff, willing to further develop themselves by joining a unique federation model or by integrating with Asseco. The acquisitions are intended to enhance our competence in the key sectors of business, to enter new geographical markets, or to reinforce the Asseco Group's position in the countries where it is already present.\nStrategic objectives in key areas\nMarket:\ntargeting the financial, health, corporate and government sectors, at home and abroad,\nbuilding and delivering software-based solutions in the Company customers' business-critical areas,\naiming to build repeatable solutions for adequate margins while maintaining a competitive price level,\nstriving for a stable source of revenues derived from maintenance and development services for the software provided, by retaining within the Company and protecting copyrights to the solutions it develops,\nproviding SaaS-based solutions based on proprietary software.\nOrganization:\nbusiness areas dedicated to serving various market sectors,\ngreat diversity, a consequence of the different needs, specifics and development phases of each sector,\nsupporting all initiatives to exchange knowledge and experience between areas,\na catalog of shared values and a vision, mission and strategy that can be detailed by business areas,\nback office processes common to all areas to support business objectives,\ninvestments in research and development (R&D).\nPeople:\nseeing people as the organization's greatest value,\nhigh expert knowledge and use of team potential,\ninvestments in the development of high-level expert and sectoral competencies,\ngathering knowledge and experience by maintaining a stable team,\npromoting initiatives and innovative approaches.\nCorporate social responsibility:\ntaking care of important social interests,\nsupporting Polish sport,\nhelping those in need,\nenvironmental protection activities.\nUp\nReports\nFinancial information\nAsseco on the WSE\nEvent calendar\nContact IR\nReport a violation\nPrivacy Policy\nAll rights reserved to Asseco Poland S.A. - 2026",
+        "fetch_mode": "static"
+      },
+      "discovery": {
+        "title": "Strategy - Asseco Poland S.A. - Centrum Relacji Inwestorskich",
+        "url": "https://inwestor.asseco.com/en/about-asseco/strategy",
+        "content": "targeting the financial, health, corporate and government sectors, at home and abroad,\n building and delivering software-based solutions in the Company customers' business-critical areas,\n aiming to build repeatable solutions for adequate margins while maintaining a competitive price level, [...] The activities of the Asseco Poland S.A focus on providing a wide range of proprietary IT solutions and services. The company specializes in implementing the largest and most complex IT projects ordered by various clients, offering comprehensive solutions to all sectors of the economy, and also selling standardized products to smaller entities. The company builds long-term trust-based relationships with customers, becoming their strategic business partner. [...] Organic growth\n\nThe strategy of organic growth of Asseco Poland S.A. is based on providing proprietary IT software and services to clients in Poland and abroad. The company's strategy relies on sector-specific business expertise, which is supported by technological competence. In addition, Asseco leverages on the vast experience of its international affiliated companies to create a comprehensive portfolio of products satisfying the highest needs of its customers.",
+        "retrieved_at": "2026-10-05T08:52:43.228981Z"
+      }
+    },
+    {
+      "source_id": "U008",
+      "original_source_id": "S001",
+      "content_sha256": "9036cb67de906025e069a90a3051c95e35d43183e1dacb9628077b79069293ef",
+      "origin_reference": "extended-20261005T070952Z/stage-c/asseco-home/page.json",
+      "material": {
+        "source": {
+          "source_id": "U008",
+          "url": "https://pl.asseco.com/",
+          "title": "Asseco Poland - Technologia dla biznesu, rozwiązania dla ludzi.",
+          "retrieved_at": "2026-10-05T08:30:22.723533Z",
+          "published_on": null,
+          "redirect_chain": [],
+          "publication_blocked_reason": null
+        },
+        "kind": "full_page",
+        "content": "Asseco Poland - Technologia dla biznesu, rozwiązania dla ludzi.\nFirma\nO nas\nGrupa kapitałowa\nWładze spółki\nESG\nCase Study\nBadania i rozwój\nBiuro prasowe\nAktualności\nOferta\nFinanse\nBanki komercyjne\nBanki spółdzielcze\nRynek kapitałowy\nBusiness Intelligence\nDigital Banking\nZdrowie\nOpieka zdrowotna\nSzpitale\nPrzychodnie\nAdministracja\nAdministracja centralna\nUbezpieczenia społeczne\nSłużby mundurowe\nPrzedsiębiorstwa\nCyberbezpieczeństwo\nRozwiązania ERP\nUsługi chmurowe\nRozwiązania celne\nRozwiązania FMCG\nEnergetyka\nEnergetyka\nTelekomunikacja\nTelekomunikacja\nKariera\nInwestor\nAkwizycja\nKontakt\npl\nen\npl\nen\nASSECO GROUP\nAsseco Eastern Europe (ASEE)\nAsseco International\nAsseco Lithuania\nAsseco PST\nAsseco Solutions\nAsseco Spain\nAsseco Turkey\nAsseco Central Europe\nSkontaktuj się\nTechnologia dla biznesu, rozwiązania dla ludzi\nJesteśmy globalnym producentem oprogramowania dla biznesu i administracji\nPoznaj Asseco\nOferta\nPoznaj technologię dla biznesu,\nktóra zmienia świat na lepsze\nNasze rozwiązania łączą innowacje z praktyką oraz wspierają rozwój firm i instytucji\nNaszym priorytetem jest i będzie produkcja własnego, innowacyjnego i bezpiecznego oprogramowania dla kluczowych sektorów gospodarki\nAdam Góral\nZałożyciel i Prezes Asseco Poland\nZaufało nam\n65%\nfirm energetycznych\n450\nszpitali\n50%\nbanków komercyjnych\n200\ninstytucji publicznych\nFinanse\nZdrowie\nAdministracja\nEnergetyka\nTelekomunikacja\nPrzedsiębiorstwa\nFinanse\nWspieramy zarządzanie procesami i rozwojem produktów dla sektora finansów\nZobacz więcej\nZdrowie\nWdrażamy rozwiązania, które wspierają pracę jednostek medycznych i leczenie pacjentów\nZobacz więcej\nAdministracja\nBudujemy przyjazną e‑administrację i przyspieszamy cyfryzację urzędów\nZobacz więcej\nEnergetyka\nZasilamy energetykę zaawansowanymi rozwiązaniami i stymulujemy rozwój elektromobilności\nZobacz więcej\nTelekomunikacja\nZwiększamy zasięg operatorów telekomunikacyjnych, wspierając sprzedaż i obsługę klienta\nZobacz więcej\nPrzedsiębiorstwa\nCyfryzujemy biznes, oferujemy rozwiązania chmurowe i zapewniamy przewagę konkurencyjną\nZobacz więcej\nFinanse\nWspieramy zarządzanie procesami i rozwojem produktów dla sektora finansów\nZobacz więcej\nZdrowie\nWdrażamy rozwiązania, które wspierają pracę jednostek medycznych i leczenie pacjentów\nZobacz więcej\nAdministracja\nBudujemy przyjazną e‑administrację i przyspieszamy cyfryzację urzędów\nZobacz więcej\nEnergetyka\nZasilamy energetykę zaawansowanymi rozwiązaniami i stymulujemy rozwój elektromobilności\nZobacz więcej\nTelekomunikacja\nZwiększamy zasięg operatorów telekomunikacyjnych, wspierając sprzedaż i obsługę klienta\nZobacz więcej\nPrzedsiębiorstwa\nCyfryzujemy biznes, oferujemy rozwiązania chmurowe i zapewniamy przewagę konkurencyjną\nZobacz więcej\nCase study\nZobacz rozwiązania dla biznesu, które poprawiają jakość życia ludzi\nDowiedz się, jak nasi klienci osiągnęli wyjątkowe wyniki, wdrażając oprogramowanie Asseco\nWdrożyliśmy nowy system i aplikację mobilną PKO supermakler, która pozwala klientom na dostęp do globalnych giełd i kontrolę nad inwestycjami\nMarcin Kwaśniewski\nDyrektor Biura E-biznesu i Komunikacji, Biuro Maklerskie PKO Banku Polskiego\nAsseco Medical Voicebot w Wielkopolskim Centrum Pediatrii\nWielkopolskie Centrum Pediatrii\nZdrowie\nW odpowiedzi na potrzeby WCP wdrożono nowoczesny Voicebot, który umożliwia automatyzację procesu rejestracji pacjentów.\nPrzeczytaj więcej\nŚląski Uniwersytet Medyczny oraz UCK i GCM Katowice z Platformą Kontrolingową AMCP od Asseco\nŚląski Uniwersytet Medyczny\nZdrowie\nProjekt obejmował uruchomienie Pulpitów zarządczych AMCP wraz z ich konfiguracją i szkoleniami dla użytkowników.\nPrzeczytaj więcej\nAsseco wdrożyło system do sprawozdawczości obowiązkowej w polskim oddziale chińskiego banku\nBank from China\nFinanse\nWdrożenie narzędzia Asseco w jednym z polskich oddziałów chińskiego Banku było projektem o szczególnym znaczeniu, nie tylko ze względu na złożoność wymogów regulacyjnych, ale również skalę wyzwań operacyjnych.\nPrzeczytaj więcej\nWdrożenie Centralnego Systemu Bankowego w Banku BPS zrealizowana przez Asseco\nBank Polskiej Spółdzielczości\nFinanse\nNowy system został zbudowany w oparciu o modułową architekturę, pozwalającą na elastyczne dostosowywanie do zmian.\nPrzeczytaj więcej\nTransformacja bankowości cyfrowej w GBS Gorzów z udziałem Asseco\nGBS w Gorzowie Wielkopolskim\nFinanse\nDedykowany i spójny z wizerunkiem Banku oraz odświeżony i unowocześniony interfejs użytkownika bankowości elektronicznej dla firm i klientów indywidualnych.\nPrzeczytaj więcej\nPrzełom w inwestowaniu z platformą PROMAK NEXT oraz aplikacjami nowej generacji od Asseco\nDom Maklerski BDM\nFinanse\nDom Maklerski BDM zdecydował się na wdrożenie rozwiązań firmy Asseco – centralnej Platformy obsługi biura maklerskiego PROMAK NEXT oraz Platformy inwestora\nPrzeczytaj więcej\nZobacz więcej historii\nKariera\nChcesz tworzyć z nami\ncyfrowy świat?\nDołącz do naszego zespołu!\nPracuj w Asseco!\nSzukamy osób gotowych do udziału w strategicznych\nprojektach o niespotykanej skali i kluczowym znaczeniu.\nZobacz, co nasi pracownicy mówią o Asseco\nRekrutacja\nOferty pracy\nOnboarding\nNapisz do nas\nTu znalazłem stabilne i przyjazne miejsce pracy\nWykorzystywanie nowoczesnych technologii w codziennej pracy to nasza pasja, służąca rozwojowi biznesu klientów na całym świecie.\nKrzysztof\nEkspert Architekt\nTu czuję, że moja praca robi różnicę\nBiorę udział w projektach dla międzynarodowych organizacji. W mojej pracy cenię samodzielność oraz współpracę z fantastycznym zespołem.\nKonrad\nArchitekt\nDowiedz się więcej o pracy w Asseco\nKariera\nPorozmawiajmy o oprogramowaniu!\nOpowiedz nam o swoich potrzebach, a my zaproponujemy najlepsze rozwiązanie.\nSkontaktuj się\nDołącz do naszego zespołu!\nSzukamy talentów gotowych do udziału w strategicznych projektach.\nNapisz do nas\n+48 17 888 55 55\n[email protected]\nOlchowa 14, 35-322 Rzeszów\nMenu\nAktualności\nCase study\nDokumenty\nCertyfikaty\nZakupy\nBiuro prasowe\nFinanse\nBanki komercyjne\nBanki spółdzielcze\nRynek kapitałowy\nBusiness Intelligence\nDigital Banking\nZdrowie\nOpieka zdrowotna\nPrzychodnie\nSzpitale\nAdministracja\nAdministracja centralna\nUbezpieczenia społeczne\nSłużby mundurowe\nPrzedsiębiorstwa\nCyberbezpieczeństwo\nRozwiązania ERP\nUsługi chmurowe\nRozwiązania celne\nRozwiązania FMCG\nEnergetyka\nEnergetyka\nTelekomunikacja\nTelekomunikacja\nCopyright © Asseco. All rights reserved\nPolityka Prywatności\nZgłaszanie naruszeń\nZgłaszanie incydentów\nAsseco Poland S.A. z siedzibą w Rzeszowie, ul. Olchowa 14, 35-322 Rzeszów, NIP:\n522-000-37-82\n, REGON:\n010334578\n, PKD 6210B. Sąd Rejonowy w Rzeszowie, XII Wydział Gospodarczy Krajowego Rejestru Sądowego, KRS:\n0000033391\n. Kapitał zakładowy w wysokości\n83 000 303,00\nPLN jest opłacony w całości. Nr BDO:\n000004848\nCentrum ustawień prywatności\nTa strona internetowa wykorzystuje pliki cookie i inne technologie śledzenia, które pomagają w nawigacji i dostarczaniu informacji zwrotnych, analizowaniu korzystania z naszych produktów i usług, wspieraniu naszych działań promocyjnych i marketingowych oraz dostarczaniu treści od podmiotów trzecich. Sprawdź więcej ustawień plików cookie, aby zarządzać swoimi preferencjami.\nWięcej informacji na temat plików cookie i przechowywania danych można znaleźć w naszej Polityce Prywatności.\nDokonaj wyboru\nZaakceptuj wszystkie\nBezpieczeństwo\nUmożliwia przechowywanie związane z bezpieczeństwem, takim jak funkcja uwierzytelniania, zapobieganie oszustwom i inna ochrona użytkownika.\nFunkcjonalne\nPrzechowywanie lub dostęp do danych technicznych jest ściśle konieczny do uzasadnionego celu umożliwienia korzystania z konkretnej usługi wyraźnie żądanej przez subskrybenta lub użytkownika, lub wyłącznie w celu przeprowadzenia transmisji komunikatu przez sieć łączności elektronicznej.\nMarketingowe\nPrzechowywanie lub dostęp techniczny jest wymagany do tworzenia profili użytkowników w celu wysyłania reklam lub śledzenia użytkownika na stronie internetowej lub na kilku stronach internetowych w podobnych celach marketingowych.\nPrzechowywanie plików cookie związanych z reklamami\nSpersonalizowana reklama\nDane użytkownika związane z reklamą\nAnalityczne\nPrzechowywanie techniczne lub dostęp, który jest używany wyłącznie do anonimowych celów statystycznych. Bez wezwania do sądu, dobrowolnego podporządkowania się dostawcy usług internetowych lub dodatkowych zapisów od strony trzeciej, informacje przechowywane lub pobierane wyłącznie w tym celu zwykle nie mogą być wykorzystywane do identyfikacji użytkownika.\nPersonalizacja\nElementy te umożliwiają witrynie zapamiętanie dokonanych wyborów (takich jak nazwa użytkownika, język lub region, w którym się znajdujesz) i zapewniają ulepszone, bardziej osobiste funkcje. Na przykład witryna internetowa może dostarczać lokalne raporty pogodowe lub informacje o ruchu drogowym, przechowując dane o Twojej bieżącej lokalizacji.\nThank you! Your submission has been received!\nOops! Something went wrong while submitting the form.\nZaakceptuj wybór\nOdrzuć wszystkie\nCzy polski biznes\njest gotowy na KSeF?\nSprawdź wyniki\nnajnowszego badania\nPobierz raport",
+        "fetch_mode": "static"
+      },
+      "discovery": {
+        "url": "https://pl.asseco.com",
+        "title": "Asseco Poland - Technologia dla biznesu, rozwiązania dla ludzi.",
+        "content": "Asseco Poland S.A. z siedzibą w Rzeszowie, ul. Olchowa 14, 35-322 Rzeszów, NIP: 522-000-37-82, REGON: 010334578, PKD 6210B. Sąd Rejonowy w Rzeszowie, XII Wydział Gospodarczy Krajowego Rejestru Sądowego, KRS: 0000033391. Kapitał zakładowy w wysokości 83 000 303,00 PLN jest opłacony w całości. Nr BDO: 000004848\n\n[](\n\n### Centrum ustawień prywatności",
+        "score": 0.8232293,
+        "raw_content": null,
+        "id": "44f2dc-02",
+        "retrieved_at": "2026-10-05T08:27:47.744790+00:00"
+      }
+    }
+  ]
+}

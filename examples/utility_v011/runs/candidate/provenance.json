@@ -1,0 +1,42 @@
+{
+  "producing_commit": "5c36e045a1f32336c403b0b254f1c6faa7cfe641",
+  "model": "openai-codex:gpt-6-luna",
+  "mode": "one fresh fixed-source candidate attempt per company, no rerolls",
+  "gold_sha256": "9760e445e38f375b237c1c3c0df07108618cd3e75126a60bc69e08a847e74dfa",
+  "attempts": [
+    {
+      "company": "asseco-poland",
+      "status": "audit_capture_failure",
+      "run_file": null,
+      "detail_file": "asseco-poland.capture-failure.json",
+      "duration_seconds": 32.83,
+      "model_requests": null
+    },
+    {
+      "company": "sonel",
+      "status": "completed",
+      "run_file": "sonel.json",
+      "run_sha256": "d00b60b5d2bb30203e4a1cb89e1217f4686320de579308217ebc7a7e1fe7e2e4",
+      "diagnostics": {
+        "model": "openai-codex:gpt-6-luna",
+        "status": "completed",
+        "stop_reason": null,
+        "failure_code": null,
+        "failures": [],
+        "validated_progress_retained": false,
+        "model_requests": 5,
+        "searches": 5,
+        "page_reads": 1,
+        "dynamic_reads": 0,
+        "output_retries": 0,
+        "input_tokens": 24939,
+        "output_tokens": 881,
+        "duration_seconds": 23.963914666790515,
+        "cost_usd": null
+      }
+    }
+  ],
+  "known_model_requests": 5,
+  "unmeasured_model_attempts": 1,
+  "cost_usd": null
+}
