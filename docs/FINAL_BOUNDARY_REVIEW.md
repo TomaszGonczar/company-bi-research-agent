@@ -1,10 +1,114 @@
-# v0.1.1 pre-holdout micro-correction
+# v0.1.1 pre-holdout integrity and freeze record
 
-**V0.1.1 STILL BLOCKED**
+**V0.1.1 IMPLEMENTATION FROZEN — READY FOR EXTERNAL HOLDOUT EXECUTION**
 
-**BLOCKED — DO NOT RELEASE**
+This is permission to proceed to the separate holdout protocol, not a release decision.
 
-## Final micro-correction from 6ccae67
+## Integrity correction from 29beb50
+
+Baseline: `29beb50d40f829bd2666e908cdca5a06c1221b11`, on
+`fix/v0.1.1-adversarial-corrections`. The strict publication grammar and normative
+contract remain byte-identical. No new live research, provider calls, vocabulary,
+ordinary-prose coverage or research architecture were added.
+
+The independent Astra corpus, component oracle and coverage matrix were not opened
+or inspected during this implementation task. External public-model preflight and
+external verifier executions are both zero. Local regression fixtures below are
+not independent holdout evidence.
+
+### Implemented integrity boundaries
+
+1. **IPv6 identity:** origin checks use `(scheme, hostname, effective_port)`;
+   redirect discovery/final endpoints also require canonical URL/path agreement.
+   Reconstructed IPv6 authorities retain brackets, so
+   `https://[2001:db8::1]:8080/` differs from `https://[2001:db8::1:8080]/`.
+   Explicit/default HTTPS 443 agree. SourceStore, lineage, ownership and legacy
+   grouping share the corrected URL key. Ordinary model validation and unchecked
+   publication recheck lineage; legitimate redirects remain valid.
+2. **Strict author specification:** public `AuthorSpec` rejects unknown nested
+   keys and unsupported field placement. Builder errors carry `case_id`. Known
+   boundary-patch fields can still deliberately contain invalid values; typo keys
+   cannot silently disappear.
+3. **Financial context:** only `period`, `currency`, `unit`, `scope`, `group_name`
+   are permitted. A context cannot replace authored value, state, metric or evidence.
+4. **Decimal intent:** non-null financial author amounts must be finite decimal
+   strings. JSON floats, integers and booleans reject. The string
+   `"123456789012345678.123456"` survives builder and public-model JSON round-trip.
+5. **Preflight targets:** the shared resolver accepts only documented concrete fact
+   surfaces and existing indexed entries. Bogus paths fail readiness even for
+   intentionally invalid identity/provenance controls. Preflight never executes
+   publication semantics.
+6. **Component oracle:** [HOLDOUT_ORACLE.md](HOLDOUT_ORACLE.md) and the public
+   `HoldoutOracle` model freeze explicit rejection stages, final state/value,
+   reason/evidence checks and financial/employee/event components. Omitted checks
+   are unassessed; explicit nullable checks require clearing/absence. The repository
+   scorer resolves the declared target from a complete profile. Wrong values,
+   retained invalid optional metadata, missing targets/values and missing output
+   cannot become success. Scoring implementation is excluded from the author ZIP.
+7. **Taxonomy:** positive assertions must be in contract; OOC truth is synthetic
+   stipulated truth expected to abstain; unsafe claims must be falsifiable from
+   supplied evidence/contract, not a private claim that the publisher lies.
+   Identity/provenance controls remain separate from semantic executions.
+8. **Scope:** the external release holdout is a sampled independent population.
+   The repository's canonical regression matrix supplies broader deterministic
+   grammar coverage. The one-page builder does not claim multi-page conflicts,
+   cross-page composition, complete redirect lineage, every literal grammar
+   alternative or every Unicode boundary.
+9. **Runtime:** release evidence uses Python **3.12** and Pydantic **2.13.5**;
+   the exercised interpreter is **3.12.13**. Broader project constraints are not
+   described as equivalent release evidence.
+
+### Separate local verification
+
+| Gate / population | Observed result |
+| --- | --- |
+| Locked pytest suite | **740 passed**, 30 existing lxml warnings |
+| Ruff check / format / mypy | **PASS / 56 files / 19 source files** |
+| Unchanged canonical CLI matrix | **262/262**, including **97/97** positives; zero unsafe/OOC support and accepted invalid identity/provenance |
+| Prior boundary CLI smoke | **26/26** |
+| Prior micro CLI + unchecked SDK smoke | **19/19**, unchanged local case content |
+| IPv6 CLI + unchecked SDK smoke | **11/11** |
+| Author/preflight CLI smoke | **10/10**, also in public-only isolation |
+| Component-scoring runtime smoke | **5/5**, using an actual CLI profile; supported employee parent retained while unverified date clears |
+| Public schemas and neutral examples | Four schemas match their public models; two examples validate; no verifier invoked |
+
+Initial integration failures are retained in the external audit: missing local
+initializations in lineage/oracle validation, typing/lint errors, and a new test
+that confused an absent optional date with a retained invalid date. A brittle
+annotation-wording assertion was removed; behavior assertions remain. No frozen
+external data, labels or expectations were changed.
+
+The final commit, clean-worktree proof, exact-commit isolated-clone logs, public-only
+package manifest and archive SHA-256 are recorded in the external integrity audit.
+Every command uses an allowlisted environment and OS network denial. No credential
+or environment files were inspected. Earlier archives remain immutable.
+
+### Deferred, not silently implemented
+
+General Unicode-category redesign; NIP checksum expansion at this boundary;
+general JSON NaN hardening; empty legacy unknown-reason hardening; multi-page author
+builder; 256+ or full 3/3/2 external holdout matrices; transaction-safe filesystem
+redesign; semantic grammar changes; live research. The finite-Decimal author check
+does not claim general JSON hardening.
+
+### Later Astra Holdout A protocol
+
+Only a subsequent execution task may inspect the supplied independent corpus.
+Verify its SHA-256
+`d39d1d30990f63f12666d45d1de81f827839aecd7df407c2434ba1fd83450e77`
+and complete FREEZE manifest. Rerun public-model preflight on those exact same bytes
+in the final pinned runtime, preserving a separate new log. STOP on unexpected
+validation differences; do not run the verifier. Otherwise execute the production
+verifier exactly once, preserve first outputs, and score against the independently
+frozen component oracle without rewriting it. No case, label or expectation changes
+after results. Model-boundary controls and semantic executions must be reported
+separately; every predeclared positive remains in the positive denominator.
+
+No release holdout was executed here. No version bump, push, merge, tag or release.
+
+## Previous micro-correction (29beb50; historical)
+
+Historical status: **V0.1.1 STILL BLOCKED — BLOCKED — DO NOT RELEASE**.
 
 Baseline: `6ccae67dff94867c3cf7ab60760165b0f6b63393`, on the existing correction
 branch. Only two boundary corrections were authorized. The normative publication

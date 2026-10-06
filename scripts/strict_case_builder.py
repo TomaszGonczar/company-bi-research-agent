@@ -9,14 +9,9 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-CLASSES = {
-    "SUPPORTED_CONTRACT_POSITIVE",
-    "OUT_OF_CONTRACT_TRUE",
-    "UNSAFE_NEGATIVE",
-    "IDENTITY_INVALID",
-    "PROVENANCE_INVALID",
-}
-EXPECTED_ACTIONS = {"publish", "abstain", "reject"}
+from pydantic import ValidationError
+
+from company_bi.strict_cases import AuthorSpec
 
 
 def _unknown(reason: str) -> dict[str, Any]:
@@ -27,55 +22,33 @@ def _fact(
     state: str, value: Any, source_id: str, context: str, reason: str | None
 ) -> dict[str, Any]:
     if state == "unknown":
-        return _unknown(reason or "The source does not provide this information.")
+        return _unknown(
+            reason if reason is not None else "The source does not provide this information."
+        )
     if state == "uncertain":
         return {
             "state": state,
             "value": value,
             "evidence": [{"source_id": source_id, "excerpt": context}],
-            "reason": reason or "The available evidence is inconclusive.",
+            "reason": reason if reason is not None else "The available evidence is inconclusive.",
         }
     if state != "supported":
         raise ValueError("candidate_fact.state must be supported, uncertain or unknown")
-    return {
+    fact = {
         "state": state,
         "value": value,
         "evidence": [{"source_id": source_id, "excerpt": context}],
     }
+    if reason is not None:
+        fact["reason"] = reason
+    return fact
 
 
-def build_case(spec: dict[str, Any]) -> dict[str, Any]:
-    """Return a serialized run envelope; no evidence or publication decision is made."""
-    if not isinstance(spec, dict):
-        raise ValueError("each author specification must be an object")
-    required = {
-        "case_id",
-        "classification",
-        "source_assertion",
-        "candidate_fact",
-        "expected_action",
-    }
-    missing = required - spec.keys()
-    if missing:
-        raise ValueError(f"missing author fields: {', '.join(sorted(missing))}")
-    if not isinstance(spec["classification"], str) or spec["classification"] not in CLASSES:
-        raise ValueError("classification must be one of the five strict classifications")
-    if (
-        not isinstance(spec["expected_action"], str)
-        or spec["expected_action"] not in EXPECTED_ACTIONS
-    ):
-        raise ValueError("expected_action must be publish, abstain or reject")
+def _build_validated(spec: dict[str, Any]) -> dict[str, Any]:
+    authored = AuthorSpec.model_validate(spec)
+    spec = authored.model_dump(exclude_unset=True)
     assertion = spec["source_assertion"]
     candidate = spec["candidate_fact"]
-    if (
-        not isinstance(assertion, dict)
-        or not isinstance(assertion.get("text"), str)
-        or not assertion["text"].strip()
-    ):
-        raise ValueError("source_assertion.text is required")
-    if not isinstance(candidate, dict) or not isinstance(candidate.get("field_path"), str):
-        raise ValueError("candidate_fact.field_path is required")
-
     generated = datetime(2026, 10, 6, 12, tzinfo=UTC)
     registry_id, evidence_id = "synthetic-registry", "synthetic-evidence"
     nip, name = "5220003782", "Example Company sp. z o.o."
@@ -106,8 +79,6 @@ def build_case(spec: dict[str, Any]) -> dict[str, Any]:
         "published_on": publication.get("published_on", assertion.get("published_on")),
     }
     content = assertion["text"]
-    if candidate.get("state", "supported") == "unknown" and candidate.get("value") is not None:
-        raise ValueError("unknown candidate facts must use a null value")
     evidence = _fact(
         candidate.get("state", "supported"),
         candidate.get("value"),
@@ -197,35 +168,26 @@ def build_case(spec: dict[str, Any]) -> dict[str, Any]:
         },
         "generated_at": generated.isoformat(),
     }
-    envelope = spec.get("envelope", {})
-    if not isinstance(envelope, dict) or set(envelope) - {"identity", "sources"}:
-        raise ValueError("envelope may mutate only identity or sources")
-    if envelope and spec["classification"] not in {"IDENTITY_INVALID", "PROVENANCE_INVALID"}:
-        raise ValueError(
-            "envelope mutations are reserved for identity/provenance boundary controls"
-        )
+    envelope = spec.get("envelope") or {}
     identity_changes = envelope.get("identity", {})
-    if not isinstance(identity_changes, dict):
-        raise ValueError("envelope.identity must be a partial identity object")
     run["identity"].update(deepcopy(identity_changes))
     source_changes = envelope.get("sources", [])
-    if not isinstance(source_changes, list):
-        raise ValueError("envelope.sources must be a list of indexed source mutations")
     for mutation in source_changes:
+        index = mutation["index"]
         if (
-            not isinstance(mutation, dict)
-            or not isinstance(mutation.get("index"), int)
-            or not 0 <= mutation["index"] < len(run["sources"])
-            or not isinstance(mutation.get("changes"), dict)
+            isinstance(index, bool)
+            or not isinstance(index, int)
+            or not 0 <= index < len(run["sources"])
         ):
             raise ValueError("each source mutation requires a valid index and changes object")
-        item = run["sources"][mutation["index"]]
+        item = run["sources"][index]
         changes = deepcopy(mutation["changes"])
         if "source" in changes:
             source_metadata = changes.pop("source")
-            if not isinstance(source_metadata, dict):
-                raise ValueError("source metadata mutation must be an object")
-            item["source"].update(source_metadata)
+            if isinstance(source_metadata, dict):
+                item["source"].update(source_metadata)
+            else:
+                item["source"] = source_metadata
         item.update(changes)
     target_paths = {
         "business_description": "business_description",
@@ -246,13 +208,29 @@ def build_case(spec: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def build_case(spec: dict[str, Any], *, case_index: int | None = None) -> dict[str, Any]:
+    """Return a serialized run envelope; no evidence or publication decision is made."""
+    case_id = spec.get("case_id") if isinstance(spec, dict) else None
+    label = (
+        case_id
+        if isinstance(case_id, str) and case_id.strip()
+        else f"<missing-case-id:index={case_index if case_index is not None else 0}>"
+    )
+    try:
+        if not isinstance(spec, dict):
+            raise ValueError("each author specification must be an object")
+        return _build_validated(spec)
+    except (ValueError, ValidationError, TypeError, KeyError) as error:
+        raise ValueError(f"case_id={label}: {error}") from error
+
+
 def build_file(spec_path: Path, output_path: Path) -> None:
     if output_path.exists():
         raise FileExistsError(f"refusing to overwrite existing output: {output_path}")
     specs = json.loads(spec_path.read_text(encoding="utf-8"))
     if not isinstance(specs, list):
         specs = [specs]
-    cases = [build_case(spec) for spec in specs]
+    cases = [build_case(spec, case_index=index) for index, spec in enumerate(specs)]
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with output_path.open("x", encoding="utf-8") as output:
         output.write(json.dumps(cases, ensure_ascii=False, indent=2) + "\n")

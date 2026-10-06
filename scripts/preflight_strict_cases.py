@@ -10,6 +10,7 @@ from typing import Any
 from pydantic import ValidationError
 
 from company_bi.models import CompanyResearchRun
+from company_bi.strict_cases import resolve_fact_path
 
 BOUNDARY = {"IDENTITY_INVALID", "PROVENANCE_INVALID"}
 CLASSIFICATIONS = {
@@ -71,13 +72,21 @@ def preflight(path: Path) -> tuple[list[dict[str, Any]], bool]:
             continue
         seen.add(case_id)
         try:
+            resolve_fact_path(case["run"], case["path"])
+        except ValueError as error:
+            results.append(
+                {"case_id": case_id, "status": "INVALID", "detail": f"case_id={case_id}: {error}"}
+            )
+            failed = True
+            continue
+        try:
             CompanyResearchRun.model_validate_json(json.dumps(case["run"], ensure_ascii=False))
         except ValidationError as error:
             if classification in BOUNDARY:
                 intentional_invalid = case["expected_action"] == "reject"
                 annotation = (
                     "expected-invalid boundary control; manually review the exact model error; "
-                    "this is not evidence that the verifier rejects for the intended reason"
+                    "model rejection is unexercised and is not semantic success"
                     if intentional_invalid
                     else "invalid boundary envelope requires expected_action=reject"
                 )
@@ -86,13 +95,19 @@ def preflight(path: Path) -> tuple[list[dict[str, Any]], bool]:
                         "case_id": case_id,
                         "status": "INVALID",
                         "annotation": annotation,
-                        "detail": str(error),
+                        "detail": f"case_id={case_id}: {error}",
                     }
                 )
                 if not intentional_invalid:
                     failed = True
             else:
-                results.append({"case_id": case_id, "status": "INVALID", "detail": str(error)})
+                results.append(
+                    {
+                        "case_id": case_id,
+                        "status": "INVALID",
+                        "detail": f"case_id={case_id}: {error}",
+                    }
+                )
                 failed = True
         else:
             results.append(

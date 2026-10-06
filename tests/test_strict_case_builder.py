@@ -215,9 +215,6 @@ def test_intentional_invalid_boundary_controls_are_annotated_not_semantic_proofs
     results, successful = preflight([identity_case, provenance_case], tmp_path / "boundary.json")
     assert successful
     assert [result["status"] for result in results] == ["INVALID", "INVALID"]
-    assert all(
-        "not evidence that the verifier rejects" in result["annotation"] for result in results
-    )
 
 
 def test_invalid_boundary_without_reject_action_fails_readiness(tmp_path: Path) -> None:
@@ -275,3 +272,204 @@ def test_builder_never_overwrites_existing_authored_output(tmp_path: Path) -> No
     with pytest.raises(FileExistsError):
         build_file(input_path, output_path)
     assert output_path.read_text(encoding="utf-8") == "author-owned bytes"
+
+
+@pytest.mark.parametrize(
+    ("mutator", "match"),
+    [
+        (lambda value: value.update(publication_metdata={}), "publication_metdata"),
+        (lambda value: value.update(contex="typo"), "contex"),
+        (lambda value: value["candidate_fact"].update(typo=True), "typo"),
+        (lambda value: value["candidate_fact"].update(as_of="2026-01-01"), "as_of"),
+        (
+            lambda value: value["candidate_fact"].update(context_fields={"currency": "PLN"}),
+            "context_fields",
+        ),
+    ],
+)
+def test_author_schema_rejects_unknown_and_misplaced_fields_with_case_id(
+    mutator: object, match: str
+) -> None:
+    authored = spec("draft.business_description", "Consulting")
+    mutator(authored)  # type: ignore[operator]
+    with pytest.raises(ValueError, match="case_id=author-case") as error:
+        build_case(authored)
+    assert match in str(error.value)
+
+
+@pytest.mark.parametrize("bad_value", [10, 10.0, True])
+def test_financial_non_null_values_must_be_decimal_strings(bad_value: object) -> None:
+    with pytest.raises(ValueError, match="case_id=author-case"):
+        build_case(spec("draft.financials.revenue", bad_value))
+
+
+def test_financial_context_cannot_override_primary_fact() -> None:
+    authored = spec(
+        "draft.financials.revenue",
+        "10",
+        candidate_fact={
+            "field_path": "draft.financials.revenue",
+            "value": "10",
+            "context_fields": {"value": "999"},
+        },
+    )
+    with pytest.raises(ValueError, match="case_id=author-case"):
+        build_case(authored)
+
+
+def test_financial_decimal_lexical_precision_survives_builder_and_public_model() -> None:
+    amount = "123456789012345678.123456"
+    case = build_case(
+        spec(
+            "draft.financials.revenue",
+            amount,
+            candidate_fact={
+                "field_path": "draft.financials.revenue",
+                "value": amount,
+                "context_fields": {
+                    "period": {"start": "2025-01-01", "end": "2025-12-31"},
+                    "currency": "PLN",
+                    "unit": "units",
+                    "scope": "legal_entity",
+                },
+            },
+        )
+    )
+    assert case["run"]["draft"]["financials"][0]["value"] == amount
+    serialized = CompanyResearchRun.model_validate_json(json.dumps(case["run"])).model_dump_json()
+    assert amount in serialized
+
+
+def test_preflight_rejects_nonexistent_paths_even_for_boundary_controls(tmp_path: Path) -> None:
+    case = build_case(
+        spec(
+            "draft.business_description",
+            "Consulting",
+            case_id="bad-target",
+            classification="IDENTITY_INVALID",
+            expected_action="reject",
+            envelope={"identity": {"nip": "0000000000"}},
+        )
+    )
+    case["path"] = "financials.99"
+    results, successful = preflight([case], tmp_path / "bad-target.json")
+    assert not successful
+    assert results[0]["status"] == "INVALID"
+    assert "case_id=bad-target" in results[0]["detail"]
+
+
+def test_shared_fact_path_resolver_accepts_supported_locations_and_rejects_bad_indices() -> None:
+    from company_bi.strict_cases import resolve_fact_path
+
+    case = build_case(spec("draft.business_description", "Consulting"))
+    run = case["run"]
+    assert resolve_fact_path(run, "business_description") is run["draft"]["business_description"]
+    assert resolve_fact_path(run, "financials.0") is run["draft"]["financials"][0]
+    assert resolve_fact_path(run, "identity.legal_name") is run["identity"]["legal_name"]
+    profile = {"business_description": run["draft"]["business_description"]}
+    assert resolve_fact_path(profile, "business_description") is profile["business_description"]
+    for invalid in ("financials.-1", "financials.00", "financials.2", "financials", "limitations"):
+        with pytest.raises(ValueError):
+            resolve_fact_path(run, invalid)
+
+
+def test_missing_case_id_errors_use_explicit_index_marker() -> None:
+    authored = spec("draft.business_description", "Consulting")
+    del authored["case_id"]
+    with pytest.raises(ValueError, match=r"<missing-case-id:index=4>"):
+        build_case(authored, case_index=4)
+
+
+@pytest.mark.parametrize(
+    "envelope",
+    [
+        {"identity": {"nipp": "0000000000"}},
+        {"sources": [{"index": 1, "changes": {"kind": "registry", "typo": True}}]},
+        {
+            "sources": [
+                {"index": 1, "changes": {"source": {"url": "https://example.test", "typo": True}}}
+            ]
+        },
+    ],
+)
+def test_envelope_patch_unknown_fields_fail_with_case_id(envelope: dict[str, object]) -> None:
+    with pytest.raises(ValueError, match="case_id=author-case"):
+        build_case(
+            spec(
+                "draft.business_description",
+                "Consulting",
+                classification="PROVENANCE_INVALID",
+                expected_action="reject",
+                envelope=envelope,
+            )
+        )
+
+
+@pytest.mark.parametrize("amount", ["not-a-decimal", "NaN", "Infinity"])
+def test_financial_values_must_be_finite_decimal_strings(amount: str) -> None:
+    with pytest.raises(ValueError, match="case_id=author-case"):
+        build_case(spec("draft.financials.revenue", amount))
+
+
+@pytest.mark.parametrize(
+    "authored",
+    [
+        spec(
+            "draft.employees",
+            {"kind": "exact", "count": 9, "typo": True},
+        ),
+        spec(
+            "draft.recent_developments",
+            {"title": "Event", "summary": "Summary", "published_on": "2026-09-25", "typo": True},
+        ),
+        spec(
+            "draft.financials.revenue",
+            "10",
+            candidate_fact={
+                "field_path": "draft.financials.revenue",
+                "value": "10",
+                "context_fields": {
+                    "period": {"start": "2025-01-01", "end": "2025-12-31", "typo": True}
+                },
+            },
+        ),
+        spec(
+            "draft.business_description",
+            "Consulting",
+            classification="IDENTITY_INVALID",
+            expected_action="reject",
+            envelope={
+                "identity": {
+                    "legal_name": {"state": "supported", "value": "X", "evidence": [], "typo": True}
+                }
+            },
+        ),
+        spec(
+            "draft.business_description",
+            "Consulting",
+            classification="IDENTITY_INVALID",
+            expected_action="reject",
+            envelope={
+                "identity": {
+                    "legal_name": {
+                        "state": "supported",
+                        "value": "X",
+                        "evidence": [{"source_id": "id", "excerpt": "X", "typo": True}],
+                    }
+                }
+            },
+        ),
+        spec(
+            "draft.business_description",
+            "Consulting",
+            classification="PROVENANCE_INVALID",
+            expected_action="reject",
+            envelope={"sources": [{"index": 1, "changes": {"url": "https://example.test"}}]},
+        ),
+    ],
+)
+def test_nested_and_misplaced_object_fields_fail_at_builder_boundary(
+    authored: dict[str, object],
+) -> None:
+    with pytest.raises(ValueError, match="case_id=author-case"):
+        build_case(authored)

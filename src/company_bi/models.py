@@ -508,10 +508,11 @@ def _normalized_source_url(url: HttpUrl | str) -> str:
     scheme = parts.scheme.lower()
     host = (parts.hostname or "").lower()
     port = parts.port
+    authority_host = f"[{host}]" if ":" in host else host
     netloc = (
-        host
+        authority_host
         if port is None or (scheme, port) in {("http", 80), ("https", 443)}
-        else f"{host}:{port}"
+        else f"{authority_host}:{port}"
     )
     if parts.username or parts.password:
         netloc = f"{parts.username or ''}:{parts.password or ''}@{netloc}"
@@ -521,7 +522,9 @@ def _normalized_source_url(url: HttpUrl | str) -> str:
 def _source_origin(url: HttpUrl) -> tuple[str, str, int | None]:
     parts = urlsplit(str(url))
     scheme = parts.scheme.lower()
-    port = parts.port or (443 if scheme == "https" else 80)
+    port = parts.port
+    if port is None:
+        port = 443 if scheme == "https" else 80
     return scheme, (parts.hostname or "").lower(), port
 
 
@@ -570,16 +573,24 @@ def validate_source_lineage(materials: list[RetrievedSource]) -> None:
         if len(chains) != 1:
             raise ValueError(f"source ID {source_id} has conflicting redirect lineages")
         chain = chained[0].source.redirect_chain
-        start = _normalized_source_url(chain[0])
-        end = _normalized_source_url(chain[-1])
+        start_url = _normalized_source_url(chain[0])
+        end_url = _normalized_source_url(chain[-1])
+        start_origin = _source_origin(chain[0])
+        end_origin = _source_origin(chain[-1])
         discoveries = [material for material in retained if material.kind == "search_snippet"]
         pages = [material for material in retained if material.kind == "full_page"]
         if not discoveries or not pages:
             raise ValueError(f"redirect lineage for source ID {source_id} lacks retained discovery")
-        if any(_normalized_source_url(item.source.url) != start for item in discoveries):
+        if any(
+            _source_origin(item.source.url) != start_origin
+            or _normalized_source_url(item.source.url) != start_url
+            for item in discoveries
+        ):
             raise ValueError(f"redirect lineage for source ID {source_id} has the wrong origin")
         if any(
-            not item.source.redirect_chain or _normalized_source_url(item.source.url) != end
+            not item.source.redirect_chain
+            or _source_origin(item.source.url) != end_origin
+            or _normalized_source_url(item.source.url) != end_url
             for item in pages
         ):
             raise ValueError(f"redirect lineage for source ID {source_id} has the wrong final URL")

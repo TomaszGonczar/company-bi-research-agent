@@ -4,7 +4,7 @@ A research agent may propose broadly; deterministic publication recognizes only 
 
 Under the [strict publication contract](docs/STRICT_PUBLICATION_CONTRACT.md), the one quoted direct assertion shown here is supported: `Example sp. z o.o. offers "cloud services".` The plausible unquoted assertion `Example sp. z o.o. offers cloud services.` is true but out of contract, so publication abstains. Labels are opaque, not a vocabulary of validated meanings.
 
-**v0.1.1 pre-holdout readiness remains BLOCKED by unavailable exact external replay inputs/runners.** The two micro-corrections pass **262/262** canonical CLI cases, **26/26** prior boundary smoke cases, **19/19** new CLI/SDK smoke cases and **696 tests**. The fresh independent blind holdout is the next stage, not self-authored evidence. Retained Asseco and SONEL each publish **0 researched facts**—strict abstention, not useful BI. See the [current evidence and missing prerequisites](docs/FINAL_BOUNDARY_REVIEW.md); earlier measurements below remain separate history.
+**v0.1.1 implementation is frozen and ready for external holdout execution—not release.** The integrity correction passes **740 tests**, **262/262** canonical CLI cases, prior boundary/micro smoke **26/26** and **19/19**, IPv6 CLI/SDK smoke **11/11**, public-toolkit smoke **10/10**, and component-scoring smoke **5/5**. The independent Astra corpus and oracle have not been opened or executed in this implementation task. See the [freeze evidence and later execution protocol](docs/FINAL_BOUNDARY_REVIEW.md). Earlier measurements below remain separate history; no new useful broad-coverage BI claim is made.
 
 ## Historical evidence (earlier contract)
 

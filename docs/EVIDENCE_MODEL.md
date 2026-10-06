@@ -123,7 +123,7 @@ and whitespace-run normalization; literal quotation marks are data. Only the exp
 citation path may JSON-decode an excerpt, and it compares that semantic value to the
 same mapped field after checking occurrence in the referenced retained material.
 
-The canonical matrix still passes 262/262 actual CLI cases, including 97 contract positives. The final micro-correction passes 696 tests, the prior 26 local CLI smoke cases, and 19 new CLI/unchecked-SDK smoke cases; see [FINAL_BOUNDARY_REVIEW.md](FINAL_BOUNDARY_REVIEW.md), which preserves the earlier 683-test snapshot separately. The original 70-case blind corpus remains failed fixture construction, not semantic evidence. Exact external replays and fresh external release acceptance remain unclaimed; legacy-envelope rejection is not a semantic success.
+The current integrity correction passes 740 tests and the unchanged 262/262 canonical CLI matrix, including 97 contract positives. Prior boundary and micro CLI/SDK smoke remain 26/26 and 19/19; IPv6 smoke adds 11/11, public-toolkit smoke 10/10, and component-scoring smoke 5/5. [FINAL_BOUNDARY_REVIEW.md](FINAL_BOUNDARY_REVIEW.md) preserves the earlier 683/696-test snapshots separately. The original 70-case blind corpus remains failed fixture construction; the independent Astra release corpus has not been opened or executed during this correction. Legacy-envelope rejection is not a semantic success.
 
 The three evidence states, financial field schema, dependencies and usage budgets remain. The proposal instructions explain the deliberately narrower publication boundary. Current boundary changes and limitations are in [FINAL_BOUNDARY_REVIEW.md](FINAL_BOUNDARY_REVIEW.md); the [b521edf strict report](STRICT_CONTRACT_REVIEW.md) and [earlier correction history](ADVERSARIAL_CORRECTIONS.md) retain their original populations and metrics.
 
@@ -160,6 +160,12 @@ default ports and fragments while preserving path/query. For trusted web materia
 the redirect-chain start (or the unredirected source URL) cannot belong to two source
 IDs. Distinct discoveries may legitimately converge on the same final URL. Registry
 records have separate ownership; blocked groups cannot veto trusted discovery ownership.
+
+Origins use `(normalized_scheme, normalized_hostname, effective_port)` independently
+of full-URL/path identity. Redirect discovery and final endpoints require both structural
+origin agreement and canonical URL agreement. IPv6 authorities retain bracket syntax:
+`[2001:db8::1]:8080` is not the host `[2001:db8::1:8080]` on default HTTPS port 443.
+An explicit 443 and implicit HTTPS 443 agree; explicit port zero is not treated as absent.
 
 The research-run format has no historical version field. Its narrow read-compatibility distinction is the actual serialized source shape: all raw source dictionaries for a non-registry ID omit `redirect_chain`, yet their normalized URLs differ. The reader copies the affected mapping branches and adds `Source.publication_blocked_reason = "unproven_legacy_url_relationship"` to the whole ID group. It does not infer hops or repair the original URLs. Typed/native inputs and current records with an explicit `redirect_chain` field, including `[]`, are not inferred to be legacy.
 
