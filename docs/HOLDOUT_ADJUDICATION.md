@@ -2,6 +2,31 @@
 
 `examples/evals/dataset.json`, `gold-corrections.json`, the controlled/retained inputs, and prior results are immutable historical artifacts. The ordinary repository evaluator reports them as `historical_earlier_contract`; it preserves their prior labels and does not claim strict-contract scoring. Revision 3 of the complete historical assertion adjudication lives separately in `examples/evals/strict-historical.json`. It explicitly covers every original `metadata.claim`, preserves each full gold claim and original raw candidate (including `null` where no candidate assertion existed), marks all seven unrecognized controlled registry envelopes `PROVENANCE_INVALID`, and recognizes only the 12 identity facts mapped by the three accepted retained MF host snapshots as strict identity positives. Identity/research denominators are separate. The five wrong-company prior-holdout corrections are a different population in `examples/evals/strict-adjudicated.json`; they are never included in the original-suite denominator. Revisions supersede only adjudication metadata; original gold and first replay artifacts remain unchanged.
 
+## Current acceptance policy
+
+`historical_earlier_contract` is not strict v0.1.1 acceptance. The dataset and
+gold remain immutable. The historical evaluator is a manual diagnostic: its
+historical assertion/outcome failures are meaningful nonzero results and must
+not be blindly ignored. `write_reports` has no aggregate recall threshold.
+
+The reproduced historical evaluation failure at `806dd639` had six outcome
+mismatches and two historical required-state failures; reports were generated
+with no execution, evaluator, or input-hash errors. This does not change those
+historical results or make them a strict-contract score.
+
+The full `uv run --frozen pytest -q` suite is the blocking canonical acceptance
+gate. Its matrix checks state/value/expected fields and boundary behavior. The
+credential-free offline reviewer command in CI is a smoke check only, not metric
+acceptance. `scripts/replay_strict_adjudication.py` returns zero after a completed
+replay even when reported expectations fail, so it is not standalone acceptance.
+
+Keep reported populations separate: the canonical strict matrix is 262/262
+(97 positives); Holdout B is 70/70 semantic plus 10/10 model controls; and zero
+unsafe-support / out-of-contract-support results are separate, not combined.
+Separately, real-world researched yield remains poor: Asseco and SONEL each
+published zero researched facts. See the [Holdout B result](V0_1_1_HOLDOUT_RESULT.md);
+do not combine these populations or infer real-world utility from holdout success.
+
 The normal command remains the historical view:
 
 ```sh
