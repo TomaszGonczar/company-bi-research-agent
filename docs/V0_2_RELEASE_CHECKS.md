@@ -4,16 +4,16 @@
 
 ```json
 {
-  "phase": "OG-208",
+  "phase": "OG-209",
   "state": "acceptance_passed_pending_commit",
   "work_branch": "feat/nipto-bi-v0.2-dossier",
   "baseline_sha": "e3da375218206354f79dac539e252f7821c1c399",
-  "latest_committed_sha": "52b5c40",
-  "completed_issues": ["OG-205", "OG-206", "OG-207"],
-  "next_action": "Commit OG-208 CLI/bundle, then run independent semantic, visual and wheel QA",
-  "tests_and_visuals": ["27 CLI/file-safety tests passed; 17 projection/PDF tests passed previously; actual CLI exits 0/1/2 observed; mypy 20 modules passed"],
+  "latest_committed_sha": "136e347",
+  "completed_issues": ["OG-205", "OG-206", "OG-207", "OG-208"],
+  "next_action": "Commit OG-209 QA, then set 0.2.0, regenerate release examples and freeze release candidate",
+  "tests_and_visuals": ["784 tests passed; Ruff/format/mypy passed; both reviewer smokes passed; 47/47 PDF pages visually inspected; clean installed-wheel smoke passed; 122 protected hashes unchanged"],
   "blockers": [],
-  "pending_linear_sync": ["OG-205 Done bd21fdd; OG-206 Done df7c876; OG-207 Done 52b5c40; OG-208 Done after commit; connector remains read-only"],
+  "pending_linear_sync": ["OG-205–OG-208 committed and locally accepted; OG-209 Done after commit; no Linear mutation route available"],
   "pending_github_actions": ["feature push, PR, exact-head CI, merge, main CI, annotated tag, release"],
   "repair_attempts_for_current_root_cause": 0
 }
@@ -52,6 +52,32 @@
 - POSIX safe publication uses no-follow directory descriptors, exclusive directory/artifact creation, owned inode checks, and completion manifest last. Existing destinations, dangling symlinks, input/output hardlinks/aliases, symlink parents, traversal, reservation races, render/copy/manifest failures and hash tampering are refused without overwriting old data. Fresh repeat bundles are byte-identical in this environment.
 - Reproduced three additional failures before repair: mutation after manifest creation returned success; replacing the parent returned success; cleanup failure left a completed manifest while reporting failure. Fixed final parent/artifact rechecks and moved successful staging cleanup inside the publication transaction. All three regressions now pass. Replaced-directory cleanup preserves the external replacement and retains staging with a bounded diagnostic. No directory-atomicity or crash-atomicity claim.
 - Safe writer currently requires POSIX directory-descriptor/no-follow primitives (tested macOS; hosted Linux pending). Native Windows refuses safely rather than claiming equivalent collision guarantees.
+
+## OG-209 integrated QA and packaging
+
+- Actual integrated gates: `uv sync --frozen --python 3.12`; **784 pytest passed** (740 inherited + 44 dossier), 30 unchanged lxml warnings; Ruff PASS; formatting PASS (62 files); strict mypy PASS (20 source files). Existing offline reviewer smoke PASS at `.work/v0.2/legacy-review-01`.
+- New `scripts/review_dossier.py` executes the real CLI parser/dispatch in fresh subprocesses with network/model/registry/Tavily/Scrapling entrypoints blocked. **9/9 outcomes passed**: seven published PDFs, failed diagnostic-only bundle, invalid identity refusal. Full approved text/excerpts/source metadata/gap reasons, companion profile parity and completion hashes verified. Deterministic summary: `.work/v0.2/dossier-review-01/review-summary.json`. Added this narrow smoke after the unchanged inherited CI steps.
+- Semantic and visual review were performed sequentially by the integration owner using independent consumer checks and actual rendered images; no separate human or independent holdout certification is claimed.
+- `uv build --out-dir .work/v0.2/dist-01` PASS. Pre-version-bump wheel SHA-256 `97e888b9427439bde0ad52a6a7a37b47835d4ed253d746d8d5d6b0b1f1994a73`. Installed wheel plus frozen runtime requirements into a fresh `/private/tmp/company-bi-v020-wheel-…/venv`, invoked its actual installed `company-bi dossier` outside the checkout with the absolute rich input, and verified site-packages imports, both fonts/LICENSE, valid PDF, complete profile and `-0.7500`. No pypdf/Poppler runtime dependency. Final 0.2.0 wheel will be separately hashed and smoked.
+- Protected baseline check: **122/122 files byte-identical**; no unrelated package version changed. Only new dependencies: ReportLab 4.5.1, its Pillow 12.3.0 dependency, development-only pypdf 6.20.0. No frozen semantic/evidence/gold/holdout edits.
+- Current-valid real demonstration: original `examples/evals/retained/asseco-poland.json` validated unchanged; input SHA-256 `41b9bf80321988d51fe4230adb5ec28b85d6954c7b1399c1a68da116afb86325`; profile generated at **2026-10-03T12:25:47.507942+00:00**, partial, **0 supported researched fields**. Four registry-backed facts are not BI research. Quarantined legacy source lineage remains visibly quarantined. No live provider call or login was needed.
+
+### All-page visual review
+
+Poppler 26.10.0: `pdftoppm -r 150 -png INPUT.pdf PAGE_PREFIX`, then image-view inspection of every page (two-page contact sheets plus full-resolution stress page 19). `pdftotext -bbox` found no words outside the checked horizontal/body/footer bounds. Images and bounding-box record: `.work/v0.2/visual-01/`. Page-split citations remain complete; full text parity is separately checked, not inferred from page counts.
+
+| Fixture | Total / main / appendix | Inspected pages | Actual findings |
+| --- | --- | --- | --- |
+| supported (synthetic) | 3 / 1 / 2 | 1–3 | Service cited; unknown scale/finances, three questions; no clipping/overlap. |
+| out_of_contract (synthetic) | 3 / 1 / 2 | 1–3 | Zero-research statement, uncertain product state, no rejected value/excerpt. |
+| unsafe (synthetic) | 3 / 1 / 2 | 1–3 | Same truthful PDF as OOC; distinct forensic verification files. |
+| rich (synthetic) | 5 / 1 / 4 | 1–5 | Polish glyphs; exact signs/scales/intervals; distinct event dates; source links readable. |
+| zero-finance (synthetic) | 5 / 1 / 4 | 1–5 | Explicit `0.0000` preserved alongside negative net result; no missing→zero substitution. |
+| stress (synthetic) | 24 / 2 / 22 | 1–24 | Full long identity and all 40 services/citations survive; markup literal; long title/URL/reason wrap. Appendix is intentionally long, not squeezed. |
+| real-asseco (original capture) | 4 / 1 / 3 | 1–4 | Sparse partial with original timestamps, zero research supports, registry IDs and clearly non-supporting/quarantined sources. |
+| failed / identity_invalid | 0 / 0 / 0 | No PDF | Expected diagnostic-only / refusal outcomes, not invented dossiers. |
+
+All **47 pages** inspected. No unresolved material semantic/layout finding. Observed non-blocking layout tradeoff: some appendix paragraphs continue on the next labelled appendix page; stress main page 2 is sparse. Normal body size remains 10.5 pt.
 
 ## Release limitations
 
