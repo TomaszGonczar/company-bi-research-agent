@@ -1,0 +1,33 @@
+# v0.2 release checks and continuation
+
+## Active continuation
+
+```json
+{
+  "phase": "OG-205",
+  "state": "acceptance_passed_pending_commit",
+  "work_branch": "feat/nipto-bi-v0.2-dossier",
+  "baseline_sha": "e3da375218206354f79dac539e252f7821c1c399",
+  "latest_committed_sha": "e3da375218206354f79dac539e252f7821c1c399",
+  "completed_issues": [],
+  "next_action": "Commit OG-205 contract, then implement final-profile projection for OG-206",
+  "tests_and_visuals": ["Baseline: 740 pytest passed; Ruff/format/mypy passed; offline reviewer smoke passed"],
+  "blockers": [],
+  "pending_linear_sync": ["OG-205 In Progress/Done after commit; only read-only Linear tools mounted"],
+  "pending_github_actions": ["feature push, PR, exact-head CI, merge, main CI, annotated tag, release"],
+  "repair_attempts_for_current_root_cause": 0
+}
+```
+
+## OG-205 baseline and acceptance
+
+- Read the complete revision-2 execution plan and all six full Linear descriptions. Issues are Todo in M5; existing historical tracker discrepancies are not reimplementation instructions. The mounted Linear connector has no mutation tools; preserve pending synchronization rather than inventing updates.
+- Initial checkout: clean `fix/v0.1.1-adversarial-corrections`, HEAD `02555dd`. PR #1 is merged at `83a9e42940190d88ed065c5804be331d3b40d48e`; annotated `v0.1.1` points there. Fetched current main `e3da375218206354f79dac539e252f7821c1c399`; no newer dossier work. Created assigned feature branch from main. Other worktrees, including operator main, remain untouched.
+- Repository root confirmed; origin `https://github.com/TomaszGonczar/company-bi-research-agent.git`. Authenticated GitHub viewer permission ADMIN; no credential changes or permission bypass. `uv 0.12.3`, CPython 3.12.13. Initial package 0.1.1/schema 0.1. Poppler `pdftoppm 26.10.0` available. Fontconfig returns Verdana for DejaVu, so use the specified upstream archive, not an unlicensed substitute.
+- Protected inventory: 122 existing tracked code/test/fixture/docs files and SHA-256 values in `examples/dossier/baseline-sha256.json`. All source except CLI protected; all old tests, examples and docs protected. Allowed edits: CLI isolation, package/lock, CI additive smoke, README/reviewer guide, new dossier files/resources/tests/examples/docs. No Holdout B first-execution runner invoked.
+- Actual baseline commands: `uv sync --frozen --python 3.12`; `uv run --frozen pytest -q` (**740 passed**, 30 pre-existing lxml warnings); `ruff check .` PASS; `ruff format --check src tests scripts` PASS (56 files); `mypy src` PASS (19 source files); `python scripts/review_offline.py --output-dir .work/v0.2/baseline-review` PASS (zero external calls). Full command output available in the execution transcript.
+- Frozen [contract and two labelled mockups](V0_2_DOSSIER_CONTRACT.md) cover final-only projection, exact interfaces/files/exits, source retention, manifest-last semantics, fixed layout/questions and release gates. Mockups validated against M5; actual rendered visual proof remains pending OG-207/209.
+
+## Release limitations
+
+This is a presentation/usability change, not expanded publication language, better real researched yield or production accuracy. Registry facts do not count as researched BI. Synthetic classification is a caller-provided label; input hashes are not source authentication. No employer/client material sent; OG-201 untouched.
