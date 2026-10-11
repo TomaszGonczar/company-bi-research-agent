@@ -1,0 +1,21 @@
+{
+  "artifacts": {
+    "5220003782.dossier.pdf": "db684ce90fb44e124a45eadd9b9431e6bd15a533e64ec20b9d0393ed2ba26e12",
+    "profile.json": "8ceae8874c027695ed4fc4f3e11dc02279c83cecc6c5e63c9724730f94c55813",
+    "profile.md": "b6733f1a04ff8abea875c40f2c5932eca52be2cad94f06e9e1fa74862da8195a",
+    "verification.json": "8023162cc458217d35de671594e76afb20471d9bc3334c327a4f0f127f248a68",
+    "verification.md": "d24cb03c18bdf1d87d5d74185025494dc78480f4955ab70571e844ebc9b3fa5d"
+  },
+  "bundle_status": "complete",
+  "input_name": "asseco-poland.json",
+  "input_sha256": "41b9bf80321988d51fe4230adb5ec28b85d6954c7b1399c1a68da116afb86325",
+  "manifest_version": "0.2.0",
+  "nip": "5220003782",
+  "package_version": "0.2.0",
+  "profile_schema_version": "0.1",
+  "profile_status": "partial",
+  "publication_status": "published",
+  "research_generated_at": "2026-10-03T12:25:47.507942+00:00",
+  "synthetic": false,
+  "template_version": "0.2.0"
+}

@@ -1,0 +1,21 @@
+{
+  "artifacts": {
+    "5220003782.dossier.pdf": "dbdc3d7bcbe5c37c14a4c895dffacb30936d0a2b966c757110ccc1cc6eb02ab0",
+    "profile.json": "e8f65cb1860be423f2b708b65b5ce2d0a85c150101172fc2aa635bb61eb770cd",
+    "profile.md": "b2f5bd0ffd69e24b04e55a6003a634f115258e8b9399a85463fa3ed30e933d6c",
+    "verification.json": "ddbbebac2142ea79756bae4705d0dffabcf41cbaa613496d548bc6988fbd53e5",
+    "verification.md": "31920af1c1fc5515d3bb8a434a5ceb4826d508fed5b6ce178cb2cfb8867dfd84"
+  },
+  "bundle_status": "complete",
+  "input_name": "zero-finance.json",
+  "input_sha256": "f4fbc06fb68396560d87c26c52165a69f164db14a71a3a221e930911074fc7b8",
+  "manifest_version": "0.2.0",
+  "nip": "5220003782",
+  "package_version": "0.2.0",
+  "profile_schema_version": "0.1",
+  "profile_status": "complete",
+  "publication_status": "published",
+  "research_generated_at": "2026-10-05T12:00:00+00:00",
+  "synthetic": true,
+  "template_version": "0.2.0"
+}

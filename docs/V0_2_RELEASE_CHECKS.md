@@ -1,23 +1,25 @@
 # v0.2 release checks and continuation
 
-## Active continuation
+## Frozen pre-publication checkpoint
 
 ```json
 {
-  "phase": "OG-209",
-  "state": "acceptance_passed_pending_commit",
+  "phase": "OG-210",
+  "state": "local_acceptance_passed_pending_release_commit",
   "work_branch": "feat/nipto-bi-v0.2-dossier",
   "baseline_sha": "e3da375218206354f79dac539e252f7821c1c399",
-  "latest_committed_sha": "136e347",
-  "completed_issues": ["OG-205", "OG-206", "OG-207", "OG-208"],
-  "next_action": "Commit OG-209 QA, then set 0.2.0, regenerate release examples and freeze release candidate",
+  "latest_committed_sha": "b0a97c5",
+  "completed_issues": ["OG-205", "OG-206", "OG-207", "OG-208", "OG-209"],
+  "next_action": "Commit final v0.2.0 candidate, push PR, require exact-head and post-merge CI, create annotated tag and release",
   "tests_and_visuals": ["784 tests passed; Ruff/format/mypy passed; both reviewer smokes passed; 47/47 PDF pages visually inspected; clean installed-wheel smoke passed; 122 protected hashes unchanged"],
   "blockers": [],
-  "pending_linear_sync": ["OG-205–OG-208 committed and locally accepted; OG-209 Done after commit; no Linear mutation route available"],
+  "pending_linear_sync": ["OG-205–OG-209 implemented, committed and accepted; OG-210 release pending; connector has no mutation tools"],
   "pending_github_actions": ["feature push, PR, exact-head CI, merge, main CI, annotated tag, release"],
   "repair_attempts_for_current_root_cause": 0
 }
 ```
+
+This tracked checkpoint is frozen with the candidate to avoid document-only commit churn after CI. Live publication transitions and immutable commit/CI/tag/release references are persisted in `.work/v0.2/release-checkpoint.json` and the [GitHub Release](https://github.com/TomaszGonczar/company-bi-research-agent/releases/tag/v0.2.0). A local candidate is **not** RELEASED; only the actual published release and its checkpoint/CI links establish that state.
 
 ## OG-205 baseline and acceptance
 
@@ -78,6 +80,17 @@ Poppler 26.10.0: `pdftoppm -r 150 -png INPUT.pdf PAGE_PREFIX`, then image-view i
 | failed / identity_invalid | 0 / 0 / 0 | No PDF | Expected diagnostic-only / refusal outcomes, not invented dossiers. |
 
 All **47 pages** inspected. No unresolved material semantic/layout finding. Observed non-blocking layout tradeoff: some appendix paragraphs continue on the next labelled appendix page; stress main page 2 is sparse. Normal body size remains 10.5 pt.
+
+## OG-210 final local candidate
+
+- Package **0.2.0**, profile schema **0.1**, template **0.2.0**. README, reviewer guide, synthetic classification and live/batch bridge updated against actual `batch.py` retained path and `_batch_state.json` `research_path`; no invented CSV column or automatic batch PDFs.
+- Final-version commands repeated after the version/lock change: frozen sync PASS; **784 tests PASS**; Ruff PASS; format PASS; mypy PASS; legacy reviewer smoke PASS; new dossier smoke **9/9 PASS**. Authoritative committed examples and machine summary: [`examples/dossier/generated`](../examples/dossier/generated/).
+- All seven final-version PDFs are **byte-identical** to the seven PDFs whose **47/47 pages** were inspected. All eight completion manifests identify package/template/manifest 0.2.0 and validate every artifact hash; published profile schemas remain 0.1. No render was inferred from an old pre-change thumbnail.
+- Final 0.2.0 build and clean outside-checkout wheel installation PASS, actual installed console entry point produced a complete rich PDF with exact `-0.7500`; both fonts and LICENSE present without pypdf/Poppler. Wheel SHA-256 **`c771c3b43d25ae8990696accef8174354e12417341381e8d376df272b94a0d11`** (`company_bi-0.2.0-py3-none-any.whl`). Release build must retain this wheel content or rerun the smoke.
+- Protected hash check again **122/122 unchanged**; protected semantic/fixture diff empty; no unrelated dependency upgrades. Final source changes are the dossier module, packaged fonts and isolated CLI dispatch; inherited schemas/renderer/research/batch/gate stay unchanged.
+- GitHub policy inspected: main unprotected; effective rules API returned an empty list; normal merge, squash and rebase permitted. Existing `v0.2.0` matching refs and same-branch PR list were empty. No rules, permissions, protections or credentials changed. Normal merge still waits for exact candidate CI, followed by main CI, by this contract.
+- Six assigned commit boundaries: OG-205 `bd21fdd`; OG-206 `df7c876`; OG-207 `52b5c40`; OG-208 `136e347`; OG-209 `b0a97c5`; final OG-210 commit is identified by the PR head/release checkpoint, not a self-referential hash in this file.
+- Linear synchronization remains pending because all mounted Linear tools are read-only. This does not block GitHub release technical gates; the final delivery must state it explicitly, never claim issue statuses changed.
 
 ## Release limitations
 

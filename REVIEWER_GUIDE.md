@@ -10,9 +10,51 @@ The contract's semantic unit is the entire retained full-page text, NFC-normaliz
 
 The agent's proposal is not publication approval. The gate does not authenticate arbitrary edited ledgers, prove publisher truth, or interpret text outside its finite language. Structured output validates shape, not truth. Unrecognized true prose is out of contract, not disproven.
 
-**Release status: Holdout B PASS; post-holdout release preparation, not released.** The certified commit `9f80eb7a7dcdb4c563a4bec897f22361cdbbae45` passed one independent first execution of 80 calls (70 semantic, 10 boundary; zero reruns): 20/20 supported positives, 20/20 true-OOC abstentions, 30/30 unsafe with no support, and 5/5 each provenance and identity model-rejections. See the [compact Holdout B result and independent artifact-audit provenance](docs/V0_1_1_HOLDOUT_RESULT.md). This sampled finite-contract evidence does not establish general accuracy, publisher truth, exhaustive coverage, or useful real-world output. Asseco and SONEL remain at **0 researched facts published**. Separate local release-preparation gates passed: 740 tests, Ruff, formatting, mypy, and 262/262 canonical CLI cases (**97/97** contract positives); the historical original 70-case holdout remains failed fixture construction, and earlier missing external replay corpora/runners have not been replayed. Check the final commit SHA and exact-commit clean-clone evidence in the external release-review package; hosted CI is pending authorization. No tag, merge, push, or release is claimed. The [current boundary review](docs/FINAL_BOUNDARY_REVIEW.md) points to the newer result; the [b521edf report](docs/STRICT_CONTRACT_REVIEW.md) remains a separate historical snapshot.
+**v0.1.1 was released** at annotated tag `v0.1.1`, commit `83a9e42940190d88ed065c5804be331d3b40d48e`; [release](https://github.com/TomaszGonczar/company-bi-research-agent/releases/tag/v0.1.1). Holdout B remains historical PASS on certified commit `9f80eb7a7dcdb4c563a4bec897f22361cdbbae45`: one independent first execution of 80 calls (70 semantic, 10 boundary; zero reruns), 20/20 supported positives, 20/20 true-OOC abstentions, 30/30 unsafe with no support, and 5/5 each provenance/identity model-rejections. [Original result and limitations](docs/V0_1_1_HOLDOUT_RESULT.md). Its separate 740-test and 262-case local gates are not research accuracy. Earlier defective/missing populations remain historical, not retroactively repaired. v0.2 changes presentation only; its checks below are not a new holdout certification.
 
 The separate v2 reviewer-reported record lists 20/40 unsafe and 34/40 accepted; it was not local CLI execution, is not a current strict-matrix result, and its distinctness from other vendor corpora is unproven. Keep it separate; see [quality report §13](docs/V0_1_1_QUALITY.md#13-separate-v2-reviewer-reported-evidence-not-a-local-strict-result).
+
+## Zero-key v0.2 dossier review
+
+```sh
+uv sync --frozen --python 3.12
+uv run --frozen python scripts/review_dossier.py --output-dir outputs/dossier-review
+```
+
+Choose a fresh root. The script runs nine actual CLI scenarios in network/model-blocked subprocesses and writes one deterministic `review-summary.json`. The two expected refusals are successful review cases, not product success. Inspect:
+
+1. `rich/5220003782.dossier.pdf`: **synthetic**, all eight research fields/observations approved by the unchanged gate; `12.5000` revenue, `-0.7500` net result, PLN millions, explicit legal-entity interval. Main page plus sources/details.
+2. `supported/5220003782.dossier.pdf`: **synthetic**, one approved service; unknown finance/employees stay unknown. Questions are fixed prompts, not inferred sales opportunities.
+3. `out_of_contract/` and `unsafe/`: zero approved researched facts, uncertain product state, no candidate value or excerpt promoted. These yield identical truthful PDFs but different forensic verification reports.
+4. `real-asseco/`: original real capture, partial, **zero** supported research fields; generated **2026-10-03T12:25:47.507942+00:00**. Registry identifiers and quarantined source metadata remain visible. No new live research.
+5. `zero-finance/`, `stress/`: labelled synthetic boundary/layout examples; supported zero, long Polish legal name, 40 service labels, markup-like text, source URLs and reasons.
+6. `failed-run/`: exit 1, only diagnostic JSON/Markdown/manifest; no profile/PDF. `identity_invalid`: exit 2 and no directory.
+
+[Committed bundles](examples/dossier/generated/) use the same case names. All successful bundles contain the PDF, existing final profile JSON/Markdown, existing verification JSON/Markdown and completion manifest. Check manifest hashes before trusting bundle completeness. This is not an authenticated source signature or a directory-atomic transaction. The companion verification files intentionally contain original proposals; the PDF facts use only the final profile.
+
+To reproduce one example:
+
+```sh
+uv run --frozen company-bi dossier examples/dossier/rich.json --output-dir outputs/dossier-rich --synthetic
+```
+
+The `--synthetic` flag is a caller classification, not verification of real-world authenticity. Use retained research, not a direct profile. Safe bundle publication requires POSIX no-follow/directory-descriptor primitives; native Windows is not supported. Existing destinations and symlink/hardlink aliases are refused, including symlink ancestors; choose physical paths. On macOS use `/private/tmp`, not symlink `/tmp`, if using temporary absolute paths.
+
+### Layout / package reproduction
+
+Runtime requires only frozen package dependencies and bundled DejaVu Sans 2.37; no Poppler or pypdf. Development-only pypdf checks text, fonts and links. For visual inspection with existing Poppler:
+
+```sh
+mkdir -p .work/v0.2/reviewer-pages
+pdftoppm -r 150 -png outputs/dossier-rich/5220003782.dossier.pdf .work/v0.2/reviewer-pages/page
+uv build --out-dir .work/v0.2/dist
+```
+
+Open every rendered page, not just the first. The recorded review inspected all **47 pages** across seven PDFs: 1–2 main pages each, readable 10.5 pt body, full appendix. Text extraction alone does not prove visual quality. Repeat renders were byte-identical in the tested locked environment; no universal cross-platform/library-version byte guarantee.
+
+For a clean wheel smoke, export locked runtime requirements with `uv export --frozen --no-dev --no-emit-project --format requirements-txt --output-file .work/v0.2/runtime-requirements.txt`, create a fresh Python 3.12 environment outside the checkout, install those requirements and the wheel, then invoke its installed `company-bi dossier` with an absolute retained-run input and a fresh physical output directory. Confirm imports come from that environment's `site-packages`, not `src/`, and that both TTFs and LICENSE are in `company_bi/assets/fonts/`. [Actual commands/results, wheel hash, visual findings and release checkpoint](docs/V0_2_RELEASE_CHECKS.md).
+
+Tomasz owns product direction/constraints and release authorization; OMP implemented and ran the recorded checks. No independent human accuracy review or external portfolio reception is asserted.
 
 ## Zero-key strict matrix review
 

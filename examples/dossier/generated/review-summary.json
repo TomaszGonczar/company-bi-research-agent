@@ -1,0 +1,230 @@
+{
+  "cases": {
+    "failed-run": {
+      "artifact_hashes": {
+        "verification.json": "d816749811ddf4a88d9ceb0b699363e942ba409d343d4a9866831e26b5f47ef2",
+        "verification.md": "1af78ce37514d04c8060a99920b9c1be39166fb05f6629e1e999a654650d88f6"
+      },
+      "artifact_paths": [
+        "failed-run/verification.json",
+        "failed-run/verification.md"
+      ],
+      "exit_code": 1,
+      "expected_exit": 1,
+      "findings": [],
+      "input": "examples/dossier/failed-run.json",
+      "input_sha256": "73ade277c875a3d6e7b5e923dca899b4795343151e6c3f417381d790fbd4badc",
+      "main_pages": 0,
+      "pdf_pages": 0,
+      "profile_status": null,
+      "supported_research_count": null,
+      "synthetic": true
+    },
+    "identity_invalid": {
+      "artifact_hashes": {},
+      "artifact_paths": [],
+      "exit_code": 2,
+      "expected_exit": 2,
+      "findings": [],
+      "input": "examples/strict_contract/identity_invalid.json",
+      "input_sha256": "6099ba520fba1d0846978fb489ab2a55051131fc688d7d8a448020c34071c4ee",
+      "main_pages": 0,
+      "pdf_pages": 0,
+      "profile_status": null,
+      "supported_research_count": null,
+      "synthetic": true
+    },
+    "out_of_contract": {
+      "artifact_hashes": {
+        "5220003782.dossier.pdf": "f44121ae8ba3a86646e4db14b32155f2173e0578fe16a1876b628ca85d0c19a3",
+        "profile.json": "3c360bf64fbcfd5e8edebed0ebd3f4cb1456d64cc6df7e448f94dc7a5788d488",
+        "profile.md": "0a960069d3b8f67627b705fff4958a1727d2b2a06fa0947efe7ef954e3f29c2a",
+        "verification.json": "9ea8d23818baea87887383fdf51f2d28fda3ce0ce3e778107c056f15733a5c08",
+        "verification.md": "1aa94ec5955fedd96204b079a09eecfc14293d1d194e12148eae5c45d05e70e4"
+      },
+      "artifact_paths": [
+        "out_of_contract/5220003782.dossier.pdf",
+        "out_of_contract/profile.json",
+        "out_of_contract/profile.md",
+        "out_of_contract/verification.json",
+        "out_of_contract/verification.md"
+      ],
+      "exit_code": 0,
+      "expected_exit": 0,
+      "findings": [],
+      "input": "examples/strict_contract/out_of_contract.json",
+      "input_sha256": "9dd1d58251087e628b1252f68d37f1b6db8c63ee05de8708f38031fc3b59d112",
+      "main_pages": 1,
+      "pdf_pages": 3,
+      "profile_status": "partial",
+      "research_generated_at": "2026-10-05T12:00:00+00:00",
+      "supported_research_count": 0,
+      "synthetic": true
+    },
+    "real-asseco": {
+      "artifact_hashes": {
+        "5220003782.dossier.pdf": "db684ce90fb44e124a45eadd9b9431e6bd15a533e64ec20b9d0393ed2ba26e12",
+        "profile.json": "8ceae8874c027695ed4fc4f3e11dc02279c83cecc6c5e63c9724730f94c55813",
+        "profile.md": "b6733f1a04ff8abea875c40f2c5932eca52be2cad94f06e9e1fa74862da8195a",
+        "verification.json": "8023162cc458217d35de671594e76afb20471d9bc3334c327a4f0f127f248a68",
+        "verification.md": "d24cb03c18bdf1d87d5d74185025494dc78480f4955ab70571e844ebc9b3fa5d"
+      },
+      "artifact_paths": [
+        "real-asseco/5220003782.dossier.pdf",
+        "real-asseco/profile.json",
+        "real-asseco/profile.md",
+        "real-asseco/verification.json",
+        "real-asseco/verification.md"
+      ],
+      "exit_code": 0,
+      "expected_exit": 0,
+      "findings": [],
+      "input": "examples/evals/retained/asseco-poland.json",
+      "input_sha256": "41b9bf80321988d51fe4230adb5ec28b85d6954c7b1399c1a68da116afb86325",
+      "main_pages": 1,
+      "pdf_pages": 4,
+      "profile_status": "partial",
+      "research_generated_at": "2026-10-03T12:25:47.507942+00:00",
+      "supported_research_count": 0,
+      "synthetic": false
+    },
+    "rich": {
+      "artifact_hashes": {
+        "5220003782.dossier.pdf": "4592c5f26ef543a1957c944f1c2deccd90536b99f8cca1fd32a989300e190fbc",
+        "profile.json": "0bc607c43cd54bf3145e7e791d122607366af0c553086b16bffe233ca3b992fa",
+        "profile.md": "ce3af81a8810e37a2403c714cf711f34291d78622f5c12952b6e536863a11998",
+        "verification.json": "ab23ee554e58ea86f083910305ec2145c878445e10b573d8a90e6ca7829dc3d9",
+        "verification.md": "2129a6b5e01ec19e13cc1b5344027666d60d8848d8a4e1f60a5ed0c2ef33d15c"
+      },
+      "artifact_paths": [
+        "rich/5220003782.dossier.pdf",
+        "rich/profile.json",
+        "rich/profile.md",
+        "rich/verification.json",
+        "rich/verification.md"
+      ],
+      "exit_code": 0,
+      "expected_exit": 0,
+      "findings": [],
+      "input": "examples/dossier/rich.json",
+      "input_sha256": "5d0ce46f5c2a569841725285ecb799358cfcf94e03e57b4f1dba453f0483359a",
+      "main_pages": 1,
+      "pdf_pages": 5,
+      "profile_status": "complete",
+      "research_generated_at": "2026-10-05T12:00:00+00:00",
+      "supported_research_count": 8,
+      "synthetic": true
+    },
+    "stress": {
+      "artifact_hashes": {
+        "5220003782.dossier.pdf": "d7493dace55de8116c31ec404c406a615412399098e544210542d92aecc061dc",
+        "profile.json": "f064d94022539a963c538e99e12e6ef93563209f209f0c81b4cf590896041c63",
+        "profile.md": "03bbc7066b1c88f8406edf0c23a3f5240f91d25aa90eb7b33a0c44dda4873a13",
+        "verification.json": "e4b3a9ebfed9adbc5abb9870cec7f2a8d3652e025211febf28e72d49cd2a9c60",
+        "verification.md": "846346f1faa579758470fa4f8bfb3b59b31339dbaa4e6be06459947f7cfcc4ec"
+      },
+      "artifact_paths": [
+        "stress/5220003782.dossier.pdf",
+        "stress/profile.json",
+        "stress/profile.md",
+        "stress/verification.json",
+        "stress/verification.md"
+      ],
+      "exit_code": 0,
+      "expected_exit": 0,
+      "findings": [],
+      "input": "examples/dossier/stress.json",
+      "input_sha256": "343a4f9b39a2725eddc69b6f8e2d8f1d2f0662d49eb3bb0d777b31f587210275",
+      "main_pages": 2,
+      "pdf_pages": 24,
+      "profile_status": "complete",
+      "research_generated_at": "2026-10-05T12:00:00+00:00",
+      "supported_research_count": 8,
+      "synthetic": true
+    },
+    "supported": {
+      "artifact_hashes": {
+        "5220003782.dossier.pdf": "d96836ebcae0daa89e00b7771c7cd48f652b800bffba3deb25086d0da1e7c126",
+        "profile.json": "cd849a55750f47af250ae5577e991e8d5581ffae146def1ecb72a2548fa55b93",
+        "profile.md": "b0194605ca578f8148a8dbbc96599da9df0bacaad2b3836b328079e64821affc",
+        "verification.json": "914dd98a6bd4c2a248a16471d52e7253e872e5e9fe5a927f07502e1bab998a9b",
+        "verification.md": "51e29f458cd0acb23285cadbce74963c2bb71ade1623ac5eb57db6278a047981"
+      },
+      "artifact_paths": [
+        "supported/5220003782.dossier.pdf",
+        "supported/profile.json",
+        "supported/profile.md",
+        "supported/verification.json",
+        "supported/verification.md"
+      ],
+      "exit_code": 0,
+      "expected_exit": 0,
+      "findings": [],
+      "input": "examples/strict_contract/supported.json",
+      "input_sha256": "1585df7207b6bd9717387a1538d6674f56fc83fa04aa182023f93100a78e1ec8",
+      "main_pages": 1,
+      "pdf_pages": 3,
+      "profile_status": "partial",
+      "research_generated_at": "2026-10-05T12:00:00+00:00",
+      "supported_research_count": 1,
+      "synthetic": true
+    },
+    "unsafe": {
+      "artifact_hashes": {
+        "5220003782.dossier.pdf": "f44121ae8ba3a86646e4db14b32155f2173e0578fe16a1876b628ca85d0c19a3",
+        "profile.json": "705d7bac17c51ba106683fd625161bacb54f636fcc67c8a6e573cff2e668e9fa",
+        "profile.md": "4587aaf4e5159638391b238ffac0b8d32cce332cb4e5a44cbd787c26f00dbbc7",
+        "verification.json": "72c4947c8518952c860b18399d65530e50b878b1525ec6d68ec23897fc398a34",
+        "verification.md": "0978184d203edff6bd4c7d072bce7255da50759c8754c30cc52374074c653c4d"
+      },
+      "artifact_paths": [
+        "unsafe/5220003782.dossier.pdf",
+        "unsafe/profile.json",
+        "unsafe/profile.md",
+        "unsafe/verification.json",
+        "unsafe/verification.md"
+      ],
+      "exit_code": 0,
+      "expected_exit": 0,
+      "findings": [],
+      "input": "examples/strict_contract/unsafe.json",
+      "input_sha256": "2debb72e13125e2d15cd43cf5911be1731461e756550185467bb961d0f1c0bb2",
+      "main_pages": 1,
+      "pdf_pages": 3,
+      "profile_status": "partial",
+      "research_generated_at": "2026-10-05T12:00:00+00:00",
+      "supported_research_count": 0,
+      "synthetic": true
+    },
+    "zero-finance": {
+      "artifact_hashes": {
+        "5220003782.dossier.pdf": "dbdc3d7bcbe5c37c14a4c895dffacb30936d0a2b966c757110ccc1cc6eb02ab0",
+        "profile.json": "e8f65cb1860be423f2b708b65b5ce2d0a85c150101172fc2aa635bb61eb770cd",
+        "profile.md": "b2f5bd0ffd69e24b04e55a6003a634f115258e8b9399a85463fa3ed30e933d6c",
+        "verification.json": "ddbbebac2142ea79756bae4705d0dffabcf41cbaa613496d548bc6988fbd53e5",
+        "verification.md": "31920af1c1fc5515d3bb8a434a5ceb4826d508fed5b6ce178cb2cfb8867dfd84"
+      },
+      "artifact_paths": [
+        "zero-finance/5220003782.dossier.pdf",
+        "zero-finance/profile.json",
+        "zero-finance/profile.md",
+        "zero-finance/verification.json",
+        "zero-finance/verification.md"
+      ],
+      "exit_code": 0,
+      "expected_exit": 0,
+      "findings": [],
+      "input": "examples/dossier/zero-finance.json",
+      "input_sha256": "f4fbc06fb68396560d87c26c52165a69f164db14a71a3a221e930911074fc7b8",
+      "main_pages": 1,
+      "pdf_pages": 5,
+      "profile_status": "complete",
+      "research_generated_at": "2026-10-05T12:00:00+00:00",
+      "supported_research_count": 8,
+      "synthetic": true
+    }
+  },
+  "network_and_model_entrypoints": "blocked in every CLI subprocess",
+  "passed": true,
+  "purpose": "Offline presentation QA; not research accuracy or new holdout certification"
+}
