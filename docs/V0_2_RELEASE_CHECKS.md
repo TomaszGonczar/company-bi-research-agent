@@ -4,16 +4,16 @@
 
 ```json
 {
-  "phase": "OG-205",
+  "phase": "OG-206",
   "state": "acceptance_passed_pending_commit",
   "work_branch": "feat/nipto-bi-v0.2-dossier",
   "baseline_sha": "e3da375218206354f79dac539e252f7821c1c399",
-  "latest_committed_sha": "e3da375218206354f79dac539e252f7821c1c399",
-  "completed_issues": [],
-  "next_action": "Commit OG-205 contract, then implement final-profile projection for OG-206",
-  "tests_and_visuals": ["Baseline: 740 pytest passed; Ruff/format/mypy passed; offline reviewer smoke passed"],
+  "latest_committed_sha": "bd21fdd",
+  "completed_issues": ["OG-205"],
+  "next_action": "Commit OG-206 projection, then implement and inspect PDF rendering for OG-207",
+  "tests_and_visuals": ["Baseline 740 passed; projection 11 passed; rich fixture verification/projection smoke passed"],
   "blockers": [],
-  "pending_linear_sync": ["OG-205 In Progress/Done after commit; only read-only Linear tools mounted"],
+  "pending_linear_sync": ["OG-205 Done at bd21fdd; OG-206 Done after commit; mounted Linear tools remain read-only"],
   "pending_github_actions": ["feature push, PR, exact-head CI, merge, main CI, annotated tag, release"],
   "repair_attempts_for_current_root_cause": 0
 }
@@ -27,6 +27,13 @@
 - Protected inventory: 122 existing tracked code/test/fixture/docs files and SHA-256 values in `examples/dossier/baseline-sha256.json`. All source except CLI protected; all old tests, examples and docs protected. Allowed edits: CLI isolation, package/lock, CI additive smoke, README/reviewer guide, new dossier files/resources/tests/examples/docs. No Holdout B first-execution runner invoked.
 - Actual baseline commands: `uv sync --frozen --python 3.12`; `uv run --frozen pytest -q` (**740 passed**, 30 pre-existing lxml warnings); `ruff check .` PASS; `ruff format --check src tests scripts` PASS (56 files); `mypy src` PASS (19 source files); `python scripts/review_offline.py --output-dir .work/v0.2/baseline-review` PASS (zero external calls). Full command output available in the execution transcript.
 - Frozen [contract and two labelled mockups](V0_2_DOSSIER_CONTRACT.md) cover final-only projection, exact interfaces/files/exits, source retention, manifest-last semantics, fixed layout/questions and release gates. Mockups validated against M5; actual rendered visual proof remains pending OG-207/209.
+
+## OG-206 projection acceptance
+
+- Added final-profile-only immutable view, stable source numbering, exact financial formatting, registry/research count separation, state/reason-only gaps and at most three fixed questions. No candidates or retained page bodies reach the view.
+- New validated recipe builder generated rich, zero-finance, stress and failed-run inputs. Actual `verify_run`: rich/zero/stress **complete**, eight supported research fields each; failed **not_published**. Stress has 40 separately evidenced services but counts as one products/services field.
+- **11 targeted tests passed**; Ruff and mypy passed; actual rich projection smoke printed 25 employees (2026-09-30), `-0.7500` and `12.5000` PLN millions with exact interval/scope. Optional wrong employee/event dates clear; uncertain/wrong-amount/group/range candidates do not become observations.
+- Integration finding: the existing gate omits ordinary uncited run sources from the **final** profile; registry/quarantined sources survive. The adapter preserves every final source, not additional raw-run material. The new uncited-source test uses a quarantined source that the real gate retains. No semantic-core change.
 
 ## Release limitations
 
