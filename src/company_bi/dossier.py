@@ -4,7 +4,28 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import date
+from importlib.resources import as_file, files
+from pathlib import Path
 from typing import Any
+from urllib.parse import urlsplit
+from xml.sax.saxutils import escape, quoteattr
+
+# ReportLab has no py.typed marker. Keep its untyped boundary confined to layout.
+from reportlab.lib import colors  # type: ignore[import-untyped]
+from reportlab.lib.pagesizes import A4  # type: ignore[import-untyped]
+from reportlab.lib.styles import ParagraphStyle  # type: ignore[import-untyped]
+from reportlab.lib.units import mm  # type: ignore[import-untyped]
+from reportlab.pdfbase import pdfmetrics  # type: ignore[import-untyped]
+from reportlab.pdfbase.ttfonts import TTFont  # type: ignore[import-untyped]
+from reportlab.pdfgen.canvas import Canvas  # type: ignore[import-untyped]
+from reportlab.platypus import (  # type: ignore[import-untyped]
+    BaseDocTemplate,
+    Frame,
+    NextPageTemplate,
+    PageBreak,
+    PageTemplate,
+    Paragraph,
+)
 
 from company_bi.models import CompanyProfile, Fact
 
@@ -273,3 +294,309 @@ def build_dossier_view(profile: CompanyProfile, *, synthetic: bool = False) -> D
         tuple(profile.limitations),
         sum(fact.section != "identity" for fact in facts),
     )
+
+
+def _preview(text: str, limit: int = 180) -> str:
+    if len(text) <= limit:
+        return text
+    return text[:limit] + "… [skrót; pełna treść w aneksie]"
+
+
+def _safe_link(url: str) -> bool:
+    try:
+        parts = urlsplit(url)
+        return (
+            parts.scheme in {"http", "https"}
+            and bool(parts.hostname)
+            and parts.username is None
+            and parts.password is None
+            and not any(char.isspace() or ord(char) < 32 for char in url)
+            and (parts.port is None or 0 < parts.port < 65536)
+        )
+    except ValueError:
+        return False
+
+
+def render_dossier_pdf(view: DossierView, output_path: Path) -> None:
+    """Render faithful text with bounded main previews and complete flowing appendix."""
+    for name, filename in (("Dossier", "DejaVuSans.ttf"), ("Dossier-Bold", "DejaVuSans-Bold.ttf")):
+        if name not in pdfmetrics.getRegisteredFontNames():
+            with as_file(files("company_bi").joinpath("assets", "fonts", filename)) as font:
+                pdfmetrics.registerFont(TTFont(name, str(font)))
+    pdfmetrics.registerFontFamily(
+        "Dossier",
+        normal="Dossier",
+        bold="Dossier-Bold",
+        italic="Dossier",
+        boldItalic="Dossier-Bold",
+    )
+    slate = colors.HexColor("#24364B")
+    blue = colors.HexColor("#215F87")
+    body = ParagraphStyle(
+        "body",
+        fontName="Dossier",
+        fontSize=10.5,
+        leading=14,
+        textColor=slate,
+        spaceAfter=6,
+        splitLongWords=True,
+    )
+    heading = ParagraphStyle(
+        "heading",
+        parent=body,
+        fontName="Dossier-Bold",
+        fontSize=12,
+        leading=16,
+        spaceBefore=10,
+        spaceAfter=6,
+        textColor=blue,
+        keepWithNext=True,
+    )
+    title = ParagraphStyle("title", parent=heading, fontSize=17, leading=22, spaceBefore=0)
+    banner = ParagraphStyle(
+        "banner",
+        parent=body,
+        fontName="Dossier-Bold",
+        backColor=colors.HexColor("#E8F0F6"),
+        borderPadding=5,
+        spaceBefore=6,
+        spaceAfter=12,
+    )
+
+    def p(text: str, style: Any = body) -> Any:
+        return Paragraph(escape(text).replace("\n", "<br/>"), style)
+
+    def link(url: str) -> Any:
+        text = escape(url)
+        if _safe_link(url):
+            text = f'<link href={quoteattr(url)} color="#215F87">{text}</link>'
+        return Paragraph(text, body)
+
+    def refs(fact: FactBlock, *, compact: bool) -> str:
+        numbers = tuple(dict.fromkeys(ref.number for ref in fact.citations))
+        shown = numbers[:3] if compact else numbers
+        label = ", ".join(str(number) for number in shown)
+        if len(shown) < len(numbers):
+            label += "; pozostałe w aneksie"
+        return f" [{label}]"
+
+    main: list[Any] = []
+    if view.synthetic:
+        main.append(p("DANE SYNTETYCZNE - demonstracja układu", banner))
+    main.extend(
+        [
+            p(_preview(view.legal_name, 160), title),
+            p(
+                f"NIP {view.nip} • "
+                + ("Dane częściowe" if view.status == "partial" else "Kompletne pokrycie profilu")
+            ),
+            p(f"Data raportu / researchu: {view.generated_at}"),
+            p("Tożsamość z rejestru", heading),
+        ]
+    )
+    for fact in view.facts:
+        if fact.section == "identity" and fact.path != "identity.legal_name":
+            main.append(
+                p(f"{fact.label}: {_preview(fact.values[0], 120)}{refs(fact, compact=True)}")
+            )
+    legal = next(f for f in view.facts if f.path == "identity.legal_name")
+    main.append(p(f"Nazwa prawna{refs(legal, compact=True)} • identyfikacja: {view.resolved_at}"))
+    main.append(p("Co ustalono w researchu", heading))
+    if view.research_support_count == 0:
+        main.append(p("Nie ustalono faktów z researchu spełniających kontrakt publikacji"))
+    else:
+        main.append(
+            p(
+                f"Poparte pola / obserwacje z researchu: {view.research_support_count}. "
+                "Poparte przytoczonym źródłem — nie jest to miara dokładności."
+            )
+        )
+    for section, label in (
+        ("business", None),
+        ("scale", "Skala i finanse"),
+        ("events", "Zdarzenia"),
+    ):
+        section_facts = [fact for fact in view.facts if fact.section == section]
+        if label:
+            main.append(p(label, heading))
+        for fact in section_facts:
+            # Keep all financial context together; only text/list previews are shortened.
+            value = "; ".join(fact.values[:3])
+            if section == "events":
+                value = _preview(fact.values[0], 100) + "; " + fact.values[-1]
+            elif section != "scale":
+                value = _preview(value)
+            if len(fact.values) > 3:
+                value += f" [podgląd listy: {len(fact.values)} elementów; pełna lista w aneksie]"
+            main.append(p(f"{fact.label}: {value}{refs(fact, compact=True)}"))
+        if not section_facts and section == "events":
+            main.append(p("Nie ustalono zdarzeń spełniających kryteria."))
+        elif not section_facts and section == "scale":
+            states = sorted(
+                {
+                    STATE_LABELS[g.state]
+                    for g in view.gaps
+                    if g.path == "employees" or g.path.startswith("financials[")
+                }
+            )
+            main.append(p(" / ".join(states) + " — szczegóły stanów i przyczyn w aneksie."))
+    main.append(p("Najważniejsze braki", heading))
+    research_gaps = [g for g in view.gaps if not g.path.startswith("identity.")]
+    prioritized = research_gaps + [g for g in view.gaps if g.path.startswith("identity.")]
+    for gap in prioritized[:3]:
+        main.append(p(f"{gap.label}: {STATE_LABELS[gap.state]}. {_preview(gap.reason, 90)}"))
+    if not view.gaps and not view.limitations:
+        main.append(p("Nie wykazano braków pokrycia w przekazanym profilu."))
+    if len(view.gaps) > 3 or view.limitations:
+        main.append(
+            p(
+                "Pozostałe stany, przyczyny i ograniczenia: aneks. "
+                "Nie ustalono nie oznacza braku w rzeczywistości."
+            )
+        )
+    if view.questions:
+        main.append(p("Pytania do potwierdzenia", heading))
+        main.extend(p(question) for question in view.questions)
+    main.append(
+        p(
+            "Treść faktów wynika z zachowanego materiału i bieżącego kontraktu publikacji. "
+            "Daty nie oznaczają odświeżenia danych. Pełne fakty, cytaty i źródła: aneks."
+        )
+    )
+
+    width, height = A4
+    margin = 16 * mm
+    frame_width, frame_height = width - 2 * margin, height - 2 * margin - 12
+    # Exact paragraph measurements; never shrink text. Overflow remains in the appendix.
+    pages: list[list[Any]] = [[]]
+    used = 0.0
+    overflow: list[Any] = []
+    reserve = 52.0  # Room for a labelled continuation, even with an oversized field.
+    for index, paragraph in enumerate(main):
+        _, paragraph_height = paragraph.wrap(frame_width, frame_height)
+        needed = paragraph_height + paragraph.getSpaceBefore() + paragraph.getSpaceAfter()
+        with_next = 0.0
+        if paragraph.getKeepWithNext() and index + 1 < len(main):
+            following = main[index + 1]
+            _, next_height = following.wrap(frame_width, frame_height)
+            with_next = next_height + following.getSpaceBefore() + following.getSpaceAfter()
+        if used + needed + with_next > frame_height - reserve:
+            if len(pages) == 1:
+                pages.append([])
+                used = 0
+            else:
+                overflow.append(paragraph)
+                continue
+        if needed > frame_height - reserve:
+            overflow.append(paragraph)
+        else:
+            pages[-1].append(paragraph)
+            used += needed
+    if overflow:
+        pages[-1].append(p("Dalsza część przeglądu i pytania: początek aneksu.", banner))
+    main_count = len(pages)
+
+    def footer(canvas: Any, doc: Any) -> None:
+        canvas.saveState()
+        canvas.setFont("Dossier", 9)
+        canvas.setFillColor(slate)
+        label = "Dossier" if doc.page <= main_count else "Aneks — źródła i szczegóły"
+        canvas.drawString(margin, 9 * mm, f"{label} • strona {doc.page}")
+        canvas.drawRightString(width - margin, 9 * mm, f"NIP {view.nip}")
+        canvas.restoreState()
+
+    doc = BaseDocTemplate(
+        str(output_path),
+        pagesize=A4,
+        leftMargin=margin,
+        rightMargin=margin,
+        topMargin=margin,
+        bottomMargin=margin,
+        title=f"Dossier NIP {view.nip}",
+        author="Company BI",
+        pageCompression=1,
+    )
+    frame = Frame(
+        margin,
+        margin + 12,
+        frame_width,
+        frame_height,
+        leftPadding=0,
+        rightPadding=0,
+        topPadding=0,
+        bottomPadding=0,
+    )
+    doc.addPageTemplates(
+        [
+            PageTemplate(id="main", frames=[frame], onPage=footer),
+            PageTemplate(id="appendix", frames=[frame], onPage=footer),
+        ]
+    )
+    story: list[Any] = []
+    for index, page in enumerate(pages):
+        if index:
+            story.append(PageBreak())
+        story.extend(page)
+    story.extend(
+        [NextPageTemplate("appendix"), PageBreak(), p("Źródła i szczegóły — aneks", title)]
+    )
+    if view.synthetic:
+        story.append(p("DANE SYNTETYCZNE - demonstracja układu", banner))
+    if overflow:
+        story.append(p("Kontynuacja przeglądu", heading))
+        story.extend(overflow)
+    story.append(p("Pełne poparte fakty i cytaty", heading))
+    story.append(
+        p(
+            "Poparte przytoczonym źródłem. Cytaty poniżej dotyczą wyłącznie popartych "
+            "faktów; samo pobranie źródła nie dowodzi jego treści."
+        )
+    )
+    for fact in view.facts:
+        story.append(p(f"{fact.label} • {fact.path}{refs(fact, compact=True)}", heading))
+        story.extend(p(value) for value in fact.values)
+        if fact.reason:
+            story.append(p(f"Przyczyna / uwaga: {fact.reason}"))
+        for citation in fact.citations:
+            story.append(p(f"Cytat [{citation.number}] • {citation.source_id} • {fact.path}"))
+            story.append(p(citation.excerpt))
+    story.append(p("Stany, braki i ograniczenia", heading))
+    for gap in view.gaps:
+        references = ", ".join(f"[{n}]" for n in gap.references) or "bez odwołań"
+        story.append(
+            p(
+                f"{gap.label} • {gap.path}: {STATE_LABELS[gap.state]} ({gap.state}); {references}",
+                heading,
+            )
+        )
+        story.append(p(gap.reason))
+    story.extend(p(f"Ograniczenie: {text}") for text in view.limitations)
+    story.append(p("Rejestr źródeł", heading))
+    story.append(
+        p(
+            "Wszystkie źródła końcowego profilu. Materiały niepotwierdzone, niecytowane "
+            "i objęte kwarantanną nie są popartymi faktami."
+        )
+    )
+    for source in view.sources:
+        story.append(p(f"[{source.number}] {source.source_id} • {source.kind}", heading))
+        story.append(p(source.title))
+        story.append(link(source.url))
+        story.append(p(" • ".join(source.usage)))
+        metadata = (
+            f"Pobrano: {source.retrieved_at}; "
+            f"opublikowano: {source.published_on or 'nie ustalono'}\n"
+            "Powód blokady publikacji: "
+            + (source.publication_blocked_reason or "nie zapisano blokady")
+        )
+        if source.redirect_chain:
+            story.append(p(metadata + "\nŁańcuch przekierowań (w oryginalnej kolejności):"))
+            story.extend(link(url) for url in source.redirect_chain)
+        else:
+            story.append(p(metadata + "\nŁańcuch przekierowań: nie zapisano."))
+
+    def invariant_canvas(*args: Any, **kwargs: Any) -> Any:
+        kwargs["invariant"] = 1
+        return Canvas(*args, **kwargs)
+
+    doc.build(story, canvasmaker=invariant_canvas)
