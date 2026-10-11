@@ -4,16 +4,16 @@
 
 ```json
 {
-  "phase": "OG-207",
+  "phase": "OG-208",
   "state": "acceptance_passed_pending_commit",
   "work_branch": "feat/nipto-bi-v0.2-dossier",
   "baseline_sha": "e3da375218206354f79dac539e252f7821c1c399",
-  "latest_committed_sha": "df7c876",
-  "completed_issues": ["OG-205", "OG-206"],
-  "next_action": "Commit OG-207 renderer, then implement safe dossier bundle and CLI",
-  "tests_and_visuals": ["Baseline 740 passed; 17 dossier tests passed; sparse/rich/stress PDFs rendered twice identically; sampled page images inspected"],
+  "latest_committed_sha": "52b5c40",
+  "completed_issues": ["OG-205", "OG-206", "OG-207"],
+  "next_action": "Commit OG-208 CLI/bundle, then run independent semantic, visual and wheel QA",
+  "tests_and_visuals": ["27 CLI/file-safety tests passed; 17 projection/PDF tests passed previously; actual CLI exits 0/1/2 observed; mypy 20 modules passed"],
   "blockers": [],
-  "pending_linear_sync": ["OG-205 Done bd21fdd; OG-206 Done df7c876; OG-207 Done after commit; no Linear mutation route mounted"],
+  "pending_linear_sync": ["OG-205 Done bd21fdd; OG-206 Done df7c876; OG-207 Done 52b5c40; OG-208 Done after commit; connector remains read-only"],
   "pending_github_actions": ["feature push, PR, exact-head CI, merge, main CI, annotated tag, release"],
   "repair_attempts_for_current_root_cause": 0
 }
@@ -43,6 +43,15 @@
 - **17 targeted tests passed**, Ruff/mypy passed. Actual sparse/rich/stress rendering in `.work/v0.2/pdf-smoke-02`: **3/5/24 total pages**, **1/1/2 main pages**. Every same-environment repeat had identical bytes. Full values, citations, source metadata, Polish/markup text and embedded regular/bold fonts checked through pypdf.
 - First inspection found an orphan main heading and a misleading “3 shown” label when the preview shortened an item. Repaired heading lookahead and honest list preview wording; event dates now stay visible beside a shortened title. Grouped source metadata avoids a one-line trailing source page. A text-test failure was page-footer interleaving across a split citation, not lost evidence; extraction now geometrically excludes footer furniture. Removed a brittle wrapped-wording assertion.
 - Inspected repaired stress main pages 1–2, full legal identity page 3 and long-URL final page 24, rich evidence page 2 and sparse source/gap page 3. Correct glyphs/wrapping; no clipping or overlap observed there. Full final-example all-page inspection remains OG-209's gate.
+
+## OG-208 CLI and bundle acceptance
+
+- Added isolated lazy dossier dispatch; existing commands unchanged. Input buffer is read once, hashed and validated, followed by one existing `verify_run`. Successful six-file bundle and failed diagnostic-only three-file bundle use existing profile/verification serializers.
+- Actual CLI smoke: `.work/v0.2/cli-supported-01` exit **0**, partial, six files; `.work/v0.2/cli-failed-01` exit **1**, diagnostics only; invalid identity exit **2**, bounded message and no output; repaired rich path `.work/v0.2/cli-rich-02` exit **0**, complete.
+- **27 CLI/file-safety tests passed**, mypy PASS for 20 source modules. Existing autouse guards block sockets/DNS/registry/model/Tavily/Scrapling during these real in-process CLI calls.
+- POSIX safe publication uses no-follow directory descriptors, exclusive directory/artifact creation, owned inode checks, and completion manifest last. Existing destinations, dangling symlinks, input/output hardlinks/aliases, symlink parents, traversal, reservation races, render/copy/manifest failures and hash tampering are refused without overwriting old data. Fresh repeat bundles are byte-identical in this environment.
+- Reproduced three additional failures before repair: mutation after manifest creation returned success; replacing the parent returned success; cleanup failure left a completed manifest while reporting failure. Fixed final parent/artifact rechecks and moved successful staging cleanup inside the publication transaction. All three regressions now pass. Replaced-directory cleanup preserves the external replacement and retains staging with a bounded diagnostic. No directory-atomicity or crash-atomicity claim.
+- Safe writer currently requires POSIX directory-descriptor/no-follow primitives (tested macOS; hosted Linux pending). Native Windows refuses safely rather than claiming equivalent collision guarantees.
 
 ## Release limitations
 

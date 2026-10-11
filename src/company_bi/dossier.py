@@ -2,11 +2,18 @@
 
 from __future__ import annotations
 
+import hashlib
+import json
+import os
+import shutil
+import stat
+import tempfile
 from dataclasses import dataclass
 from datetime import date
+from importlib.metadata import version
 from importlib.resources import as_file, files
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 from urllib.parse import urlsplit
 from xml.sax.saxutils import escape, quoteattr
 
@@ -27,7 +34,10 @@ from reportlab.platypus import (  # type: ignore[import-untyped]
     Paragraph,
 )
 
-from company_bi.models import CompanyProfile, Fact
+from company_bi.models import CompanyProfile, CompanyResearchRun, Fact
+from company_bi.nip import validate_nip
+from company_bi.renderer import render_json, render_markdown
+from company_bi.verification import VerificationReport, render_verification_markdown, verify_run
 
 TEMPLATE_VERSION = "0.2.0"
 STATE_LABELS = {
@@ -600,3 +610,243 @@ def render_dossier_pdf(view: DossierView, output_path: Path) -> None:
         return Canvas(*args, **kwargs)
 
     doc.build(story, canvasmaker=invariant_canvas)
+
+
+@dataclass(frozen=True)
+class DossierResult:
+    exit_code: Literal[0, 1]
+    profile_status: Literal["complete", "partial"] | None
+    manifest_path: Path
+
+
+class DossierError(ValueError):
+    """Bounded operational error, never a retained-source or validation payload."""
+
+
+def _inode(info: os.stat_result) -> tuple[int, int]:
+    return info.st_dev, info.st_ino
+
+
+def _safe_path(path: Path) -> Path:
+    if ".." in path.parts:
+        raise DossierError("Path traversal is not permitted")
+    absolute = path.absolute()
+    for part in (absolute, *absolute.parents):
+        if part.is_symlink():
+            raise DossierError("Symlink paths are not permitted")
+    return absolute
+
+
+def _directory_fd(path: Path) -> int:
+    return os.open(path, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+
+
+def _is_owned(parent_fd: int, name: str, identity: tuple[int, int]) -> bool:
+    try:
+        return _inode(os.stat(name, dir_fd=parent_fd, follow_symlinks=False)) == identity
+    except FileNotFoundError:
+        return False
+
+
+def _exclusive_write(
+    directory_fd: int, name: str, data: bytes, owned: dict[str, tuple[int, int]]
+) -> None:
+    fd = os.open(
+        name, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o644, dir_fd=directory_fd
+    )
+    owned[name] = _inode(os.fstat(fd))
+    with os.fdopen(fd, "wb") as stream:
+        stream.write(data)
+        stream.flush()
+        os.fsync(stream.fileno())
+
+
+def _read_owned(directory_fd: int, name: str, identity: tuple[int, int]) -> bytes:
+    fd = os.open(name, os.O_RDONLY | os.O_NOFOLLOW, dir_fd=directory_fd)
+    with os.fdopen(fd, "rb") as stream:
+        info = os.fstat(stream.fileno())
+        if _inode(info) != identity or info.st_nlink != 1 or not stat.S_ISREG(info.st_mode):
+            raise DossierError("An output artifact was replaced or aliased")
+        return stream.read()
+
+
+def _reserve_directory(parent_fd: int, name: str) -> int:
+    os.mkdir(name, dir_fd=parent_fd)
+    return os.open(name, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=parent_fd)
+
+
+def _cleanup_publication(
+    parent_fd: int, name: str, directory_fd: int, owned: dict[str, tuple[int, int]]
+) -> bool:
+    """Never traverse or remove an externally replaced directory/artifact."""
+    identity = _inode(os.fstat(directory_fd))
+    if not _is_owned(parent_fd, name, identity):
+        return False
+    safe = True
+    for filename, file_identity in reversed(tuple(owned.items())):
+        if _is_owned(directory_fd, filename, file_identity):
+            try:
+                os.unlink(filename, dir_fd=directory_fd)
+            except OSError:
+                safe = False
+        else:
+            safe = False
+    if safe and _is_owned(parent_fd, name, identity):
+        try:
+            os.rmdir(name, dir_fd=parent_fd)
+        except OSError:
+            safe = False
+    return safe
+
+
+def write_dossier(input_path: Path, output_dir: Path, *, synthetic: bool = False) -> DossierResult:
+    """Publish a fresh POSIX bundle; only manifest-last plus hashes signals completion."""
+    if not hasattr(os, "O_NOFOLLOW") or os.open not in os.supports_dir_fd:
+        raise DossierError("Safe dossier publication requires POSIX directory descriptors")
+    input_path, output_dir = _safe_path(input_path), _safe_path(output_dir)
+    if os.path.lexists(output_dir):
+        raise DossierError("Destination already exists")
+    # Refuse special files before opening, then recheck the actual opened inode.
+    info = input_path.lstat()
+    if not stat.S_ISREG(info.st_mode) or info.st_nlink != 1:
+        raise DossierError("Input must be a regular non-aliased file")
+    fd = os.open(input_path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+    with os.fdopen(fd, "rb") as stream:
+        actual = os.fstat(stream.fileno())
+        if _inode(actual) != _inode(info) or actual.st_nlink != 1:
+            raise DossierError("Input changed while opening")
+        raw = stream.read()
+    digest = hashlib.sha256(raw).hexdigest()
+    try:
+        run = CompanyResearchRun.model_validate_json(raw)
+        validate_nip(run.identity.nip)
+        profile, verification = verify_run(run, input_sha256=digest, input_name=input_path.name)
+    except ValueError as error:
+        raise DossierError("Invalid retained run, identity or provenance") from error
+
+    output_dir.parent.mkdir(parents=True, exist_ok=True)
+    _safe_path(output_dir)
+    parent_fd = _directory_fd(output_dir.parent)
+    stage: Path | None = None
+    stage_identity: tuple[int, int] | None = None
+    destination_fd: int | None = None
+    owned: dict[str, tuple[int, int]] = {}
+    preserve_stage = False
+    try:
+        stage = Path(tempfile.mkdtemp(prefix=".dossier-", dir=output_dir.parent))
+        stage_identity = _inode(stage.stat())
+        payloads = {
+            "verification.json": (verification.model_dump_json(indent=2) + "\n").encode(),
+            "verification.md": render_verification_markdown(verification).encode(),
+        }
+        if VerificationReport.model_validate_json(payloads["verification.json"]) != verification:
+            raise DossierError("Verification round-trip failed")
+        if profile is not None:
+            payloads["profile.json"] = render_json(profile).encode()
+            payloads["profile.md"] = render_markdown(profile).encode()
+            if CompanyProfile.model_validate_json(payloads["profile.json"]) != profile:
+                raise DossierError("Profile round-trip failed")
+            pdf_name = f"{profile.identity.nip}.dossier.pdf"
+            try:
+                render_dossier_pdf(
+                    build_dossier_view(profile, synthetic=synthetic), stage / pdf_name
+                )
+                pdf = (stage / pdf_name).read_bytes()
+            except Exception as error:
+                raise DossierError("PDF rendering failed") from error
+            if not pdf.startswith(b"%PDF-") or b"%%EOF" not in pdf[-1024:]:
+                raise DossierError("PDF validation failed")
+            payloads[pdf_name] = pdf
+        for name, data in payloads.items():
+            if not name.endswith(".pdf"):
+                (stage / name).write_bytes(data)
+        hashes = {name: hashlib.sha256(data).hexdigest() for name, data in sorted(payloads.items())}
+        for name, expected in hashes.items():
+            if hashlib.sha256((stage / name).read_bytes()).hexdigest() != expected:
+                raise DossierError("Staging validation failed")
+        manifest = {
+            "manifest_version": "0.2.0",
+            "bundle_status": "complete",
+            "publication_status": "published" if profile is not None else "not_published",
+            "package_version": version("company-bi"),
+            "profile_schema_version": profile.schema_version if profile else None,
+            "template_version": TEMPLATE_VERSION,
+            "nip": run.identity.nip,
+            "profile_status": profile.status if profile else None,
+            "research_generated_at": run.generated_at.isoformat(),
+            "synthetic": synthetic,
+            "input_name": input_path.name,
+            "input_sha256": digest,
+            "artifacts": hashes,
+        }
+        manifest_bytes = (
+            json.dumps(manifest, indent=2, ensure_ascii=False, sort_keys=True) + "\n"
+        ).encode()
+        (stage / "dossier-manifest.json").write_bytes(manifest_bytes)
+        if _inode(output_dir.parent.stat()) != _inode(os.fstat(parent_fd)):
+            raise DossierError("Output parent changed")
+        destination_fd = _reserve_directory(parent_fd, output_dir.name)
+        destination_identity = _inode(os.fstat(destination_fd))
+        for name, data in sorted(payloads.items()):
+            _exclusive_write(destination_fd, name, data, owned)
+        for name, expected in hashes.items():
+            if (
+                hashlib.sha256(_read_owned(destination_fd, name, owned[name])).hexdigest()
+                != expected
+            ):
+                raise DossierError("Publication hash validation failed")
+        if not _is_owned(parent_fd, output_dir.name, destination_identity):
+            raise DossierError("Output directory changed")
+        _exclusive_write(destination_fd, "dossier-manifest.json", manifest_bytes, owned)
+        if (
+            _read_owned(destination_fd, "dossier-manifest.json", owned["dossier-manifest.json"])
+            != manifest_bytes
+        ):
+            raise DossierError("Completion manifest validation failed")
+        if not _is_owned(parent_fd, output_dir.name, destination_identity):
+            raise DossierError("Output directory changed")
+        if _inode(output_dir.parent.stat()) != _inode(os.fstat(parent_fd)):
+            raise DossierError("Output parent changed")
+        _safe_path(output_dir)
+        for name, expected in hashes.items():
+            if (
+                hashlib.sha256(_read_owned(destination_fd, name, owned[name])).hexdigest()
+                != expected
+            ):
+                raise DossierError("Completed bundle hash validation failed")
+        # Cleanup is part of success, not a finally action after a successful return.
+        try:
+            if _inode(stage.lstat()) != stage_identity or stage.is_symlink():
+                raise OSError("Staging directory changed")
+            shutil.rmtree(stage)
+        except OSError as error:
+            preserve_stage = True
+            raise DossierError(f"Staging cleanup failed; inspect {str(stage)!r:.200}") from error
+        stage = None
+        return DossierResult(
+            0 if profile is not None else 1,
+            profile.status if profile else None,
+            output_dir / "dossier-manifest.json",
+        )
+    except BaseException as error:
+        if destination_fd is not None and not _cleanup_publication(
+            parent_fd, output_dir.name, destination_fd, owned
+        ):
+            preserve_stage = True
+            raise DossierError(
+                f"Incomplete publication at {str(output_dir)!r:.200}; "
+                f"staging retained at {str(stage)!r:.200}"
+            ) from error
+        raise
+    finally:
+        if destination_fd is not None:
+            os.close(destination_fd)
+        os.close(parent_fd)
+        if stage is not None and not preserve_stage and stage.exists():
+            if _inode(stage.lstat()) == stage_identity and not stage.is_symlink():
+                try:
+                    shutil.rmtree(stage)
+                except OSError as error:
+                    raise DossierError(
+                        f"Staging cleanup failed; inspect {str(stage)!r:.200}"
+                    ) from error

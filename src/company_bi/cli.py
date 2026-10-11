@@ -82,7 +82,27 @@ def main(argv: list[str] | None = None) -> int:
     verify = commands.add_parser("verify", help="Verify a retained research run offline")
     verify.add_argument("research_run", type=Path)
     verify.add_argument("--output-dir", type=Path, required=True)
+    dossier = commands.add_parser("dossier", help="Render an offline verified Polish PDF dossier")
+    dossier.add_argument("research_run", type=Path)
+    dossier.add_argument("--output-dir", type=Path, required=True)
+    dossier.add_argument("--synthetic", action="store_true")
     args = parser.parse_args(argv)
+    if args.command == "dossier":
+        from company_bi.dossier import DossierError, write_dossier
+
+        try:
+            result = write_dossier(args.research_run, args.output_dir, synthetic=args.synthetic)
+        except (OSError, ValueError) as error:
+            message = (
+                str(error) if isinstance(error, DossierError) else "Input/output operation failed"
+            )
+            print(f"DOSSIER_ERROR: {message[:500]}", file=sys.stderr)
+            return 2
+        print(
+            f"Wrote {'dossier' if result.exit_code == 0 else 'diagnostics only'} "
+            f"to {result.manifest_path.parent}"
+        )
+        return result.exit_code
     if args.command == "verify":
         from company_bi.verification import write_verification
 
