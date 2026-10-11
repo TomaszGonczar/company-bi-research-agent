@@ -1,0 +1,507 @@
+{
+  "status": "verified",
+  "nip": "5220003782",
+  "legal_name": "\"ASSECO POLAND\" SPÓŁKA AKCYJNA",
+  "input_name": "asseco-poland.json",
+  "input_sha256": "41b9bf80321988d51fe4230adb5ec28b85d6954c7b1399c1a68da116afb86325",
+  "generated_at": "2026-10-03T12:25:47.507942Z",
+  "diagnostics": {
+    "model": "openai-codex:gpt-6-luna",
+    "status": "completed",
+    "stop_reason": "Unsupported non-page document content",
+    "failure_code": null,
+    "failures": [],
+    "validated_progress_retained": false,
+    "model_requests": 5,
+    "searches": 4,
+    "page_reads": 3,
+    "dynamic_reads": 0,
+    "output_retries": 0,
+    "input_tokens": 57142,
+    "output_tokens": 2103,
+    "duration_seconds": 73.28119125030935,
+    "cost_usd": null
+  },
+  "profile_status": "partial",
+  "reason": null,
+  "deltas": [
+    {
+      "path": "business_description",
+      "candidate": {
+        "state": "supported",
+        "value": "Polish software and IT services company whose solutions support business processes in key economic sectors. The available annual-report material describes its activities across public administration, finance and banking, and general business.",
+        "evidence": [
+          {
+            "source_id": "S002",
+            "excerpt": "Asseco Poland’s revenues are diversified across three main business segments: public administration, finance and banking, and the general business sector."
+          },
+          {
+            "source_id": "S006",
+            "excerpt": "The segment’s results were supported by Asseco’s involvement in the development of the digital government ecosystem, numerous financial sector transformation projects, and the execution of contracts for nearly half of the hospitals covered by the National Recovery Plan (KPO)."
+          }
+        ],
+        "reason": null,
+        "context": {}
+      },
+      "final": {
+        "state": "uncertain",
+        "value": null,
+        "evidence": [
+          {
+            "source_id": "S002",
+            "excerpt": "Asseco Poland’s revenues are diversified across three main business segments: public administration, finance and banking, and the general business sector."
+          },
+          {
+            "source_id": "S006",
+            "excerpt": "The segment’s results were supported by Asseco’s involvement in the development of the digital government ecosystem, numerous financial sector transformation projects, and the execution of contracts for nearly half of the hospitals covered by the National Recovery Plan (KPO)."
+          }
+        ],
+        "reason": "No complete exact-entity assertion supports every proposed value",
+        "context": {}
+      },
+      "decision": "downgraded",
+      "reason": "No complete exact-entity assertion supports every proposed value",
+      "changed_paths": [
+        "reason",
+        "state",
+        "value"
+      ]
+    },
+    {
+      "path": "products_services",
+      "candidate": {
+        "state": "supported",
+        "value": [
+          "Proprietary software and IT services",
+          "Solutions for public institutions and digital government",
+          "Financial and banking solutions",
+          "ERP solutions",
+          "Healthcare IT"
+        ],
+        "evidence": [
+          {
+            "source_id": "S002",
+            "excerpt": "revenue growth in key product groups: financial solutions +8%, solutions for public institutions +15%, ERP solutions +10%; revenue growth from proprietary software and services +11%"
+          },
+          {
+            "source_id": "S006",
+            "excerpt": "development of the digital government ecosystem, numerous financial sector transformation projects, and the execution of contracts for nearly half of the hospitals"
+          }
+        ],
+        "reason": null,
+        "context": {}
+      },
+      "final": {
+        "state": "uncertain",
+        "value": null,
+        "evidence": [
+          {
+            "source_id": "S002",
+            "excerpt": "revenue growth in key product groups: financial solutions +8%, solutions for public institutions +15%, ERP solutions +10%; revenue growth from proprietary software and services +11%"
+          },
+          {
+            "source_id": "S006",
+            "excerpt": "development of the digital government ecosystem, numerous financial sector transformation projects, and the execution of contracts for nearly half of the hospitals"
+          }
+        ],
+        "reason": "No complete exact-entity assertion supports every proposed value",
+        "context": {}
+      },
+      "decision": "downgraded",
+      "reason": "No complete exact-entity assertion supports every proposed value",
+      "changed_paths": [
+        "reason",
+        "state",
+        "value"
+      ]
+    },
+    {
+      "path": "industries",
+      "candidate": {
+        "state": "supported",
+        "value": [
+          "Information technology and software",
+          "Public administration",
+          "Finance and banking",
+          "Healthcare",
+          "General business and ERP"
+        ],
+        "evidence": [
+          {
+            "source_id": "S002",
+            "excerpt": "public administration, finance and banking, and the general business sector"
+          },
+          {
+            "source_id": "S006",
+            "excerpt": "digital government ecosystem, numerous financial sector transformation projects ... hospitals"
+          }
+        ],
+        "reason": null,
+        "context": {}
+      },
+      "final": {
+        "state": "uncertain",
+        "value": null,
+        "evidence": [
+          {
+            "source_id": "S002",
+            "excerpt": "public administration, finance and banking, and the general business sector"
+          },
+          {
+            "source_id": "S006",
+            "excerpt": "digital government ecosystem, numerous financial sector transformation projects ... hospitals"
+          }
+        ],
+        "reason": "No complete exact-entity assertion supports every proposed value",
+        "context": {}
+      },
+      "decision": "downgraded",
+      "reason": "No complete exact-entity assertion supports every proposed value",
+      "changed_paths": [
+        "reason",
+        "state",
+        "value"
+      ]
+    },
+    {
+      "path": "markets",
+      "candidate": {
+        "state": "supported",
+        "value": [
+          "Poland"
+        ],
+        "evidence": [
+          {
+            "source_id": "S006",
+            "excerpt": "Sales revenues in the Asseco Poland Segment increased by 12% to PLN 607 million"
+          }
+        ],
+        "reason": null,
+        "context": {}
+      },
+      "final": {
+        "state": "uncertain",
+        "value": null,
+        "evidence": [
+          {
+            "source_id": "S006",
+            "excerpt": "Sales revenues in the Asseco Poland Segment increased by 12% to PLN 607 million"
+          }
+        ],
+        "reason": "No complete exact-entity assertion supports every proposed value",
+        "context": {}
+      },
+      "decision": "downgraded",
+      "reason": "No complete exact-entity assertion supports every proposed value",
+      "changed_paths": [
+        "reason",
+        "state",
+        "value"
+      ]
+    },
+    {
+      "path": "employees",
+      "candidate": {
+        "state": "unknown",
+        "value": null,
+        "evidence": [],
+        "reason": "The available official sources give group or segment workforce information, but not a verified standalone employee count for Asseco Poland S.A. Group headcount is not used as a substitute.",
+        "context": {
+          "as_of": null
+        }
+      },
+      "final": {
+        "state": "unknown",
+        "value": null,
+        "evidence": [],
+        "reason": "The available official sources give group or segment workforce information, but not a verified standalone employee count for Asseco Poland S.A. Group headcount is not used as a substitute.",
+        "context": {
+          "as_of": null
+        }
+      },
+      "decision": "preserved",
+      "reason": "The available official sources give group or segment workforce information, but not a verified standalone employee count for Asseco Poland S.A. Group headcount is not used as a substitute.",
+      "changed_paths": []
+    },
+    {
+      "path": "financials[0]",
+      "candidate": {
+        "state": "unknown",
+        "value": null,
+        "evidence": [],
+        "reason": "The annual-report search result states 2025 Asseco Poland revenue of PLN 1,703.4 million, but it is a discovery snippet rather than retrieved page/text evidence. The linked report could not be read by the page tool; amount is therefore not reported.",
+        "context": {
+          "metric": "revenue",
+          "period": null,
+          "currency": null,
+          "unit": null,
+          "scope": null,
+          "group_name": null
+        }
+      },
+      "final": {
+        "state": "unknown",
+        "value": null,
+        "evidence": [],
+        "reason": "The annual-report search result states 2025 Asseco Poland revenue of PLN 1,703.4 million, but it is a discovery snippet rather than retrieved page/text evidence. The linked report could not be read by the page tool; amount is therefore not reported.",
+        "context": {
+          "metric": "revenue",
+          "period": null,
+          "currency": null,
+          "unit": null,
+          "scope": null,
+          "group_name": null
+        }
+      },
+      "decision": "preserved",
+      "reason": "The annual-report search result states 2025 Asseco Poland revenue of PLN 1,703.4 million, but it is a discovery snippet rather than retrieved page/text evidence. The linked report could not be read by the page tool; amount is therefore not reported.",
+      "changed_paths": []
+    },
+    {
+      "path": "financials[1]",
+      "candidate": {
+        "state": "unknown",
+        "value": null,
+        "evidence": [],
+        "reason": "No eligible retrieved official HTML/text evidence for Asseco Poland S.A.’s total net result was available. Group net profit attributable to parent shareholders is not a substitute for the entity’s total net result.",
+        "context": {
+          "metric": "net_result",
+          "period": null,
+          "currency": null,
+          "unit": null,
+          "scope": null,
+          "group_name": null
+        }
+      },
+      "final": {
+        "state": "unknown",
+        "value": null,
+        "evidence": [],
+        "reason": "No eligible retrieved official HTML/text evidence for Asseco Poland S.A.’s total net result was available. Group net profit attributable to parent shareholders is not a substitute for the entity’s total net result.",
+        "context": {
+          "metric": "net_result",
+          "period": null,
+          "currency": null,
+          "unit": null,
+          "scope": null,
+          "group_name": null
+        }
+      },
+      "decision": "preserved",
+      "reason": "No eligible retrieved official HTML/text evidence for Asseco Poland S.A.’s total net result was available. Group net profit attributable to parent shareholders is not a substitute for the entity’s total net result.",
+      "changed_paths": []
+    },
+    {
+      "path": "recent_developments[0]",
+      "candidate": {
+        "state": "supported",
+        "value": {
+          "title": "Q1 2026 growth in the Asseco Poland Segment",
+          "summary": "The segment recorded 12% revenue growth to PLN 607 million in Q1 2026, with results supported by digital-government development, financial-sector transformation projects, and hospital contracts. This is segment-level rather than standalone legal-entity financial information.",
+          "published_on": "2026-05-27",
+          "occurred_on": null
+        },
+        "evidence": [
+          {
+            "source_id": "S006",
+            "excerpt": "2026-05-27 ... Sales revenues in the Asseco Poland Segment increased by 12% to PLN 607 million (EUR 143 million)."
+          }
+        ],
+        "reason": null,
+        "context": {}
+      },
+      "final": {
+        "state": "uncertain",
+        "value": null,
+        "evidence": [
+          {
+            "source_id": "S006",
+            "excerpt": "2026-05-27 ... Sales revenues in the Asseco Poland Segment increased by 12% to PLN 607 million (EUR 143 million)."
+          }
+        ],
+        "reason": "No complete event assertion and eligible publication date support the event",
+        "context": {}
+      },
+      "decision": "downgraded",
+      "reason": "No complete event assertion and eligible publication date support the event",
+      "changed_paths": [
+        "reason",
+        "state",
+        "value"
+      ]
+    },
+    {
+      "path": "recent_developments[1]",
+      "candidate": {
+        "state": "supported",
+        "value": {
+          "title": "Management Board appointments for the 2027–2031 term",
+          "summary": "The Supervisory Board appointed Rafał Kozłowski as President and named the other Management Board members for a five-year term effective January 1, 2027.",
+          "published_on": "2026-09-11",
+          "occurred_on": "2026-09-11"
+        },
+        "evidence": [
+          {
+            "source_id": "S010",
+            "excerpt": "11.09.2026 ... appointed ... for a new joint five-year term of office covering the years 2027–2031 ... The appointments will become effective as of January 1, 2027."
+          }
+        ],
+        "reason": null,
+        "context": {}
+      },
+      "final": {
+        "state": "uncertain",
+        "value": null,
+        "evidence": [
+          {
+            "source_id": "S010",
+            "excerpt": "11.09.2026 ... appointed ... for a new joint five-year term of office covering the years 2027–2031 ... The appointments will become effective as of January 1, 2027."
+          }
+        ],
+        "reason": "No complete event assertion and eligible publication date support the event",
+        "context": {}
+      },
+      "decision": "downgraded",
+      "reason": "No complete event assertion and eligible publication date support the event",
+      "changed_paths": [
+        "reason",
+        "state",
+        "value"
+      ]
+    }
+  ],
+  "sources": {
+    "candidate": [
+      {
+        "source_id": "mf-vat-5220003782-20261003T122434221952Z",
+        "url": "https://wl-api.mf.gov.pl/api/search/nip/5220003782?date=2026-10-03",
+        "title": "Ministerstwo Finansów — Wykaz podatników VAT",
+        "retrieved_at": "2026-10-03T12:24:34.221952Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null,
+        "kind": "registry"
+      },
+      {
+        "source_id": "S002",
+        "url": "https://inwestor.asseco.com/files/investor/uploads/Management_Board_s_report_on_operations_of_the_Asseco_Group_and_Asseco_Poland_SA_2025.pdf",
+        "title": "Annual Report - Asseco Poland",
+        "retrieved_at": "2026-10-03T12:24:46.710720Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null,
+        "kind": "search_snippet"
+      },
+      {
+        "source_id": "S006",
+        "url": "https://asseco.com/news/5723?L=-6815",
+        "title": "Asseco Group reports strong results for Q1, 2026 – growth in profits and order backlog - Asseco Group",
+        "retrieved_at": "2026-10-03T12:24:49.788528Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": "unproven_legacy_url_relationship",
+        "kind": "search_snippet"
+      },
+      {
+        "source_id": "S010",
+        "url": "https://inwestor.asseco.com/en/reports/regulatory-filings",
+        "title": "Regulatory Filings - Asseco Poland S.A. - Centrum Relacji Inwestorskich",
+        "retrieved_at": "2026-10-03T12:24:49.788528Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": "unproven_legacy_url_relationship",
+        "kind": "search_snippet"
+      },
+      {
+        "source_id": "S002",
+        "url": "https://inwestor.asseco.com/files/investor/uploads/Management_Board_s_report_on_operations_of_the_Asseco_Group_and_Asseco_Poland_SA_2025.pdf",
+        "title": "Annual Report - Asseco Poland",
+        "retrieved_at": "2026-10-03T12:24:53.302266Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null,
+        "kind": "search_snippet"
+      },
+      {
+        "source_id": "S006",
+        "url": "https://asseco.com/news/5723/?L=-6815",
+        "title": "Asseco Group reports strong results for Q1, 2026 – growth in profits and order backlog - Asseco Group",
+        "retrieved_at": "2026-10-03T12:24:58.671041Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": "unproven_legacy_url_relationship",
+        "kind": "full_page"
+      },
+      {
+        "source_id": "S010",
+        "url": "https://inwestor.asseco.com/en/reports/regulatory-filings/",
+        "title": "Regulatory Filings - Asseco Poland S.A. - Centrum Relacji Inwestorskich",
+        "retrieved_at": "2026-10-03T12:25:00.242368Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": "unproven_legacy_url_relationship",
+        "kind": "full_page"
+      }
+    ],
+    "final": [
+      {
+        "source_id": "S002",
+        "url": "https://inwestor.asseco.com/files/investor/uploads/Management_Board_s_report_on_operations_of_the_Asseco_Group_and_Asseco_Poland_SA_2025.pdf",
+        "title": "Annual Report - Asseco Poland",
+        "retrieved_at": "2026-10-03T12:24:53.302266Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null,
+        "kind": "search_snippet"
+      },
+      {
+        "source_id": "S006",
+        "url": "https://asseco.com/news/5723/?L=-6815",
+        "title": "Asseco Group reports strong results for Q1, 2026 – growth in profits and order backlog - Asseco Group",
+        "retrieved_at": "2026-10-03T12:24:58.671041Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": "unproven_legacy_url_relationship",
+        "kind": "full_page"
+      },
+      {
+        "source_id": "S010",
+        "url": "https://inwestor.asseco.com/en/reports/regulatory-filings/",
+        "title": "Regulatory Filings - Asseco Poland S.A. - Centrum Relacji Inwestorskich",
+        "retrieved_at": "2026-10-03T12:25:00.242368Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": "unproven_legacy_url_relationship",
+        "kind": "full_page"
+      },
+      {
+        "source_id": "mf-vat-5220003782-20261003T122434221952Z",
+        "url": "https://wl-api.mf.gov.pl/api/search/nip/5220003782?date=2026-10-03",
+        "title": "Ministerstwo Finansów — Wykaz podatników VAT",
+        "retrieved_at": "2026-10-03T12:24:34.221952Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null,
+        "kind": "registry"
+      }
+    ]
+  },
+  "candidate_limitations": [
+    "Annual-report and financial-statement materials were surfaced as PDF documents that the page reader could not retrieve as readable text; discovery snippets were not used as financial amount evidence.",
+    "The Q1 2026 revenue figure is for the Asseco Poland Segment and should not be interpreted as the legal entity’s standalone revenue.",
+    "Unsupported non-page document content"
+  ],
+  "final_limitations": [
+    "Annual-report and financial-statement materials were surfaced as PDF documents that the page reader could not retrieve as readable text; discovery snippets were not used as financial amount evidence.",
+    "The Q1 2026 revenue figure is for the Asseco Poland Segment and should not be interpreted as the legal entity’s standalone revenue.",
+    "Unsupported non-page document content",
+    "Source S006: publication blocked: unproven_legacy_url_relationship",
+    "Source S010: publication blocked: unproven_legacy_url_relationship",
+    "business description: No complete exact-entity assertion supports every proposed value",
+    "products/services: No complete exact-entity assertion supports every proposed value",
+    "industries: No complete exact-entity assertion supports every proposed value",
+    "markets: No complete exact-entity assertion supports every proposed value",
+    "Recent development: No complete event assertion and eligible publication date support the event",
+    "Recent development: No complete event assertion and eligible publication date support the event"
+  ]
+}

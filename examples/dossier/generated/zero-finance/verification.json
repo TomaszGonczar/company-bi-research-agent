@@ -1,0 +1,529 @@
+{
+  "status": "verified",
+  "nip": "5220003782",
+  "legal_name": "Przykładowa Firma Żółć sp. z o.o.",
+  "input_name": "zero-finance.json",
+  "input_sha256": "f4fbc06fb68396560d87c26c52165a69f164db14a71a3a221e930911074fc7b8",
+  "generated_at": "2026-10-05T12:00:00Z",
+  "diagnostics": {
+    "model": "offline-synthetic-fixture",
+    "status": "completed",
+    "stop_reason": null,
+    "failure_code": null,
+    "failures": [],
+    "validated_progress_retained": false,
+    "model_requests": 0,
+    "searches": 0,
+    "page_reads": 8,
+    "dynamic_reads": 0,
+    "output_retries": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "duration_seconds": 0.0,
+    "cost_usd": null
+  },
+  "profile_status": "complete",
+  "reason": null,
+  "deltas": [
+    {
+      "path": "business_description",
+      "candidate": {
+        "state": "supported",
+        "value": "dostawca rozwiązań pomiarowych",
+        "evidence": [
+          {
+            "source_id": "business_description",
+            "excerpt": "Przykładowa Firma Żółć sp. z o.o. działa jako \"dostawca rozwiązań pomiarowych\"."
+          }
+        ],
+        "reason": null,
+        "context": {}
+      },
+      "final": {
+        "state": "supported",
+        "value": "dostawca rozwiązań pomiarowych",
+        "evidence": [
+          {
+            "source_id": "business_description",
+            "excerpt": "Przykładowa Firma Żółć sp. z o.o. działa jako \"dostawca rozwiązań pomiarowych\"."
+          }
+        ],
+        "reason": null,
+        "context": {}
+      },
+      "decision": "accepted",
+      "reason": "The publication gate retained this supported fact.",
+      "changed_paths": []
+    },
+    {
+      "path": "products_services",
+      "candidate": {
+        "state": "supported",
+        "value": [
+          "systemy pomiarowe"
+        ],
+        "evidence": [
+          {
+            "source_id": "products_services",
+            "excerpt": "Przykładowa Firma Żółć sp. z o.o. oferuje \"systemy pomiarowe\"."
+          }
+        ],
+        "reason": null,
+        "context": {}
+      },
+      "final": {
+        "state": "supported",
+        "value": [
+          "systemy pomiarowe"
+        ],
+        "evidence": [
+          {
+            "source_id": "products_services",
+            "excerpt": "Przykładowa Firma Żółć sp. z o.o. oferuje \"systemy pomiarowe\"."
+          }
+        ],
+        "reason": null,
+        "context": {}
+      },
+      "decision": "accepted",
+      "reason": "The publication gate retained this supported fact.",
+      "changed_paths": []
+    },
+    {
+      "path": "industries",
+      "candidate": {
+        "state": "supported",
+        "value": [
+          "aparatura pomiarowa"
+        ],
+        "evidence": [
+          {
+            "source_id": "industries",
+            "excerpt": "Przykładowa Firma Żółć sp. z o.o. działa w branży \"aparatura pomiarowa\"."
+          }
+        ],
+        "reason": null,
+        "context": {}
+      },
+      "final": {
+        "state": "supported",
+        "value": [
+          "aparatura pomiarowa"
+        ],
+        "evidence": [
+          {
+            "source_id": "industries",
+            "excerpt": "Przykładowa Firma Żółć sp. z o.o. działa w branży \"aparatura pomiarowa\"."
+          }
+        ],
+        "reason": null,
+        "context": {}
+      },
+      "decision": "accepted",
+      "reason": "The publication gate retained this supported fact.",
+      "changed_paths": []
+    },
+    {
+      "path": "markets",
+      "candidate": {
+        "state": "supported",
+        "value": [
+          "Polska"
+        ],
+        "evidence": [
+          {
+            "source_id": "markets",
+            "excerpt": "Przykładowa Firma Żółć sp. z o.o. działa na rynku \"Polska\"."
+          }
+        ],
+        "reason": null,
+        "context": {}
+      },
+      "final": {
+        "state": "supported",
+        "value": [
+          "Polska"
+        ],
+        "evidence": [
+          {
+            "source_id": "markets",
+            "excerpt": "Przykładowa Firma Żółć sp. z o.o. działa na rynku \"Polska\"."
+          }
+        ],
+        "reason": null,
+        "context": {}
+      },
+      "decision": "accepted",
+      "reason": "The publication gate retained this supported fact.",
+      "changed_paths": []
+    },
+    {
+      "path": "employees",
+      "candidate": {
+        "state": "supported",
+        "value": {
+          "kind": "exact",
+          "count": 25
+        },
+        "evidence": [
+          {
+            "source_id": "employees",
+            "excerpt": "Przykładowa Firma Żółć sp. z o.o. zatrudnia 25 pracowników na dzień 2026-09-30."
+          }
+        ],
+        "reason": null,
+        "context": {
+          "as_of": "2026-09-30"
+        }
+      },
+      "final": {
+        "state": "supported",
+        "value": {
+          "kind": "exact",
+          "count": 25
+        },
+        "evidence": [
+          {
+            "source_id": "employees",
+            "excerpt": "Przykładowa Firma Żółć sp. z o.o. zatrudnia 25 pracowników na dzień 2026-09-30."
+          }
+        ],
+        "reason": null,
+        "context": {
+          "as_of": "2026-09-30"
+        }
+      },
+      "decision": "accepted",
+      "reason": "The publication gate retained this supported fact.",
+      "changed_paths": []
+    },
+    {
+      "path": "financials[0]",
+      "candidate": {
+        "state": "supported",
+        "value": "0.0000",
+        "evidence": [
+          {
+            "source_id": "revenue",
+            "excerpt": "Przykładowa Firma Żółć sp. z o.o. reported standalone revenue of PLN 0.0000 million for 2025-01-01 to 2025-12-31."
+          }
+        ],
+        "reason": null,
+        "context": {
+          "metric": "revenue",
+          "period": {
+            "start": "2025-01-01",
+            "end": "2025-12-31"
+          },
+          "currency": "PLN",
+          "unit": "millions",
+          "scope": "legal_entity",
+          "group_name": null
+        }
+      },
+      "final": {
+        "state": "supported",
+        "value": "0.0000",
+        "evidence": [
+          {
+            "source_id": "revenue",
+            "excerpt": "Przykładowa Firma Żółć sp. z o.o. reported standalone revenue of PLN 0.0000 million for 2025-01-01 to 2025-12-31."
+          }
+        ],
+        "reason": null,
+        "context": {
+          "metric": "revenue",
+          "period": {
+            "start": "2025-01-01",
+            "end": "2025-12-31"
+          },
+          "currency": "PLN",
+          "unit": "millions",
+          "scope": "legal_entity",
+          "group_name": null
+        }
+      },
+      "decision": "accepted",
+      "reason": "The publication gate retained this supported fact.",
+      "changed_paths": []
+    },
+    {
+      "path": "financials[1]",
+      "candidate": {
+        "state": "supported",
+        "value": "-0.7500",
+        "evidence": [
+          {
+            "source_id": "net_result",
+            "excerpt": "Przykładowa Firma Żółć sp. z o.o. reported standalone net loss of PLN 0.7500 million for 2025-01-01 to 2025-12-31."
+          }
+        ],
+        "reason": null,
+        "context": {
+          "metric": "net_result",
+          "period": {
+            "start": "2025-01-01",
+            "end": "2025-12-31"
+          },
+          "currency": "PLN",
+          "unit": "millions",
+          "scope": "legal_entity",
+          "group_name": null
+        }
+      },
+      "final": {
+        "state": "supported",
+        "value": "-0.7500",
+        "evidence": [
+          {
+            "source_id": "net_result",
+            "excerpt": "Przykładowa Firma Żółć sp. z o.o. reported standalone net loss of PLN 0.7500 million for 2025-01-01 to 2025-12-31."
+          }
+        ],
+        "reason": null,
+        "context": {
+          "metric": "net_result",
+          "period": {
+            "start": "2025-01-01",
+            "end": "2025-12-31"
+          },
+          "currency": "PLN",
+          "unit": "millions",
+          "scope": "legal_entity",
+          "group_name": null
+        }
+      },
+      "decision": "accepted",
+      "reason": "The publication gate retained this supported fact.",
+      "changed_paths": []
+    },
+    {
+      "path": "recent_developments[0]",
+      "candidate": {
+        "state": "supported",
+        "value": {
+          "title": "centrum badawcze",
+          "summary": "Przykładowa Firma Żółć sp. z o.o. otworzyła \"centrum badawcze\" w dniu 2026-09-18.",
+          "published_on": "2026-09-20",
+          "occurred_on": "2026-09-18"
+        },
+        "evidence": [
+          {
+            "source_id": "event",
+            "excerpt": "Przykładowa Firma Żółć sp. z o.o. otworzyła \"centrum badawcze\" w dniu 2026-09-18."
+          }
+        ],
+        "reason": null,
+        "context": {}
+      },
+      "final": {
+        "state": "supported",
+        "value": {
+          "title": "centrum badawcze",
+          "summary": "Przykładowa Firma Żółć sp. z o.o. otworzyła \"centrum badawcze\" w dniu 2026-09-18.",
+          "published_on": "2026-09-20",
+          "occurred_on": "2026-09-18"
+        },
+        "evidence": [
+          {
+            "source_id": "event",
+            "excerpt": "Przykładowa Firma Żółć sp. z o.o. otworzyła \"centrum badawcze\" w dniu 2026-09-18."
+          }
+        ],
+        "reason": null,
+        "context": {}
+      },
+      "decision": "accepted",
+      "reason": "The publication gate retained this supported fact.",
+      "changed_paths": []
+    }
+  ],
+  "sources": {
+    "candidate": [
+      {
+        "source_id": "registry",
+        "url": "https://registry.example/",
+        "title": "Syntetyczny rekord w strukturze MF",
+        "retrieved_at": "2026-10-05T12:00:00Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null,
+        "kind": "registry"
+      },
+      {
+        "source_id": "business_description",
+        "url": "https://business_description.example/",
+        "title": "Syntetyczna pełna asercja: business_description",
+        "retrieved_at": "2026-10-05T12:00:00Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null,
+        "kind": "full_page"
+      },
+      {
+        "source_id": "products_services",
+        "url": "https://products_services.example/",
+        "title": "Syntetyczna pełna asercja: products_services",
+        "retrieved_at": "2026-10-05T12:00:00Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null,
+        "kind": "full_page"
+      },
+      {
+        "source_id": "industries",
+        "url": "https://industries.example/",
+        "title": "Syntetyczna pełna asercja: industries",
+        "retrieved_at": "2026-10-05T12:00:00Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null,
+        "kind": "full_page"
+      },
+      {
+        "source_id": "markets",
+        "url": "https://markets.example/",
+        "title": "Syntetyczna pełna asercja: markets",
+        "retrieved_at": "2026-10-05T12:00:00Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null,
+        "kind": "full_page"
+      },
+      {
+        "source_id": "employees",
+        "url": "https://employees.example/",
+        "title": "Syntetyczna pełna asercja: employees",
+        "retrieved_at": "2026-10-05T12:00:00Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null,
+        "kind": "full_page"
+      },
+      {
+        "source_id": "revenue",
+        "url": "https://revenue.example/",
+        "title": "Syntetyczna pełna asercja: revenue",
+        "retrieved_at": "2026-10-05T12:00:00Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null,
+        "kind": "full_page"
+      },
+      {
+        "source_id": "net_result",
+        "url": "https://net_result.example/",
+        "title": "Syntetyczna pełna asercja: net_result",
+        "retrieved_at": "2026-10-05T12:00:00Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null,
+        "kind": "full_page"
+      },
+      {
+        "source_id": "event",
+        "url": "https://event.example/",
+        "title": "Syntetyczna pełna asercja: event",
+        "retrieved_at": "2026-10-05T12:00:00Z",
+        "published_on": "2026-09-20",
+        "redirect_chain": [],
+        "publication_blocked_reason": null,
+        "kind": "full_page"
+      }
+    ],
+    "final": [
+      {
+        "source_id": "business_description",
+        "url": "https://business_description.example/",
+        "title": "Syntetyczna pełna asercja: business_description",
+        "retrieved_at": "2026-10-05T12:00:00Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null,
+        "kind": "full_page"
+      },
+      {
+        "source_id": "employees",
+        "url": "https://employees.example/",
+        "title": "Syntetyczna pełna asercja: employees",
+        "retrieved_at": "2026-10-05T12:00:00Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null,
+        "kind": "full_page"
+      },
+      {
+        "source_id": "event",
+        "url": "https://event.example/",
+        "title": "Syntetyczna pełna asercja: event",
+        "retrieved_at": "2026-10-05T12:00:00Z",
+        "published_on": "2026-09-20",
+        "redirect_chain": [],
+        "publication_blocked_reason": null,
+        "kind": "full_page"
+      },
+      {
+        "source_id": "industries",
+        "url": "https://industries.example/",
+        "title": "Syntetyczna pełna asercja: industries",
+        "retrieved_at": "2026-10-05T12:00:00Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null,
+        "kind": "full_page"
+      },
+      {
+        "source_id": "markets",
+        "url": "https://markets.example/",
+        "title": "Syntetyczna pełna asercja: markets",
+        "retrieved_at": "2026-10-05T12:00:00Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null,
+        "kind": "full_page"
+      },
+      {
+        "source_id": "net_result",
+        "url": "https://net_result.example/",
+        "title": "Syntetyczna pełna asercja: net_result",
+        "retrieved_at": "2026-10-05T12:00:00Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null,
+        "kind": "full_page"
+      },
+      {
+        "source_id": "products_services",
+        "url": "https://products_services.example/",
+        "title": "Syntetyczna pełna asercja: products_services",
+        "retrieved_at": "2026-10-05T12:00:00Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null,
+        "kind": "full_page"
+      },
+      {
+        "source_id": "registry",
+        "url": "https://registry.example/",
+        "title": "Syntetyczny rekord w strukturze MF",
+        "retrieved_at": "2026-10-05T12:00:00Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null,
+        "kind": "registry"
+      },
+      {
+        "source_id": "revenue",
+        "url": "https://revenue.example/",
+        "title": "Syntetyczna pełna asercja: revenue",
+        "retrieved_at": "2026-10-05T12:00:00Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null,
+        "kind": "full_page"
+      }
+    ]
+  },
+  "candidate_limitations": [],
+  "final_limitations": []
+}

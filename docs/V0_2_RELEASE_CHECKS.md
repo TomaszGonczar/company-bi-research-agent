@@ -1,0 +1,97 @@
+# v0.2 release checks and continuation
+
+## Frozen pre-publication checkpoint
+
+```json
+{
+  "phase": "OG-210",
+  "state": "local_acceptance_passed_pending_release_commit",
+  "work_branch": "feat/nipto-bi-v0.2-dossier",
+  "baseline_sha": "e3da375218206354f79dac539e252f7821c1c399",
+  "latest_committed_sha": "b0a97c5",
+  "completed_issues": ["OG-205", "OG-206", "OG-207", "OG-208", "OG-209"],
+  "next_action": "Commit final v0.2.0 candidate, push PR, require exact-head and post-merge CI, create annotated tag and release",
+  "tests_and_visuals": ["784 tests passed; Ruff/format/mypy passed; both reviewer smokes passed; 47/47 PDF pages visually inspected; clean installed-wheel smoke passed; 122 protected hashes unchanged"],
+  "blockers": [],
+  "pending_linear_sync": ["OG-205–OG-209 implemented, committed and accepted; OG-210 release pending; connector has no mutation tools"],
+  "pending_github_actions": ["feature push, PR, exact-head CI, merge, main CI, annotated tag, release"],
+  "repair_attempts_for_current_root_cause": 0
+}
+```
+
+This tracked checkpoint is frozen with the candidate to avoid document-only commit churn after CI. Live publication transitions and immutable commit/CI/tag/release references are persisted in `.work/v0.2/release-checkpoint.json` and the [GitHub Release](https://github.com/TomaszGonczar/company-bi-research-agent/releases/tag/v0.2.0). A local candidate is **not** RELEASED; only the actual published release and its checkpoint/CI links establish that state.
+
+## OG-205 baseline and acceptance
+
+- Read the complete revision-2 execution plan and all six full Linear descriptions. Issues are Todo in M5; existing historical tracker discrepancies are not reimplementation instructions. The mounted Linear connector has no mutation tools; preserve pending synchronization rather than inventing updates.
+- Initial checkout: clean `fix/v0.1.1-adversarial-corrections`, HEAD `02555dd`. PR #1 is merged at `83a9e42940190d88ed065c5804be331d3b40d48e`; annotated `v0.1.1` points there. Fetched current main `e3da375218206354f79dac539e252f7821c1c399`; no newer dossier work. Created assigned feature branch from main. Other worktrees, including operator main, remain untouched.
+- Repository root confirmed; origin `https://github.com/TomaszGonczar/company-bi-research-agent.git`. Authenticated GitHub viewer permission ADMIN; no credential changes or permission bypass. `uv 0.12.3`, CPython 3.12.13. Initial package 0.1.1/schema 0.1. Poppler `pdftoppm 26.10.0` available. Fontconfig returns Verdana for DejaVu, so use the specified upstream archive, not an unlicensed substitute.
+- Protected inventory: 122 existing tracked code/test/fixture/docs files and SHA-256 values in `examples/dossier/baseline-sha256.json`. All source except CLI protected; all old tests, examples and docs protected. Allowed edits: CLI isolation, package/lock, CI additive smoke, README/reviewer guide, new dossier files/resources/tests/examples/docs. No Holdout B first-execution runner invoked.
+- Actual baseline commands: `uv sync --frozen --python 3.12`; `uv run --frozen pytest -q` (**740 passed**, 30 pre-existing lxml warnings); `ruff check .` PASS; `ruff format --check src tests scripts` PASS (56 files); `mypy src` PASS (19 source files); `python scripts/review_offline.py --output-dir .work/v0.2/baseline-review` PASS (zero external calls). Full command output available in the execution transcript.
+- Frozen [contract and two labelled mockups](V0_2_DOSSIER_CONTRACT.md) cover final-only projection, exact interfaces/files/exits, source retention, manifest-last semantics, fixed layout/questions and release gates. Mockups validated against M5; actual rendered visual proof remains pending OG-207/209.
+
+## OG-206 projection acceptance
+
+- Added final-profile-only immutable view, stable source numbering, exact financial formatting, registry/research count separation, state/reason-only gaps and at most three fixed questions. No candidates or retained page bodies reach the view.
+- New validated recipe builder generated rich, zero-finance, stress and failed-run inputs. Actual `verify_run`: rich/zero/stress **complete**, eight supported research fields each; failed **not_published**. Stress has 40 separately evidenced services but counts as one products/services field.
+- **11 targeted tests passed**; Ruff and mypy passed; actual rich projection smoke printed 25 employees (2026-09-30), `-0.7500` and `12.5000` PLN millions with exact interval/scope. Optional wrong employee/event dates clear; uncertain/wrong-amount/group/range candidates do not become observations.
+- Integration finding: the existing gate omits ordinary uncited run sources from the **final** profile; registry/quarantined sources survive. The adapter preserves every final source, not additional raw-run material. The new uncited-source test uses a quarantined source that the real gate retains. No semantic-core change.
+
+## OG-207 PDF acceptance
+
+- ReportLab **4.5.1** runtime; pypdf **6.20.0** development-only inspection; Pillow 12.3.0 is ReportLab's new transitive dependency. No unrelated dependency upgrade. Narrow untyped ReportLab imports; mypy remains strict.
+- DejaVu Sans **2.37**, regular/bold and full upstream LICENSE packaged unmodified. Archive: `https://github.com/dejavu-fonts/dejavu-fonts/releases/download/version_2_37/dejavu-fonts-ttf-2.37.zip`; SHA-256 `7576310b219e04159d35ff61dd4a4ec4cdba4f35c00e002a136f00e96a908b0a`. Original redistribution/license notices retained.
+- A4, 16 mm margins, body 10.5/14 pt; invariant PDF metadata; safe escaped text and HTTP(S) links. Full supported values/citations, all final sources and gaps flow through appendix; main previews are explicitly abbreviated.
+- **17 targeted tests passed**, Ruff/mypy passed. Actual sparse/rich/stress rendering in `.work/v0.2/pdf-smoke-02`: **3/5/24 total pages**, **1/1/2 main pages**. Every same-environment repeat had identical bytes. Full values, citations, source metadata, Polish/markup text and embedded regular/bold fonts checked through pypdf.
+- First inspection found an orphan main heading and a misleading “3 shown” label when the preview shortened an item. Repaired heading lookahead and honest list preview wording; event dates now stay visible beside a shortened title. Grouped source metadata avoids a one-line trailing source page. A text-test failure was page-footer interleaving across a split citation, not lost evidence; extraction now geometrically excludes footer furniture. Removed a brittle wrapped-wording assertion.
+- Inspected repaired stress main pages 1–2, full legal identity page 3 and long-URL final page 24, rich evidence page 2 and sparse source/gap page 3. Correct glyphs/wrapping; no clipping or overlap observed there. Full final-example all-page inspection remains OG-209's gate.
+
+## OG-208 CLI and bundle acceptance
+
+- Added isolated lazy dossier dispatch; existing commands unchanged. Input buffer is read once, hashed and validated, followed by one existing `verify_run`. Successful six-file bundle and failed diagnostic-only three-file bundle use existing profile/verification serializers.
+- Actual CLI smoke: `.work/v0.2/cli-supported-01` exit **0**, partial, six files; `.work/v0.2/cli-failed-01` exit **1**, diagnostics only; invalid identity exit **2**, bounded message and no output; repaired rich path `.work/v0.2/cli-rich-02` exit **0**, complete.
+- **27 CLI/file-safety tests passed**, mypy PASS for 20 source modules. Existing autouse guards block sockets/DNS/registry/model/Tavily/Scrapling during these real in-process CLI calls.
+- POSIX safe publication uses no-follow directory descriptors, exclusive directory/artifact creation, owned inode checks, and completion manifest last. Existing destinations, dangling symlinks, input/output hardlinks/aliases, symlink parents, traversal, reservation races, render/copy/manifest failures and hash tampering are refused without overwriting old data. Fresh repeat bundles are byte-identical in this environment.
+- Reproduced three additional failures before repair: mutation after manifest creation returned success; replacing the parent returned success; cleanup failure left a completed manifest while reporting failure. Fixed final parent/artifact rechecks and moved successful staging cleanup inside the publication transaction. All three regressions now pass. Replaced-directory cleanup preserves the external replacement and retains staging with a bounded diagnostic. No directory-atomicity or crash-atomicity claim.
+- Safe writer currently requires POSIX directory-descriptor/no-follow primitives (tested macOS; hosted Linux pending). Native Windows refuses safely rather than claiming equivalent collision guarantees.
+
+## OG-209 integrated QA and packaging
+
+- Actual integrated gates: `uv sync --frozen --python 3.12`; **784 pytest passed** (740 inherited + 44 dossier), 30 unchanged lxml warnings; Ruff PASS; formatting PASS (62 files); strict mypy PASS (20 source files). Existing offline reviewer smoke PASS at `.work/v0.2/legacy-review-01`.
+- New `scripts/review_dossier.py` executes the real CLI parser/dispatch in fresh subprocesses with network/model/registry/Tavily/Scrapling entrypoints blocked. **9/9 outcomes passed**: seven published PDFs, failed diagnostic-only bundle, invalid identity refusal. Full approved text/excerpts/source metadata/gap reasons, companion profile parity and completion hashes verified. Deterministic summary: `.work/v0.2/dossier-review-01/review-summary.json`. Added this narrow smoke after the unchanged inherited CI steps.
+- Semantic and visual review were performed sequentially by the integration owner using independent consumer checks and actual rendered images; no separate human or independent holdout certification is claimed.
+- `uv build --out-dir .work/v0.2/dist-01` PASS. Pre-version-bump wheel SHA-256 `97e888b9427439bde0ad52a6a7a37b47835d4ed253d746d8d5d6b0b1f1994a73`. Installed wheel plus frozen runtime requirements into a fresh `/private/tmp/company-bi-v020-wheel-…/venv`, invoked its actual installed `company-bi dossier` outside the checkout with the absolute rich input, and verified site-packages imports, both fonts/LICENSE, valid PDF, complete profile and `-0.7500`. No pypdf/Poppler runtime dependency. Final 0.2.0 wheel will be separately hashed and smoked.
+- Protected baseline check: **122/122 files byte-identical**; no unrelated package version changed. Only new dependencies: ReportLab 4.5.1, its Pillow 12.3.0 dependency, development-only pypdf 6.20.0. No frozen semantic/evidence/gold/holdout edits.
+- Current-valid real demonstration: original `examples/evals/retained/asseco-poland.json` validated unchanged; input SHA-256 `41b9bf80321988d51fe4230adb5ec28b85d6954c7b1399c1a68da116afb86325`; profile generated at **2026-10-03T12:25:47.507942+00:00**, partial, **0 supported researched fields**. Four registry-backed facts are not BI research. Quarantined legacy source lineage remains visibly quarantined. No live provider call or login was needed.
+
+### All-page visual review
+
+Poppler 26.10.0: `pdftoppm -r 150 -png INPUT.pdf PAGE_PREFIX`, then image-view inspection of every page (two-page contact sheets plus full-resolution stress page 19). `pdftotext -bbox` found no words outside the checked horizontal/body/footer bounds. Images and bounding-box record: `.work/v0.2/visual-01/`. Page-split citations remain complete; full text parity is separately checked, not inferred from page counts.
+
+| Fixture | Total / main / appendix | Inspected pages | Actual findings |
+| --- | --- | --- | --- |
+| supported (synthetic) | 3 / 1 / 2 | 1–3 | Service cited; unknown scale/finances, three questions; no clipping/overlap. |
+| out_of_contract (synthetic) | 3 / 1 / 2 | 1–3 | Zero-research statement, uncertain product state, no rejected value/excerpt. |
+| unsafe (synthetic) | 3 / 1 / 2 | 1–3 | Same truthful PDF as OOC; distinct forensic verification files. |
+| rich (synthetic) | 5 / 1 / 4 | 1–5 | Polish glyphs; exact signs/scales/intervals; distinct event dates; source links readable. |
+| zero-finance (synthetic) | 5 / 1 / 4 | 1–5 | Explicit `0.0000` preserved alongside negative net result; no missing→zero substitution. |
+| stress (synthetic) | 24 / 2 / 22 | 1–24 | Full long identity and all 40 services/citations survive; markup literal; long title/URL/reason wrap. Appendix is intentionally long, not squeezed. |
+| real-asseco (original capture) | 4 / 1 / 3 | 1–4 | Sparse partial with original timestamps, zero research supports, registry IDs and clearly non-supporting/quarantined sources. |
+| failed / identity_invalid | 0 / 0 / 0 | No PDF | Expected diagnostic-only / refusal outcomes, not invented dossiers. |
+
+All **47 pages** inspected. No unresolved material semantic/layout finding. Observed non-blocking layout tradeoff: some appendix paragraphs continue on the next labelled appendix page; stress main page 2 is sparse. Normal body size remains 10.5 pt.
+
+## OG-210 final local candidate
+
+- Package **0.2.0**, profile schema **0.1**, template **0.2.0**. README, reviewer guide, synthetic classification and live/batch bridge updated against actual `batch.py` retained path and `_batch_state.json` `research_path`; no invented CSV column or automatic batch PDFs.
+- Final-version commands repeated after the version/lock change: frozen sync PASS; **784 tests PASS**; Ruff PASS; format PASS; mypy PASS; legacy reviewer smoke PASS; new dossier smoke **9/9 PASS**. Authoritative committed examples and machine summary: [`examples/dossier/generated`](../examples/dossier/generated/).
+- All seven final-version PDFs are **byte-identical** to the seven PDFs whose **47/47 pages** were inspected. All eight completion manifests identify package/template/manifest 0.2.0 and validate every artifact hash; published profile schemas remain 0.1. No render was inferred from an old pre-change thumbnail.
+- Final 0.2.0 build and clean outside-checkout wheel installation PASS, actual installed console entry point produced a complete rich PDF with exact `-0.7500`; both fonts and LICENSE present without pypdf/Poppler. Wheel SHA-256 **`c771c3b43d25ae8990696accef8174354e12417341381e8d376df272b94a0d11`** (`company_bi-0.2.0-py3-none-any.whl`). Release build must retain this wheel content or rerun the smoke.
+- Protected hash check again **122/122 unchanged**; protected semantic/fixture diff empty; no unrelated dependency upgrades. Final source changes are the dossier module, packaged fonts and isolated CLI dispatch; inherited schemas/renderer/research/batch/gate stay unchanged.
+- GitHub policy inspected: main unprotected; effective rules API returned an empty list; normal merge, squash and rebase permitted. Existing `v0.2.0` matching refs and same-branch PR list were empty. No rules, permissions, protections or credentials changed. Normal merge still waits for exact candidate CI, followed by main CI, by this contract.
+- Six assigned commit boundaries: OG-205 `bd21fdd`; OG-206 `df7c876`; OG-207 `52b5c40`; OG-208 `136e347`; OG-209 `b0a97c5`; final OG-210 commit is identified by the PR head/release checkpoint, not a self-referential hash in this file.
+- Linear synchronization remains pending because all mounted Linear tools are read-only. This does not block GitHub release technical gates; the final delivery must state it explicitly, never claim issue statuses changed.
+
+## Release limitations
+
+This is a presentation/usability change, not expanded publication language, better real researched yield or production accuracy. Registry facts do not count as researched BI. Synthetic classification is a caller-provided label; input hashes are not source authentication. No employer/client material sent; OG-201 untouched.

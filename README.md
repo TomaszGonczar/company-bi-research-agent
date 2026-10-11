@@ -1,5 +1,46 @@
 # Company BI
 
+## v0.2.0 — Polish PDF dossier
+
+Offline, human-readable presentation of the **final verified profile**: one or two A4 main pages plus a full sources/details appendix. The v0.1.1 publication language and profile schema **0.1** are unchanged. Better presentation is not better research.
+
+```sh
+uv sync --frozen --python 3.12
+uv run --frozen company-bi dossier examples/strict_contract/supported.json --output-dir outputs/dossier-supported --synthetic
+```
+
+Use a **fresh** destination each time. This synthetic example publishes one approved service and preserves unknown sections. No key, login, network, browser or Poppler is needed to generate the PDF. Fonts and their license ship in the package.
+
+The successful directory contains `5220003782.dossier.pdf`, `profile.json`, `profile.md`, `verification.json`, `verification.md` and `dossier-manifest.json`. Input is a retained `CompanyResearchRun`, **not** a bare profile. Exit **0** = published complete/partial; **1** = valid failed run, diagnostics only; **2** = invalid run or file/render failure, no completed bundle. Original research dates are never replaced by today's date.
+
+Bundles use exclusive fresh-directory creation and a **completion-manifest-last** protocol, not whole-directory atomicity. Accept a bundle only when the manifest and all listed SHA-256 hashes validate. Existing paths, traversal, symlink paths and hardlink aliases are refused; use physical paths (on macOS `/tmp` is a symlink). Safe publication targets POSIX systems; macOS was tested locally and Linux CI is a release gate. Native Windows refuses unsupported primitives. Hashes and `--synthetic` classification do not authenticate the input.
+
+[Demo PDFs and companion bundles](examples/dossier/generated/) · [Dossier contract](docs/V0_2_DOSSIER_CONTRACT.md) · [QA / release evidence](docs/V0_2_RELEASE_CHECKS.md) · [GitHub releases](https://github.com/TomaszGonczar/company-bi-research-agent/releases)
+
+```sh
+# Nine cases, real CLI subprocesses, blocked network/model entrypoints:
+uv run --frozen python scripts/review_dossier.py --output-dir outputs/dossier-review
+```
+
+Six labelled synthetic PDF demos cover approved/unknown, rejected, rich, zero/negative and long-content layouts. One original Asseco capture produces a **partial dossier with zero supported researched fields**, dated 2026-10-03; registry identity is explicitly separate. A valid failed run produces diagnostic files only; invalid identity produces no dossier. The rich synthetic fixture is not a researched company result.
+
+### Existing research → dossier
+
+```sh
+# Live step: existing Tavily configuration and native Codex authentication required.
+uv run --frozen company-bi research 5220003782 --output runs/company-research.json --model openai-codex:gpt-6-luna
+# Offline step: no provider calls or new research.
+uv run --frozen company-bi dossier runs/company-research.json --output-dir outputs/company-dossier
+```
+
+Existing `batch` behavior is unchanged. Its retained runs are `<runs-dir>/<nip>/<UTC YYYYMMDDTHHMMSSffffffZ>/research.json`; use each normalized company's `BatchResult.research_path` in `<output-dir>/_batch_state.json`, not a guessed latest timestamp or a presumed CSV column. Pass that path to `dossier`. Unresolved/failed upstream input is not fabricated into a company report. No automatic batch PDFs were added.
+
+### Contributions and limits
+
+Tomasz set product direction, evidence constraints, the M5 plan and autonomous release authorization. The OMP coding assistant implemented the dossier, fixtures and smoke tooling, repaired observed defects, and performed the recorded semantic/visual/package checks. This does not claim Tomasz independently reviewed each PDF, an external reviewer approved accuracy, or an employer/client received the material. OG-201 remains a separate reception decision.
+
+## Research boundary and v0.1.1 history
+
 A research agent may propose broadly; deterministic publication recognizes only a narrow finite contract and abstains when meaning is outside it. This is not general language understanding or a useful broad-coverage research claim.
 
 Under the [strict publication contract](docs/STRICT_PUBLICATION_CONTRACT.md), the one quoted direct assertion shown here is supported: `Example sp. z o.o. offers "cloud services".` The plausible unquoted assertion `Example sp. z o.o. offers cloud services.` is true but out of contract, so publication abstains. Labels are opaque, not a vocabulary of validated meanings.

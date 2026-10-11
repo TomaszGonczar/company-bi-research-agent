@@ -37,3 +37,5 @@ jobs:
       - run: uv run --frozen mypy src
       - name: Run credential-free offline reviewer smoke
         run: uv run --frozen python scripts/review_offline.py --output-dir "$RUNNER_TEMP/company-bi-review"
+      - name: Run credential-free dossier CLI and PDF parity smoke
+        run: uv run --frozen python scripts/review_dossier.py --output-dir "$RUNNER_TEMP/company-bi-dossier"

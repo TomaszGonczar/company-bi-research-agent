@@ -1,0 +1,21 @@
+{
+  "artifacts": {
+    "5220003782.dossier.pdf": "f44121ae8ba3a86646e4db14b32155f2173e0578fe16a1876b628ca85d0c19a3",
+    "profile.json": "3c360bf64fbcfd5e8edebed0ebd3f4cb1456d64cc6df7e448f94dc7a5788d488",
+    "profile.md": "0a960069d3b8f67627b705fff4958a1727d2b2a06fa0947efe7ef954e3f29c2a",
+    "verification.json": "9ea8d23818baea87887383fdf51f2d28fda3ce0ce3e778107c056f15733a5c08",
+    "verification.md": "1aa94ec5955fedd96204b079a09eecfc14293d1d194e12148eae5c45d05e70e4"
+  },
+  "bundle_status": "complete",
+  "input_name": "out_of_contract.json",
+  "input_sha256": "9dd1d58251087e628b1252f68d37f1b6db8c63ee05de8708f38031fc3b59d112",
+  "manifest_version": "0.2.0",
+  "nip": "5220003782",
+  "package_version": "0.2.0",
+  "profile_schema_version": "0.1",
+  "profile_status": "partial",
+  "publication_status": "published",
+  "research_generated_at": "2026-10-05T12:00:00+00:00",
+  "synthetic": true,
+  "template_version": "0.2.0"
+}

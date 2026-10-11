@@ -1,0 +1,18 @@
+{
+  "artifacts": {
+    "verification.json": "d816749811ddf4a88d9ceb0b699363e942ba409d343d4a9866831e26b5f47ef2",
+    "verification.md": "1af78ce37514d04c8060a99920b9c1be39166fb05f6629e1e999a654650d88f6"
+  },
+  "bundle_status": "complete",
+  "input_name": "failed-run.json",
+  "input_sha256": "73ade277c875a3d6e7b5e923dca899b4795343151e6c3f417381d790fbd4badc",
+  "manifest_version": "0.2.0",
+  "nip": "5220003782",
+  "package_version": "0.2.0",
+  "profile_schema_version": null,
+  "profile_status": null,
+  "publication_status": "not_published",
+  "research_generated_at": "2026-10-05T12:00:00+00:00",
+  "synthetic": true,
+  "template_version": "0.2.0"
+}

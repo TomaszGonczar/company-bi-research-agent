@@ -13,3 +13,4 @@ dist/
 !.env.example
 outputs/
 runs/
+.work/v0.2/

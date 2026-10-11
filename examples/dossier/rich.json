@@ -1,0 +1,326 @@
+{
+  "identity": {
+    "nip": "5220003782",
+    "legal_name": {
+      "state": "supported",
+      "value": "Przykładowa Firma Żółć sp. z o.o.",
+      "evidence": [
+        {
+          "source_id": "registry",
+          "excerpt": "Przykładowa Firma Żółć sp. z o.o."
+        }
+      ],
+      "reason": null
+    },
+    "krs": {
+      "state": "unknown",
+      "value": null,
+      "evidence": [],
+      "reason": "Brak danych w syntetycznym przykładzie."
+    },
+    "regon": {
+      "state": "unknown",
+      "value": null,
+      "evidence": [],
+      "reason": "Brak danych w syntetycznym przykładzie."
+    },
+    "registered_city": {
+      "state": "unknown",
+      "value": null,
+      "evidence": [],
+      "reason": "Brak danych w syntetycznym przykładzie."
+    },
+    "registered_address": {
+      "state": "supported",
+      "value": "ul. Przykładowa 1, 00-001 Warszawa",
+      "evidence": [
+        {
+          "source_id": "registry",
+          "excerpt": "ul. Przykładowa 1, 00-001 Warszawa"
+        }
+      ],
+      "reason": null
+    },
+    "website": {
+      "state": "unknown",
+      "value": null,
+      "evidence": [],
+      "reason": "Brak danych w syntetycznym przykładzie."
+    },
+    "resolved_at": "2026-10-05T12:00:00Z"
+  },
+  "draft": {
+    "business_description": {
+      "state": "supported",
+      "value": "dostawca rozwiązań pomiarowych",
+      "evidence": [
+        {
+          "source_id": "business_description",
+          "excerpt": "Przykładowa Firma Żółć sp. z o.o. działa jako \"dostawca rozwiązań pomiarowych\"."
+        }
+      ],
+      "reason": null
+    },
+    "products_services": {
+      "state": "supported",
+      "value": [
+        "systemy pomiarowe"
+      ],
+      "evidence": [
+        {
+          "source_id": "products_services",
+          "excerpt": "Przykładowa Firma Żółć sp. z o.o. oferuje \"systemy pomiarowe\"."
+        }
+      ],
+      "reason": null
+    },
+    "industries": {
+      "state": "supported",
+      "value": [
+        "aparatura pomiarowa"
+      ],
+      "evidence": [
+        {
+          "source_id": "industries",
+          "excerpt": "Przykładowa Firma Żółć sp. z o.o. działa w branży \"aparatura pomiarowa\"."
+        }
+      ],
+      "reason": null
+    },
+    "markets": {
+      "state": "supported",
+      "value": [
+        "Polska"
+      ],
+      "evidence": [
+        {
+          "source_id": "markets",
+          "excerpt": "Przykładowa Firma Żółć sp. z o.o. działa na rynku \"Polska\"."
+        }
+      ],
+      "reason": null
+    },
+    "employees": {
+      "state": "supported",
+      "value": {
+        "kind": "exact",
+        "count": 25
+      },
+      "evidence": [
+        {
+          "source_id": "employees",
+          "excerpt": "Przykładowa Firma Żółć sp. z o.o. zatrudnia 25 pracowników na dzień 2026-09-30."
+        }
+      ],
+      "reason": null,
+      "as_of": "2026-09-30"
+    },
+    "financials": [
+      {
+        "state": "supported",
+        "value": "12.5000",
+        "evidence": [
+          {
+            "source_id": "revenue",
+            "excerpt": "Przykładowa Firma Żółć sp. z o.o. reported standalone revenue of PLN 12.5000 million for 2025-01-01 to 2025-12-31."
+          }
+        ],
+        "reason": null,
+        "metric": "revenue",
+        "period": {
+          "start": "2025-01-01",
+          "end": "2025-12-31"
+        },
+        "currency": "PLN",
+        "unit": "millions",
+        "scope": "legal_entity",
+        "group_name": null
+      },
+      {
+        "state": "supported",
+        "value": "-0.7500",
+        "evidence": [
+          {
+            "source_id": "net_result",
+            "excerpt": "Przykładowa Firma Żółć sp. z o.o. reported standalone net loss of PLN 0.7500 million for 2025-01-01 to 2025-12-31."
+          }
+        ],
+        "reason": null,
+        "metric": "net_result",
+        "period": {
+          "start": "2025-01-01",
+          "end": "2025-12-31"
+        },
+        "currency": "PLN",
+        "unit": "millions",
+        "scope": "legal_entity",
+        "group_name": null
+      }
+    ],
+    "recent_developments": [
+      {
+        "state": "supported",
+        "value": {
+          "title": "centrum badawcze",
+          "summary": "Przykładowa Firma Żółć sp. z o.o. otworzyła \"centrum badawcze\" w dniu 2026-09-18.",
+          "published_on": "2026-09-20",
+          "occurred_on": "2026-09-18"
+        },
+        "evidence": [
+          {
+            "source_id": "event",
+            "excerpt": "Przykładowa Firma Żółć sp. z o.o. otworzyła \"centrum badawcze\" w dniu 2026-09-18."
+          }
+        ],
+        "reason": null
+      }
+    ],
+    "limitations": []
+  },
+  "sources": [
+    {
+      "source": {
+        "source_id": "registry",
+        "url": "https://registry.example/",
+        "title": "Syntetyczny rekord w strukturze MF",
+        "retrieved_at": "2026-10-05T12:00:00Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null
+      },
+      "kind": "registry",
+      "content": "{\"result\": {\"subject\": {\"nip\": \"5220003782\", \"name\": \"Przykładowa Firma Żółć sp. z o.o.\", \"workingAddress\": \"ul. Przykładowa 1, 00-001 Warszawa\"}}}",
+      "fetch_mode": "registry"
+    },
+    {
+      "source": {
+        "source_id": "business_description",
+        "url": "https://business_description.example/",
+        "title": "Syntetyczna pełna asercja: business_description",
+        "retrieved_at": "2026-10-05T12:00:00Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null
+      },
+      "kind": "full_page",
+      "content": "Przykładowa Firma Żółć sp. z o.o. działa jako \"dostawca rozwiązań pomiarowych\".",
+      "fetch_mode": "static"
+    },
+    {
+      "source": {
+        "source_id": "products_services",
+        "url": "https://products_services.example/",
+        "title": "Syntetyczna pełna asercja: products_services",
+        "retrieved_at": "2026-10-05T12:00:00Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null
+      },
+      "kind": "full_page",
+      "content": "Przykładowa Firma Żółć sp. z o.o. oferuje \"systemy pomiarowe\".",
+      "fetch_mode": "static"
+    },
+    {
+      "source": {
+        "source_id": "industries",
+        "url": "https://industries.example/",
+        "title": "Syntetyczna pełna asercja: industries",
+        "retrieved_at": "2026-10-05T12:00:00Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null
+      },
+      "kind": "full_page",
+      "content": "Przykładowa Firma Żółć sp. z o.o. działa w branży \"aparatura pomiarowa\".",
+      "fetch_mode": "static"
+    },
+    {
+      "source": {
+        "source_id": "markets",
+        "url": "https://markets.example/",
+        "title": "Syntetyczna pełna asercja: markets",
+        "retrieved_at": "2026-10-05T12:00:00Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null
+      },
+      "kind": "full_page",
+      "content": "Przykładowa Firma Żółć sp. z o.o. działa na rynku \"Polska\".",
+      "fetch_mode": "static"
+    },
+    {
+      "source": {
+        "source_id": "employees",
+        "url": "https://employees.example/",
+        "title": "Syntetyczna pełna asercja: employees",
+        "retrieved_at": "2026-10-05T12:00:00Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null
+      },
+      "kind": "full_page",
+      "content": "Przykładowa Firma Żółć sp. z o.o. zatrudnia 25 pracowników na dzień 2026-09-30.",
+      "fetch_mode": "static"
+    },
+    {
+      "source": {
+        "source_id": "revenue",
+        "url": "https://revenue.example/",
+        "title": "Syntetyczna pełna asercja: revenue",
+        "retrieved_at": "2026-10-05T12:00:00Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null
+      },
+      "kind": "full_page",
+      "content": "Przykładowa Firma Żółć sp. z o.o. reported standalone revenue of PLN 12.5000 million for 2025-01-01 to 2025-12-31.",
+      "fetch_mode": "static"
+    },
+    {
+      "source": {
+        "source_id": "net_result",
+        "url": "https://net_result.example/",
+        "title": "Syntetyczna pełna asercja: net_result",
+        "retrieved_at": "2026-10-05T12:00:00Z",
+        "published_on": null,
+        "redirect_chain": [],
+        "publication_blocked_reason": null
+      },
+      "kind": "full_page",
+      "content": "Przykładowa Firma Żółć sp. z o.o. reported standalone net loss of PLN 0.7500 million for 2025-01-01 to 2025-12-31.",
+      "fetch_mode": "static"
+    },
+    {
+      "source": {
+        "source_id": "event",
+        "url": "https://event.example/",
+        "title": "Syntetyczna pełna asercja: event",
+        "retrieved_at": "2026-10-05T12:00:00Z",
+        "published_on": "2026-09-20",
+        "redirect_chain": [],
+        "publication_blocked_reason": null
+      },
+      "kind": "full_page",
+      "content": "Przykładowa Firma Żółć sp. z o.o. otworzyła \"centrum badawcze\" w dniu 2026-09-18.",
+      "fetch_mode": "static"
+    }
+  ],
+  "diagnostics": {
+    "model": "offline-synthetic-fixture",
+    "status": "completed",
+    "stop_reason": null,
+    "failure_code": null,
+    "failures": [],
+    "validated_progress_retained": false,
+    "model_requests": 0,
+    "searches": 0,
+    "page_reads": 8,
+    "dynamic_reads": 0,
+    "output_retries": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "duration_seconds": 0.0,
+    "cost_usd": null
+  },
+  "generated_at": "2026-10-05T12:00:00Z"
+}

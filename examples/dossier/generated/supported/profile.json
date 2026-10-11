@@ -1,0 +1,140 @@
+{
+  "schema_version": "0.1",
+  "status": "partial",
+  "generated_at": "2026-10-05T12:00:00Z",
+  "identity": {
+    "nip": "5220003782",
+    "legal_name": {
+      "state": "supported",
+      "value": "Example sp. z o.o.",
+      "evidence": [
+        {
+          "source_id": "registry",
+          "excerpt": "\"Example sp. z o.o.\""
+        }
+      ],
+      "reason": null
+    },
+    "krs": {
+      "state": "unknown",
+      "value": null,
+      "evidence": [],
+      "reason": "Not established in this synthetic offline example"
+    },
+    "regon": {
+      "state": "unknown",
+      "value": null,
+      "evidence": [],
+      "reason": "Not established in this synthetic offline example"
+    },
+    "registered_city": {
+      "state": "unknown",
+      "value": null,
+      "evidence": [],
+      "reason": "Not established in this synthetic offline example"
+    },
+    "registered_address": {
+      "state": "unknown",
+      "value": null,
+      "evidence": [],
+      "reason": "Not established in this synthetic offline example"
+    },
+    "website": {
+      "state": "unknown",
+      "value": null,
+      "evidence": [],
+      "reason": "Not established in this synthetic offline example"
+    },
+    "resolved_at": "2026-10-05T12:00:00Z"
+  },
+  "business_description": {
+    "state": "unknown",
+    "value": null,
+    "evidence": [],
+    "reason": "Not established in this synthetic offline example"
+  },
+  "products_services": {
+    "state": "supported",
+    "value": [
+      "cloud services"
+    ],
+    "evidence": [
+      {
+        "source_id": "page",
+        "excerpt": "Example sp. z o.o. offers \"cloud services\"."
+      }
+    ],
+    "reason": null
+  },
+  "industries": {
+    "state": "unknown",
+    "value": null,
+    "evidence": [],
+    "reason": "Not established in this synthetic offline example"
+  },
+  "markets": {
+    "state": "unknown",
+    "value": null,
+    "evidence": [],
+    "reason": "Not established in this synthetic offline example"
+  },
+  "employees": {
+    "state": "unknown",
+    "value": null,
+    "evidence": [],
+    "reason": "Not established in this synthetic offline example",
+    "as_of": null
+  },
+  "financials": [
+    {
+      "state": "unknown",
+      "value": null,
+      "evidence": [],
+      "reason": "Not established in this synthetic offline example",
+      "metric": "revenue",
+      "period": null,
+      "currency": null,
+      "unit": null,
+      "scope": null,
+      "group_name": null
+    },
+    {
+      "state": "unknown",
+      "value": null,
+      "evidence": [],
+      "reason": "Not established in this synthetic offline example",
+      "metric": "net_result",
+      "period": null,
+      "currency": null,
+      "unit": null,
+      "scope": null,
+      "group_name": null
+    }
+  ],
+  "recent_developments": [],
+  "sources": [
+    {
+      "source_id": "page",
+      "url": "https://company.example/",
+      "title": "Synthetic complete assertion unit",
+      "retrieved_at": "2026-10-05T12:00:00Z",
+      "published_on": null,
+      "redirect_chain": [],
+      "publication_blocked_reason": null,
+      "kind": "full_page"
+    },
+    {
+      "source_id": "registry",
+      "url": "https://registry.example/",
+      "title": "Synthetic MF-shaped registry record",
+      "retrieved_at": "2026-10-05T12:00:00Z",
+      "published_on": null,
+      "redirect_chain": [],
+      "publication_blocked_reason": null,
+      "kind": "registry"
+    }
+  ],
+  "limitations": [
+    "Synthetic strict-contract probe; no live-company research"
+  ]
+}
